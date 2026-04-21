@@ -7,6 +7,7 @@ import ToolCTA from "@/components/ToolCTA";
 import { getNameData, getSimilarNames, formatNumber } from "@/data/nameData";
 import { Users, TrendingUp, Globe, BarChart3 } from "lucide-react";
 import RelatedPosts from "@/components/RelatedPosts";
+import Breadcrumbs from "@/components/Breadcrumbs";
 
 
 const NameDetail = () => {
@@ -35,15 +36,14 @@ const NameDetail = () => {
       />
       <SiteHeader />
       <main className="container py-12">
-        <nav className="text-sm text-muted-foreground mb-6">
-          <Link to="/" className="hover:text-foreground">Home</Link>
-          <span className="mx-2">/</span>
-          <Link to={`/names/${data.name.charAt(0).toLowerCase()}`} className="hover:text-foreground">
-            Names: {data.name.charAt(0).toUpperCase()}
-          </Link>
-          <span className="mx-2">/</span>
-          <span className="text-foreground">{data.name}</span>
-        </nav>
+        <Breadcrumbs
+          className="mb-6"
+          items={[
+            { label: "Home", href: "/" },
+            { label: `Names: ${data.name.charAt(0).toUpperCase()}`, href: `/names/${data.name.charAt(0).toLowerCase()}` },
+            { label: data.name },
+          ]}
+        />
 
         <h1 className="font-display text-4xl md:text-6xl font-bold mb-3">
           How Many People Are Named {data.name}?
