@@ -572,33 +572,73 @@ const Index = () => {
           </div>
         </section>
 
-        {/* Section 18: FAQ Accordion */}
+        {/* Section 18: FAQ — 30 questions grouped by intent (AEO / AI Overviews optimized) */}
         <section className="py-16">
-          <div className="text-center mb-8">
-            <h2 id="faq" className="font-display text-3xl md:text-4xl font-bold mb-3">Frequently Asked Questions</h2>
+          <div className="text-center mb-10">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-semibold uppercase tracking-wider mb-3">
+              <HelpCircle className="h-3.5 w-3.5" /> 30 Real Questions
+            </div>
+            <h2 id="faq" className="font-display text-3xl md:text-4xl font-bold mb-3">
+              Frequently Asked Questions About Your Name
+            </h2>
+            <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
+              Real questions people ask AI assistants, Google, and voice search — answered in seconds.
+            </p>
           </div>
-          <div className="max-w-3xl mx-auto">
-            <Accordion type="single" collapsible className="space-y-2">
-              {[
-                { q: "How accurate are your name frequency estimates?", a: "For common names in well-documented countries (US, UK, Canada, Australia), our estimates are typically accurate within ±5%. For rarer names or countries with less comprehensive data, accuracy ranges from ±10-25%. We always indicate the confidence level." },
-                { q: "How often is your data updated?", a: "We update our core dataset quarterly, incorporating newly released birth registration data and demographic statistics. Most countries release annual name data with a 6-18 month lag." },
-                { q: "Can I search for last names / surnames?", a: "Yes! While our most detailed statistics are for first names, we also support surname searches using census records and telephone directory analyses." },
-                { q: "Why might the number differ from other websites?", a: "Different sites use different data sources, time periods, and methodologies. Some only count current-year births; we estimate total living bearers. Some use only US data; we aggregate globally." },
-                { q: "How do you handle multiple spellings?", a: "Each spelling variant is counted separately. 'Catherine,' 'Katherine,' 'Kathryn,' are each tracked as distinct names. We provide links to common variants on each name's detail page." },
-                { q: "What countries do you cover?", a: "We have data for over 80 countries, with the most comprehensive coverage for English-speaking countries, Western Europe, and major Asian nations. Coverage is continuously expanding." },
-                { q: "Can I use this data for research?", a: "Personal and educational use is free. For commercial use or academic citations, please contact us for licensing options." },
-                { q: "How do you estimate global counts?", a: "For countries with direct data, we use official records. For others, we use linguistic modeling, migration data, and proportional estimation based on cultural naming patterns." },
-              ].map((faq, i) => (
-                <AccordionItem key={i} value={`faq-${i}`} className="border border-border rounded-lg px-4">
-                  <AccordionTrigger className="text-left text-sm font-semibold hover:no-underline">
-                    {faq.q}
-                  </AccordionTrigger>
-                  <AccordionContent className="text-sm text-muted-foreground leading-relaxed">
-                    {faq.a}
-                  </AccordionContent>
-                </AccordionItem>
+
+          <div className="max-w-3xl mx-auto space-y-10">
+            {faqGroups.map((group, gi) => (
+              <div key={group.category}>
+                <div className="flex items-center gap-3 mb-4">
+                  <span className="text-xs font-bold text-primary uppercase tracking-wider">
+                    {String(gi + 1).padStart(2, "0")} · {group.category}
+                  </span>
+                  <span className="h-px flex-1 bg-border" />
+                  <span className="text-xs text-muted-foreground">{group.items.length} questions</span>
+                </div>
+                <Accordion type="single" collapsible className="space-y-2">
+                  {group.items.map((faq, i) => (
+                    <AccordionItem
+                      key={`${group.category}-${i}`}
+                      value={`faq-${group.category}-${i}`}
+                      className="border border-border rounded-lg px-4 bg-card"
+                    >
+                      <AccordionTrigger className="text-left text-sm font-semibold hover:no-underline">
+                        {faq.q}
+                      </AccordionTrigger>
+                      <AccordionContent className="text-sm text-muted-foreground leading-relaxed">
+                        {faq.a}
+                      </AccordionContent>
+                    </AccordionItem>
+                  ))}
+                </Accordion>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* Section 18b: Long-tail conversational keywords — AEO / GEO anchor block */}
+        <section className="py-10">
+          <div className="max-w-4xl mx-auto p-6 md:p-8 rounded-2xl border border-border bg-gradient-to-br from-primary/5 to-accent/5">
+            <div className="flex items-start gap-3 mb-4">
+              <Search className="h-5 w-5 text-primary shrink-0 mt-0.5" />
+              <div>
+                <h2 className="font-display text-xl md:text-2xl font-bold mb-1">
+                  People also search for
+                </h2>
+                <p className="text-sm text-muted-foreground">
+                  Conversational queries our tool answers — optimized for AI Overviews, ChatGPT, and voice search.
+                </p>
+              </div>
+            </div>
+            <ul className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-2 text-sm">
+              {longTailKeywords.map(k => (
+                <li key={k} className="flex gap-2 text-muted-foreground">
+                  <ArrowRight className="h-4 w-4 text-primary shrink-0 mt-0.5" />
+                  <span className="text-foreground/90">{k}</span>
+                </li>
               ))}
-            </Accordion>
+            </ul>
           </div>
         </section>
 
