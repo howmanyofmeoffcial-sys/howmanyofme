@@ -5,6 +5,7 @@ import SiteFooter from "@/components/SiteFooter";
 import SEOHead from "@/components/SEOHead";
 import { getNamesForLetter, getNameData, formatNumber, ALPHABET } from "@/data/nameData";
 import RelatedPosts from "@/components/RelatedPosts";
+import DataFreshness from "@/components/DataFreshness";
 
 const UniqueNameGenerator = () => {
   const [gender, setGender] = useState("any");
@@ -338,6 +339,8 @@ const UniqueNameGenerator = () => {
           </div>
 
         </section>
+
+        <DataFreshness toolName="Unique Baby Name Generator" />
 
         <RelatedPosts currentSlug="unique-name-generator" tags={["unique names", "rare names", "generator", "baby names"]} count={12} />
 

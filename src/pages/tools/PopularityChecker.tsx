@@ -5,6 +5,7 @@ import SiteFooter from "@/components/SiteFooter";
 import SEOHead from "@/components/SEOHead";
 import { getNameData, formatNumber } from "@/data/nameData";
 import RelatedPosts from "@/components/RelatedPosts";
+import DataFreshness from "@/components/DataFreshness";
 
 const SUGGESTED = ["Emma","Olivia","Sophia","Liam","Noah","Oliver","Isabella","Lucas"];
 
@@ -414,6 +415,8 @@ const PopularityChecker = () => {
           </div>
 
         </section>
+
+        <DataFreshness toolName="Name Popularity Checker" />
 
         <RelatedPosts currentSlug="popularity-checker" tags={["popularity", "charts", "trends", "statistics", "baby names"]} count={12} />
       </main>

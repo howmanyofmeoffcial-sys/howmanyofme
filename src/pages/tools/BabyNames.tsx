@@ -4,6 +4,7 @@ import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
 import { getNamesForLetter, getNameData, formatNumber, ALPHABET } from "@/data/nameData";
 import RelatedPosts from "@/components/RelatedPosts";
+import DataFreshness from "@/components/DataFreshness";
 
 const BabyNames = () => {
   const [letter, setLetter] = useState("a");
@@ -42,6 +43,7 @@ const BabyNames = () => {
             </Link>
           ))}
         </div>
+        <DataFreshness toolName="Baby Name Ideas" />
         <RelatedPosts currentSlug="baby-names" tags={["baby names", "browse", "A-Z names", "gender"]} count={12} />
       </main>
       <SiteFooter />

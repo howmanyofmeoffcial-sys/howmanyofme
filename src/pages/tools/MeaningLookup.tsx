@@ -5,6 +5,7 @@ import SiteFooter from "@/components/SiteFooter";
 import SEOHead from "@/components/SEOHead";
 import { getNameData, formatNumber } from "@/data/nameData";
 import RelatedPosts from "@/components/RelatedPosts";
+import DataFreshness from "@/components/DataFreshness";
 
 const MeaningLookup = () => {
   const [name, setName] = useState("");
@@ -53,6 +54,7 @@ const MeaningLookup = () => {
             <Link to={`/name/${result.name}`} className="inline-block text-sm text-primary hover:underline">View full name statistics →</Link>
           </div>
         )}
+        <DataFreshness toolName="Name Meaning Lookup" />
         <RelatedPosts currentSlug="meaning" tags={["meanings", "etymology", "origins", "cultural", "baby names"]} count={12} />
       </main>
       <SiteFooter />

@@ -4,6 +4,7 @@ import SiteFooter from "@/components/SiteFooter";
 import SEOHead from "@/components/SEOHead";
 import { CheckCircle, ArrowRight } from "lucide-react";
 import RelatedPosts from "@/components/RelatedPosts";
+import DataFreshness from "@/components/DataFreshness";
 
 const steps = [
   { title: "Enter a Name", desc: "Type any first name into the search box. Our tool accepts names from any origin, language, or cultural tradition." },
@@ -46,6 +47,7 @@ const PopularityGuide = () => (
         <Link to="/tools/popularity-checker" className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-primary text-primary-foreground font-semibold text-sm hover:opacity-90 transition-opacity">Try the Popularity Checker <ArrowRight className="h-4 w-4" /></Link>
         <Link to="/tools/name-comparison" className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg border border-border bg-card font-semibold text-sm hover:bg-secondary transition-colors">Compare Names <ArrowRight className="h-4 w-4" /></Link>
       </div>
+      <DataFreshness toolName="Popularity Checker Guide" />
       <RelatedPosts currentSlug="popularity-guide" tags={["guide", "popularity", "help", "charts", "statistics"]} count={12} />
     </main>
     <SiteFooter />
