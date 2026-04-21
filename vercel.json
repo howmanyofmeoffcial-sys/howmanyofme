@@ -6,6 +6,11 @@
       "source": "/:path+/",
       "destination": "/:path+",
       "permanent": true
+    },
+    {
+      "source": "/blog/how-many-people-have-my-name-questions",
+      "destination": "/#faq",
+      "permanent": true
     }
   ],
 

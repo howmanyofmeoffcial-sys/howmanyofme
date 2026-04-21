@@ -1,17 +1,28 @@
 import { useParams, Link } from "react-router-dom";
 import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
+import SEOHead from "@/components/SEOHead";
 import AdSlot from "@/components/AdSlot";
+import ToolCTA from "@/components/ToolCTA";
 import { getNamesForLetter, ALPHABET } from "@/data/nameData";
 import RelatedPosts from "@/components/RelatedPosts";
 
 const LetterDirectory = () => {
   const { letter } = useParams<{ letter: string }>();
   const l = (letter || "a").toLowerCase();
+  const L = l.toUpperCase();
   const names = getNamesForLetter(l);
+  const idx = ALPHABET.indexOf(l);
+  const prev = ALPHABET[(idx - 1 + 26) % 26];
+  const next = ALPHABET[(idx + 1) % 26];
 
   return (
     <div className="min-h-screen bg-background">
+      <SEOHead
+        title={`Names Starting with ${L} — Popularity & Meanings (A–Z Directory)`}
+        description={`Browse ${names.length.toLocaleString()} first names beginning with ${L}. Click any name to see how many people have it worldwide, decade-by-decade popularity, and regional data. Free, no signup.`}
+        canonical={`https://howmanyofme.co/names/${l}`}
+      />
       <SiteHeader />
       <main className="container py-12">
         <nav className="flex flex-wrap gap-1.5 mb-8">
@@ -60,6 +71,36 @@ const LetterDirectory = () => {
             Each name links to a comprehensive statistics page where you can discover how many people share that name, its historical popularity trends, gender distribution, regional presence across 80+ countries, and lists of similar names to explore.
           </p>
         </div>
+        {/* Tool CTA — embed tool on every alphabet directory page */}
+        <ToolCTA
+          headline={`Check any ${L}-name's popularity instantly`}
+          subhead={`Type a name starting with ${L} and see how many people share it worldwide.`}
+        />
+
+        {/* Prev/next letter navigation — improves crawl graph */}
+        <div className="mt-10 grid grid-cols-2 gap-4">
+          <Link to={`/names/${prev}`} className="p-4 rounded-xl border border-border hover:bg-secondary/50 transition-colors">
+            <div className="text-xs text-muted-foreground mb-1">← Previous letter</div>
+            <div className="font-semibold">Names starting with {prev.toUpperCase()}</div>
+          </Link>
+          <Link to={`/names/${next}`} className="p-4 rounded-xl border border-border hover:bg-secondary/50 transition-colors text-right">
+            <div className="text-xs text-muted-foreground mb-1">Next letter →</div>
+            <div className="font-semibold">Names starting with {next.toUpperCase()}</div>
+          </Link>
+        </div>
+
+        {/* Contextual links to core tools */}
+        <div className="mt-8 p-6 rounded-xl bg-secondary/30 border border-border">
+          <h3 className="font-display text-lg font-bold mb-3">More ways to explore {L}-names</h3>
+          <div className="flex flex-wrap gap-2">
+            <Link to="/tools/popularity-checker" className="px-3 py-1.5 text-sm rounded-lg bg-card border border-border hover:border-primary/40 hover:text-primary transition-colors">Popularity Checker</Link>
+            <Link to="/tools/trend-visualizer" className="px-3 py-1.5 text-sm rounded-lg bg-card border border-border hover:border-primary/40 hover:text-primary transition-colors">Trend Visualizer</Link>
+            <Link to="/tools/unique-name-generator" className="px-3 py-1.5 text-sm rounded-lg bg-card border border-border hover:border-primary/40 hover:text-primary transition-colors">Rarity Score</Link>
+            <Link to="/blog/baby-names-by-decade" className="px-3 py-1.5 text-sm rounded-lg bg-card border border-border hover:border-primary/40 hover:text-primary transition-colors">Names by decade</Link>
+            <Link to="/blog/unusual-baby-names-alphabet" className="px-3 py-1.5 text-sm rounded-lg bg-card border border-border hover:border-primary/40 hover:text-primary transition-colors">Unusual names A–Z</Link>
+          </div>
+        </div>
+
         <RelatedPosts currentSlug={`letter-${l}`} tags={["A-Z names", "baby names", "browse", "popular names", "trends"]} count={12} />
       </main>
       <SiteFooter />

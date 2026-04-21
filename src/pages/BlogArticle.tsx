@@ -5,6 +5,7 @@ import SEOHead from "@/components/SEOHead";
 import { getBlogArticle, blogArticles, blogCategories } from "@/data/blogData";
 import { Clock, ArrowLeft, ArrowRight, ChevronRight } from "lucide-react";
 import RelatedPosts from "@/components/RelatedPosts";
+import ToolCTA from "@/components/ToolCTA";
 import { getTagsForSlug } from "@/data/contentRegistry";
 
 const BlogArticle = () => {
@@ -97,6 +98,9 @@ const BlogArticle = () => {
               );
             })}
           </div>
+
+          {/* Embedded main tool — every blog post funnels to /name/* */}
+          <ToolCTA variant="compact" />
 
           {/* Internal links */}
           <div className="mt-12 p-6 rounded-xl bg-secondary/50 border border-border">
