@@ -1,10 +1,13 @@
 import { useParams, Link } from "react-router-dom";
 import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
+import SEOHead from "@/components/SEOHead";
 import AdSlot from "@/components/AdSlot";
+import ToolCTA from "@/components/ToolCTA";
 import { getNameData, getSimilarNames, formatNumber } from "@/data/nameData";
 import { Users, TrendingUp, Globe, BarChart3 } from "lucide-react";
 import RelatedPosts from "@/components/RelatedPosts";
+
 
 const NameDetail = () => {
   const { name: rawName } = useParams<{ name: string }>();
