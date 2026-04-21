@@ -1,18 +1,64 @@
 <!doctype html>
 <html lang="en">
   <head>
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7878908407640624"
-     crossorigin="anonymous"></script>
-    <meta name="google-site-verification" content="mu13LHCJdzcQGEj69hBuFNH0G3tiqwMOlqWlEpe4Afc" />
-    <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-Q1NTDXVHWE"></script>
-    
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    
+
+    <!-- Preconnects: shave ~200ms off the critical request chain for fonts + 3P -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="dns-prefetch" href="https://pagead2.googlesyndication.com" />
+    <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
+    <link rel="dns-prefetch" href="https://www.google-analytics.com" />
+
+    <!-- Self-host-quality font load: non-blocking via media-swap, fonts apply when ready -->
+    <link
+      rel="preload"
+      as="style"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Playfair+Display:wght@700;800&display=swap"
+    />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Playfair+Display:wght@700;800&display=swap"
+      media="print"
+      onload="this.media='all'"
+    />
+    <noscript>
+      <link
+        rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Playfair+Display:wght@700;800&display=swap"
+      />
+    </noscript>
+
+    <!-- Critical above-the-fold CSS — eliminates FOUC on the hero before main bundle parses -->
+    <style>
+      :root {
+        --background: 0 0% 100%;
+        --foreground: 220 20% 10%;
+        --primary: 220 80% 50%;
+        --primary-foreground: 0 0% 100%;
+        --border: 220 15% 91%;
+      }
+      html, body { margin: 0; padding: 0; background: hsl(var(--background)); color: hsl(var(--foreground)); font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; -webkit-font-smoothing: antialiased; }
+      #root { min-height: 100vh; }
+      .hero-skeleton {
+        background: linear-gradient(135deg, hsl(220 80% 50%) 0%, hsl(250 70% 55%) 50%, hsl(280 60% 50%) 100%);
+        min-height: 520px;
+        display: flex; align-items: center; justify-content: center;
+        color: #fff; padding: 4rem 1rem; text-align: center;
+      }
+      .hero-skeleton h1 {
+        font-family: "Playfair Display", Georgia, serif;
+        font-size: clamp(2.25rem, 5vw, 3.75rem);
+        font-weight: 800; line-height: 1.1; margin: 0 0 1rem; max-width: 60ch;
+      }
+      .hero-skeleton p { opacity: .9; max-width: 42ch; margin: 0 auto; font-size: 1.05rem; }
+    </style>
+
     <title>How Many People Have My Name? Check Instantly 🌍</title>
     <meta name="description" content="How many people have your name? Check instantly using 100M+ global records. See rarity, popularity & origin in seconds. Free, no signup needed." />
     <meta name="author" content="Ziven Borceg" />
+    <meta name="google-site-verification" content="mu13LHCJdzcQGEj69hBuFNH0G3tiqwMOlqWlEpe4Afc" />
 
     <meta property="og:title" content="How Many People Have My Name? Check Instantly 🌍" />
     <meta property="og:description" content="How many people have your name? Check instantly using 100M+ global records. See rarity, popularity & origin in seconds. Free, no signup needed." />
@@ -29,7 +75,52 @@
   </head>
 
   <body>
-    <div id="root"></div>
+    <div id="root">
+      <!-- Server-rendered hero shell — paints instantly so LCP element exists before JS hydrates -->
+      <section class="hero-skeleton" aria-label="Loading hero">
+        <div>
+          <h1>How many people have your name?</h1>
+          <p>Check instantly against 100M+ global records — popularity, rarity & origin in seconds.</p>
+        </div>
+      </section>
+    </div>
     <script type="module" src="/src/main.tsx"></script>
+
+    <!-- Defer all 3P scripts until the browser is idle so they don't block FCP/LCP -->
+    <script>
+      (function () {
+        function loadDeferred() {
+          // Google Tag Manager / GA
+          var gtm = document.createElement('script');
+          gtm.async = true;
+          gtm.src = 'https://www.googletagmanager.com/gtag/js?id=G-Q1NTDXVHWE';
+          document.head.appendChild(gtm);
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){window.dataLayer.push(arguments);}
+          window.gtag = gtag;
+          gtag('js', new Date());
+          gtag('config', 'G-Q1NTDXVHWE');
+
+          // Google AdSense
+          var ads = document.createElement('script');
+          ads.async = true;
+          ads.crossOrigin = 'anonymous';
+          ads.src = 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7878908407640624';
+          document.head.appendChild(ads);
+        }
+
+        // Wait for browser idle OR first user interaction — whichever comes first.
+        var fired = false;
+        function go() { if (fired) return; fired = true; loadDeferred(); }
+        if ('requestIdleCallback' in window) {
+          requestIdleCallback(go, { timeout: 4000 });
+        } else {
+          setTimeout(go, 3500);
+        }
+        ['scroll', 'pointerdown', 'keydown', 'touchstart'].forEach(function (ev) {
+          window.addEventListener(ev, go, { once: true, passive: true });
+        });
+      })();
+    </script>
   </body>
 </html>
