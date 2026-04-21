@@ -455,6 +455,7 @@ export const blogArticles: BlogArticle[] = [
     ],
   },
 
+];
 export function getBlogArticle(slug: string): BlogArticle | undefined {
   return blogArticles.find(a => a.slug === slug);
 }
