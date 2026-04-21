@@ -1,8 +1,7 @@
+import { lazy, Suspense } from "react";
 import { Link } from "react-router-dom";
 import SiteHeader from "@/components/SiteHeader";
-import SiteFooter from "@/components/SiteFooter";
 import NameSearchHero from "@/components/NameSearchHero";
-import AdSlot from "@/components/AdSlot";
 import SEOHead from "@/components/SEOHead";
 import { ALPHABET, getPopularNames, formatNumber } from "@/data/nameData";
 import {
@@ -10,12 +9,12 @@ import {
   Baby, Shuffle, User, HelpCircle, Database, MapPin,
   Clock, Shield, Zap, FileText, ChevronDown, ArrowRight, Heart, Search
 } from "lucide-react";
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion";
+
+// Heavy below-the-fold chunks: code-split out of the critical bundle.
+// They only download/parse after the hero is painted.
+const HomeBelowFold = lazy(() => import("@/components/home/HomeBelowFold"));
+const SiteFooter = lazy(() => import("@/components/SiteFooter"));
+const AdSlot = lazy(() => import("@/components/AdSlot"));
 
 const popularNames = getPopularNames().slice(0, 20);
 
