@@ -4,6 +4,7 @@ import SiteFooter from "@/components/SiteFooter";
 import SEOHead from "@/components/SEOHead";
 import { getNameData } from "@/data/nameData";
 import RelatedPosts from "@/components/RelatedPosts";
+import DataFreshness from "@/components/DataFreshness";
 import {
 LineChart,
 Line,
@@ -462,6 +463,8 @@ journey across generations.
 </p>
 
 </div>
+
+<DataFreshness toolName="Baby Name Trend Visualizer" />
 
 <RelatedPosts currentSlug="trend-visualizer" tags={["trends", "charts", "visualization", "baby names", "interactive"]} count={12} />
 

@@ -4,6 +4,7 @@ import SiteFooter from "@/components/SiteFooter";
 import { Link } from "react-router-dom";
 import { getNamesForLetter, getNameData, formatNumber, ALPHABET } from "@/data/nameData";
 import RelatedPosts from "@/components/RelatedPosts";
+import DataFreshness from "@/components/DataFreshness";
 
 const RandomNameGenerator = () => {
   const [generated, setGenerated] = useState<string[]>([]);
@@ -48,6 +49,7 @@ const RandomNameGenerator = () => {
             ))}
           </div>
         )}
+        <DataFreshness toolName="Random Name Generator" />
         <RelatedPosts currentSlug="random-name" tags={["generator", "random", "baby names"]} count={12} />
       </main>
       <SiteFooter />

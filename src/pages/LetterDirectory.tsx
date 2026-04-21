@@ -6,6 +6,7 @@ import AdSlot from "@/components/AdSlot";
 import ToolCTA from "@/components/ToolCTA";
 import { getNamesForLetter, ALPHABET } from "@/data/nameData";
 import RelatedPosts from "@/components/RelatedPosts";
+import Breadcrumbs from "@/components/Breadcrumbs";
 
 const LetterDirectory = () => {
   const { letter } = useParams<{ letter: string }>();
@@ -25,6 +26,14 @@ const LetterDirectory = () => {
       />
       <SiteHeader />
       <main className="container py-12">
+        <Breadcrumbs
+          className="mb-6"
+          items={[
+            { label: "Home", href: "/" },
+            { label: "Browse Names A–Z", href: "/names/a" },
+            { label: `Names starting with ${L}` },
+          ]}
+        />
         <nav className="flex flex-wrap gap-1.5 mb-8">
           {ALPHABET.map(a => (
             <Link

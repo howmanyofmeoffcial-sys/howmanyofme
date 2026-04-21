@@ -5,6 +5,7 @@ import SiteFooter from "@/components/SiteFooter";
 import SEOHead from "@/components/SEOHead";
 import { getNameData, formatNumber } from "@/data/nameData";
 import RelatedPosts from "@/components/RelatedPosts";
+import DataFreshness from "@/components/DataFreshness";
 
 const NameComparison = () => {
   const [name1, setName1] = useState("");
@@ -377,6 +378,8 @@ const NameComparison = () => {
           </div>
 
         </section>
+
+        <DataFreshness toolName="Name Popularity Comparison" />
 
         <RelatedPosts currentSlug="name-comparison" tags={["comparison", "popularity", "trends", "statistics"]} count={12} />
 

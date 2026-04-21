@@ -2,6 +2,7 @@ import { useState } from "react";
 import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
 import RelatedPosts from "@/components/RelatedPosts";
+import DataFreshness from "@/components/DataFreshness";
 
 const styles = [
   (n: string) => n.toLowerCase() + Math.floor(Math.random() * 999),
@@ -42,6 +43,7 @@ const UsernameGenerator = () => {
             ))}
           </div>
         )}
+        <DataFreshness toolName="Username Generator" />
         <RelatedPosts currentSlug="username-generator" tags={["username", "generator", "social media"]} count={12} />
       </main>
       <SiteFooter />
