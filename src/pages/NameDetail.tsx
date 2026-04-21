@@ -18,8 +18,21 @@ const NameDetail = () => {
   const topRegion = Object.entries(data.regions).sort((a, b) => b[1] - a[1])[0];
   const decades = Object.entries(data.decade_popularity);
 
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    name: data.name,
+    description: `Approximately ${formatNumber(data.count)} people are named ${data.name} worldwide. Popularity rank #${formatNumber(data.rank)}. Origin: ${data.origin}.`,
+  };
+
   return (
     <div className="min-h-screen bg-background">
+      <SEOHead
+        title={`How Many People Are Named ${data.name}? Popularity, Rarity & Origin`}
+        description={`There are ~${formatNumber(data.count)} people named ${data.name} worldwide (rank #${formatNumber(data.rank)}). See ${data.name}'s popularity by decade, country, and gender — free, no signup.`}
+        canonical={`https://howmanyofme.co/name/${encodeURIComponent(data.name)}`}
+        jsonLd={jsonLd}
+      />
       <SiteHeader />
       <main className="container py-12">
         <nav className="text-sm text-muted-foreground mb-6">
@@ -153,11 +166,23 @@ const NameDetail = () => {
           </p>
         </div>
 
-        <div className="mt-12 p-6 rounded-xl bg-secondary/50 border border-border text-center">
-          <p className="text-muted-foreground text-sm mb-3">Search for another name</p>
-          <Link to="/" className="inline-flex items-center gap-2 px-6 py-3 rounded-lg bg-primary text-primary-foreground font-semibold hover:opacity-90 transition-opacity">
-            Back to Search
-          </Link>
+        {/* Tool CTA — embed main tool for internal-linking + engagement signals */}
+        <ToolCTA
+          headline={`Check another name like ${data.name}`}
+          subhead="Same free tool — instant popularity, rarity score, and regional breakdown for any first name."
+        />
+
+        {/* Contextual internal links — strengthen crawl graph */}
+        <div className="mt-10 p-6 rounded-xl bg-secondary/30 border border-border">
+          <h3 className="font-display text-lg font-bold mb-3">Related guides &amp; tools</h3>
+          <div className="flex flex-wrap gap-2">
+            <Link to="/tools/popularity-checker" className="px-3 py-1.5 text-sm rounded-lg bg-card border border-border hover:border-primary/40 hover:text-primary transition-colors">Name Popularity Checker</Link>
+            <Link to="/tools/name-comparison" className="px-3 py-1.5 text-sm rounded-lg bg-card border border-border hover:border-primary/40 hover:text-primary transition-colors">Compare {data.name} to another name</Link>
+            <Link to="/tools/trend-visualizer" className="px-3 py-1.5 text-sm rounded-lg bg-card border border-border hover:border-primary/40 hover:text-primary transition-colors">{data.name} popularity trend</Link>
+            <Link to={`/names/${data.name.charAt(0).toLowerCase()}`} className="px-3 py-1.5 text-sm rounded-lg bg-card border border-border hover:border-primary/40 hover:text-primary transition-colors">More names starting with {data.name.charAt(0).toUpperCase()}</Link>
+            <Link to="/blog/name-rarity-score-explained" className="px-3 py-1.5 text-sm rounded-lg bg-card border border-border hover:border-primary/40 hover:text-primary transition-colors">What is a name rarity score?</Link>
+            <Link to="/blog/how-to-interpret-popularity-charts" className="px-3 py-1.5 text-sm rounded-lg bg-card border border-border hover:border-primary/40 hover:text-primary transition-colors">How to read popularity charts</Link>
+          </div>
         </div>
         <RelatedPosts currentSlug={`name-${nameStr.toLowerCase()}`} tags={["baby names", "popularity", "statistics", data.gender === "male" ? "boy names" : data.gender === "female" ? "girl names" : "unisex", "meanings", "trends"]} count={12} />
       </main>

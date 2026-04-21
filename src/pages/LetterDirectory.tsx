@@ -1,17 +1,28 @@
 import { useParams, Link } from "react-router-dom";
 import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
+import SEOHead from "@/components/SEOHead";
 import AdSlot from "@/components/AdSlot";
+import ToolCTA from "@/components/ToolCTA";
 import { getNamesForLetter, ALPHABET } from "@/data/nameData";
 import RelatedPosts from "@/components/RelatedPosts";
 
 const LetterDirectory = () => {
   const { letter } = useParams<{ letter: string }>();
   const l = (letter || "a").toLowerCase();
+  const L = l.toUpperCase();
   const names = getNamesForLetter(l);
+  const idx = ALPHABET.indexOf(l);
+  const prev = ALPHABET[(idx - 1 + 26) % 26];
+  const next = ALPHABET[(idx + 1) % 26];
 
   return (
     <div className="min-h-screen bg-background">
+      <SEOHead
+        title={`Names Starting with ${L} — Popularity & Meanings (A–Z Directory)`}
+        description={`Browse ${names.length.toLocaleString()} first names beginning with ${L}. Click any name to see how many people have it worldwide, decade-by-decade popularity, and regional data. Free, no signup.`}
+        canonical={`https://howmanyofme.co/names/${l}`}
+      />
       <SiteHeader />
       <main className="container py-12">
         <nav className="flex flex-wrap gap-1.5 mb-8">
