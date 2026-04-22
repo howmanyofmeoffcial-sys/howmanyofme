@@ -1,0 +1,252 @@
+{
+  "version": 3,
+  "pages404": true,
+  "caseSensitive": false,
+  "basePath": "",
+  "redirects": [
+    {
+      "source": "/:path+/",
+      "destination": "/:path+",
+      "internal": true,
+      "statusCode": 308,
+      "regex": "^(?:/((?:[^/]+?)(?:/(?:[^/]+?))*))/$"
+    },
+    {
+      "source": "/:path+/",
+      "destination": "/:path+",
+      "statusCode": 308,
+      "regex": "^(?!/_next)(?:/((?:[^/]+?)(?:/(?:[^/]+?))*))/(?:/)?$"
+    },
+    {
+      "source": "/blog/how-many-people-have-my-name-questions",
+      "destination": "/#faq",
+      "statusCode": 308,
+      "regex": "^(?!/_next)/blog/how-many-people-have-my-name-questions(?:/)?$"
+    },
+    {
+      "source": "/blog/baby-name-trends-2026",
+      "destination": "/blog/baby-name-trends",
+      "statusCode": 308,
+      "regex": "^(?!/_next)/blog/baby-name-trends-2026(?:/)?$"
+    },
+    {
+      "source": "/blog/baby-name-trends-:year(20\\d{2})",
+      "destination": "/blog/baby-name-trends",
+      "statusCode": 308,
+      "regex": "^(?!/_next)/blog/baby-name-trends-(20\\d{2})(?:/)?$"
+    },
+    {
+      "source": "/blog/top-google-baby-name-searches-2026",
+      "destination": "/blog/top-google-baby-name-searches",
+      "statusCode": 308,
+      "regex": "^(?!/_next)/blog/top-google-baby-name-searches-2026(?:/)?$"
+    },
+    {
+      "source": "/blog/top-google-baby-name-searches-:year(20\\d{2})",
+      "destination": "/blog/top-google-baby-name-searches",
+      "statusCode": 308,
+      "regex": "^(?!/_next)/blog/top-google-baby-name-searches-(20\\d{2})(?:/)?$"
+    },
+    {
+      "source": "/blog/popular-baby-names-california-2026",
+      "destination": "/blog/popular-baby-names-california",
+      "statusCode": 308,
+      "regex": "^(?!/_next)/blog/popular-baby-names-california-2026(?:/)?$"
+    },
+    {
+      "source": "/blog/popular-baby-names-california-:year(20\\d{2})",
+      "destination": "/blog/popular-baby-names-california",
+      "statusCode": 308,
+      "regex": "^(?!/_next)/blog/popular-baby-names-california-(20\\d{2})(?:/)?$"
+    },
+    {
+      "source": "/blog/popular-baby-names-texas-2026",
+      "destination": "/blog/popular-baby-names-texas",
+      "statusCode": 308,
+      "regex": "^(?!/_next)/blog/popular-baby-names-texas-2026(?:/)?$"
+    },
+    {
+      "source": "/blog/popular-baby-names-texas-:year(20\\d{2})",
+      "destination": "/blog/popular-baby-names-texas",
+      "statusCode": 308,
+      "regex": "^(?!/_next)/blog/popular-baby-names-texas-(20\\d{2})(?:/)?$"
+    }
+  ],
+  "headers": [],
+  "rewrites": {
+    "beforeFiles": [],
+    "afterFiles": [],
+    "fallback": []
+  },
+  "dynamicRoutes": [
+    {
+      "page": "/blog/[slug]",
+      "regex": "^/blog/([^/]+?)(?:/)?$",
+      "routeKeys": {
+        "nxtPslug": "nxtPslug"
+      },
+      "namedRegex": "^/blog/(?<nxtPslug>[^/]+?)(?:/)?$"
+    },
+    {
+      "page": "/name/[name]",
+      "regex": "^/name/([^/]+?)(?:/)?$",
+      "routeKeys": {
+        "nxtPname": "nxtPname"
+      },
+      "namedRegex": "^/name/(?<nxtPname>[^/]+?)(?:/)?$"
+    },
+    {
+      "page": "/names/[letter]",
+      "regex": "^/names/([^/]+?)(?:/)?$",
+      "routeKeys": {
+        "nxtPletter": "nxtPletter"
+      },
+      "namedRegex": "^/names/(?<nxtPletter>[^/]+?)(?:/)?$"
+    }
+  ],
+  "staticRoutes": [
+    {
+      "page": "/",
+      "regex": "^/(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/(?:/)?$"
+    },
+    {
+      "page": "/_not-found",
+      "regex": "^/_not\\-found(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/_not\\-found(?:/)?$"
+    },
+    {
+      "page": "/about",
+      "regex": "^/about(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/about(?:/)?$"
+    },
+    {
+      "page": "/blog",
+      "regex": "^/blog(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/blog(?:/)?$"
+    },
+    {
+      "page": "/contact",
+      "regex": "^/contact(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/contact(?:/)?$"
+    },
+    {
+      "page": "/disclaimer",
+      "regex": "^/disclaimer(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/disclaimer(?:/)?$"
+    },
+    {
+      "page": "/methodology",
+      "regex": "^/methodology(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/methodology(?:/)?$"
+    },
+    {
+      "page": "/privacy",
+      "regex": "^/privacy(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/privacy(?:/)?$"
+    },
+    {
+      "page": "/robots.txt",
+      "regex": "^/robots\\.txt(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/robots\\.txt(?:/)?$"
+    },
+    {
+      "page": "/sitemap.xml",
+      "regex": "^/sitemap\\.xml(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/sitemap\\.xml(?:/)?$"
+    },
+    {
+      "page": "/terms",
+      "regex": "^/terms(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/terms(?:/)?$"
+    },
+    {
+      "page": "/tools",
+      "regex": "^/tools(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/tools(?:/)?$"
+    },
+    {
+      "page": "/tools/baby-names",
+      "regex": "^/tools/baby\\-names(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/tools/baby\\-names(?:/)?$"
+    },
+    {
+      "page": "/tools/meaning",
+      "regex": "^/tools/meaning(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/tools/meaning(?:/)?$"
+    },
+    {
+      "page": "/tools/name-comparison",
+      "regex": "^/tools/name\\-comparison(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/tools/name\\-comparison(?:/)?$"
+    },
+    {
+      "page": "/tools/popularity-checker",
+      "regex": "^/tools/popularity\\-checker(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/tools/popularity\\-checker(?:/)?$"
+    },
+    {
+      "page": "/tools/popularity-guide",
+      "regex": "^/tools/popularity\\-guide(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/tools/popularity\\-guide(?:/)?$"
+    },
+    {
+      "page": "/tools/random-name",
+      "regex": "^/tools/random\\-name(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/tools/random\\-name(?:/)?$"
+    },
+    {
+      "page": "/tools/trend-visualizer",
+      "regex": "^/tools/trend\\-visualizer(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/tools/trend\\-visualizer(?:/)?$"
+    },
+    {
+      "page": "/tools/unique-name-generator",
+      "regex": "^/tools/unique\\-name\\-generator(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/tools/unique\\-name\\-generator(?:/)?$"
+    },
+    {
+      "page": "/tools/username-generator",
+      "regex": "^/tools/username\\-generator(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/tools/username\\-generator(?:/)?$"
+    }
+  ],
+  "dataRoutes": [],
+  "rsc": {
+    "header": "rsc",
+    "varyHeader": "rsc, next-router-state-tree, next-router-prefetch, next-router-segment-prefetch",
+    "prefetchHeader": "next-router-prefetch",
+    "didPostponeHeader": "x-nextjs-postponed",
+    "contentTypeHeader": "text/x-component",
+    "suffix": ".rsc",
+    "prefetchSuffix": ".prefetch.rsc",
+    "prefetchSegmentHeader": "next-router-segment-prefetch",
+    "prefetchSegmentSuffix": ".segment.rsc",
+    "prefetchSegmentDirSuffix": ".segments"
+  },
+  "rewriteHeaders": {
+    "pathHeader": "x-nextjs-rewritten-path",
+    "queryHeader": "x-nextjs-rewritten-query"
+  }
+}
