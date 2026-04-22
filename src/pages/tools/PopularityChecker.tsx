@@ -149,6 +149,32 @@ const PopularityChecker = () => {
           .
         </p>
 
+        {/* PRESET PICKER — one click loads a worked example into the tool */}
+        <div className="mb-4">
+          <p className="text-xs uppercase tracking-wide text-muted-foreground mb-2 font-semibold">
+            Try a preset example
+          </p>
+          <div className="flex flex-wrap gap-2">
+            {[
+              { label: "Trending today", value: "Olivia" },
+              { label: "Vintage revival", value: "Eleanor" },
+              { label: "Mid-century classic", value: "Linda" },
+              { label: "Rare breakout", value: "Atlas" },
+            ].map((p) => (
+              <button
+                key={p.value}
+                onClick={() => {
+                  setName(p.value);
+                  setResult(getNameData(p.value));
+                }}
+                className="px-3 py-1.5 text-sm rounded-full border border-primary/30 bg-primary/5 hover:bg-primary hover:text-primary-foreground transition"
+              >
+                {p.label}: <span className="font-semibold">{p.value}</span>
+              </button>
+            ))}
+          </div>
+        </div>
+
         <form onSubmit={check} className="flex gap-3 mb-6">
           <input
             type="text"

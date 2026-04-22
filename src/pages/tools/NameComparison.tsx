@@ -148,6 +148,33 @@ const NameComparison = () => {
           .
         </p>
 
+        {/* PRESET PICKER — load a worked-example pair in one click */}
+        <div className="mb-4">
+          <p className="text-xs uppercase tracking-wide text-muted-foreground mb-2 font-semibold">
+            Try a preset comparison
+          </p>
+          <div className="flex flex-wrap gap-2">
+            {[
+              { label: "Top boys", a: "Liam", b: "Noah" },
+              { label: "Top girls", a: "Emma", b: "Olivia" },
+              { label: "Vintage revival", a: "Eleanor", b: "Theodore" },
+              { label: "Classic vs modern", a: "Mary", b: "Mia" },
+            ].map((p) => (
+              <button
+                key={p.label}
+                onClick={() => {
+                  setName1(p.a);
+                  setName2(p.b);
+                  setResults({ a: getNameData(p.a), b: getNameData(p.b) });
+                }}
+                className="px-3 py-1.5 text-sm rounded-full border border-primary/30 bg-primary/5 hover:bg-primary hover:text-primary-foreground transition"
+              >
+                {p.label}: <span className="font-semibold">{p.a} vs {p.b}</span>
+              </button>
+            ))}
+          </div>
+        </div>
+
         <form onSubmit={compare} className="flex flex-col sm:flex-row gap-3 mb-8">
           <input
             type="text"
