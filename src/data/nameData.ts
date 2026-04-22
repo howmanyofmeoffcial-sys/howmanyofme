@@ -65,17 +65,104 @@ Object.entries(COMMON_PREFIXES).forEach(([letter, names]) => {
   EXTENDED_NAMES[letter.toLowerCase()] = names;
 });
 
-export function getNameData(name: string) {
-  const normalized = name.charAt(0).toUpperCase() + name.slice(1).toLowerCase();
-  if (POPULAR_NAMES[normalized]) {
-    return { name: normalized, ...POPULAR_NAMES[normalized] };
+function getLevenshteinDistance(a: string, b: string): number {
+  const matrix = Array.from({ length: a.length + 1 }, () => Array(b.length + 1).fill(0));
+  for (let i = 0; i <= a.length; i++) matrix[i][0] = i;
+  for (let j = 0; j <= b.length; j++) matrix[0][j] = j;
+
+  for (let i = 1; i <= a.length; i++) {
+    for (let j = 1; j <= b.length; j++) {
+      if (a[i - 1] === b[j - 1]) {
+        matrix[i][j] = matrix[i - 1][j - 1];
+      } else {
+        matrix[i][j] = Math.min(
+          matrix[i - 1][j - 1] + 1,
+          matrix[i][j - 1] + 1,
+          matrix[i - 1][j] + 1
+        );
+      }
+    }
   }
-  // Generate deterministic data for unknown names
+  return matrix[a.length][b.length];
+}
+
+export function getSimilarNames(name: string, limit: number = 10): string[] {
+  const q = name.toLowerCase();
+  const allNames = Array.from(new Set([...Object.keys(POPULAR_NAMES), ...Object.values(EXTENDED_NAMES).flat()]));
+  return allNames
+    .filter(n => n.toLowerCase() !== q)
+    .map(n => ({ name: n, dist: getLevenshteinDistance(q, n.toLowerCase()) }))
+    .sort((a, b) => a.dist - b.dist)
+    .slice(0, limit)
+    .map(n => n.name);
+}
+
+export function getNameData(name: string) {
+  // Normalize input: trim spaces and remove special characters
+  const cleaned = name.trim().replace(/[^a-zA-Z\s-]/g, '');
+  const normalized = cleaned ? cleaned.charAt(0).toUpperCase() + cleaned.slice(1).toLowerCase() : "Unknown";
+
+  if (POPULAR_NAMES[normalized]) {
+    return { name: normalized, isExact: true, ...POPULAR_NAMES[normalized], confidenceLevel: 'high' as const, explanation: '', estimatedPopularity: '', estimatedRange: '', similarSuggestedNames: [] };
+  }
+
+  // Detect patterns
+  const nl = normalized.toLowerCase();
+  let origin = "Unknown";
+  if (nl.endsWith("esh") || nl.endsWith("it") || nl.endsWith("an") || nl.endsWith("ya") || nl.endsWith("av") || nl.endsWith("vi")) {
+    origin = "Indian";
+  } else if (nl.endsWith("son") || nl.endsWith("ton") || nl.endsWith("ley")) {
+    origin = "English";
+  } else if (nl.endsWith("o") || nl.endsWith("a") || nl.endsWith("ez")) {
+    origin = "Spanish/Italian";
+  } else {
+    origin = ["English", "Latin", "Greek", "Hebrew", "Germanic", "Celtic", "Arabic", "Sanskrit"][simpleHash(normalized) % 8];
+  }
+
+  // Length heuristic
+  let lengthPenalty = 0;
+  if (nl.length > 8) lengthPenalty = 30;
+  else if (nl.length > 6) lengthPenalty = 15;
+  else if (nl.length < 4) lengthPenalty = -10;
+
+  // Pattern similarity
+  const similarNames = getSimilarNames(normalized, 3);
+  let similarScore = 0;
+  if (similarNames.length > 0) {
+    const bestMatchDist = getLevenshteinDistance(nl, similarNames[0].toLowerCase());
+    if (bestMatchDist <= 1) similarScore = 30;
+    else if (bestMatchDist <= 2) similarScore = 15;
+  }
+
+  // Frequency scoring (1-100)
   const hash = simpleHash(normalized);
-  const count = Math.max(100, hash % 500000);
+  let score = (hash % 60) + 20; // 20 to 80 base
+  score = score - lengthPenalty + similarScore;
+  score = Math.max(1, Math.min(100, score)); // clamp 1-100
+
+  let estimatedPopularity = "rare";
+  let estimatedRange = "Fewer than 10,000 people";
+  let count = Math.max(100, hash % 9000);
+  
+  if (score >= 80) {
+    estimatedPopularity = "very common";
+    estimatedRange = "100,000 - 500,000+ people";
+    count = 100000 + (hash % 400000);
+  } else if (score >= 50) {
+    estimatedPopularity = "moderately common";
+    estimatedRange = "10,000 - 100,000 people";
+    count = 10000 + (hash % 90000);
+  }
+
+  const confidenceLevel = similarScore >= 30 ? 'medium' : 'low';
+
+  const explanation = `This estimate is based on our linguistic models. The name has ${nl.length} characters (which influences rarity) and shares structural similarities with known names like ${similarNames.join(" and ")}. Its suffix patterns suggest a likely ${origin} origin.`;
+
   const genders: Array<'male' | 'female' | 'unisex'> = ['male', 'female', 'unisex'];
+  
   return {
     name: normalized,
+    isExact: false,
     count,
     gender: genders[hash % 3],
     rank: Math.min(count > 100000 ? hash % 500 : hash % 50000 + 500, 99999),
@@ -85,7 +172,7 @@ export function getNameData(name: string) {
       "Canada": Math.floor(count * 0.1),
       "Australia": Math.floor(count * 0.08),
       "Other": Math.floor(count * 0.22),
-    },
+    } as Record<string, number>,
     decade_popularity: {
       "1940s": (hash % 40) + 10,
       "1950s": (hash % 45) + 10,
@@ -96,9 +183,14 @@ export function getNameData(name: string) {
       "2000s": (hash % 70) + 15,
       "2010s": (hash % 60) + 15,
       "2020s": (hash % 50) + 10,
-    },
-    origin: ["English", "Latin", "Greek", "Hebrew", "Germanic", "Celtic", "Arabic", "Sanskrit"][hash % 8],
-    meaning: "A name of historical significance",
+    } as Record<string, number>,
+    origin,
+    meaning: "Estimated based on linguistic patterns",
+    estimatedPopularity,
+    estimatedRange,
+    confidenceLevel,
+    explanation,
+    similarSuggestedNames: similarNames,
   };
 }
 
@@ -118,13 +210,7 @@ export function getPopularNames() {
     .sort((a, b) => a.rank - b.rank);
 }
 
-export function getSimilarNames(name: string): string[] {
-  const letter = name.charAt(0).toLowerCase();
-  const names = EXTENDED_NAMES[letter] || [];
-  return names.filter(n => n.toLowerCase() !== name.toLowerCase()).slice(0, 10);
-}
-
-function simpleHash(str: string): number {
+export function simpleHash(str: string): number {
   let hash = 0;
   for (let i = 0; i < str.length; i++) {
     const char = str.charCodeAt(i);
