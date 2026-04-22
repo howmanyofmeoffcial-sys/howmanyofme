@@ -31,7 +31,7 @@ const ToolCTA = ({
 
   const submit = (e: React.FormEvent) => {
     e.preventDefault();
-    const n = name.trim() || "James";
+    const n = name.trim().replace(/\s+/g, "-") || "James";
     router.push(`/name/${encodeURIComponent(n)}`);
   };
 

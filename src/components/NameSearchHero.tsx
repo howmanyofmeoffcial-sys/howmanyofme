@@ -23,13 +23,13 @@ const NameSearchHero = () => {
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
-    const name = firstName.trim() || "James";
+    const name = firstName.trim().replace(/\s+/g, "-") || "James";
     router.push(`/name/${encodeURIComponent(name)}`);
     setSuggestions([]);
   };
 
   const tryExample = (name: string) => {
-    router.push(`/name/${encodeURIComponent(name)}`);
+    router.push(`/name/${encodeURIComponent(name.replace(/\s+/g, "-"))}`);
   };
 
   const selectSuggestion = (name: string) => {

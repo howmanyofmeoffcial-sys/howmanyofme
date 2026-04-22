@@ -11,12 +11,7 @@ import { generateContentForName } from "@/lib/contentGenerator";
 import { Users, TrendingUp, Globe, BarChart3 } from "lucide-react";
 import React from "react";
 
-export const dynamicParams = true;
-
-export function generateStaticParams() {
-  const popular = getPopularNames();
-  return popular.map((n) => ({ name: n.name }));
-}
+export const dynamic = "force-dynamic";
 
 type Props = { params: Promise<{ name: string }> };
 
