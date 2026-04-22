@@ -13,7 +13,7 @@ const SiteHeader = () => {
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
     if (query.trim()) {
-      router.push(`/name/${encodeURIComponent(query.trim())}`);
+      router.push(`/name/${encodeURIComponent(query.trim().replace(/\s+/g, "-"))}`);
       setQuery("");
       setMobileMenuOpen(false);
     }
