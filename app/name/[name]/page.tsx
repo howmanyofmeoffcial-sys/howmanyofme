@@ -15,9 +15,16 @@ export const dynamic = "force-dynamic";
 
 type Props = { params: Promise<{ name: string }> };
 
+/** Normalize URL slug → human name: decode, replace hyphens, trim, strip non-alpha */
+function normalizeSlug(raw: string): string {
+  const decoded = decodeURIComponent(raw);
+  const cleaned = decoded.replace(/-/g, " ").trim().replace(/[^a-zA-Z\s]/g, "").trim();
+  return cleaned || "Unknown";
+}
+
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { name: rawName } = await params;
-  const nameStr = decodeURIComponent(rawName);
+  const nameStr = normalizeSlug(rawName);
   const data = getNameData(nameStr);
   return {
     title: `How Many People Are Named ${data.name}? Popularity, Rarity & Origin`,
@@ -52,7 +59,7 @@ function renderMarkdownText(text: string) {
 
 export default async function NameDetailPage({ params }: Props) {
   const { name: rawName } = await params;
-  const nameStr = decodeURIComponent(rawName);
+  const nameStr = normalizeSlug(rawName);
   const data = getNameData(nameStr);
   const similar = getSimilarNames(nameStr);
   const topRegion = Object.entries(data.regions).sort((a, b) => b[1] - a[1])[0];
