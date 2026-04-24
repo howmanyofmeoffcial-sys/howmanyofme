@@ -121,9 +121,25 @@ const TrendVisualizer = () => {
   const [input, setInput] = useState("");
   const [names, setNames] = useState<string[]>([]);
   const [country, setCountry] = useState<string>("Global");
+  const [showWarning, setShowWarning] = useState(false);
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    let val = e.target.value;
+    if (/\s/.test(val)) {
+      setShowWarning(true);
+      setTimeout(() => setShowWarning(false), 1000);
+      val = val.replace(/\s/g, "");
+    }
+    setInput(val);
+  };
 
   const addName = (e: React.FormEvent) => {
     e.preventDefault();
+    if (/\s/.test(input)) {
+      setShowWarning(true);
+      setTimeout(() => setShowWarning(false), 1000);
+      return;
+    }
     const n = input.trim();
     if (n && !names.includes(n) && names.length < 4) {
       setNames([...names, n]);
@@ -280,12 +296,17 @@ const TrendVisualizer = () => {
           </div>
         </div>
 
-        <form onSubmit={addName} className="flex gap-3 mb-6">
+        <form onSubmit={addName} className="relative flex gap-3 mb-6">
+          {showWarning && (
+            <div className="absolute -top-12 left-1/2 -translate-x-1/2 px-4 py-2 bg-destructive text-destructive-foreground text-sm font-semibold rounded-lg shadow-lg whitespace-nowrap animate-in fade-in slide-in-from-bottom-2 z-30">
+              please enter a first name or last name only
+            </div>
+          )}
           <input
             type="text"
             placeholder="Enter a name..."
             value={input}
-            onChange={(e) => setInput(e.target.value)}
+            onChange={handleInputChange}
             className="flex-1 h-12 rounded-md border border-input bg-secondary px-4"
             aria-label="Name to add to chart"
           />

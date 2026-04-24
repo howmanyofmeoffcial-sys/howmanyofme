@@ -16,7 +16,7 @@ const tools = [
   { icon: Globe, title: "Global Name Search", desc: "Explore name popularity by country.", link: "/" },
   { icon: MapPin, title: "Name Distribution Map", desc: "Visualize where your name is most common.", link: "/tools/trend-visualizer" },
   { icon: User, title: "Gender Prediction", desc: "Discover common gender usage of your name.", link: "/tools/meaning" },
-  { icon: Users, title: "Surname Analyzer", desc: "Explore origin and history of surnames.", link: "/tools/name-comparison" },
+  { icon: Users, title: "Name Comparison", desc: "Compare popularity between two names.", link: "/tools/name-comparison" },
   { icon: BookOpen, title: "Name Meaning & Origin", desc: "Learn meaning and cultural background.", link: "/tools/meaning" },
   { icon: Zap, title: "Trending Names", desc: "See names gaining popularity right now.", link: "/tools/trend-visualizer" },
   { icon: Clock, title: "Top Names by Year", desc: "Explore names by decade trends.", link: "/tools/popularity-checker" },

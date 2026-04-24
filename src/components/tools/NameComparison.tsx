@@ -61,9 +61,35 @@ const NameComparison = () => {
   const [name1, setName1] = useState("");
   const [name2, setName2] = useState("");
   const [results, setResults] = useState<{ a: ReturnType<typeof getNameData>; b: ReturnType<typeof getNameData> } | null>(null);
+  const [showWarning, setShowWarning] = useState(false);
+
+  const handleName1Change = (e: React.ChangeEvent<HTMLInputElement>) => {
+    let val = e.target.value;
+    if (/\s/.test(val)) {
+      setShowWarning(true);
+      setTimeout(() => setShowWarning(false), 1000);
+      val = val.replace(/\s/g, "");
+    }
+    setName1(val);
+  };
+
+  const handleName2Change = (e: React.ChangeEvent<HTMLInputElement>) => {
+    let val = e.target.value;
+    if (/\s/.test(val)) {
+      setShowWarning(true);
+      setTimeout(() => setShowWarning(false), 1000);
+      val = val.replace(/\s/g, "");
+    }
+    setName2(val);
+  };
 
   const compare = (e: React.FormEvent) => {
     e.preventDefault();
+    if (/\s/.test(name1) || /\s/.test(name2)) {
+      setShowWarning(true);
+      setTimeout(() => setShowWarning(false), 1000);
+      return;
+    }
     if (name1.trim() && name2.trim()) {
       setResults({ a: getNameData(name1.trim()), b: getNameData(name2.trim()) });
     }
@@ -165,12 +191,17 @@ const NameComparison = () => {
           </div>
         </div>
 
-        <form onSubmit={compare} className="flex flex-col sm:flex-row gap-3 mb-8">
+        <form onSubmit={compare} className="relative flex flex-col sm:flex-row gap-3 mb-8">
+          {showWarning && (
+            <div className="absolute -top-12 left-1/2 -translate-x-1/2 px-4 py-2 bg-destructive text-destructive-foreground text-sm font-semibold rounded-lg shadow-lg whitespace-nowrap animate-in fade-in slide-in-from-bottom-2 z-30">
+              please enter a first name or last name only
+            </div>
+          )}
           <input
             type="text"
             placeholder="First name..."
             value={name1}
-            onChange={(e) => setName1(e.target.value)}
+            onChange={handleName1Change}
             className="flex-1 h-12 rounded-md border border-input bg-secondary px-4 placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring"
             aria-label="First name"
           />
@@ -179,7 +210,7 @@ const NameComparison = () => {
             type="text"
             placeholder="Second name..."
             value={name2}
-            onChange={(e) => setName2(e.target.value)}
+            onChange={handleName2Change}
             className="flex-1 h-12 rounded-md border border-input bg-secondary px-4 placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring"
             aria-label="Second name"
           />

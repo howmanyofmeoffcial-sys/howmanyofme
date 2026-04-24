@@ -7,12 +7,18 @@ import { searchNames } from "@/data/nameData";
 
 const NameSearchHero = () => {
   const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
   const [suggestions, setSuggestions] = useState<string[]>([]);
   const [focused, setFocused] = useState(false);
+  const [showWarning, setShowWarning] = useState(false);
   const router = useRouter();
 
   const handleFirstNameChange = (val: string) => {
+    if (/\s/.test(val)) {
+      setShowWarning(true);
+      setTimeout(() => setShowWarning(false), 1000);
+      val = val.replace(/\s/g, ""); // strip spaces
+    }
+    
     setFirstName(val);
     if (val.length >= 2) {
       setSuggestions(searchNames(val));
@@ -23,6 +29,11 @@ const NameSearchHero = () => {
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
+    if (/\s/.test(firstName)) {
+      setShowWarning(true);
+      setTimeout(() => setShowWarning(false), 1000);
+      return;
+    }
     const name = firstName.trim().replace(/\s+/g, "-") || "James";
     router.push(`/name/${encodeURIComponent(name)}`);
     setSuggestions([]);
@@ -107,6 +118,11 @@ const NameSearchHero = () => {
 
               <form onSubmit={handleSearch} className="space-y-3">
                 <div className="relative">
+                  {showWarning && (
+                    <div className="absolute -top-12 left-1/2 -translate-x-1/2 px-4 py-2 bg-destructive text-destructive-foreground text-sm font-semibold rounded-lg shadow-lg whitespace-nowrap animate-in fade-in slide-in-from-bottom-2 z-30">
+                      please enter a first name or last name only
+                    </div>
+                  )}
                   <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground pointer-events-none" />
                   <input
                     type="text"
@@ -137,15 +153,6 @@ const NameSearchHero = () => {
                     </div>
                   )}
                 </div>
-
-                <input
-                  type="text"
-                  placeholder="Last name (optional)"
-                  value={lastName}
-                  onChange={(e) => setLastName(e.target.value)}
-                  aria-label="Enter your last name (optional)"
-                  className="w-full h-12 rounded-xl border-2 border-border bg-background px-4 text-foreground text-sm placeholder:text-muted-foreground/70 focus:outline-none focus:border-primary focus:ring-4 focus:ring-primary/15 hover:border-primary/40 transition-all"
-                />
 
                 <button
                   type="submit"

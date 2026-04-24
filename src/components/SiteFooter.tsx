@@ -50,7 +50,7 @@ const SiteFooter = () => (
         <div className="max-w-2xl mx-auto text-center">
           <p className="text-sm font-semibold text-foreground mb-2">Built by Ziven Borceg</p>
           <p className="text-sm text-muted-foreground leading-relaxed mb-3">
-            Hi, I&apos;m Ziven Borceg. Welcome to howmanyofme.co — your all-in-one platform to discover how many people around the world share your first or last name, explore name popularity trends, and uncover the origins and meaning behind names.
+            Hi, I&apos;m Ziven Borceg. Welcome to howmanyofme.co — your all-in-one platform to discover how many people around the world share your name, explore name popularity trends, and uncover the origins and meaning behind names.
           </p>
           <a
             href="https://medium.com/@zivenborceg"

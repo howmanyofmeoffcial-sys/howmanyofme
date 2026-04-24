@@ -21,8 +21,8 @@ const faqGroups = [
     items: [
       { q: "How many people have my exact name worldwide right now?", a: "Type your first name into the checker above to see a live estimate of global bearers, based on 100M+ records from 80+ countries. Most common English first names have between 500,000 and 10 million living bearers worldwide." },
       { q: "How many people share my first name in the United States?", a: "We combine U.S. Social Security Administration birth records (1880–present) with actuarial life tables to estimate how many living Americans share your first name. Results appear in under 1 second with no signup." },
-      { q: "Am I the only person in the world with my name?", a: "For truly unique first-name + surname combinations, yes — our tool can flag a name as 'likely unique' (fewer than 5 estimated bearers). Enter your full name to check if you may be the only one." },
-      { q: "Is it possible that no one else has my exact full name?", a: "Yes. Roughly 1 in 8 full-name combinations in the U.S. are estimated to be unique. Add your surname in the optional field to see whether your first + last name combination is one-of-a-kind." },
+      { q: "Am I the only person in the world with my name?", a: "Our tool can flag a name as 'likely unique' (fewer than 5 estimated bearers). Enter your first name to check if you may be the only one." },
+      { q: "Is it possible that no one else has my exact name?", a: "Yes. Many unique names exist globally. Enter your first name to see if it is one-of-a-kind." },
       { q: "How many babies were born with my name last year?", a: "Our popularity checker shows year-by-year birth counts back to 1880 and forward to the most recent release (typically prior year). You'll see exact annual figures for the U.S., UK, and major English-speaking countries." },
       { q: "Which country has the most people with my first name?", a: "After you search a name, the results page lists the top 10 countries by estimated living bearers, so you'll see instantly whether your name is most common in the US, India, Brazil, Nigeria, or elsewhere." },
     ],
@@ -35,7 +35,7 @@ const faqGroups = [
       { q: "How does my name rank among the top 1000 most popular names?", a: "If your name is in the top 1,000, we display its exact rank (e.g. #247) plus how that rank has changed decade by decade since 1880." },
       { q: "Is my name considered rare, uncommon, common, or very common?", a: "We label every name with a rarity tier: Very Common (top 100), Common (top 1,000), Uncommon (top 10,000), Rare (under 1 in 100,000 bearers), or Ultra-Rare (fewer than 100 bearers globally)." },
       { q: "How does the popularity of my name compare to my parents' generation?", a: "Our decade-by-decade popularity chart shows whether your name peaked in the 1950s, 1980s, or today — so you can see exactly how your name's popularity compares to when your parents were born." },
-      { q: "Which is rarer — my first name or my last name?", a: "Enter both your first name and surname. The results page shows separate rarity scores and bearer estimates for each, so you can compare which one makes you more unique." },
+      { q: "How do I check if my name is rare?", a: "Enter your first name. The results page shows a rarity score and bearer estimate, so you can see exactly how unique you are." },
     ],
   },
   {
@@ -63,9 +63,9 @@ const faqGroups = [
   {
     category: "Personalization",
     items: [
-      { q: "How many people have my full name including my surname?", a: "Add your last name in the optional field. We'll estimate how many people share your exact first + last name combination using linked birth and census records." },
-      { q: "Can I check how many people share my name with a specific middle name?", a: "Middle name support is limited — most public records index first + last name. You can, however, check each name separately and multiply approximate frequencies for a rough middle-name combo estimate." },
-      { q: "How many people have the same first and last name as me in my country?", a: "Our country filter lets you narrow a full-name search to a specific country (e.g. 'how many John Smiths live in the UK'), returning a country-specific bearer estimate." },
+      { q: "How many people have my exact name?", a: "Enter your first name. We'll estimate how many people share your name using linked birth and census records." },
+      { q: "Can I check how many people share my name with a specific middle name?", a: "Middle name support is limited — most public records index first names. You can, however, check each name separately and multiply approximate frequencies for a rough combo estimate." },
+      { q: "How many people have the same name as me in my country?", a: "Our country filter lets you narrow a search to a specific country (e.g. 'how many Johns live in the UK'), returning a country-specific bearer estimate." },
       { q: "How many people in my age group share my name?", a: "Our decade-by-decade breakdown shows how many people in each birth-year cohort were given your name, so you can see how many people your age share your name specifically." },
       { q: "Can I check how rare my name is for my gender?", a: "Yes. Every name page shows a gender split percentage (e.g. 97% female / 3% male) so you can see whether your name is rare for your specific gender." },
       { q: "How many people share my name and were born in the same decade as me?", a: "Enter your name and check the historical popularity chart — it shows the exact number of bearers born in the 1980s, 1990s, 2000s, 2010s, and 2020s, so you can isolate your own cohort." },
@@ -80,7 +80,7 @@ const ctrVariations = [
   "Check how many people share my name — free tool",
   "How many of me are there worldwide?",
   "Is my name rare or common? Find out in 1 second",
-  "How many people have my exact full name?",
+  "How many people have my exact name?",
 ];
 
 const jsonLd = [

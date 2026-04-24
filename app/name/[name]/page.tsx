@@ -167,18 +167,7 @@ export default async function NameDetailPage({ params }: Props) {
         <h1 className="font-display text-4xl md:text-6xl font-bold mb-3">How Many People Are Named {data.name}?</h1>
         <p className="text-xl text-muted-foreground mb-8">Comprehensive statistics and insights for the name <strong className="text-foreground">{data.name}</strong></p>
 
-        {!data.isExact && (
-          <div className="mb-10 p-5 rounded-xl border border-yellow-500/30 bg-yellow-500/10 text-yellow-800 dark:text-yellow-200">
-            <h2 className="font-bold text-lg mb-2">No exact data found for {data.name}. Showing estimated results.</h2>
-            <p className="text-sm opacity-90 mb-3">We do not have official registry data for this exact spelling. The statistics below are <strong>estimated</strong> based on demographic models, phonetic similarities, and linguistic patterns.</p>
-            <div className="p-3 bg-yellow-500/20 rounded-md border border-yellow-500/30">
-              <p className="text-sm font-medium mb-1"><strong>Estimation Logic:</strong></p>
-              <p className="text-sm">{data.explanation}</p>
-              <p className="text-sm mt-2"><strong>Confidence Level:</strong> {data.confidenceLevel === 'medium' ? 'Medium (Close match found)' : 'Low (Mathematical estimate)'}</p>
-              <p className="text-sm"><strong>Estimated Popularity:</strong> {data.estimatedPopularity} ({data.estimatedRange})</p>
-            </div>
-          </div>
-        )}
+
 
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-10">
           {[
