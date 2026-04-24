@@ -27,16 +27,14 @@ export function generateContentForName(name: string, count: number, origin: stri
   const link1 = allInternalLinks[hash % allInternalLinks.length];
   const link2 = allInternalLinks[(hash + 1) % allInternalLinks.length];
 
-  // 1. Intro Variations
+  // 1. Intro Variations (6 total for uniqueness)
   const intros = [
-    // Style A: Direct answer
     `If you've ever wondered how many people share the name **${name}**, our latest demographic analysis estimates there are approximately ${count.toLocaleString()} individuals worldwide. You can also [${link1.text}](${link1.href}).`,
-    // Style B: Question-based
     `Is **${name}** a rare name? Based on global birth registries and census data, we estimate that ${count.toLocaleString()} people currently hold this name, making it rank #${rank.toLocaleString()} globally. Want more insights? [${link1.text}](${link1.href}).`,
-    // Style C: Context-based
     `The name **${name}** has maintained a fascinating presence across different regions. Our statistical models indicate a global population of roughly ${count.toLocaleString()} people sharing this name today.`,
-    // Style D: Cultural explanation
-    `With roots tracing back to ${origin} origins, **${name}** is carried by an estimated ${count.toLocaleString()} people worldwide. Let's dive into the data behind this unique name. You can also [${link1.text}](${link1.href}).`
+    `With roots tracing back to ${origin} origins, **${name}** is carried by an estimated ${count.toLocaleString()} people worldwide. Let's dive into the data behind this unique name. You can also [${link1.text}](${link1.href}).`,
+    `Ever met someone named **${name}**? Our analysis of global naming records shows approximately ${count.toLocaleString()} people bear this name, placing it at rank #${rank.toLocaleString()} worldwide. [${link1.text}](${link1.href}) for more context.`,
+    `**${name}** is more than just a name — it carries ${origin} heritage and is shared by roughly ${count.toLocaleString()} individuals across the globe. Discover what makes this name stand out below.`
   ];
   
   // 2. Explanation / Sentence Variations
@@ -50,11 +48,13 @@ export function generateContentForName(name: string, count: number, origin: stri
     explanations.push(`Because precise registry data for ${name} is limited, this model leverages phonetic similarity and cultural suffixes to estimate its footprint. You might want to [${link2.text}](${link2.href}).`);
   }
 
-  // 3. Section Order Variation
+  // 3. Section Order Variation (5 permutations)
   const orders = [
-    ['intro', 'stats', 'history', 'regional', 'faqs', 'similar'],
-    ['intro', 'stats', 'regional', 'history', 'faqs', 'similar'],
-    ['intro', 'regional', 'stats', 'faqs', 'history', 'similar']
+    ['intro', 'stats', 'meaning', 'history', 'age', 'regional', 'faqs', 'similar'],
+    ['intro', 'stats', 'regional', 'age', 'history', 'meaning', 'faqs', 'similar'],
+    ['intro', 'meaning', 'regional', 'stats', 'faqs', 'age', 'history', 'similar'],
+    ['intro', 'history', 'meaning', 'stats', 'age', 'regional', 'similar', 'faqs'],
+    ['intro', 'regional', 'history', 'age', 'stats', 'meaning', 'faqs', 'similar']
   ];
 
   // 4. FAQ Variation
@@ -74,6 +74,14 @@ export function generateContentForName(name: string, count: number, origin: stri
     {
       question: `Is ${name} outdated?`,
       answer: `Naming trends are cyclical. While certain decades saw spikes in usage, ${name} continues to be used by modern parents.`
+    },
+    {
+      question: `How common is ${name} in the United States?`,
+      answer: `In the United States alone, we estimate approximately ${Math.floor(count * 0.45).toLocaleString()} people are named ${name}, making it ${count * 0.45 > 50000 ? 'relatively common' : 'quite distinctive'} within the country.`
+    },
+    {
+      question: `What does the name ${name} mean?`,
+      answer: `The name ${name}, with ${origin} roots, has been associated with various cultural meanings throughout history. Its usage patterns suggest strong ties to ${origin.toLowerCase()} naming traditions.`
     }
   ];
 

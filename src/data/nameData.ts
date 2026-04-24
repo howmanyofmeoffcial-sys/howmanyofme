@@ -1,3 +1,9 @@
+import { A_NAMES } from './names/namesA';
+
+// Pre-indexed gender lookup from name registries
+const NAME_GENDER_INDEX: Record<string, 'male' | 'female' | 'unisex'> = {};
+A_NAMES.forEach(entry => { NAME_GENDER_INDEX[entry.name.toLowerCase()] = entry.gender; });
+
 // Mock dataset - in production this would come from a database
 const POPULAR_NAMES: Record<string, {
   count: number;
@@ -33,7 +39,6 @@ const POPULAR_NAMES: Record<string, {
 // Generate extended names list for each letter
 const EXTENDED_NAMES: Record<string, string[]> = {};
 const COMMON_PREFIXES: Record<string, string[]> = {
-  A: ["Aaron", "Abigail", "Adam", "Adrian", "Aiden", "Alan", "Albert", "Alex", "Alexander", "Alexandra", "Alice", "Alicia", "Allen", "Allison", "Amanda", "Amber", "Amy", "Andrea", "Andrew", "Angela", "Ann", "Anna", "Anne", "Anthony", "Antonio", "April", "Aria", "Ariana", "Arthur", "Ashley", "Audrey", "Aurora", "Austin", "Avery", "Ava"],
   B: ["Bailey", "Barbara", "Barry", "Beatrice", "Bella", "Benjamin", "Bernard", "Beth", "Betty", "Beverly", "Billy", "Blake", "Bobby", "Bonnie", "Bradley", "Brandon", "Brenda", "Brian", "Brianna", "Brittany", "Brooke", "Brooklyn", "Bruce", "Bryan"],
   C: ["Caleb", "Cameron", "Camila", "Carl", "Carlos", "Carmen", "Carol", "Caroline", "Carolyn", "Carter", "Catherine", "Charles", "Charlotte", "Chase", "Chelsea", "Cheryl", "Chris", "Christian", "Christina", "Christine", "Christopher", "Cindy", "Claire", "Clara", "Clarence", "Clark", "Claude", "Clayton", "Cody", "Colin", "Colton", "Connor", "Cooper", "Corey", "Craig", "Crystal", "Curtis", "Cynthia"],
   D: ["Daisy", "Dale", "Dallas", "Damian", "Daniel", "Danielle", "Danny", "Darlene", "Darren", "David", "Dawn", "Dean", "Deborah", "Debra", "Delilah", "Dennis", "Derek", "Destiny", "Diana", "Diane", "Diego", "Dominic", "Donald", "Donna", "Dorothy", "Douglas", "Drew", "Dustin", "Dylan"],
@@ -61,6 +66,8 @@ const COMMON_PREFIXES: Record<string, string[]> = {
   Z: ["Zachary", "Zane", "Zara", "Zelda", "Zion", "Zoe", "Zoey"],
 };
 
+// Populate EXTENDED_NAMES: A-names from registry, others from common prefixes
+EXTENDED_NAMES['a'] = A_NAMES.map(e => e.name);
 Object.entries(COMMON_PREFIXES).forEach(([letter, names]) => {
   EXTENDED_NAMES[letter.toLowerCase()] = names;
 });
@@ -158,13 +165,14 @@ export function getNameData(name: string) {
 
   const explanation = `This estimate is based on our linguistic models. The name has ${nl.length} characters (which influences rarity) and shares structural similarities with known names like ${similarNames.join(" and ")}. Its suffix patterns suggest a likely ${origin} origin.`;
 
-  const genders: Array<'male' | 'female' | 'unisex'> = ['male', 'female', 'unisex'];
+  // Use pre-assigned gender from registry if available, otherwise heuristic
+  let gender: 'male' | 'female' | 'unisex' = NAME_GENDER_INDEX[nl] || detectGenderHeuristic(nl);
   
   return {
     name: normalized,
     isExact: false,
     count,
-    gender: genders[hash % 3],
+    gender,
     rank: Math.min(count > 100000 ? hash % 500 : hash % 50000 + 500, 99999),
     regions: {
       "United States": Math.floor(count * 0.45),
@@ -192,6 +200,18 @@ export function getNameData(name: string) {
     explanation,
     similarSuggestedNames: similarNames,
   };
+}
+
+/** Heuristic gender detection for names not in registry */
+function detectGenderHeuristic(name: string): 'male' | 'female' | 'unisex' {
+  const n = name.toLowerCase();
+  const fSuffixes = ['ella','ette','anna','enna','issa','iana','eena','leen','line','lina','rina','dina','tina','nina','mina','gina','isha','esha','asha','usha','ushi','ishi','athi','itha','iya','aya','eya','iah','yah','nah','rah','lah','mah','ini','ani','eni','uni','oni','ika','ia','ya','ah','ee','ie','na','la','ra','da','sa','ka','ma','ta'];
+  const mSuffixes = ['ander','andro','bert','ford','rick','wick','fred','helm','olph','veer','deep','jeet','nath','dev','esh','ish','ush','rit','hit','mit','vit','dit','jit','av','ev','iv','uv','ik','ak','uk','ek','ok'];
+  for (const s of fSuffixes) { if (n.endsWith(s) && n.length > s.length) return 'female'; }
+  for (const s of mSuffixes) { if (n.endsWith(s) && n.length > s.length) return 'male'; }
+  if (n.endsWith('a') || n.endsWith('i')) return 'female';
+  if (n.endsWith('n') || n.endsWith('r') || n.endsWith('d') || n.endsWith('s') || n.endsWith('o') || n.endsWith('x')) return 'male';
+  return 'unisex';
 }
 
 export function getNamesForLetter(letter: string): string[] {
