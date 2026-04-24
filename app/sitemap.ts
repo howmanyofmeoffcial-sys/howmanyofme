@@ -42,6 +42,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const popularNames = getPopularNames().map((n) => n.name);
   const allNames = new Set<string>(popularNames);
   ALPHABET.forEach((letter) => {
+    if (letter.toLowerCase() === 'a') return; // Handled in sitemap_names_a.xml
     getNamesForLetter(letter).forEach((name) => allNames.add(name));
   });
   const namePages: MetadataRoute.Sitemap = Array.from(allNames).map((name) => ({

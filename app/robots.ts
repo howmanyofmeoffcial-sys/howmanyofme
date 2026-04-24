@@ -9,6 +9,9 @@ export default function robots(): MetadataRoute.Robots {
         disallow: ["/api/", "/_next/"],
       },
     ],
-    sitemap: "https://howmanyofme.co/sitemap.xml",
+    sitemap: [
+      "https://howmanyofme.co/sitemap.xml",
+      "https://howmanyofme.co/sitemap_names_a.xml",
+    ],
   };
 }
