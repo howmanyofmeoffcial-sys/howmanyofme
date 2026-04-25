@@ -1080,6 +1080,22 @@
     "category": "variation"
   },
   {
+    "name": "Celicia",
+    "gender": "female",
+    "score": 100,
+    "status": "index",
+    "tier": 2,
+    "category": "variation"
+  },
+  {
+    "name": "Celissa",
+    "gender": "female",
+    "score": 100,
+    "status": "index",
+    "tier": 2,
+    "category": "variation"
+  },
+  {
     "name": "Baile",
     "gender": "unisex",
     "score": 95,
@@ -1472,6 +1488,14 @@
     "category": "variation"
   },
   {
+    "name": "Cebastian",
+    "gender": "male",
+    "score": 95,
+    "status": "index",
+    "tier": 2,
+    "category": "variation"
+  },
+  {
     "name": "Baden",
     "gender": "male",
     "score": 90,
@@ -1570,30 +1594,6 @@
   {
     "name": "Baraa",
     "gender": "female",
-    "score": 90,
-    "status": "index",
-    "tier": 2,
-    "category": "variation"
-  },
-  {
-    "name": "Barara",
-    "gender": "female",
-    "score": 90,
-    "status": "index",
-    "tier": 2,
-    "category": "variation"
-  },
-  {
-    "name": "Barbaraann",
-    "gender": "unisex",
-    "score": 90,
-    "status": "index",
-    "tier": 2,
-    "category": "variation"
-  },
-  {
-    "name": "Barbarajo",
-    "gender": "unisex",
     "score": 90,
     "status": "index",
     "tier": 2,
@@ -2368,33 +2368,33 @@
     "category": "longtail"
   },
   {
-    "name": "Bashawn",
-    "gender": "unisex",
-    "score": 95,
+    "name": "Cabella",
+    "gender": "female",
+    "score": 100,
     "status": "index",
     "tier": 3,
     "category": "longtail"
   },
   {
-    "name": "Batrice",
-    "gender": "unisex",
-    "score": 95,
+    "name": "Cabrina",
+    "gender": "female",
+    "score": 100,
     "status": "index",
     "tier": 3,
     "category": "longtail"
   },
   {
-    "name": "Bearnice",
-    "gender": "unisex",
-    "score": 95,
+    "name": "Caitlyn",
+    "gender": "female",
+    "score": 100,
     "status": "index",
     "tier": 3,
     "category": "longtail"
   },
   {
-    "name": "Beather",
-    "gender": "male",
-    "score": 95,
+    "name": "Camaria",
+    "gender": "female",
+    "score": 100,
     "status": "index",
     "tier": 3,
     "category": "longtail"

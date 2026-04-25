@@ -20,6 +20,9 @@ if not combined_data:
 unique_data = {item['name'].lower(): item for item in combined_data}
 combined_data = list(unique_data.values())
 
+# Filter out low scores (must be >= 80 to be indexed)
+combined_data = [item for item in combined_data if item.get('score', 0) >= 80]
+
 # Sort by score descending
 combined_data.sort(key=lambda x: x.get('score', 0), reverse=True)
 

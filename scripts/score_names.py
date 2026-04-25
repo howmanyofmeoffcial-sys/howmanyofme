@@ -5,8 +5,8 @@ import difflib
 import os
 
 letter = sys.argv[1].upper() if len(sys.argv) > 1 else "B"
-INPUT_FILE = f"scripts/clean_names_{letter}.json" if letter == "B" else f"scripts/clean_names.json"
-OUTPUT_FILE = f"scripts/scored_names_{letter}.json" if letter == "B" else f"scripts/scored_names.json"
+INPUT_FILE = f"scripts/clean_names_{letter}.json"
+OUTPUT_FILE = f"scripts/scored_names_{letter}.json"
 DICT_FILE = "/usr/share/dict/words"
 
 # Load dynamic known popular names for similarity checking

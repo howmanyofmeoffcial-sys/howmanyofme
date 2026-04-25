@@ -5,8 +5,8 @@ import os
 import sys
 
 letter = sys.argv[1].upper() if len(sys.argv) > 1 else "B"
-INPUT_FILE = f"scripts/raw_names_input_{letter}.txt" if letter == "B" else f"scripts/raw_names_input.txt"
-OUTPUT_FILE = f"scripts/clean_names_{letter}.json" if letter == "B" else f"scripts/clean_names.json"
+INPUT_FILE = f"scripts/raw_names_input_{letter}.txt"
+OUTPUT_FILE = f"scripts/clean_names_{letter}.json"
 DICT_FILE = "/usr/share/dict/words"
 
 # Load dynamic known popular names for similarity checking and whitelist
@@ -48,6 +48,27 @@ def get_gender(name):
 def process_names():
     reject_words = load_dictionary()
     clean_names = {}
+    
+    seen_names = set()
+    seen_slugs = set()
+    
+    # Global deduplication across all existing core datasets
+    src_data_dir = "src/data/names"
+    if os.path.exists(src_data_dir):
+        for filename in os.listdir(src_data_dir):
+            if filename.startswith("core_dataset_") and filename.endswith(".json"):
+                with open(os.path.join(src_data_dir, filename), "r") as f:
+                    try:
+                        existing_data = json.load(f)
+                        for item in existing_data:
+                            if "name" in item:
+                                seen_names.add(item["name"].lower())
+                            if "slug" in item:
+                                seen_slugs.add(item["slug"].lower())
+                    except Exception as e:
+                        print(f"Error loading {filename}: {e}")
+                        
+    print(f"Loaded {len(seen_names)} existing names for global deduplication.")
     
     with open(INPUT_FILE, 'r') as f:
         lines = f.readlines()
@@ -98,14 +119,17 @@ def process_names():
             continue
             
         # Deduplication
-        if name not in clean_names:
-            gender = get_gender(name)
-            clean_names[name] = {
-                "name": name,
-                "slug": slug,
-                "gender": gender,
-                "score": score
-            }
+        if name.lower() not in seen_names and slug not in seen_slugs:
+            if name not in clean_names:
+                gender = get_gender(name)
+                clean_names[name] = {
+                    "name": name,
+                    "slug": slug,
+                    "gender": gender,
+                    "score": score
+                }
+                seen_names.add(name.lower())
+                seen_slugs.add(slug)
             
     # Output to JSON
     with open(OUTPUT_FILE, 'w') as f:
