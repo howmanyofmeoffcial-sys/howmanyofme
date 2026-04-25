@@ -4,7 +4,6 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { Search, Sparkles, Zap, ShieldCheck, ArrowRight } from "lucide-react";
-import { searchNames } from "@/data/nameData";
 
 interface ToolCTAProps {
   variant?: "full" | "compact";
@@ -24,9 +23,19 @@ const ToolCTA = ({
   const [focused, setFocused] = useState(false);
   const router = useRouter();
 
-  const handleChange = (val: string) => {
+  const handleChange = async (val: string) => {
     setName(val);
-    setSuggestions(val.length >= 2 ? searchNames(val) : []);
+    if (val.length >= 2) {
+      try {
+        const res = await fetch(`/api/search?q=${encodeURIComponent(val)}`);
+        const data = await res.json();
+        setSuggestions(data.suggestions || []);
+      } catch (err) {
+        setSuggestions([]);
+      }
+    } else {
+      setSuggestions([]);
+    }
   };
 
   const submit = (e: React.FormEvent) => {

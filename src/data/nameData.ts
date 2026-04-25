@@ -1,10 +1,5 @@
-import { A_NAMES } from './names/namesA';
-import { B_NAMES } from './names/namesB';
-
 // Pre-indexed gender lookup from name registries
 const NAME_GENDER_INDEX: Record<string, 'male' | 'female' | 'unisex'> = {};
-A_NAMES.forEach(entry => { NAME_GENDER_INDEX[entry.name.toLowerCase()] = entry.gender; });
-B_NAMES.forEach(entry => { NAME_GENDER_INDEX[entry.name.toLowerCase()] = entry.gender; });
 
 // Mock dataset - in production this would come from a database
 const POPULAR_NAMES: Record<string, {
@@ -39,7 +34,7 @@ const POPULAR_NAMES: Record<string, {
 };
 
 // Generate extended names list for each letter
-const EXTENDED_NAMES: Record<string, string[]> = {};
+export const EXTENDED_NAMES: Record<string, string[]> = {};
 const COMMON_PREFIXES: Record<string, string[]> = {
   B: ["Bailey", "Barbara", "Barry", "Beatrice", "Bella", "Benjamin", "Bernard", "Beth", "Betty", "Beverly", "Billy", "Blake", "Bobby", "Bonnie", "Bradley", "Brandon", "Brenda", "Brian", "Brianna", "Brittany", "Brooke", "Brooklyn", "Bruce", "Bryan"],
   C: ["Caleb", "Cameron", "Camila", "Carl", "Carlos", "Carmen", "Carol", "Caroline", "Carolyn", "Carter", "Catherine", "Charles", "Charlotte", "Chase", "Chelsea", "Cheryl", "Chris", "Christian", "Christina", "Christine", "Christopher", "Cindy", "Claire", "Clara", "Clarence", "Clark", "Claude", "Clayton", "Cody", "Colin", "Colton", "Connor", "Cooper", "Corey", "Craig", "Crystal", "Curtis", "Cynthia"],
@@ -68,9 +63,7 @@ const COMMON_PREFIXES: Record<string, string[]> = {
   Z: ["Zachary", "Zane", "Zara", "Zelda", "Zion", "Zoe", "Zoey"],
 };
 
-// Populate EXTENDED_NAMES: A-names and B-names from registry, others from common prefixes
-EXTENDED_NAMES['a'] = A_NAMES.map(e => e.name);
-EXTENDED_NAMES['b'] = B_NAMES.map(e => e.name);
+// Populate EXTENDED_NAMES: A-names and B-names will be loaded dynamically on the server
 Object.entries(COMMON_PREFIXES).forEach(([letter, names]) => {
   EXTENDED_NAMES[letter.toLowerCase()] = names;
 });

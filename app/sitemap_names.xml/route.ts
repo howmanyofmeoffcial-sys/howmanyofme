@@ -1,17 +1,17 @@
-import { A_NAMES } from "@/data/names/namesA";
+import { getIndexedSitemapTargets } from "@/data/serverNameData";
 
 export const dynamic = "force-dynamic";
 
 export async function GET() {
   const baseUrl = "https://howmanyofme.co";
 
-  // Only include names that are marked for indexing (Score >= 80)
-  const indexedNames = A_NAMES.filter((nameData) => nameData.status === "index");
+  const targets = getIndexedSitemapTargets();
+  const indexedNames = targets.filter((nameData: any) => nameData.status === "index");
 
   const xml = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   ${indexedNames.map(
-    (nameData) => `
+    (nameData: any) => `
   <url>
     <loc>${baseUrl}/name/${encodeURIComponent(nameData.name)}</loc>
     <changefreq>monthly</changefreq>
