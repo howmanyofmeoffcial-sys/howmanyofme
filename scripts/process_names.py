@@ -2,22 +2,18 @@ import json
 import re
 import os
 
-INPUT_FILE = "scripts/raw_names_input_B.txt"
-OUTPUT_FILE = "scripts/clean_names_B.json"
+import sys
+
+letter = sys.argv[1].upper() if len(sys.argv) > 1 else "B"
+INPUT_FILE = f"scripts/raw_names_input_{letter}.txt" if letter == "B" else f"scripts/raw_names_input.txt"
+OUTPUT_FILE = f"scripts/clean_names_{letter}.json" if letter == "B" else f"scripts/clean_names.json"
 DICT_FILE = "/usr/share/dict/words"
 
-# A whitelist of words that are valid names despite being in the dictionary
-WHITELIST = {
-    "amber", "april", "autumn", "ash", "apple", "angel", "arrow", "aspen", 
-    "august", "aura", "ace", "alpha", "aqua", "aria", "art", "asia", "atlas", 
-    "auburn", "aurora", "azure", "amethyst", "almond", "alpine", "america", 
-    "amity", "arabia", "archer", "argentina", "aries", "arrow", "astrid", 
-    "athena", "audacity", "augustus", "austen", "austin", "avalanch", "avalon",
-    "avenue", "aviator", "awesome", "ali", "abbey", "abbot", "abbott",
-    "bill", "bella", "ben", "bear", "beau", "bell", "berry", "birdie",
-    "bishop", "blaze", "blossom", "blue", "bob", "booker", "bree", "briar",
-    "brook", "brooke", "brown", "buck", "buddy", "bunny", "basil", "baker"
-}
+# Load dynamic known popular names for similarity checking and whitelist
+WHITELIST = set()
+if os.path.exists("scripts/popular_names_seed.json"):
+    with open("scripts/popular_names_seed.json", "r") as f:
+        WHITELIST = set(json.load(f))
 
 def load_dictionary():
     lowercase_words = set()

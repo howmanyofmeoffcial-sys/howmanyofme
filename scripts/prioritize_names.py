@@ -1,23 +1,17 @@
+import sys
 import json
 
-INPUT_FILE = "scripts/scored_names_B.json"
-OUTPUT_FILE = "scripts/top_500_tiers_B.json"
+letter = sys.argv[1].upper() if len(sys.argv) > 1 else "B"
+INPUT_FILE = f"scripts/scored_names_{letter}.json" if letter == "B" else f"scripts/scored_names.json"
+OUTPUT_FILE = f"scripts/top_500_tiers_{letter}.json" if letter == "B" else f"scripts/top_500_tiers.json"
 
-# Basic list of top names to seed the tier selection
-TOP_NAMES_SEED = {
-    "aaron", "abigail", "adam", "adrian", "aiden", "alan", "albert", "alex", 
-    "alexander", "alexis", "alice", "alicia", "alison", "allison", "alma", 
-    "amanda", "amber", "amelia", "amy", "ana", "andrea", "andrew", "angela", 
-    "angelina", "anita", "ann", "anna", "anne", "annie", "anthony", "antonio", 
-    "april", "ariana", "arianna", "ariel", "arthur", "ashley", "athena", "aubrey", 
-    "audrey", "august", "aurora", "austin", "autumn", "ava", "axel", "aarav", 
-    "aaliyah", "amir", "aryan", "ayden", "alden", "amara",
-    "benjamin", "bella", "brianna", "brandon", "brian", "bailey", "blake",
-    "brody", "bentley", "braxton", "bryce", "bradley", "brooks", "bryan",
-    "beau", "beckett", "brady", "beckham", "brendan", "brennan", "ben",
-    "bill", "billy", "beth", "bethany", "britney", "brittany", "brie",
-    "bree", "brooklyn", "brooke", "brynn", "blair", "bianca", "bonnie"
-}
+import os
+
+# Load dynamic known popular names to seed the tier selection
+TOP_NAMES_SEED = set()
+if os.path.exists("scripts/popular_names_seed.json"):
+    with open("scripts/popular_names_seed.json", "r") as f:
+        TOP_NAMES_SEED = set(json.load(f))
 
 def prioritize_names():
     with open(INPUT_FILE, "r") as f:

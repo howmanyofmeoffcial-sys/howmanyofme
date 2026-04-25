@@ -7,6 +7,7 @@ import ToolCTA from "@/components/ToolCTA";
 import Breadcrumbs from "@/components/Breadcrumbs";
 import RelatedPosts from "@/components/RelatedPosts";
 import { getNamesForLetter, ALPHABET } from "@/data/nameData";
+import { getNamesForLetterServer } from "@/data/serverNameData";
 
 export function generateStaticParams() {
   return ALPHABET.map((letter) => ({ letter }));
@@ -18,7 +19,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { letter } = await params;
   const l = letter.toLowerCase();
   const L = l.toUpperCase();
-  const names = getNamesForLetter(l);
+  const baseNames = getNamesForLetter(l);
+  const names = getNamesForLetterServer(l, baseNames);
   return {
     title: `Names Starting with ${L} — Popularity & Meanings (A–Z Directory)`,
     description: `Browse ${names.length.toLocaleString()} first names beginning with ${L}. Click any name to see how many people have it worldwide, decade-by-decade popularity, and regional data.`,
@@ -30,7 +32,8 @@ export default async function LetterDirectoryPage({ params }: Props) {
   const { letter } = await params;
   const l = letter.toLowerCase();
   const L = l.toUpperCase();
-  const names = getNamesForLetter(l);
+  const baseNames = getNamesForLetter(l);
+  const names = getNamesForLetterServer(l, baseNames);
   const idx = ALPHABET.indexOf(l);
   const prev = ALPHABET[(idx - 1 + 26) % 26];
   const next = ALPHABET[(idx + 1) % 26];

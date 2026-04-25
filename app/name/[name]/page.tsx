@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { notFound } from "next/navigation";
 import Link from "next/link";
 import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
@@ -7,6 +8,7 @@ import ToolCTA from "@/components/ToolCTA";
 import Breadcrumbs from "@/components/Breadcrumbs";
 import RelatedPosts from "@/components/RelatedPosts";
 import { getNameData, getSimilarNames, formatNumber, getPopularNames } from "@/data/nameData";
+import { getRegistryStatus } from "@/data/serverNameData";
 import { generateContentForName } from "@/lib/contentGenerator";
 import { Users, TrendingUp, Globe, BarChart3, Sparkles, Calendar, Brain, BookOpen } from "lucide-react";
 import React from "react";
@@ -60,6 +62,15 @@ function renderMarkdownText(text: string) {
 export default async function NameDetailPage({ params }: Props) {
   const { name: rawName } = await params;
   const nameStr = normalizeSlug(rawName);
+  
+  // Enforce Quality Checks
+  const registryStatus = getRegistryStatus(nameStr);
+  if (registryStatus) {
+    if (registryStatus.status === "reject" || registryStatus.score < 60) {
+      notFound();
+    }
+  }
+  
   const data = getNameData(nameStr);
   const similar = getSimilarNames(nameStr);
   const topRegion = Object.entries(data.regions).sort((a, b) => b[1] - a[1])[0];

@@ -480,6 +480,12 @@
     "score": 100
   },
   {
+    "name": "Bailey",
+    "slug": "bailey",
+    "gender": "female",
+    "score": 100
+  },
+  {
     "name": "Baileyann",
     "slug": "baileyann",
     "gender": "unisex",
@@ -633,12 +639,6 @@
     "name": "Bakary",
     "slug": "bakary",
     "gender": "unisex",
-    "score": 100
-  },
-  {
-    "name": "Baker",
-    "slug": "baker",
-    "gender": "male",
     "score": 100
   },
   {
@@ -2658,12 +2658,6 @@
     "score": 100
   },
   {
-    "name": "Bear",
-    "slug": "bear",
-    "gender": "male",
-    "score": 100
-  },
-  {
     "name": "Bearen",
     "slug": "bearen",
     "gender": "male",
@@ -2810,12 +2804,6 @@
   {
     "name": "Beatty",
     "slug": "beatty",
-    "gender": "unisex",
-    "score": 100
-  },
-  {
-    "name": "Beau",
-    "slug": "beau",
     "gender": "unisex",
     "score": 100
   },
@@ -3482,12 +3470,6 @@
   {
     "name": "Belkys",
     "slug": "belkys",
-    "gender": "unisex",
-    "score": 100
-  },
-  {
-    "name": "Bell",
-    "slug": "bell",
     "gender": "unisex",
     "score": 100
   },
@@ -5732,12 +5714,6 @@
   {
     "name": "Berrin",
     "slug": "berrin",
-    "gender": "unisex",
-    "score": 100
-  },
-  {
-    "name": "Berry",
-    "slug": "berry",
     "gender": "unisex",
     "score": 100
   },
@@ -8136,12 +8112,6 @@
     "score": 100
   },
   {
-    "name": "Birdie",
-    "slug": "birdie",
-    "gender": "female",
-    "score": 100
-  },
-  {
     "name": "Birdine",
     "slug": "birdine",
     "gender": "unisex",
@@ -8325,12 +8295,6 @@
     "name": "Bishesh",
     "slug": "bishesh",
     "gender": "male",
-    "score": 100
-  },
-  {
-    "name": "Bishop",
-    "slug": "bishop",
-    "gender": "unisex",
     "score": 100
   },
   {
@@ -9012,12 +8976,6 @@
     "score": 100
   },
   {
-    "name": "Blaze",
-    "slug": "blaze",
-    "gender": "unisex",
-    "score": 100
-  },
-  {
     "name": "Blazen",
     "slug": "blazen",
     "gender": "male",
@@ -9282,12 +9240,6 @@
     "score": 100
   },
   {
-    "name": "Blossom",
-    "slug": "blossom",
-    "gender": "unisex",
-    "score": 100
-  },
-  {
     "name": "Blouncie",
     "slug": "blouncie",
     "gender": "female",
@@ -9296,12 +9248,6 @@
   {
     "name": "Blu",
     "slug": "blu",
-    "gender": "unisex",
-    "score": 100
-  },
-  {
-    "name": "Blue",
-    "slug": "blue",
     "gender": "unisex",
     "score": 100
   },
@@ -10131,12 +10077,6 @@
     "name": "Bonzie",
     "slug": "bonzie",
     "gender": "female",
-    "score": 100
-  },
-  {
-    "name": "Booker",
-    "slug": "booker",
-    "gender": "male",
     "score": 100
   },
   {
@@ -12900,12 +12840,6 @@
     "score": 100
   },
   {
-    "name": "Bree",
-    "slug": "bree",
-    "gender": "female",
-    "score": 100
-  },
-  {
     "name": "Breea",
     "slug": "breea",
     "gender": "female",
@@ -15159,12 +15093,6 @@
     "name": "Briany",
     "slug": "briany",
     "gender": "unisex",
-    "score": 100
-  },
-  {
-    "name": "Briar",
-    "slug": "briar",
-    "gender": "male",
     "score": 100
   },
   {
@@ -17964,12 +17892,6 @@
     "score": 100
   },
   {
-    "name": "Brook",
-    "slug": "brook",
-    "gender": "unisex",
-    "score": 100
-  },
-  {
     "name": "Brookann",
     "slug": "brookann",
     "gender": "unisex",
@@ -18224,12 +18146,6 @@
   {
     "name": "Browdy",
     "slug": "browdy",
-    "gender": "unisex",
-    "score": 100
-  },
-  {
-    "name": "Brown",
-    "slug": "brown",
     "gender": "unisex",
     "score": 100
   },
@@ -19530,12 +19446,6 @@
     "score": 100
   },
   {
-    "name": "Buck",
-    "slug": "buck",
-    "gender": "unisex",
-    "score": 100
-  },
-  {
     "name": "Buckey",
     "slug": "buckey",
     "gender": "female",
@@ -19581,12 +19491,6 @@
     "name": "Buddie",
     "slug": "buddie",
     "gender": "female",
-    "score": 100
-  },
-  {
-    "name": "Buddy",
-    "slug": "buddy",
-    "gender": "unisex",
     "score": 100
   },
   {
@@ -19767,12 +19671,6 @@
     "name": "Bunnie",
     "slug": "bunnie",
     "gender": "female",
-    "score": 100
-  },
-  {
-    "name": "Bunny",
-    "slug": "bunny",
-    "gender": "unisex",
     "score": 100
   },
   {

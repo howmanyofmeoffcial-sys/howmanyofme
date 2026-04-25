@@ -1,5 +1,6 @@
 import type { MetadataRoute } from "next";
 import { ALPHABET, getPopularNames, getNamesForLetter } from "@/data/nameData";
+import { getNamesForLetterServer } from "@/data/serverNameData";
 import { blogArticles } from "@/data/blogData";
 
 export default function sitemap(): MetadataRoute.Sitemap {
@@ -44,7 +45,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
   ALPHABET.forEach((letter) => {
     if (letter.toLowerCase() === 'a') return; // Handled in sitemap_names_a.xml
     if (letter.toLowerCase() === 'b') return; // Handled in sitemap_names_b.xml
-    getNamesForLetter(letter).forEach((name) => allNames.add(name));
+    const baseNames = getNamesForLetter(letter);
+    getNamesForLetterServer(letter, baseNames).forEach((name) => allNames.add(name));
   });
   const namePages: MetadataRoute.Sitemap = Array.from(allNames).map((name) => ({
     url: `${baseUrl}/name/${encodeURIComponent(name)}`,
