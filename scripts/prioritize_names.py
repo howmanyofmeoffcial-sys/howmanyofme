@@ -1,7 +1,7 @@
 import json
 
-INPUT_FILE = "scripts/scored_names.json"
-OUTPUT_FILE = "scripts/top_500_tiers.json"
+INPUT_FILE = "scripts/scored_names_B.json"
+OUTPUT_FILE = "scripts/top_500_tiers_B.json"
 
 # Basic list of top names to seed the tier selection
 TOP_NAMES_SEED = {
@@ -11,7 +11,12 @@ TOP_NAMES_SEED = {
     "angelina", "anita", "ann", "anna", "anne", "annie", "anthony", "antonio", 
     "april", "ariana", "arianna", "ariel", "arthur", "ashley", "athena", "aubrey", 
     "audrey", "august", "aurora", "austin", "autumn", "ava", "axel", "aarav", 
-    "aaliyah", "amir", "aryan", "ayden", "alden", "amara"
+    "aaliyah", "amir", "aryan", "ayden", "alden", "amara",
+    "benjamin", "bella", "brianna", "brandon", "brian", "bailey", "blake",
+    "brody", "bentley", "braxton", "bryce", "bradley", "brooks", "bryan",
+    "beau", "beckett", "brady", "beckham", "brendan", "brennan", "ben",
+    "bill", "billy", "beth", "bethany", "britney", "brittany", "brie",
+    "bree", "brooklyn", "brooke", "brynn", "blair", "bianca", "bonnie"
 }
 
 def prioritize_names():

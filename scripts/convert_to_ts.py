@@ -1,13 +1,13 @@
 import json
 import os
 
-with open("scripts/scored_names.json", "r") as f:
+with open("scripts/scored_names_B.json", "r") as f:
     data = json.load(f)
 
 # Optional: load tiers
 tier1, tier2, tier3 = set(), set(), set()
-if os.path.exists("scripts/top_500_tiers.json"):
-    with open("scripts/top_500_tiers.json", "r") as f:
+if os.path.exists("scripts/top_500_tiers_B.json"):
+    with open("scripts/top_500_tiers_B.json", "r") as f:
         tiers = json.load(f)
         tier1 = set(tiers.get("tier1", []))
         tier2 = set(tiers.get("tier2", []))
@@ -34,10 +34,10 @@ ts_content = """export type NameEntry = {
   status: "index" | "noindex" | "review" | "reject";
   tier: 1 | 2 | 3 | null;
 };
-export const A_NAMES: NameEntry[] = [
+export const B_NAMES: NameEntry[] = [
 """ + ",\n".join(ts_lines) + "\n];\n"
 
-with open("src/data/names/namesA.ts", "w") as f:
+with open("src/data/names/namesB.ts", "w") as f:
     f.write(ts_content)
 
-print(f"Wrote {len(data)} items to namesA.ts")
+print(f"Wrote {len(data)} items to namesB.ts")

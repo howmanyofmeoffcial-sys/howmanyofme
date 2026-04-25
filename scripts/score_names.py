@@ -3,8 +3,8 @@ import re
 import difflib
 import os
 
-INPUT_FILE = "scripts/clean_names.json"
-OUTPUT_FILE = "scripts/scored_names.json"
+INPUT_FILE = "scripts/clean_names_B.json"
+OUTPUT_FILE = "scripts/scored_names_B.json"
 DICT_FILE = "/usr/share/dict/words"
 
 # Base known popular names for similarity checking (sample)
@@ -15,7 +15,13 @@ KNOWN_POPULAR = {
     "angelina", "anita", "ann", "anna", "anne", "annie", "anthony", "antonio", 
     "april", "ariana", "arianna", "ariel", "arthur", "ashley", "athena", "aubrey", 
     "audrey", "august", "aurora", "austin", "autumn", "ava", "axel", "aarav", 
-    "aaliyah", "amir", "aryan", "ayden", "alden", "amara"
+    "aaliyah", "amir", "aryan", "ayden", "alden", "amara",
+    "benjamin", "bella", "brianna", "brandon", "brian", "bailey", "blake",
+    "brody", "bentley", "braxton", "bryce", "bradley", "brooks", "bryan",
+    "beau", "beckett", "brady", "beckham", "brendan", "brennan", "ben",
+    "bill", "billy", "beth", "bethany", "britney", "brittany", "brie",
+    "bree", "brooklyn", "brooke", "brynn", "blair", "bianca", "bonnie",
+    "beatrice", "bristol", "bailee", "braelyn", "bridget"
 }
 
 def load_dictionary():

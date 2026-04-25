@@ -2,18 +2,21 @@ import json
 import re
 import os
 
-INPUT_FILE = "scripts/raw_names_input.txt"
-OUTPUT_FILE = "scripts/clean_names.json"
+INPUT_FILE = "scripts/raw_names_input_B.txt"
+OUTPUT_FILE = "scripts/clean_names_B.json"
 DICT_FILE = "/usr/share/dict/words"
 
-# A whitelist of 'A' words that are valid names despite being in the dictionary
+# A whitelist of words that are valid names despite being in the dictionary
 WHITELIST = {
     "amber", "april", "autumn", "ash", "apple", "angel", "arrow", "aspen", 
     "august", "aura", "ace", "alpha", "aqua", "aria", "art", "asia", "atlas", 
     "auburn", "aurora", "azure", "amethyst", "almond", "alpine", "america", 
     "amity", "arabia", "archer", "argentina", "aries", "arrow", "astrid", 
     "athena", "audacity", "augustus", "austen", "austin", "avalanch", "avalon",
-    "avenue", "aviator", "awesome", "ali", "abbey", "abbot", "abbott"
+    "avenue", "aviator", "awesome", "ali", "abbey", "abbot", "abbott",
+    "bill", "bella", "ben", "bear", "beau", "bell", "berry", "birdie",
+    "bishop", "blaze", "blossom", "blue", "bob", "booker", "bree", "briar",
+    "brook", "brooke", "brown", "buck", "buddy", "bunny", "basil", "baker"
 }
 
 def load_dictionary():

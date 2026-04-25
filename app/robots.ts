@@ -12,6 +12,7 @@ export default function robots(): MetadataRoute.Robots {
     sitemap: [
       "https://howmanyofme.co/sitemap.xml",
       "https://howmanyofme.co/sitemap_names_a.xml",
+      "https://howmanyofme.co/sitemap_names_b.xml",
     ],
   };
 }

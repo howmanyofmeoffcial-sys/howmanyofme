@@ -1,8 +1,10 @@
 import { A_NAMES } from './names/namesA';
+import { B_NAMES } from './names/namesB';
 
 // Pre-indexed gender lookup from name registries
 const NAME_GENDER_INDEX: Record<string, 'male' | 'female' | 'unisex'> = {};
 A_NAMES.forEach(entry => { NAME_GENDER_INDEX[entry.name.toLowerCase()] = entry.gender; });
+B_NAMES.forEach(entry => { NAME_GENDER_INDEX[entry.name.toLowerCase()] = entry.gender; });
 
 // Mock dataset - in production this would come from a database
 const POPULAR_NAMES: Record<string, {
@@ -66,8 +68,9 @@ const COMMON_PREFIXES: Record<string, string[]> = {
   Z: ["Zachary", "Zane", "Zara", "Zelda", "Zion", "Zoe", "Zoey"],
 };
 
-// Populate EXTENDED_NAMES: A-names from registry, others from common prefixes
+// Populate EXTENDED_NAMES: A-names and B-names from registry, others from common prefixes
 EXTENDED_NAMES['a'] = A_NAMES.map(e => e.name);
+EXTENDED_NAMES['b'] = B_NAMES.map(e => e.name);
 Object.entries(COMMON_PREFIXES).forEach(([letter, names]) => {
   EXTENDED_NAMES[letter.toLowerCase()] = names;
 });
