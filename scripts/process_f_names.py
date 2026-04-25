@@ -1,19 +1,19 @@
 import json
 import re
 import os
-
 import sys
 
-letter = sys.argv[1].upper() if len(sys.argv) > 1 else "B"
-INPUT_FILE = f"scripts/raw_names_input_{letter}.txt"
-OUTPUT_FILE = f"scripts/clean_names_{letter}.json"
+INPUT_FILE = "scripts/raw_names_input_F.txt"
+OUTPUT_FILE = "scripts/clean_names_F.json"
 DICT_FILE = "/usr/share/dict/words"
 
-# Load dynamic known popular names for similarity checking and whitelist
-WHITELIST = set()
+# The "Old" F dataset from EXTENDED_NAMES
+OLD_F_NAMES = ["Faith", "Felicia", "Felix", "Fernando", "Finn", "Fiona", "Florence", "Floyd", "Frances", "Francis", "Francisco", "Frank", "Franklin", "Fred", "Frederick"]
+
+WHITELIST = set(OLD_F_NAMES)
 if os.path.exists("scripts/popular_names_seed.json"):
     with open("scripts/popular_names_seed.json", "r") as f:
-        WHITELIST = set(json.load(f))
+        WHITELIST.update(json.load(f))
 
 def load_dictionary():
     lowercase_words = set()
@@ -27,13 +27,10 @@ def load_dictionary():
                 elif word.istitle():
                     capitalized_words.add(word.lower())
     
-    # Words to reject: they exist as generic lowercase words but NOT as proper nouns
-    # And they are not in our whitelist
     reject_words = lowercase_words - capitalized_words
     return reject_words
 
 def get_gender(name):
-    # Heuristics for gender based on suffix
     name_lower = name.lower()
     female_suffixes = ("a", "i", "ya", "ah", "ee", "ey", "ie", "elle", "ella", "lyn", "lynn")
     male_suffixes = ("an", "ar", "it", "esh", "on", "en", "er", "or", "us", "os")
@@ -45,18 +42,18 @@ def get_gender(name):
     else:
         return "unisex"
 
-def process_names():
+def process_f_names():
     reject_words = load_dictionary()
     clean_names = {}
     
     seen_names = set()
     seen_slugs = set()
     
-    # Global deduplication across all existing core datasets
+    # 1. Global deduplication across all existing core datasets (A-E)
     src_data_dir = "src/data/names"
     if os.path.exists(src_data_dir):
         for filename in os.listdir(src_data_dir):
-            if filename.startswith("core_dataset_") and filename.endswith(".json"):
+            if filename.startswith("core_dataset_") and filename.endswith(".json") and filename != "core_dataset_f.json":
                 with open(os.path.join(src_data_dir, filename), "r") as f:
                     try:
                         existing_data = json.load(f)
@@ -68,52 +65,30 @@ def process_names():
                     except Exception as e:
                         print(f"Error loading {filename}: {e}")
                         
-    print(f"Loaded {len(seen_names)} existing names for global deduplication.")
+    print(f"Loaded {len(seen_names)} existing names for global deduplication (A-E).")
     
-    with open(INPUT_FILE, 'r') as f:
-        lines = f.readlines()
-        
-    for line in lines:
-        line = line.strip()
-        if not line:
-            continue
-            
-        # Extract slug from URL like /name/aaban/
-        match = re.search(r'/name/([^/]+)/?', line)
-        if not match:
-            continue
-            
-        slug = match.group(1).lower().strip()
-        name = slug.replace("-", " ").title()
-        
+    # Track statistics
+    total_old = len(OLD_F_NAMES)
+    total_new = 0
+    duplicates_removed = 0
+
+    def process_name(slug, name):
+        nonlocal duplicates_removed
         # Heuristics Validation
         score = 100
         
-        # 1. Too short
         if len(slug) < 3:
-            continue
-            
-        # 2. Non-alphabetical (allow spaces and hyphens)
+            return
         if not re.match(r'^[a-z\- ]+$', slug):
-            continue
-            
-        # 3. Excessive repeated chars (e.g. 'aaaa')
+            return
         if re.search(r'(.)\1{2,}', slug):
-            continue
-            
-        # 4. Must contain at least one vowel
+            return
         if not re.search(r'[aeiouy]', slug):
-            continue
-            
-        # 5. Excessive consonants (4 or more in a row)
+            return
         if re.search(r'[^aeiouy \-]{4,}', slug):
             score -= 20
-            
-        # 6. Dictionary word filter
-        # If it's a generic word, reject it
-        if slug in reject_words and slug not in WHITELIST:
-            # Common dictionary word that's not a known name
-            continue
+        if slug in reject_words and name not in WHITELIST:
+            return
             
         # Deduplication
         if name.lower() not in seen_names and slug not in seen_slugs:
@@ -127,13 +102,41 @@ def process_names():
                 }
                 seen_names.add(name.lower())
                 seen_slugs.add(slug)
+        else:
+            duplicates_removed += 1
+
+    # 2. Process OLD F names FIRST to give them precedence
+    for old_name in OLD_F_NAMES:
+        slug = old_name.lower().replace(" ", "-")
+        process_name(slug, old_name)
+
+    # 3. Process NEW F names
+    with open(INPUT_FILE, 'r') as f:
+        lines = f.readlines()
+        
+    for line in lines:
+        line = line.strip()
+        if not line:
+            continue
+            
+        match = re.search(r'/name/([^/]+)/?', line)
+        if not match:
+            continue
+            
+        slug = match.group(1).lower().strip()
+        name = slug.replace("-", " ").title()
+        total_new += 1
+        
+        process_name(slug, name)
             
     # Output to JSON
     with open(OUTPUT_FILE, 'w') as f:
         json.dump(list(clean_names.values()), f, indent=2)
         
-    print(f"Processed {len(lines)} URLs.")
-    print(f"Extracted {len(clean_names)} clean names.")
+    print(f"Total Old F Names: {total_old}")
+    print(f"Total New F Names: {total_new}")
+    print(f"Duplicates Removed: {duplicates_removed}")
+    print(f"Final Merged Count: {len(clean_names)}")
 
 if __name__ == "__main__":
-    process_names()
+    process_f_names()

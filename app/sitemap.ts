@@ -43,10 +43,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const popularNames = getPopularNames().map((n) => n.name);
   const allNames = new Set<string>(popularNames);
   ALPHABET.forEach((letter) => {
-    if (letter.toLowerCase() === 'a') return; // Handled in sitemap_names.xml
-    if (letter.toLowerCase() === 'b') return; // Handled in sitemap_names.xml
+    if (['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i'].includes(letter.toLowerCase())) return; // Handled in sitemap_names.xml
     const baseNames = getNamesForLetter(letter);
-    getNamesForLetterServer(letter, baseNames).forEach((name) => allNames.add(name));
+    getNamesForLetterServer(letter, baseNames).forEach((item) => {
+      // Only add to this generic sitemap if it's considered high quality
+      if (item.score >= 80) allNames.add(item.name);
+    });
   });
   const namePages: MetadataRoute.Sitemap = Array.from(allNames).map((name) => ({
     url: `${baseUrl}/name/${encodeURIComponent(name)}`,

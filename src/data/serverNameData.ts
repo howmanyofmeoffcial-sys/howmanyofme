@@ -1,23 +1,27 @@
 import fs from 'fs';
 import path from 'path';
 
-export function getNamesForLetterServer(letter: string, baseNames: string[]): string[] {
+export function getNamesForLetterServer(letter: string, baseNames: string[]): {name: string, score: number}[] {
   const letterLower = letter.toLowerCase();
   
-  if (letterLower === 'a' || letterLower === 'b') {
+  const mappedBase = baseNames.map(name => ({ name, score: 100 }));
+  
+  if (['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i'].includes(letterLower)) {
     try {
       const filePath = path.join(process.cwd(), 'src', 'data', 'names', `core_dataset_${letterLower}.json`);
       if (fs.existsSync(filePath)) {
         const fileContent = fs.readFileSync(filePath, 'utf-8');
         const coreNames = JSON.parse(fileContent);
-        return [...baseNames, ...coreNames.map((n: any) => n.name)];
+        // Map core names to {name, score}
+        const mappedCore = coreNames.map((n: any) => ({ name: n.name, score: n.score || 0 }));
+        return [...mappedBase, ...mappedCore];
       }
     } catch (e) {
       console.error(e);
     }
   }
   
-  return baseNames;
+  return mappedBase;
 }
 
 export function getRegistryStatus(name: string): { status: string, score: number, tier: number | null } | null {
@@ -38,7 +42,7 @@ export function getRegistryStatus(name: string): { status: string, score: number
   }
 
   // 2. If not in the Top 300, check the full core dataset for the score
-  if (letter === 'a' || letter === 'b') {
+  if (['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i'].includes(letter)) {
     try {
       const filePath = path.join(process.cwd(), 'src', 'data', 'names', `core_dataset_${letter}.json`);
       if (fs.existsSync(filePath)) {
@@ -46,10 +50,11 @@ export function getRegistryStatus(name: string): { status: string, score: number
         const coreNames = JSON.parse(fileContent);
         const match = coreNames.find((n: any) => n.name.toLowerCase() === nl);
         if (match) {
-            // Even if valid, if it's not in our indexed sitemap targets, we might enforce noindex
-            // But we allow rendering if score >= 60. 
-            // Let's return noindex for any non-top-300 page to be perfectly strict.
-            return { status: "noindex", score: match.score, tier: null };
+            // Apply strict SEO rules: score >= 80 -> index, score 60-79 -> noindex, score < 60 -> reject
+            let status = "reject";
+            if (match.score >= 80) status = "index";
+            else if (match.score >= 60) status = "noindex";
+            return { status: status, score: match.score, tier: null };
         }
       }
     } catch (e) {
@@ -73,4 +78,59 @@ export function getIndexedSitemapTargets() {
         console.error(e);
     }
     return [];
+}
+
+export function getAdvancedSimilarNames(name: string, limit: number = 5): string[] {
+    const letterLower = name.charAt(0).toLowerCase();
+    let similar: string[] = [];
+    
+    if (['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i'].includes(letterLower)) {
+        try {
+            const filePath = path.join(process.cwd(), 'src', 'data', 'names', `core_dataset_${letterLower}.json`);
+            if (fs.existsSync(filePath)) {
+                const fileContent = fs.readFileSync(filePath, 'utf-8');
+                const coreNames = JSON.parse(fileContent);
+                
+                // Filter by same starting 2 letters
+                const prefix = name.substring(0, 2).toLowerCase();
+                const candidates = coreNames.filter((n: any) => 
+                  n.name.toLowerCase().startsWith(prefix) && 
+                  n.name.toLowerCase() !== name.toLowerCase() &&
+                  n.score >= 60 // Only recommend valid names
+                );
+                
+                // Sort by highest score first
+                candidates.sort((a: any, b: any) => (b.score || 0) - (a.score || 0));
+                similar = candidates.slice(0, limit).map((n: any) => n.name);
+            }
+        } catch (e) {
+            console.error(e);
+        }
+    }
+    
+    return similar;
+}
+
+export function getAllIndexableNames(): { name: string, score: number }[] {
+    const indexable: { name: string, score: number }[] = [];
+    ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i'].forEach(letter => {
+        try {
+            const filePath = path.join(process.cwd(), 'src', 'data', 'names', `core_dataset_${letter}.json`);
+            if (fs.existsSync(filePath)) {
+                const fileContent = fs.readFileSync(filePath, 'utf-8');
+                const coreNames = JSON.parse(fileContent);
+                coreNames.forEach((n: any) => {
+                    if (n.score >= 80) {
+                        indexable.push({ name: n.name, score: n.score });
+                    }
+                });
+            }
+        } catch (e) {
+            console.error(e);
+        }
+    });
+    
+    // Sort by score descending
+    indexable.sort((a, b) => b.score - a.score);
+    return indexable;
 }

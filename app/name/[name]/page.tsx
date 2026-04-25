@@ -7,8 +7,8 @@ import AdSlot from "@/components/AdSlot";
 import ToolCTA from "@/components/ToolCTA";
 import Breadcrumbs from "@/components/Breadcrumbs";
 import RelatedPosts from "@/components/RelatedPosts";
-import { getNameData, getSimilarNames, formatNumber, getPopularNames } from "@/data/nameData";
-import { getRegistryStatus } from "@/data/serverNameData";
+import { getNameData, formatNumber, getPopularNames } from "@/data/nameData";
+import { getRegistryStatus, getAdvancedSimilarNames } from "@/data/serverNameData";
 import { generateContentForName } from "@/lib/contentGenerator";
 import { Users, TrendingUp, Globe, BarChart3, Sparkles, Calendar, Brain, BookOpen } from "lucide-react";
 import React from "react";
@@ -28,11 +28,39 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { name: rawName } = await params;
   const nameStr = normalizeSlug(rawName);
   const data = getNameData(nameStr);
+  const registryStatus = getRegistryStatus(nameStr);
+  
+  let isIndexable = false;
+  if (registryStatus) {
+    if (registryStatus.status === "index") isIndexable = true;
+  } else if (data.isExact) {
+    isIndexable = true; // Fallback for hardcoded names in nameData.ts
+  }
+
+  // CTR-Optimized Title System — 5 psychological angles
+  const titleHash = nameStr.split('').reduce((a, c) => a + c.charCodeAt(0), 0);
+  const titles = [
+    /* curiosity */    `${data.name}: You Won't Believe How Many People Share This Name`,
+    /* data-driven */  `${data.name} — ${formatNumber(data.count)} People, Rank #${formatNumber(data.rank)} | Real Data`,
+    /* emotional */    `The Meaning Behind ${data.name} — Origin, Popularity & What Makes It Special`,
+    /* comparison */   `${data.name} vs Other Names: Popularity Rank #${formatNumber(data.rank)} Explained`,
+    /* question */     `How Many People Are Named ${data.name}? (${new Date().getFullYear()} Data)`,
+  ];
+  const selectedTitle = titles[titleHash % titles.length];
+
+  // CTR-Optimized Meta Descriptions — benefit-driven, under 155 chars
+  const descriptions = [
+    `Discover how many people are named ${data.name}. Real data: ~${formatNumber(data.count)} worldwide, rank #${formatNumber(data.rank)}. Free stats by decade & region.`,
+    `${data.name} name stats updated for ${new Date().getFullYear()}: ${formatNumber(data.count)} people globally. See trends, origin & regional breakdown — no signup.`,
+    `Is ${data.name} rare or common? ${formatNumber(data.count)} people share it (rank #${formatNumber(data.rank)}). Explore real popularity data by country & era.`,
+  ];
+  const selectedDescription = descriptions[(titleHash + 1) % descriptions.length];
+
   return {
-    title: `How Many People Are Named ${data.name}? Popularity, Rarity & Origin`,
-    description: `There are ~${formatNumber(data.count)} people named ${data.name} worldwide (rank #${formatNumber(data.rank)}). See ${data.name}'s popularity by decade, country, and gender — free, no signup.`,
-    alternates: { canonical: `https://howmanyofme.co/name/${encodeURIComponent(data.name)}` },
-    robots: data.isExact || data.confidenceLevel === 'medium' ? { index: true, follow: true } : { index: false, follow: true },
+    title: selectedTitle,
+    description: selectedDescription,
+    alternates: { canonical: `https://howmanyofme.co/name/${encodeURIComponent(data.name.toLowerCase())}` },
+    robots: { index: isIndexable, follow: true },
   };
 }
 
@@ -72,7 +100,7 @@ export default async function NameDetailPage({ params }: Props) {
   }
   
   const data = getNameData(nameStr);
-  const similar = getSimilarNames(nameStr);
+  const similar = getAdvancedSimilarNames(nameStr, 5); // 3-5 similar names dynamically fetched
   const topRegion = Object.entries(data.regions).sort((a, b) => b[1] - a[1])[0];
   const decades = Object.entries(data.decade_popularity);
 
@@ -182,7 +210,11 @@ export default async function NameDetailPage({ params }: Props) {
         <div className="p-5 rounded-xl border border-border bg-card my-6">
           <div className="flex items-center gap-2 mb-3"><BookOpen className="h-5 w-5 text-emerald-500" /><h3 className="font-bold m-0">Name Meaning</h3></div>
           <p className="text-lg font-medium mb-2">&quot;{data.meaning}&quot;</p>
-          <p className="text-sm text-muted-foreground m-0">The name {data.name} originates from {data.origin} traditions. Names from this linguistic family often carry connotations of {data.gender === 'male' ? 'strength, leadership, and heritage' : data.gender === 'female' ? 'grace, beauty, and wisdom' : 'balance, adaptability, and resilience'}. {data.name} has been used across generations, adapting to each era&apos;s cultural context.</p>
+          <p className="text-sm text-muted-foreground m-0 mb-4">The name {data.name} originates from {data.origin} traditions. Names from this linguistic family often carry connotations of {data.gender === 'male' ? 'strength, leadership, and heritage' : data.gender === 'female' ? 'grace, beauty, and wisdom' : 'balance, adaptability, and resilience'}. {data.name} has been used across generations, adapting to each era&apos;s cultural context.</p>
+          <div className="p-4 bg-primary/5 rounded-lg border border-primary/10">
+            <h4 className="font-bold text-sm text-primary mb-1">Unique Insight</h4>
+            <p className="text-sm m-0">{content.uniqueAngle}</p>
+          </div>
         </div>
       </React.Fragment>
     ),
