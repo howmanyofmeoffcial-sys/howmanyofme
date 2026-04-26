@@ -186,26 +186,21 @@ const TrendVisualizer = () => {
   };
 
   // Compute country-adjusted multiplier per name. Global = 1.
-  // For a country, multiplier = (country_count / total_count). This rescales the
-  // 0-100 decade score to reflect that country's share, then we normalize so the
-  // peak decade for that country still hits 100 (so the line stays readable).
-  const chartData = useMemo(() => {
+  const buildChartData = (countryKey: string) => {
     if (names.length === 0) return [];
     const decades = Object.keys(getNameData(names[0]).decade_popularity);
-
     const adjusted: Record<string, Record<string, number>> = {};
     names.forEach((n) => {
       const d = getNameData(n);
       let multiplier = 1;
-      if (country !== "Global") {
-        const countryShare = (d.regions[country] ?? 0) / Math.max(d.count, 1);
-        multiplier = countryShare > 0 ? Math.min(1, countryShare * 4) : 0.05; // soft scale
+      if (countryKey !== "Global") {
+        const countryShare = (d.regions[countryKey] ?? 0) / Math.max(d.count, 1);
+        multiplier = countryShare > 0 ? Math.min(1, countryShare * 4) : 0.05;
       }
       const raw: Record<string, number> = {};
       decades.forEach((dec) => {
         raw[dec] = d.decade_popularity[dec] * multiplier;
       });
-      // Re-normalize to 0-100 against this country's peak so lines stay readable
       const peak = Math.max(...Object.values(raw), 0.0001);
       const normalized: Record<string, number> = {};
       decades.forEach((dec) => {
@@ -213,15 +208,18 @@ const TrendVisualizer = () => {
       });
       adjusted[n] = normalized;
     });
-
     return decades.map((decade) => {
-      const point: any = { decade };
-      names.forEach((n) => {
-        point[n] = adjusted[n][decade];
-      });
+      const point: Record<string, string | number> = { decade };
+      names.forEach((n) => { point[n] = adjusted[n][decade]; });
       return point;
     });
-  }, [names, country]);
+  };
+
+  const chartData = useMemo(() => buildChartData(country), [names, country]);
+  const compareChartData = useMemo(
+    () => (compareCountry ? buildChartData(compareCountry) : []),
+    [names, compareCountry],
+  );
 
   const peakDecade = (name: string) => {
     const data = getNameData(name).decade_popularity;
