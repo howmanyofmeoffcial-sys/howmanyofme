@@ -62,11 +62,11 @@ const NameInput = forwardRef<HTMLInputElement, NameInputProps>(
           )}
           {...rest}
         />
-        {touched && value.length > 0 && !validation.ok && showError && (
+        {showError && touched && value.length > 0 && !validation.ok ? (
           <p id="name-input-error" className="mt-1.5 text-xs text-destructive" role="alert">
             {validation.reason}
           </p>
-        )}
+        ) : null}
       </div>
     );
   },
