@@ -268,6 +268,17 @@ const TrendVisualizer = () => {
     },
     {
       "@context": "https://schema.org",
+      "@type": "Dataset",
+      name: names.length ? `Popularity trend for ${names.join(", ")}` : "Baby name popularity trend dataset",
+      description: `Decade-by-decade normalized popularity scores (1880–present) for the selected name(s) — region: ${country}${compareCountry ? ` vs ${compareCountry}` : ""}.`,
+      keywords: ["baby names", "popularity", "trends", country, ...names],
+      temporalCoverage: "1880-01-01/..",
+      spatialCoverage: country,
+      variableMeasured: names.length ? names : ["name popularity score (0–100)"],
+      url: typeof window !== "undefined" ? window.location.href : "https://howmanyofme.co/tools/trend-visualizer",
+      creator: { "@type": "Organization", name: "HowManyOfMe.co" },
+    },
+      "@context": "https://schema.org",
       "@type": "FAQPage",
       mainEntity: FAQS.map((f) => ({
         "@type": "Question",
