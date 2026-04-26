@@ -186,18 +186,7 @@ const NameDetail = () => {
 
           <AdSlot />
 
-          <h2>Similar Names to {data.name}</h2>
-          <p>
-            If you're interested in {data.name}, you might also want to explore these related names that share similar characteristics, origins, or sounds:
-          </p>
-          <div className="flex flex-wrap gap-2 my-6">
-            {similar.map(s => (
-              <Link key={s} to={`/name/${s}`} className="px-4 py-2 rounded-full bg-secondary hover:bg-primary/10 text-sm font-medium transition-colors">
-                {s}
-              </Link>
-            ))}
-          </div>
-
+          {/* Similar names already rendered above in the rich report */}
           <h2>Interesting Facts About {data.name}</h2>
           <p>
             If there are {formatNumber(data.count)} people named {data.name} worldwide, that means approximately 1 in every {formatNumber(Math.round(8000000000 / data.count))} people on Earth shares this name. If all the people named {data.name} formed their own city, it would be {data.count > 1000000 ? 'larger than many major metropolitan areas' : data.count > 100000 ? 'comparable to a mid-sized city' : 'similar in size to a small town'}.
