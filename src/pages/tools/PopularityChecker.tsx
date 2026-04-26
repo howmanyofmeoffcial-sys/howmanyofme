@@ -1,11 +1,16 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import { toast } from "sonner";
 import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
 import SEOHead from "@/components/SEOHead";
+import NameInput from "@/components/NameInput";
+import NameInsightReport from "@/components/NameInsightReport";
+import { validateSingleName } from "@/lib/nameValidation";
 import { getNameData, formatNumber } from "@/data/nameData";
 import RelatedPosts from "@/components/RelatedPosts";
 import DataFreshness from "@/components/DataFreshness";
+import { Bookmark, Share2 } from "lucide-react";
 import {
   FeatureGrid,
   ProsCons,
