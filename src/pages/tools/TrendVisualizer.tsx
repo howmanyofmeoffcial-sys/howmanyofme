@@ -490,6 +490,29 @@ const TrendVisualizer = () => {
           </div>
         )}
 
+        {compareCountry && compareChartData.length > 0 && (
+          <div className="mt-6 rounded-xl border bg-card p-6">
+            <div className="flex items-center justify-between mb-6 flex-wrap gap-2">
+              <h2 className="font-display text-xl font-bold">
+                Side-by-side: <span className="text-muted-foreground font-normal">{compareCountry}</span>
+              </h2>
+              <span className="text-xs text-muted-foreground">Same names, different region</span>
+            </div>
+            <ResponsiveContainer width="100%" height={400}>
+              <LineChart data={compareChartData}>
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="decade" />
+                <YAxis domain={[0, 100]} />
+                <Tooltip />
+                <Legend />
+                {names.map((n, i) => (
+                  <Line key={n} type="monotone" dataKey={n} stroke={COLORS[i]} strokeWidth={2.5} strokeDasharray="5 5" dot={{ r: 3 }} />
+                ))}
+              </LineChart>
+            </ResponsiveContainer>
+          </div>
+        )}
+
         {names.length > 0 && (
           <div className="mt-10 p-6 rounded-xl border bg-card">
             <h2 className="font-display text-xl font-bold mb-4">Peak Popularity Insights</h2>
