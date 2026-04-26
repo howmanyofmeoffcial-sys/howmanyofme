@@ -1,11 +1,14 @@
 import { useParams, Link } from "react-router-dom";
+import { useState } from "react";
+import { toast } from "sonner";
 import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
 import SEOHead from "@/components/SEOHead";
 import AdSlot from "@/components/AdSlot";
 import ToolCTA from "@/components/ToolCTA";
-import { getNameData, getSimilarNames, formatNumber } from "@/data/nameData";
-import { Users, TrendingUp, Globe, BarChart3 } from "lucide-react";
+import NameInsightReport from "@/components/NameInsightReport";
+import { getNameData, formatNumber } from "@/data/nameData";
+import { Bookmark, Share2 } from "lucide-react";
 import RelatedPosts from "@/components/RelatedPosts";
 import Breadcrumbs from "@/components/Breadcrumbs";
 
