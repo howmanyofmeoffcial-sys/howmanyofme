@@ -201,31 +201,41 @@ const NameComparison = () => {
           </div>
         </div>
 
-        <form onSubmit={compare} className="flex flex-col sm:flex-row gap-3 mb-8">
-          <input
-            type="text"
-            placeholder="First name..."
+        <form onSubmit={compare} className="flex flex-col sm:flex-row gap-3 mb-4">
+          <NameInput
             value={name1}
-            onChange={(e) => setName1(e.target.value)}
-            className="flex-1 h-12 rounded-md border border-input bg-secondary px-4 placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring"
+            onChange={setName1}
+            inputClassName="h-12 rounded-md border border-input bg-secondary px-4 focus:outline-none focus:ring-2 focus:ring-ring"
+            className="flex-1"
             aria-label="First name"
           />
           <span className="text-muted-foreground self-center font-bold">vs</span>
-          <input
-            type="text"
-            placeholder="Second name..."
+          <NameInput
             value={name2}
-            onChange={(e) => setName2(e.target.value)}
-            className="flex-1 h-12 rounded-md border border-input bg-secondary px-4 placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring"
+            onChange={setName2}
+            inputClassName="h-12 rounded-md border border-input bg-secondary px-4 focus:outline-none focus:ring-2 focus:ring-ring"
+            className="flex-1"
             aria-label="Second name"
           />
           <button
             type="submit"
-            className="h-12 px-6 rounded-md bg-primary text-primary-foreground font-semibold hover:opacity-90 transition-opacity"
+            disabled={!canCompare}
+            className="h-12 px-6 rounded-md bg-primary text-primary-foreground font-semibold hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed"
           >
             Compare
           </button>
         </form>
+
+        {results && (
+          <div className="flex justify-end mb-4">
+            <button
+              onClick={shareCompare}
+              className="inline-flex items-center gap-2 h-9 px-3 rounded-lg bg-primary text-primary-foreground text-sm hover:opacity-90"
+            >
+              <Share2 className="h-4 w-4" /> Share comparison
+            </button>
+          </div>
+        )}
 
         {results && (
           <div className="space-y-6 mb-12">
