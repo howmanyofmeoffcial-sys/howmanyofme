@@ -2,27 +2,47 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Search, Sparkles, Zap, Globe, ShieldCheck, ArrowRight } from "lucide-react";
 import { searchNames } from "@/data/nameData";
+import { validateSingleName } from "@/lib/nameValidation";
+import { toast } from "sonner";
 
 const NameSearchHero = () => {
   const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
   const [suggestions, setSuggestions] = useState<string[]>([]);
   const [focused, setFocused] = useState(false);
+  const [shake, setShake] = useState(false);
+  const [touched, setTouched] = useState(false);
   const navigate = useNavigate();
 
+  const validation = validateSingleName(firstName);
+  const isInvalid = touched && firstName.length > 0 && !validation.ok;
+
+  const triggerShake = () => {
+    setShake(true);
+    window.setTimeout(() => setShake(false), 450);
+  };
+
   const handleFirstNameChange = (val: string) => {
-    setFirstName(val);
-    if (val.length >= 2) {
-      setSuggestions(searchNames(val));
-    } else {
-      setSuggestions([]);
+    if (/\s/.test(val)) {
+      toast.warning("Please enter first or last name only", { duration: 1500 });
+      triggerShake();
+      val = val.replace(/\s+/g, "");
     }
+    const cleaned = val.replace(/[^A-Za-z]/g, "").slice(0, 20);
+    if (cleaned !== val) triggerShake();
+    setFirstName(cleaned);
+    if (cleaned.length >= 2) setSuggestions(searchNames(cleaned));
+    else setSuggestions([]);
   };
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
-    const name = firstName.trim() || "James";
-    navigate(`/name/${encodeURIComponent(name)}`);
+    setTouched(true);
+    if (!validation.ok) {
+      triggerShake();
+      toast.error(validation.ok ? "" : (validation as { ok: false; reason: string }).reason);
+      return;
+    }
+    navigate(`/name/${encodeURIComponent(validation.value)}`);
     setSuggestions([]);
   };
 
