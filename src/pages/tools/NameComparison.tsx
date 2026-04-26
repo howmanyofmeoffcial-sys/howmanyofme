@@ -1,11 +1,15 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import { toast } from "sonner";
 import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
 import SEOHead from "@/components/SEOHead";
+import NameInput from "@/components/NameInput";
+import { validateSingleName } from "@/lib/nameValidation";
 import { getNameData, formatNumber } from "@/data/nameData";
 import RelatedPosts from "@/components/RelatedPosts";
 import DataFreshness from "@/components/DataFreshness";
+import { Share2 } from "lucide-react";
 import {
   FeatureGrid,
   ProsCons,
@@ -59,14 +63,36 @@ const FAQS = [
 ];
 
 const NameComparison = () => {
-  const [name1, setName1] = useState("");
-  const [name2, setName2] = useState("");
-  const [results, setResults] = useState<{ a: ReturnType<typeof getNameData>; b: ReturnType<typeof getNameData> } | null>(null);
+  const sp = typeof window !== "undefined" ? new URLSearchParams(window.location.search) : new URLSearchParams();
+  const [name1, setName1] = useState(sp.get("a") || "");
+  const [name2, setName2] = useState(sp.get("b") || "");
+  const [results, setResults] = useState<{ a: ReturnType<typeof getNameData>; b: ReturnType<typeof getNameData> } | null>(
+    sp.get("a") && sp.get("b") ? { a: getNameData(sp.get("a")!), b: getNameData(sp.get("b")!) } : null,
+  );
+
+  const v1 = validateSingleName(name1);
+  const v2 = validateSingleName(name2);
+  const canCompare = v1.ok && v2.ok;
 
   const compare = (e: React.FormEvent) => {
     e.preventDefault();
-    if (name1.trim() && name2.trim()) {
-      setResults({ a: getNameData(name1.trim()), b: getNameData(name2.trim()) });
+    if (!canCompare) {
+      toast.error("Please enter two valid single names");
+      return;
+    }
+    setResults({ a: getNameData((v1 as { ok: true; value: string }).value), b: getNameData((v2 as { ok: true; value: string }).value) });
+    const url = new URL(window.location.href);
+    url.searchParams.set("a", (v1 as { ok: true; value: string }).value);
+    url.searchParams.set("b", (v2 as { ok: true; value: string }).value);
+    window.history.replaceState({}, "", url.toString());
+  };
+
+  const shareCompare = async () => {
+    try {
+      await navigator.clipboard.writeText(window.location.href);
+      toast.success("Comparison link copied");
+    } catch {
+      toast.error("Could not copy link");
     }
   };
 
