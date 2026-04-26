@@ -278,6 +278,7 @@ const TrendVisualizer = () => {
       url: typeof window !== "undefined" ? window.location.href : "https://howmanyofme.co/tools/trend-visualizer",
       creator: { "@type": "Organization", name: "HowManyOfMe.co" },
     },
+    {
       "@context": "https://schema.org",
       "@type": "FAQPage",
       mainEntity: FAQS.map((f) => ({
