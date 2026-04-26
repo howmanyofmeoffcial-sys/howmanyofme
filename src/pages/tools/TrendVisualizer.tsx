@@ -351,18 +351,17 @@ const TrendVisualizer = () => {
         </div>
 
         <form onSubmit={addName} className="flex gap-3 mb-6">
-          <input
-            type="text"
-            placeholder="Enter a name..."
+          <NameInput
             value={input}
-            onChange={(e) => setInput(e.target.value)}
-            className="flex-1 h-12 rounded-md border border-input bg-secondary px-4"
+            onChange={setInput}
+            inputClassName="h-12 rounded-md border border-input bg-secondary px-4 focus:outline-none focus:ring-2 focus:ring-ring"
+            className="flex-1"
             aria-label="Name to add to chart"
           />
           <button
             type="submit"
-            disabled={names.length >= 4}
-            className="h-12 px-6 rounded-md bg-primary text-primary-foreground font-semibold disabled:opacity-50"
+            disabled={names.length >= 4 || !validation.ok}
+            className="h-12 px-6 rounded-md bg-primary text-primary-foreground font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
           >
             Add Name
           </button>
@@ -405,6 +404,47 @@ const TrendVisualizer = () => {
                 {c.label}
               </button>
             ))}
+          </div>
+
+          {/* Side-by-side region compare */}
+          <div className="mt-4 pt-4 border-t border-border">
+            <div className="flex items-center gap-2 mb-2">
+              <Columns2 size={16} className="text-primary" />
+              <p className="text-sm font-semibold">Compare side-by-side with another region</p>
+            </div>
+            <div className="flex flex-wrap gap-2">
+              <button
+                onClick={() => setCompareCountry(null)}
+                className={`px-3 py-1.5 text-xs rounded-full border ${!compareCountry ? "bg-primary text-primary-foreground border-primary" : "bg-secondary"}`}
+              >
+                Off
+              </button>
+              {COUNTRIES.filter((c) => c.key !== country).map((c) => (
+                <button
+                  key={c.key}
+                  onClick={() => setCompareCountry(c.key)}
+                  className={`px-3 py-1.5 text-xs rounded-full border ${compareCountry === c.key ? "bg-primary text-primary-foreground border-primary" : "bg-secondary hover:bg-primary/10"}`}
+                >
+                  vs {c.label}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Save / Share */}
+          <div className="mt-4 pt-4 border-t border-border flex flex-wrap gap-2">
+            <button
+              onClick={saveView}
+              className="inline-flex items-center gap-2 h-9 px-3 rounded-lg border border-border bg-card hover:bg-secondary text-sm"
+            >
+              <Bookmark className="h-4 w-4" /> Save this result
+            </button>
+            <button
+              onClick={shareView}
+              className="inline-flex items-center gap-2 h-9 px-3 rounded-lg bg-primary text-primary-foreground text-sm hover:opacity-90"
+            >
+              <Share2 className="h-4 w-4" /> Share view
+            </button>
           </div>
         </div>
 
