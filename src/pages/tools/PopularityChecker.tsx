@@ -66,12 +66,49 @@ const FAQS = [
 ];
 
 const PopularityChecker = () => {
-  const [name, setName] = useState("");
-  const [result, setResult] = useState<ReturnType<typeof getNameData> | null>(null);
+  const initial = typeof window !== "undefined" ? new URLSearchParams(window.location.search).get("name") || "" : "";
+  const [name, setName] = useState(initial);
+  const [result, setResult] = useState<ReturnType<typeof getNameData> | null>(
+    initial ? getNameData(initial) : null,
+  );
+
+  const validation = validateSingleName(name);
 
   const check = (e: React.FormEvent) => {
     e.preventDefault();
-    if (name.trim()) setResult(getNameData(name.trim()));
+    if (!validation.ok) {
+      toast.error((validation as { ok: false; reason: string }).reason);
+      return;
+    }
+    setResult(getNameData(validation.value));
+    // Preserve in URL for sharing
+    const url = new URL(window.location.href);
+    url.searchParams.set("name", validation.value);
+    window.history.replaceState({}, "", url.toString());
+  };
+
+  const shareResult = async () => {
+    if (!result) return;
+    try {
+      await navigator.clipboard.writeText(window.location.href);
+      toast.success("Share link copied");
+    } catch {
+      toast.error("Could not copy link");
+    }
+  };
+
+  const saveResult = () => {
+    if (!result) return;
+    try {
+      const list: string[] = JSON.parse(localStorage.getItem("hmom:saved") || "[]");
+      if (!list.includes(result.name)) {
+        list.unshift(result.name);
+        localStorage.setItem("hmom:saved", JSON.stringify(list.slice(0, 50)));
+      }
+      toast.success(`Saved ${result.name}`);
+    } catch {
+      toast.error("Save failed");
+    }
   };
 
   const jsonLd = [
