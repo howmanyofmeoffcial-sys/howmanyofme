@@ -1,8 +1,11 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { Link } from "react-router-dom";
+import { toast } from "sonner";
 import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
 import SEOHead from "@/components/SEOHead";
+import NameInput from "@/components/NameInput";
+import { validateSingleName } from "@/lib/nameValidation";
 import { getNameData } from "@/data/nameData";
 import RelatedPosts from "@/components/RelatedPosts";
 import DataFreshness from "@/components/DataFreshness";
@@ -16,7 +19,7 @@ import {
   ResponsiveContainer,
   Legend,
 } from "recharts";
-import { TrendingUp, TrendingDown, Clock, Info, CheckCircle2, Globe } from "lucide-react";
+import { TrendingUp, TrendingDown, Clock, Info, CheckCircle2, Globe, Bookmark, Share2, Columns2 } from "lucide-react";
 import {
   FeatureGrid,
   ProsCons,
@@ -120,14 +123,34 @@ const CHART_CHECKLIST = [
 ];
 
 const TrendVisualizer = () => {
+  const initSp = typeof window !== "undefined" ? new URLSearchParams(window.location.search) : new URLSearchParams();
   const [input, setInput] = useState("");
-  const [names, setNames] = useState<string[]>([]);
-  const [country, setCountry] = useState<string>("Global");
+  const [names, setNames] = useState<string[]>(() => {
+    const fromUrl = initSp.get("names");
+    return fromUrl ? fromUrl.split(",").filter(Boolean).slice(0, 4) : [];
+  });
+  const [country, setCountry] = useState<string>(initSp.get("country") || "Global");
+  const [compareCountry, setCompareCountry] = useState<string | null>(initSp.get("vs") || null);
+
+  const validation = validateSingleName(input);
+
+  // Sync URL state for sharing
+  useEffect(() => {
+    const url = new URL(window.location.href);
+    if (names.length) url.searchParams.set("names", names.join(",")); else url.searchParams.delete("names");
+    if (country !== "Global") url.searchParams.set("country", country); else url.searchParams.delete("country");
+    if (compareCountry) url.searchParams.set("vs", compareCountry); else url.searchParams.delete("vs");
+    window.history.replaceState({}, "", url.toString());
+  }, [names, country, compareCountry]);
 
   const addName = (e: React.FormEvent) => {
     e.preventDefault();
-    const n = input.trim();
-    if (n && !names.includes(n) && names.length < 4) {
+    if (!validation.ok) {
+      toast.error((validation as { ok: false; reason: string }).reason);
+      return;
+    }
+    const n = (validation as { ok: true; value: string }).value;
+    if (!names.includes(n) && names.length < 4) {
       setNames([...names, n]);
       setInput("");
     }
@@ -136,6 +159,31 @@ const TrendVisualizer = () => {
   const removeN = (n: string) => setNames(names.filter((x) => x !== n));
 
   const loadPreset = (preset: string[]) => setNames(preset);
+
+  const shareView = async () => {
+    try {
+      await navigator.clipboard.writeText(window.location.href);
+      toast.success("Chart link copied — share away!");
+    } catch {
+      toast.error("Could not copy link");
+    }
+  };
+
+  const saveView = () => {
+    if (names.length === 0) {
+      toast.error("Add at least one name first");
+      return;
+    }
+    try {
+      const key = "hmom:savedCharts";
+      const list: { names: string[]; country: string }[] = JSON.parse(localStorage.getItem(key) || "[]");
+      list.unshift({ names, country });
+      localStorage.setItem(key, JSON.stringify(list.slice(0, 20)));
+      toast.success("Chart saved to bookmarks");
+    } catch {
+      toast.error("Save failed");
+    }
+  };
 
   // Compute country-adjusted multiplier per name. Global = 1.
   // For a country, multiplier = (country_count / total_count). This rescales the
