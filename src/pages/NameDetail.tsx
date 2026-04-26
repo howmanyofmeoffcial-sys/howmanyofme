@@ -1,11 +1,14 @@
 import { useParams, Link } from "react-router-dom";
+import { useState } from "react";
+import { toast } from "sonner";
 import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
 import SEOHead from "@/components/SEOHead";
 import AdSlot from "@/components/AdSlot";
 import ToolCTA from "@/components/ToolCTA";
-import { getNameData, getSimilarNames, formatNumber } from "@/data/nameData";
-import { Users, TrendingUp, Globe, BarChart3 } from "lucide-react";
+import NameInsightReport from "@/components/NameInsightReport";
+import { getNameData, formatNumber } from "@/data/nameData";
+import { Bookmark, Share2 } from "lucide-react";
 import RelatedPosts from "@/components/RelatedPosts";
 import Breadcrumbs from "@/components/Breadcrumbs";
 
@@ -14,10 +17,38 @@ const NameDetail = () => {
   const { name: rawName } = useParams<{ name: string }>();
   const nameStr = decodeURIComponent(rawName || "James");
   const data = getNameData(nameStr);
-  const similar = getSimilarNames(nameStr);
+  const [saved, setSaved] = useState(false);
 
-  const topRegion = Object.entries(data.regions).sort((a, b) => b[1] - a[1])[0];
   const decades = Object.entries(data.decade_popularity);
+
+  const saveResult = () => {
+    try {
+      const key = "hmom:saved";
+      const list: string[] = JSON.parse(localStorage.getItem(key) || "[]");
+      if (!list.includes(data.name)) {
+        list.unshift(data.name);
+        localStorage.setItem(key, JSON.stringify(list.slice(0, 50)));
+      }
+      setSaved(true);
+      toast.success(`Saved ${data.name} to your bookmarks`);
+    } catch {
+      toast.error("Could not save — storage unavailable");
+    }
+  };
+
+  const shareResult = async () => {
+    const url = window.location.href;
+    try {
+      if (navigator.share) {
+        await navigator.share({ title: `${data.name} — name insights`, url });
+      } else {
+        await navigator.clipboard.writeText(url);
+        toast.success("Share link copied to clipboard");
+      }
+    } catch {
+      /* user cancelled */
+    }
+  };
 
   const jsonLd = {
     "@context": "https://schema.org",
@@ -45,30 +76,40 @@ const NameDetail = () => {
           ]}
         />
 
-        <h1 className="font-display text-4xl md:text-6xl font-bold mb-3">
-          How Many People Are Named {data.name}?
-        </h1>
-        <p className="text-xl text-muted-foreground mb-8">
-          Comprehensive statistics and insights for the name <strong className="text-foreground">{data.name}</strong>
-        </p>
-
-        {/* Stats Grid */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-10">
-          {[
-            { icon: Users, label: "Estimated People", value: formatNumber(data.count), color: "text-primary" },
-            { icon: TrendingUp, label: "Popularity Rank", value: `#${formatNumber(data.rank)}`, color: "text-accent" },
-            { icon: BarChart3, label: "Gender", value: data.gender.charAt(0).toUpperCase() + data.gender.slice(1), color: "text-foreground" },
-            { icon: Globe, label: "Top Region", value: topRegion[0], color: "text-primary" },
-          ].map(stat => (
-            <div key={stat.label} className="p-5 rounded-xl border border-border bg-card">
-              <stat.icon className={`h-6 w-6 ${stat.color} mb-2`} />
-              <div className="text-2xl font-bold">{stat.value}</div>
-              <div className="text-sm text-muted-foreground">{stat.label}</div>
-            </div>
-          ))}
+        <div className="flex flex-wrap items-start justify-between gap-4 mb-8">
+          <div>
+            <h1 className="font-display text-4xl md:text-6xl font-bold mb-3">
+              How Many People Are Named {data.name}?
+            </h1>
+            <p className="text-xl text-muted-foreground">
+              Comprehensive statistics and insights for the name <strong className="text-foreground">{data.name}</strong>
+            </p>
+          </div>
+          <div className="flex gap-2">
+            <button
+              onClick={saveResult}
+              aria-pressed={saved}
+              className="inline-flex items-center gap-2 h-10 px-4 rounded-lg border border-border bg-card hover:bg-secondary text-sm font-medium transition"
+            >
+              <Bookmark className={`h-4 w-4 ${saved ? "fill-primary text-primary" : ""}`} />
+              {saved ? "Saved" : "Save"}
+            </button>
+            <button
+              onClick={shareResult}
+              className="inline-flex items-center gap-2 h-10 px-4 rounded-lg bg-primary text-primary-foreground text-sm font-medium hover:opacity-90 transition"
+            >
+              <Share2 className="h-4 w-4" />
+              Share
+            </button>
+          </div>
         </div>
 
-        <AdSlot />
+        {/* Modern rich report */}
+        <NameInsightReport name={data.name} />
+
+        <div className="my-10">
+          <AdSlot />
+        </div>
 
         <div className="prose-content">
           {/* Main Content */}
@@ -145,18 +186,7 @@ const NameDetail = () => {
 
           <AdSlot />
 
-          <h2>Similar Names to {data.name}</h2>
-          <p>
-            If you're interested in {data.name}, you might also want to explore these related names that share similar characteristics, origins, or sounds:
-          </p>
-          <div className="flex flex-wrap gap-2 my-6">
-            {similar.map(s => (
-              <Link key={s} to={`/name/${s}`} className="px-4 py-2 rounded-full bg-secondary hover:bg-primary/10 text-sm font-medium transition-colors">
-                {s}
-              </Link>
-            ))}
-          </div>
-
+          {/* Similar names already rendered above in the rich report */}
           <h2>Interesting Facts About {data.name}</h2>
           <p>
             If there are {formatNumber(data.count)} people named {data.name} worldwide, that means approximately 1 in every {formatNumber(Math.round(8000000000 / data.count))} people on Earth shares this name. If all the people named {data.name} formed their own city, it would be {data.count > 1000000 ? 'larger than many major metropolitan areas' : data.count > 100000 ? 'comparable to a mid-sized city' : 'similar in size to a small town'}.

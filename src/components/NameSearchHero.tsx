@@ -2,27 +2,47 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Search, Sparkles, Zap, Globe, ShieldCheck, ArrowRight } from "lucide-react";
 import { searchNames } from "@/data/nameData";
+import { validateSingleName } from "@/lib/nameValidation";
+import { toast } from "sonner";
 
 const NameSearchHero = () => {
   const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
   const [suggestions, setSuggestions] = useState<string[]>([]);
   const [focused, setFocused] = useState(false);
+  const [shake, setShake] = useState(false);
+  const [touched, setTouched] = useState(false);
   const navigate = useNavigate();
 
+  const validation = validateSingleName(firstName);
+  const isInvalid = touched && firstName.length > 0 && !validation.ok;
+
+  const triggerShake = () => {
+    setShake(true);
+    window.setTimeout(() => setShake(false), 450);
+  };
+
   const handleFirstNameChange = (val: string) => {
-    setFirstName(val);
-    if (val.length >= 2) {
-      setSuggestions(searchNames(val));
-    } else {
-      setSuggestions([]);
+    if (/\s/.test(val)) {
+      toast.warning("Please enter first or last name only", { duration: 1500 });
+      triggerShake();
+      val = val.replace(/\s+/g, "");
     }
+    const cleaned = val.replace(/[^A-Za-z]/g, "").slice(0, 20);
+    if (cleaned !== val) triggerShake();
+    setFirstName(cleaned);
+    if (cleaned.length >= 2) setSuggestions(searchNames(cleaned));
+    else setSuggestions([]);
   };
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
-    const name = firstName.trim() || "James";
-    navigate(`/name/${encodeURIComponent(name)}`);
+    setTouched(true);
+    if (!validation.ok) {
+      triggerShake();
+      toast.error(validation.ok ? "" : (validation as { ok: false; reason: string }).reason);
+      return;
+    }
+    navigate(`/name/${encodeURIComponent(validation.value)}`);
     setSuggestions([]);
   };
 
@@ -103,22 +123,30 @@ const NameSearchHero = () => {
                 </div>
               </div>
 
-              <form onSubmit={handleSearch} className="space-y-3">
+              <form onSubmit={handleSearch} className="space-y-3" noValidate>
                 <div className="relative">
                   <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground pointer-events-none" />
                   <input
                     type="text"
-                    placeholder="Try James, Liam, Sophia…"
+                    placeholder="Enter a single name (e.g., Rahul)"
                     value={firstName}
                     onChange={(e) => handleFirstNameChange(e.target.value)}
                     onFocus={() => setFocused(true)}
-                    onBlur={() => setTimeout(() => setFocused(false), 150)}
-                    aria-label="Enter your first name"
+                    onBlur={() => {
+                      setTouched(true);
+                      setTimeout(() => setFocused(false), 150);
+                    }}
+                    aria-label="Enter a single first or last name"
+                    aria-invalid={isInvalid}
+                    aria-describedby={isInvalid ? "hero-name-error" : undefined}
+                    maxLength={20}
                     className={`w-full h-14 rounded-xl border-2 bg-background pl-11 pr-4 text-foreground text-base placeholder:text-muted-foreground/70 focus:outline-none transition-all ${
-                      focused
-                        ? "border-primary ring-4 ring-primary/15"
-                        : "border-border hover:border-primary/40"
-                    }`}
+                      isInvalid
+                        ? "border-destructive ring-4 ring-destructive/20"
+                        : focused
+                          ? "border-primary ring-4 ring-primary/15"
+                          : "border-border hover:border-primary/40"
+                    } ${shake ? "animate-[shake_0.4s_ease-in-out]" : ""}`}
                   />
                   {suggestions.length > 0 && (
                     <div className="absolute top-full left-0 right-0 mt-1.5 bg-popover border border-border rounded-xl shadow-xl z-20 max-h-56 overflow-y-auto">
@@ -135,19 +163,16 @@ const NameSearchHero = () => {
                     </div>
                   )}
                 </div>
-
-                <input
-                  type="text"
-                  placeholder="Last name (optional)"
-                  value={lastName}
-                  onChange={(e) => setLastName(e.target.value)}
-                  aria-label="Enter your last name (optional)"
-                  className="w-full h-12 rounded-xl border-2 border-border bg-background px-4 text-foreground text-sm placeholder:text-muted-foreground/70 focus:outline-none focus:border-primary focus:ring-4 focus:ring-primary/15 hover:border-primary/40 transition-all"
-                />
+                {isInvalid && (
+                  <p id="hero-name-error" role="alert" className="text-xs text-destructive -mt-1">
+                    {(validation as { ok: false; reason: string }).reason}
+                  </p>
+                )}
 
                 <button
                   type="submit"
-                  className="group relative w-full h-14 rounded-xl font-semibold text-base text-primary-foreground shadow-lg shadow-primary/30 hover:shadow-xl hover:shadow-primary/40 hover:-translate-y-0.5 transition-all flex items-center justify-center gap-2 overflow-hidden"
+                  disabled={!validation.ok}
+                  className="group relative w-full h-14 rounded-xl font-semibold text-base text-primary-foreground shadow-lg shadow-primary/30 hover:shadow-xl hover:shadow-primary/40 hover:-translate-y-0.5 transition-all flex items-center justify-center gap-2 overflow-hidden disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:translate-y-0"
                   style={{
                     background:
                       "linear-gradient(135deg, hsl(var(--primary)), hsl(280 60% 55%))",

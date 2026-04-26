@@ -1,11 +1,16 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import { toast } from "sonner";
 import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
 import SEOHead from "@/components/SEOHead";
+import NameInput from "@/components/NameInput";
+import NameInsightReport from "@/components/NameInsightReport";
+import { validateSingleName } from "@/lib/nameValidation";
 import { getNameData, formatNumber } from "@/data/nameData";
 import RelatedPosts from "@/components/RelatedPosts";
 import DataFreshness from "@/components/DataFreshness";
+import { Bookmark, Share2 } from "lucide-react";
 import {
   FeatureGrid,
   ProsCons,
@@ -61,12 +66,49 @@ const FAQS = [
 ];
 
 const PopularityChecker = () => {
-  const [name, setName] = useState("");
-  const [result, setResult] = useState<ReturnType<typeof getNameData> | null>(null);
+  const initial = typeof window !== "undefined" ? new URLSearchParams(window.location.search).get("name") || "" : "";
+  const [name, setName] = useState(initial);
+  const [result, setResult] = useState<ReturnType<typeof getNameData> | null>(
+    initial ? getNameData(initial) : null,
+  );
+
+  const validation = validateSingleName(name);
 
   const check = (e: React.FormEvent) => {
     e.preventDefault();
-    if (name.trim()) setResult(getNameData(name.trim()));
+    if (!validation.ok) {
+      toast.error((validation as { ok: false; reason: string }).reason);
+      return;
+    }
+    setResult(getNameData(validation.value));
+    // Preserve in URL for sharing
+    const url = new URL(window.location.href);
+    url.searchParams.set("name", validation.value);
+    window.history.replaceState({}, "", url.toString());
+  };
+
+  const shareResult = async () => {
+    if (!result) return;
+    try {
+      await navigator.clipboard.writeText(window.location.href);
+      toast.success("Share link copied");
+    } catch {
+      toast.error("Could not copy link");
+    }
+  };
+
+  const saveResult = () => {
+    if (!result) return;
+    try {
+      const list: string[] = JSON.parse(localStorage.getItem("hmom:saved") || "[]");
+      if (!list.includes(result.name)) {
+        list.unshift(result.name);
+        localStorage.setItem("hmom:saved", JSON.stringify(list.slice(0, 50)));
+      }
+      toast.success(`Saved ${result.name}`);
+    } catch {
+      toast.error("Save failed");
+    }
   };
 
   const jsonLd = [
@@ -176,17 +218,17 @@ const PopularityChecker = () => {
         </div>
 
         <form onSubmit={check} className="flex gap-3 mb-6">
-          <input
-            type="text"
-            placeholder="Enter a name..."
+          <NameInput
             value={name}
-            onChange={(e) => setName(e.target.value)}
-            className="flex-1 h-12 rounded-md border border-input bg-secondary px-4 text-base"
+            onChange={setName}
+            inputClassName="h-12 rounded-md border border-input bg-secondary px-4 text-base focus:outline-none focus:ring-2 focus:ring-ring"
+            className="flex-1"
             aria-label="Name to check"
           />
           <button
             type="submit"
-            className="h-12 px-6 rounded-md bg-primary text-primary-foreground font-semibold hover:opacity-90"
+            disabled={!validation.ok}
+            className="h-12 px-6 rounded-md bg-primary text-primary-foreground font-semibold hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed"
           >
             Check
           </button>
@@ -208,24 +250,24 @@ const PopularityChecker = () => {
         </div>
 
         {result && (
-          <div className="rounded-xl border border-border bg-card p-6 mb-12">
-            <h2 className="font-display text-2xl font-bold mb-1">{result.name}</h2>
-            <p className="text-muted-foreground mb-4">
-              Rank #{formatNumber(result.rank)} · ~{formatNumber(result.count)} people worldwide
-            </p>
-            <div className="space-y-3">
-              {Object.entries(result.decade_popularity).map(([decade, score]) => (
-                <div key={decade} className="flex items-center gap-3">
-                  <span className="w-16 text-sm text-muted-foreground">{decade}</span>
-                  <div className="flex-1 h-3 rounded-full bg-secondary overflow-hidden">
-                    <div className="h-full rounded-full bg-primary" style={{ width: `${score}%` }} />
-                  </div>
-                  <span className="w-8 text-sm text-right font-medium">{score}</span>
-                </div>
-              ))}
+          <div className="mb-12 space-y-4">
+            <div className="flex flex-wrap gap-2 justify-end">
+              <button
+                onClick={saveResult}
+                className="inline-flex items-center gap-2 h-9 px-3 rounded-lg border border-border bg-card hover:bg-secondary text-sm"
+              >
+                <Bookmark className="h-4 w-4" /> Save
+              </button>
+              <button
+                onClick={shareResult}
+                className="inline-flex items-center gap-2 h-9 px-3 rounded-lg bg-primary text-primary-foreground text-sm hover:opacity-90"
+              >
+                <Share2 className="h-4 w-4" /> Share
+              </button>
             </div>
-            <Link to={`/name/${result.name}`} className="inline-block mt-6 text-sm text-primary hover:underline">
-              View full statistics →
+            <NameInsightReport name={result.name} />
+            <Link to={`/name/${result.name}`} className="inline-block mt-2 text-sm text-primary hover:underline">
+              View full statistics page →
             </Link>
           </div>
         )}

@@ -1,8 +1,11 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { Link } from "react-router-dom";
+import { toast } from "sonner";
 import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
 import SEOHead from "@/components/SEOHead";
+import NameInput from "@/components/NameInput";
+import { validateSingleName } from "@/lib/nameValidation";
 import { getNameData } from "@/data/nameData";
 import RelatedPosts from "@/components/RelatedPosts";
 import DataFreshness from "@/components/DataFreshness";
@@ -16,7 +19,7 @@ import {
   ResponsiveContainer,
   Legend,
 } from "recharts";
-import { TrendingUp, TrendingDown, Clock, Info, CheckCircle2, Globe } from "lucide-react";
+import { TrendingUp, TrendingDown, Clock, Info, CheckCircle2, Globe, Bookmark, Share2, Columns2 } from "lucide-react";
 import {
   FeatureGrid,
   ProsCons,
@@ -120,14 +123,34 @@ const CHART_CHECKLIST = [
 ];
 
 const TrendVisualizer = () => {
+  const initSp = typeof window !== "undefined" ? new URLSearchParams(window.location.search) : new URLSearchParams();
   const [input, setInput] = useState("");
-  const [names, setNames] = useState<string[]>([]);
-  const [country, setCountry] = useState<string>("Global");
+  const [names, setNames] = useState<string[]>(() => {
+    const fromUrl = initSp.get("names");
+    return fromUrl ? fromUrl.split(",").filter(Boolean).slice(0, 4) : [];
+  });
+  const [country, setCountry] = useState<string>(initSp.get("country") || "Global");
+  const [compareCountry, setCompareCountry] = useState<string | null>(initSp.get("vs") || null);
+
+  const validation = validateSingleName(input);
+
+  // Sync URL state for sharing
+  useEffect(() => {
+    const url = new URL(window.location.href);
+    if (names.length) url.searchParams.set("names", names.join(",")); else url.searchParams.delete("names");
+    if (country !== "Global") url.searchParams.set("country", country); else url.searchParams.delete("country");
+    if (compareCountry) url.searchParams.set("vs", compareCountry); else url.searchParams.delete("vs");
+    window.history.replaceState({}, "", url.toString());
+  }, [names, country, compareCountry]);
 
   const addName = (e: React.FormEvent) => {
     e.preventDefault();
-    const n = input.trim();
-    if (n && !names.includes(n) && names.length < 4) {
+    if (!validation.ok) {
+      toast.error((validation as { ok: false; reason: string }).reason);
+      return;
+    }
+    const n = (validation as { ok: true; value: string }).value;
+    if (!names.includes(n) && names.length < 4) {
       setNames([...names, n]);
       setInput("");
     }
@@ -137,27 +160,47 @@ const TrendVisualizer = () => {
 
   const loadPreset = (preset: string[]) => setNames(preset);
 
+  const shareView = async () => {
+    try {
+      await navigator.clipboard.writeText(window.location.href);
+      toast.success("Chart link copied — share away!");
+    } catch {
+      toast.error("Could not copy link");
+    }
+  };
+
+  const saveView = () => {
+    if (names.length === 0) {
+      toast.error("Add at least one name first");
+      return;
+    }
+    try {
+      const key = "hmom:savedCharts";
+      const list: { names: string[]; country: string }[] = JSON.parse(localStorage.getItem(key) || "[]");
+      list.unshift({ names, country });
+      localStorage.setItem(key, JSON.stringify(list.slice(0, 20)));
+      toast.success("Chart saved to bookmarks");
+    } catch {
+      toast.error("Save failed");
+    }
+  };
+
   // Compute country-adjusted multiplier per name. Global = 1.
-  // For a country, multiplier = (country_count / total_count). This rescales the
-  // 0-100 decade score to reflect that country's share, then we normalize so the
-  // peak decade for that country still hits 100 (so the line stays readable).
-  const chartData = useMemo(() => {
+  const buildChartData = (countryKey: string) => {
     if (names.length === 0) return [];
     const decades = Object.keys(getNameData(names[0]).decade_popularity);
-
     const adjusted: Record<string, Record<string, number>> = {};
     names.forEach((n) => {
       const d = getNameData(n);
       let multiplier = 1;
-      if (country !== "Global") {
-        const countryShare = (d.regions[country] ?? 0) / Math.max(d.count, 1);
-        multiplier = countryShare > 0 ? Math.min(1, countryShare * 4) : 0.05; // soft scale
+      if (countryKey !== "Global") {
+        const countryShare = (d.regions[countryKey] ?? 0) / Math.max(d.count, 1);
+        multiplier = countryShare > 0 ? Math.min(1, countryShare * 4) : 0.05;
       }
       const raw: Record<string, number> = {};
       decades.forEach((dec) => {
         raw[dec] = d.decade_popularity[dec] * multiplier;
       });
-      // Re-normalize to 0-100 against this country's peak so lines stay readable
       const peak = Math.max(...Object.values(raw), 0.0001);
       const normalized: Record<string, number> = {};
       decades.forEach((dec) => {
@@ -165,15 +208,18 @@ const TrendVisualizer = () => {
       });
       adjusted[n] = normalized;
     });
-
     return decades.map((decade) => {
-      const point: any = { decade };
-      names.forEach((n) => {
-        point[n] = adjusted[n][decade];
-      });
+      const point: Record<string, string | number> = { decade };
+      names.forEach((n) => { point[n] = adjusted[n][decade]; });
       return point;
     });
-  }, [names, country]);
+  };
+
+  const chartData = useMemo(() => buildChartData(country), [names, country]);
+  const compareChartData = useMemo(
+    () => (compareCountry ? buildChartData(compareCountry) : []),
+    [names, compareCountry],
+  );
 
   const peakDecade = (name: string) => {
     const data = getNameData(name).decade_popularity;
@@ -219,6 +265,18 @@ const TrendVisualizer = () => {
         name: `Step ${i + 1}`,
         text,
       })),
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Dataset",
+      name: names.length ? `Popularity trend for ${names.join(", ")}` : "Baby name popularity trend dataset",
+      description: `Decade-by-decade normalized popularity scores (1880–present) for the selected name(s) — region: ${country}${compareCountry ? ` vs ${compareCountry}` : ""}.`,
+      keywords: ["baby names", "popularity", "trends", country, ...names],
+      temporalCoverage: "1880-01-01/..",
+      spatialCoverage: country,
+      variableMeasured: names.length ? names : ["name popularity score (0–100)"],
+      url: typeof window !== "undefined" ? window.location.href : "https://howmanyofme.co/tools/trend-visualizer",
+      creator: { "@type": "Organization", name: "HowManyOfMe.co" },
     },
     {
       "@context": "https://schema.org",
@@ -293,18 +351,17 @@ const TrendVisualizer = () => {
         </div>
 
         <form onSubmit={addName} className="flex gap-3 mb-6">
-          <input
-            type="text"
-            placeholder="Enter a name..."
+          <NameInput
             value={input}
-            onChange={(e) => setInput(e.target.value)}
-            className="flex-1 h-12 rounded-md border border-input bg-secondary px-4"
+            onChange={setInput}
+            inputClassName="h-12 rounded-md border border-input bg-secondary px-4 focus:outline-none focus:ring-2 focus:ring-ring"
+            className="flex-1"
             aria-label="Name to add to chart"
           />
           <button
             type="submit"
-            disabled={names.length >= 4}
-            className="h-12 px-6 rounded-md bg-primary text-primary-foreground font-semibold disabled:opacity-50"
+            disabled={names.length >= 4 || !validation.ok}
+            className="h-12 px-6 rounded-md bg-primary text-primary-foreground font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
           >
             Add Name
           </button>
@@ -348,6 +405,47 @@ const TrendVisualizer = () => {
               </button>
             ))}
           </div>
+
+          {/* Side-by-side region compare */}
+          <div className="mt-4 pt-4 border-t border-border">
+            <div className="flex items-center gap-2 mb-2">
+              <Columns2 size={16} className="text-primary" />
+              <p className="text-sm font-semibold">Compare side-by-side with another region</p>
+            </div>
+            <div className="flex flex-wrap gap-2">
+              <button
+                onClick={() => setCompareCountry(null)}
+                className={`px-3 py-1.5 text-xs rounded-full border ${!compareCountry ? "bg-primary text-primary-foreground border-primary" : "bg-secondary"}`}
+              >
+                Off
+              </button>
+              {COUNTRIES.filter((c) => c.key !== country).map((c) => (
+                <button
+                  key={c.key}
+                  onClick={() => setCompareCountry(c.key)}
+                  className={`px-3 py-1.5 text-xs rounded-full border ${compareCountry === c.key ? "bg-primary text-primary-foreground border-primary" : "bg-secondary hover:bg-primary/10"}`}
+                >
+                  vs {c.label}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Save / Share */}
+          <div className="mt-4 pt-4 border-t border-border flex flex-wrap gap-2">
+            <button
+              onClick={saveView}
+              className="inline-flex items-center gap-2 h-9 px-3 rounded-lg border border-border bg-card hover:bg-secondary text-sm"
+            >
+              <Bookmark className="h-4 w-4" /> Save this result
+            </button>
+            <button
+              onClick={shareView}
+              className="inline-flex items-center gap-2 h-9 px-3 rounded-lg bg-primary text-primary-foreground text-sm hover:opacity-90"
+            >
+              <Share2 className="h-4 w-4" /> Share view
+            </button>
+          </div>
         </div>
 
         {names.length > 0 && (
@@ -386,6 +484,29 @@ const TrendVisualizer = () => {
                 <Legend />
                 {names.map((n, i) => (
                   <Line key={n} type="monotone" dataKey={n} stroke={COLORS[i]} strokeWidth={2.5} dot={{ r: 4 }} activeDot={{ r: 6 }} />
+                ))}
+              </LineChart>
+            </ResponsiveContainer>
+          </div>
+        )}
+
+        {compareCountry && compareChartData.length > 0 && (
+          <div className="mt-6 rounded-xl border bg-card p-6">
+            <div className="flex items-center justify-between mb-6 flex-wrap gap-2">
+              <h2 className="font-display text-xl font-bold">
+                Side-by-side: <span className="text-muted-foreground font-normal">{compareCountry}</span>
+              </h2>
+              <span className="text-xs text-muted-foreground">Same names, different region</span>
+            </div>
+            <ResponsiveContainer width="100%" height={400}>
+              <LineChart data={compareChartData}>
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="decade" />
+                <YAxis domain={[0, 100]} />
+                <Tooltip />
+                <Legend />
+                {names.map((n, i) => (
+                  <Line key={n} type="monotone" dataKey={n} stroke={COLORS[i]} strokeWidth={2.5} strokeDasharray="5 5" dot={{ r: 3 }} />
                 ))}
               </LineChart>
             </ResponsiveContainer>
