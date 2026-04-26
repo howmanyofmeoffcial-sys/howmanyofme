@@ -37,10 +37,10 @@ interface Props {
   country?: string;
 }
 
-const GENDER_ACCENT: Record<string, { bg: string; text: string; ring: string; emoji: string }> = {
-  male: { bg: "bg-[hsl(220_80%_94%)]", text: "text-[hsl(220_80%_35%)]", ring: "ring-[hsl(220_80%_50%)]", emoji: "👦" },
-  female: { bg: "bg-[hsl(330_80%_94%)]", text: "text-[hsl(330_70%_40%)]", ring: "ring-[hsl(330_70%_55%)]", emoji: "👧" },
-  unisex: { bg: "bg-[hsl(160_50%_92%)]", text: "text-[hsl(160_60%_30%)]", ring: "ring-[hsl(160_60%_45%)]", emoji: "🧒" },
+const GENDER_ACCENT: Record<string, { wrap: string; chip: string; emoji: string }> = {
+  male: { wrap: "ring-blue-500/30", chip: "bg-blue-100 text-blue-800 dark:bg-blue-500/15 dark:text-blue-200", emoji: "👦" },
+  female: { wrap: "ring-pink-500/30", chip: "bg-pink-100 text-pink-800 dark:bg-pink-500/15 dark:text-pink-200", emoji: "👧" },
+  unisex: { wrap: "ring-emerald-500/30", chip: "bg-emerald-100 text-emerald-800 dark:bg-emerald-500/15 dark:text-emerald-200", emoji: "🧒" },
 };
 
 const PIE_COLORS = ["hsl(220 80% 50%)", "hsl(160 60% 45%)", "hsl(280 60% 55%)", "hsl(30 80% 55%)", "hsl(0 70% 55%)"];
@@ -96,7 +96,7 @@ const NameInsightReport = ({ name, country }: Props) => {
       )}
 
       {/* 1. HEADER */}
-      <header className={`relative overflow-hidden rounded-2xl border border-border bg-card p-6 md:p-8 ring-1 ${accent.ring} ring-opacity-20`}>
+      <header className={`relative overflow-hidden rounded-2xl border border-border bg-card p-6 md:p-8 ring-1 ${accent.wrap}`}>
         <div className="flex flex-wrap items-start justify-between gap-4">
           <div>
             <p className="text-xs uppercase tracking-wider text-muted-foreground mb-2">Name Insight Report</p>
@@ -104,7 +104,7 @@ const NameInsightReport = ({ name, country }: Props) => {
               {accent.emoji} {data.name}
             </h2>
             <div className="mt-3 flex flex-wrap items-center gap-2">
-              <span className={`px-3 py-1 rounded-full text-xs font-semibold ${accent.bg} ${accent.text}`}>
+              <span className={`px-3 py-1 rounded-full text-xs font-semibold ${accent.chip}`}>
                 {gender.gender.toUpperCase()}
               </span>
               <span className="px-3 py-1 rounded-full text-xs bg-secondary text-secondary-foreground">
