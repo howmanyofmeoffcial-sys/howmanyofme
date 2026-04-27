@@ -4,7 +4,7 @@ import SEOHead from "@/components/SEOHead";
 
 const Privacy = () => (
   <div className="min-h-screen bg-background">
-    <SEOHead title="Privacy Policy — HowManyOfMe" description="Privacy policy for HowManyOfMe name statistics platform." />
+    <SEOHead title="Privacy Policy — HowManyOfMe" description="Privacy policy for HowManyOfMe name statistics platform." noindex />
     <SiteHeader />
     <main className="container py-12 max-w-3xl prose-content">
       <h1 className="font-display text-4xl md:text-5xl font-bold mb-6">Privacy Policy</h1>

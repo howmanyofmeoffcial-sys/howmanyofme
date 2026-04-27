@@ -4,10 +4,11 @@ interface SEOHeadProps {
   title: string;
   description: string;
   canonical?: string;
+  noindex?: boolean;
   jsonLd?: Record<string, unknown> | Record<string, unknown>[];
 }
 
-const SEOHead = ({ title, description, canonical, jsonLd }: SEOHeadProps) => {
+const SEOHead = ({ title, description, canonical, noindex, jsonLd }: SEOHeadProps) => {
   useEffect(() => {
     document.title = title;
 
@@ -22,9 +23,16 @@ const SEOHead = ({ title, description, canonical, jsonLd }: SEOHeadProps) => {
     };
 
     setMeta("description", description);
+    setMeta(
+      "robots",
+      noindex
+        ? "noindex, nofollow"
+        : "index, follow, max-snippet:-1, max-image-preview:large",
+    );
     setMeta("og:title", title, "property");
     setMeta("og:description", description, "property");
     setMeta("og:type", "website", "property");
+    if (canonical) setMeta("og:url", canonical, "property");
     setMeta("twitter:card", "summary_large_image");
     setMeta("twitter:title", title);
     setMeta("twitter:description", description);

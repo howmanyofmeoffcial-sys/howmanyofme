@@ -60,18 +60,65 @@
     <meta name="author" content="Ziven Borceg" />
     <meta name="google-site-verification" content="mu13LHCJdzcQGEj69hBuFNH0G3tiqwMOlqWlEpe4Afc" />
 
+    <!-- Crawl directives: explicit index,follow + rich snippet hints -->
+    <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
+    <meta name="googlebot" content="index, follow, max-snippet:-1, max-image-preview:large" />
+
+    <!-- US geo targeting -->
+    <meta name="geo.region" content="US" />
+    <meta name="geo.placename" content="United States" />
+    <meta name="language" content="English" />
+    <meta http-equiv="content-language" content="en-US" />
+    <meta name="theme-color" content="#1f5fcf" />
+
+    <meta property="og:site_name" content="HowManyOfMe" />
+    <meta property="og:locale" content="en_US" />
     <meta property="og:title" content="How Many People Have My Name? Check Instantly 🌍" />
     <meta property="og:description" content="How many people have your name? Check instantly using 100M+ global records. See rarity, popularity & origin in seconds. Free, no signup needed." />
     <meta property="og:type" content="website" />
-    <meta property="og:image" content="https://lovable.dev/opengraph-image-p98pqg.png" />
+    <meta property="og:image" content="https://howmanyofme.co/og-image.jpg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
     <meta property="og:url" content="https://howmanyofme.co/" />
     <link rel="canonical" href="https://howmanyofme.co/" />
+    <link rel="alternate" hreflang="en-us" href="https://howmanyofme.co/" />
+    <link rel="alternate" hreflang="x-default" href="https://howmanyofme.co/" />
 
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:site" content="@Lovable" />
-    <meta name="twitter:image" content="https://lovable.dev/opengraph-image-p98pqg.png" />
+    <meta name="twitter:site" content="@howmanyofme" />
+    <meta name="twitter:image" content="https://howmanyofme.co/og-image.jpg" />
     <meta name="twitter:title" content="How Many People Have My Name? Check Instantly 🌍" />
     <meta name="twitter:description" content="How many people have your name? Check instantly using 100M+ global records. See rarity, popularity & origin in seconds. Free, no signup needed." />
+
+    <!-- Site-wide WebSite + Organization JSON-LD for SiteLinks search box & brand entity -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@graph": [
+          {
+            "@type": "WebSite",
+            "@id": "https://howmanyofme.co/#website",
+            "url": "https://howmanyofme.co/",
+            "name": "HowManyOfMe",
+            "description": "How many people have your name? Check instantly using 100M+ global records.",
+            "inLanguage": "en-US",
+            "potentialAction": {
+              "@type": "SearchAction",
+              "target": "https://howmanyofme.co/name/{search_term_string}",
+              "query-input": "required name=search_term_string"
+            }
+          },
+          {
+            "@type": "Organization",
+            "@id": "https://howmanyofme.co/#organization",
+            "name": "HowManyOfMe",
+            "url": "https://howmanyofme.co/",
+            "logo": "https://howmanyofme.co/og-image.jpg",
+            "founder": { "@type": "Person", "name": "Ziven Borceg" }
+          }
+        ]
+      }
+    </script>
   </head>
 
   <body>
