@@ -73,7 +73,7 @@ const SimilarNamesIndex = () => {
     if (v.ok) {
       navigate(`/similar-names/${v.value.toLowerCase()}`);
     } else {
-      toast.warning(v.reason, { duration: 1500 });
+      toast.warning((v as { ok: false; reason: string }).reason, { duration: 1500 });
     }
   };
 
