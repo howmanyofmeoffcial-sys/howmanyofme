@@ -70,12 +70,11 @@ const SimilarNamesIndex = () => {
   const submit = (e: React.FormEvent) => {
     e.preventDefault();
     const v = validateSingleName(q);
-    if (!v.ok) {
+    if (v.ok) {
+      navigate(`/similar-names/${v.value.toLowerCase()}`);
+    } else {
       toast.warning(v.reason, { duration: 1500 });
-      return;
     }
-    navigate(`/similar-names/${v.value.toLowerCase()}`);
-    void allNames;
   };
 
   return (
