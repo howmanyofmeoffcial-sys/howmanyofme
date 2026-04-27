@@ -4,7 +4,7 @@ import SEOHead from "@/components/SEOHead";
 
 const Disclaimer = () => (
   <div className="min-h-screen bg-background">
-    <SEOHead
+    <SEOHead noindex
       title="Disclaimer — HowManyOfMe"
       description="Read the disclaimer for HowManyOfMe. Understand the limitations of our name statistics data and estimates."
       canonical="https://howmanyofme.co/disclaimer"

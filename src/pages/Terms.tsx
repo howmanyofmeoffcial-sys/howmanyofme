@@ -4,7 +4,7 @@ import SEOHead from "@/components/SEOHead";
 
 const Terms = () => (
   <div className="min-h-screen bg-background">
-    <SEOHead
+    <SEOHead noindex
       title="Terms of Service — HowManyOfMe"
       description="Read the Terms of Service for HowManyOfMe. Understand the rules and guidelines for using our name statistics platform."
       canonical="https://howmanyofme.co/terms"

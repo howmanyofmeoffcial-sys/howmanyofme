@@ -5,7 +5,7 @@ import { ExternalLink, Mail } from "lucide-react";
 
 const Contact = () => (
   <div className="min-h-screen bg-background">
-    <SEOHead
+    <SEOHead noindex
       title="Contact HowManyOfMe — Get In Touch"
       description="Have questions, feedback, or data licensing inquiries? Contact the HowManyOfMe team. We'd love to hear from you."
       canonical="https://howmanyofme.co/contact"
