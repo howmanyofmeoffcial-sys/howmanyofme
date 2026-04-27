@@ -75,6 +75,7 @@ const SimilarNamesIndex = () => {
       return;
     }
     navigate(`/similar-names/${v.value.toLowerCase()}`);
+    void allNames;
   };
 
   return (
