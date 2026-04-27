@@ -53,6 +53,8 @@ pillars.forEach((p) => push(`/${p}`, p === "" ? "1.0" : "0.8", "weekly"));
 tools.forEach((t) => push(`/tools/${t}`, "0.8", "monthly"));
 alphabet.forEach((l) => push(`/names/${l}`, "0.6", "monthly"));
 allNames.forEach((n) => push(`/name/${n}`, "0.7", "monthly"));
+push(`/similar-names`, "0.8", "weekly");
+allNames.forEach((n) => push(`/similar-names/${n.toLowerCase()}`, "0.6", "monthly"));
 blogSlugs.forEach((s) => push(`/blog/${s}`, "0.7", "monthly"));
 
 // De-dupe
