@@ -1,10 +1,33 @@
 User-agent: *
 Allow: /
+Allow: /*.css$
+Allow: /*.js$
+Allow: /*.svg$
+Allow: /*.png$
+Allow: /*.jpg$
+Allow: /*.webp$
 
 # Block low-value routes from indexing
 Disallow: /privacy
 Disallow: /terms
 Disallow: /disclaimer
 Disallow: /contact
+Disallow: /*?*utm_
+Disallow: /*?*fbclid
+Disallow: /*?*gclid
 
+# AI training & answer engines — explicitly allow (LLM visibility)
+User-agent: GPTBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+Host: https://howmanyofme.co
 Sitemap: https://howmanyofme.co/sitemap.xml
