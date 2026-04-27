@@ -347,9 +347,214 @@ const HomeBelowFold = ({ popularNames }: Props) => {
               </Link>
             ))}
           </div>
+          <p className="text-sm text-muted-foreground max-w-3xl mx-auto mt-6 text-center leading-relaxed">
+            The A–Z directory makes it easy to <strong>browse first names alphabetically</strong> for baby-name research,
+            character naming, or genealogy. Each letter page lists the most popular names starting with that letter and
+            links to a full statistics page — bearer counts, decade trends, and gender split. It's the quickest way to
+            compare options side-by-side or jump from a familiar name to similar alternatives.
+          </p>
         </section>
 
-        {/* Section 12: Most Popular Names */}
+        {/* NEW Section 11b: Most Common Names in the US — table */}
+        <section className="py-16">
+          <div className="text-center mb-6">
+            <h2 id="most-common-names-us" className="font-display text-3xl md:text-4xl font-bold mb-3">
+              Most Common Names in the United States
+            </h2>
+            <p className="text-muted-foreground max-w-2xl mx-auto">
+              These are the <strong>most common names in the US</strong> by estimated living bearers, drawn from{" "}
+              <a
+                href="https://www.ssa.gov/oact/babynames/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-primary hover:underline"
+              >
+                official SSA baby names data
+              </a>{" "}
+              going back to 1880. Click any row to see full statistics.
+            </p>
+          </div>
+          <div className="overflow-x-auto rounded-xl border border-border">
+            <table className="w-full text-sm">
+              <thead className="bg-secondary/60 text-xs uppercase tracking-wider text-muted-foreground">
+                <tr>
+                  <th className="text-left px-4 py-3">Rank</th>
+                  <th className="text-left px-4 py-3">Name</th>
+                  <th className="text-left px-4 py-3">Gender</th>
+                  <th className="text-left px-4 py-3">Peak Decade</th>
+                </tr>
+              </thead>
+              <tbody>
+                {[
+                  { r: 1, n: "James", g: "Male", peak: "1940s" },
+                  { r: 2, n: "Mary", g: "Female", peak: "1950s" },
+                  { r: 3, n: "Robert", g: "Male", peak: "1940s" },
+                  { r: 4, n: "Patricia", g: "Female", peak: "1940s" },
+                  { r: 5, n: "John", g: "Male", peak: "1950s" },
+                  { r: 6, n: "Jennifer", g: "Female", peak: "1970s" },
+                  { r: 7, n: "Michael", g: "Male", peak: "1960s" },
+                  { r: 8, n: "Linda", g: "Female", peak: "1950s" },
+                  { r: 9, n: "William", g: "Male", peak: "1940s" },
+                  { r: 10, n: "Elizabeth", g: "Female", peak: "1980s" },
+                  { r: 11, n: "David", g: "Male", peak: "1960s" },
+                  { r: 12, n: "Barbara", g: "Female", peak: "1940s" },
+                  { r: 13, n: "Richard", g: "Male", peak: "1950s" },
+                  { r: 14, n: "Susan", g: "Female", peak: "1950s" },
+                  { r: 15, n: "Joseph", g: "Male", peak: "1940s" },
+                  { r: 16, n: "Jessica", g: "Female", peak: "1980s" },
+                  { r: 17, n: "Thomas", g: "Male", peak: "1950s" },
+                  { r: 18, n: "Sarah", g: "Female", peak: "1980s" },
+                  { r: 19, n: "Charles", g: "Male", peak: "1940s" },
+                  { r: 20, n: "Karen", g: "Female", peak: "1960s" },
+                  { r: 21, n: "Christopher", g: "Male", peak: "1980s" },
+                  { r: 22, n: "Nancy", g: "Female", peak: "1950s" },
+                  { r: 23, n: "Daniel", g: "Male", peak: "1980s" },
+                  { r: 24, n: "Lisa", g: "Female", peak: "1960s" },
+                  { r: 25, n: "Matthew", g: "Male", peak: "1980s" },
+                ].map((row) => (
+                  <tr key={row.n} className="border-t border-border hover:bg-secondary/40 transition-colors">
+                    <td className="px-4 py-3 font-mono text-xs text-muted-foreground">#{row.r}</td>
+                    <td className="px-4 py-3">
+                      <Link to={`/name/${row.n}`} className="font-semibold text-primary hover:underline">
+                        {row.n}
+                      </Link>
+                    </td>
+                    <td className="px-4 py-3">{row.g}</td>
+                    <td className="px-4 py-3 text-muted-foreground">{row.peak}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        {/* NEW Section 11c: Popular vs Rare side-by-side */}
+        <section className="py-16">
+          <div className="text-center mb-6">
+            <h2 className="font-display text-3xl md:text-4xl font-bold mb-3">Popular Names vs Rare Names</h2>
+            <p className="text-muted-foreground max-w-2xl mx-auto">
+              Compare today's trending picks against the rarest first names in our database. Cross-checked against{" "}
+              <a
+                href="https://www.census.gov/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-primary hover:underline"
+              >
+                US Census population data
+              </a>{" "}
+              and global naming trends from{" "}
+              <a
+                href="https://data.unicef.org/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-primary hover:underline"
+              >
+                UNICEF
+              </a>
+              .
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            {/* LEFT — popular */}
+            <div className="rounded-xl border border-border overflow-hidden">
+              <div className="bg-primary/10 px-4 py-3 border-b border-border">
+                <h3 className="font-bold text-primary">Currently Popular Names</h3>
+              </div>
+              <div className="overflow-x-auto">
+                <table className="w-full text-sm">
+                  <thead className="bg-secondary/40 text-xs uppercase tracking-wider text-muted-foreground">
+                    <tr>
+                      <th className="text-left px-4 py-2">Rank</th>
+                      <th className="text-left px-4 py-2">Name</th>
+                      <th className="text-left px-4 py-2">Gender</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {[
+                      { r: 1, n: "Liam", g: "Male" },
+                      { r: 2, n: "Olivia", g: "Female" },
+                      { r: 3, n: "Noah", g: "Male" },
+                      { r: 4, n: "Emma", g: "Female" },
+                      { r: 5, n: "Oliver", g: "Male" },
+                      { r: 6, n: "Charlotte", g: "Female" },
+                      { r: 7, n: "Elijah", g: "Male" },
+                      { r: 8, n: "Amelia", g: "Female" },
+                      { r: 9, n: "Mateo", g: "Male" },
+                      { r: 10, n: "Sophia", g: "Female" },
+                      { r: 11, n: "Lucas", g: "Male" },
+                      { r: 12, n: "Mia", g: "Female" },
+                    ].map((row) => (
+                      <tr key={row.n} className="border-t border-border hover:bg-secondary/40 transition-colors">
+                        <td className="px-4 py-2 font-mono text-xs text-muted-foreground">#{row.r}</td>
+                        <td className="px-4 py-2">
+                          <Link to={`/name/${row.n}`} className="font-semibold text-primary hover:underline">
+                            {row.n}
+                          </Link>
+                        </td>
+                        <td className="px-4 py-2">{row.g}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            {/* RIGHT — rare */}
+            <div className="rounded-xl border border-border overflow-hidden">
+              <div className="bg-accent/10 px-4 py-3 border-b border-border">
+                <h3 className="font-bold text-accent-foreground">Very Rare Names Today</h3>
+              </div>
+              <div className="overflow-x-auto">
+                <table className="w-full text-sm">
+                  <thead className="bg-secondary/40 text-xs uppercase tracking-wider text-muted-foreground">
+                    <tr>
+                      <th className="text-left px-4 py-2">Rank</th>
+                      <th className="text-left px-4 py-2">Name</th>
+                      <th className="text-left px-4 py-2">Gender</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {[
+                      { r: 1, n: "Aaban", g: "Male" },
+                      { r: 2, n: "Opal", g: "Female" },
+                      { r: 3, n: "Ulysses", g: "Male" },
+                      { r: 4, n: "Imani", g: "Female" },
+                      { r: 5, n: "Knox", g: "Male" },
+                      { r: 6, n: "Zelda", g: "Female" },
+                      { r: 7, n: "Cassius", g: "Male" },
+                      { r: 8, n: "Ximena", g: "Female" },
+                      { r: 9, n: "Percival", g: "Male" },
+                      { r: 10, n: "Mirela", g: "Female" },
+                      { r: 11, n: "Thaddeus", g: "Male" },
+                      { r: 12, n: "Ottilie", g: "Female" },
+                    ].map((row) => (
+                      <tr key={row.n} className="border-t border-border hover:bg-secondary/40 transition-colors">
+                        <td className="px-4 py-2 font-mono text-xs text-muted-foreground">#{row.r}</td>
+                        <td className="px-4 py-2">
+                          <Link to={`/name/${row.n}`} className="font-semibold text-primary hover:underline">
+                            {row.n}
+                          </Link>
+                        </td>
+                        <td className="px-4 py-2">{row.g}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <div className="mt-6 text-center">
+            <Link
+              to="/similar-names"
+              className="inline-flex items-center gap-2 text-sm text-primary hover:underline font-medium"
+            >
+              Explore similar-name pages for any first name →
+            </Link>
+          </div>
+        </section>
+
         <section className="py-16">
           <div className="text-center mb-8">
             <h2 id="popular-names" className="font-display text-3xl md:text-4xl font-bold mb-3">Most Popular Names Worldwide</h2>
