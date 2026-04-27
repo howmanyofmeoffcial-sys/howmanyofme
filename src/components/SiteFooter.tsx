@@ -25,10 +25,16 @@ const SiteFooter = () => (
         <div>
           <h4 className="font-semibold mb-3 text-sm">Tools</h4>
           <ul className="space-y-1.5 text-sm text-muted-foreground">
+            <li><Link to="/tools" className="hover:text-foreground transition-colors">All Tools</Link></li>
             <li><Link to="/tools/popularity-checker" className="hover:text-foreground transition-colors">Popularity Checker</Link></li>
+            <li><Link to="/tools/name-comparison" className="hover:text-foreground transition-colors">Name Comparison</Link></li>
+            <li><Link to="/tools/trend-visualizer" className="hover:text-foreground transition-colors">Trend Visualizer</Link></li>
+            <li><Link to="/tools/unique-name-generator" className="hover:text-foreground transition-colors">Unique Name Generator</Link></li>
             <li><Link to="/tools/random-name" className="hover:text-foreground transition-colors">Random Name Generator</Link></li>
             <li><Link to="/tools/baby-names" className="hover:text-foreground transition-colors">Baby Name Ideas</Link></li>
             <li><Link to="/tools/username-generator" className="hover:text-foreground transition-colors">Username Generator</Link></li>
+            <li><Link to="/tools/meaning" className="hover:text-foreground transition-colors">Name Meaning</Link></li>
+            <li><Link to="/similar-names" className="hover:text-foreground transition-colors">Similar Names</Link></li>
           </ul>
         </div>
         <div>
