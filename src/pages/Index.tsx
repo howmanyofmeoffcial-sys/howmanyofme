@@ -124,6 +124,20 @@ const jsonLd = [
       acceptedAnswer: { "@type": "Answer", text: f.a },
     })),
   },
+  {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    name: "Most Common Names in the United States",
+    itemListElement: [
+      "James","Mary","Robert","Patricia","John","Jennifer","Michael","Linda","William","Elizabeth",
+      "David","Barbara","Richard","Susan","Joseph","Jessica","Thomas","Sarah","Charles","Karen",
+    ].map((n, i) => ({
+      "@type": "ListItem",
+      position: i + 1,
+      url: `https://howmanyofme.co/name/${n}`,
+      name: n,
+    })),
+  },
 ];
 
 const Index = () => {
