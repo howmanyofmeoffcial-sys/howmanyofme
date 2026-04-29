@@ -8,17 +8,30 @@ import { BarChart3, Sparkles, ArrowRight } from "lucide-react";
 import { getSimilarNamesFor, getNameContext } from "@/lib/similarNames";
 import { detectGender } from "@/lib/genderDetection";
 import { formatNumber } from "@/data/nameData";
+import { buildSimilarIntro, buildSimilarFaqs } from "@/lib/dynamicContent";
+import DataSources from "@/components/DataSources";
 
 const SimilarNamesDetail = () => {
   const { name = "" } = useParams<{ name: string }>();
 
-  const { display, lower, similar, ctx, gender } = useMemo(() => {
+  const { display, lower, similar, ctx, gender, intro, faqs } = useMemo(() => {
     const lower = name.toLowerCase();
     const display = lower.charAt(0).toUpperCase() + lower.slice(1);
     const similar = getSimilarNamesFor(display, 24);
     const ctx = getNameContext(display);
     const gender = detectGender(display);
-    return { display, lower, similar, ctx, gender };
+    const dynCtx = {
+      name: display,
+      origin: ctx.origin,
+      meaning: ctx.meaning,
+      rank: ctx.rank,
+      count: ctx.count,
+      similarSample: similar.combined.slice(0, 5),
+      formatNumber,
+    };
+    const intro = buildSimilarIntro(dynCtx);
+    const faqs = buildSimilarFaqs(dynCtx);
+    return { display, lower, similar, ctx, gender, intro, faqs };
   }, [name]);
 
   const previewList = similar.combined.slice(0, 4).join(", ") || "Aaron, Aiden, Alan";
