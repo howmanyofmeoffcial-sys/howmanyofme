@@ -221,6 +221,52 @@ const NameDetail = () => {
           </p>
         </div>
 
+        {/* Dynamic FAQ — varies per name; backed by FAQPage JSON-LD */}
+        <section className="mt-12 max-w-3xl">
+          <h2 className="font-display text-2xl font-bold mb-4">Frequently Asked Questions About {data.name}</h2>
+          <div className="space-y-3">
+            {faqs.map((f) => (
+              <div key={f.q} className="p-5 rounded-xl border border-border bg-card">
+                <h3 className="font-semibold mb-2">{f.q}</h3>
+                <p className="text-sm text-muted-foreground">{f.a}</p>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* Explore Related Names & Tools — keyword-rich anchors */}
+        <section className="mt-10 p-6 rounded-xl border border-border bg-card/50">
+          <h2 className="font-display text-xl font-bold mb-3">Explore Related Names &amp; Tools</h2>
+          <ul className="grid sm:grid-cols-2 gap-2 text-sm">
+            <li>
+              <Link to={`/similar-names/${data.name.toLowerCase()}`} className="text-primary hover:underline">
+                Names similar to {data.name}
+              </Link>
+            </li>
+            <li>
+              <Link to="/tools/popularity-checker" className="text-primary hover:underline">
+                Check how many people share your name
+              </Link>
+            </li>
+            <li>
+              <Link to="/tools/name-comparison" className="text-primary hover:underline">
+                Compare {data.name} side-by-side with another name
+              </Link>
+            </li>
+            <li>
+              <Link to="/tools/trend-visualizer" className="text-primary hover:underline">
+                See {data.name}'s popularity trend by decade
+              </Link>
+            </li>
+          </ul>
+        </section>
+
+        {/* Trust block */}
+        <DataSources
+          className="mt-8 max-w-3xl"
+          context={`Bearer estimates and rank for ${data.name} combine US Social Security Administration records with global census-derived modeling.`}
+        />
+
         {/* Tool CTA — embed main tool for internal-linking + engagement signals */}
         <ToolCTA
           headline={`Check another name like ${data.name}`}
