@@ -98,9 +98,7 @@ const SimilarNamesDetail = () => {
             Names Similar To {display}
           </h1>
           <p className="text-lg text-muted-foreground max-w-3xl mb-6">
-            <strong>Short answer:</strong> Names similar to {display} include{" "}
-            <span className="text-foreground font-medium">{previewList}</span>, and more — based on shared sound,
-            starting letter, and length.
+            <strong>Quick answer:</strong> {intro.lead}
           </p>
 
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 max-w-2xl">
@@ -167,32 +165,32 @@ const SimilarNamesDetail = () => {
           </div>
         </section>
 
-        {/* SEO content block */}
+        {/* SEO content block — varied per name to avoid templated patterns */}
         <section className="prose-content max-w-3xl mb-12">
           <h2>About the Name {display}</h2>
+          <p>{intro.body}</p>
           <p>
-            <strong>{display}</strong> is a first name of {ctx.origin} origin meaning "{ctx.meaning}." With an
-            estimated {formatNumber(ctx.count)} living bearers worldwide and a popularity rank near #{ctx.rank},{" "}
-            {display} sits among the {ctx.rank < 1000 ? "more recognizable" : "less common"} first names in our
-            dataset.
-          </p>
-          <p>
-            The names listed above are considered similar to {display} for one or more reasons: they share the same
-            starting letter ({display.charAt(0).toUpperCase()}), they have a comparable length ({display.length}{" "}
-            characters), or they sound alike (small phonetic edit distance). This makes them strong candidates for
-            parents searching for a {display}-style baby name, writers building name sets for related characters,
-            or anyone exploring the broader name family around {display}.
-          </p>
-          <p>
-            Want deeper insights? Open the{" "}
+            {intro.cta}{" "}
             <Link to={`/name/${display}`} className="text-primary hover:underline">
-              full {display} statistics page
-            </Link>{" "}
-            for global bearer counts, US SSA rank, decade-by-decade popularity, and the gender split — or jump to
-            our <Link to="/tools/popularity-checker" className="text-primary hover:underline">popularity checker</Link>{" "}
-            and <Link to="/tools/name-comparison" className="text-primary hover:underline">name comparison tool</Link>.
+              Open the full {display} statistics page
+            </Link>
+            , compare it on the{" "}
+            <Link to="/tools/popularity-checker" className="text-primary hover:underline">
+              popularity checker
+            </Link>
+            , or run a side-by-side via the{" "}
+            <Link to="/tools/name-comparison" className="text-primary hover:underline">
+              name comparison tool
+            </Link>
+            .
           </p>
         </section>
+
+        {/* Trust block */}
+        <DataSources
+          className="max-w-3xl mb-12"
+          context={`Bearer estimates and rank for ${display} combine US Social Security Administration records with global census-derived modeling.`}
+        />
 
         {/* INTERNAL LINKING */}
         <section className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
@@ -232,34 +230,16 @@ const SimilarNamesDetail = () => {
           </div>
         </section>
 
-        {/* FAQ */}
+        {/* FAQ — dynamic question set per name */}
         <section className="max-w-3xl mb-12">
           <h2 className="font-display text-2xl font-bold mb-4">Frequently Asked Questions</h2>
           <div className="space-y-3">
-            <div className="p-5 rounded-xl border border-border bg-card">
-              <h3 className="font-semibold mb-2">What names are similar to {display}?</h3>
-              <p className="text-sm text-muted-foreground">
-                Names similar to {display} include {similar.combined.slice(0, 8).join(", ") || "—"}. They share
-                starting letter, length, or sound.
-              </p>
-            </div>
-            <div className="p-5 rounded-xl border border-border bg-card">
-              <h3 className="font-semibold mb-2">What does {display} mean?</h3>
-              <p className="text-sm text-muted-foreground">
-                {display} is of {ctx.origin} origin and means "{ctx.meaning}".
-              </p>
-            </div>
-            <div className="p-5 rounded-xl border border-border bg-card">
-              <h3 className="font-semibold mb-2">Is {display} a rare name?</h3>
-              <p className="text-sm text-muted-foreground">
-                {display} ranks around #{ctx.rank}, with roughly {formatNumber(ctx.count)} known bearers
-                {ctx.rank < 100
-                  ? " — making it very common."
-                  : ctx.rank < 1000
-                  ? " — making it common but not in the very top tier."
-                  : " — making it uncommon."}
-              </p>
-            </div>
+            {faqs.map((f) => (
+              <div key={f.q} className="p-5 rounded-xl border border-border bg-card">
+                <h3 className="font-semibold mb-2">{f.q}</h3>
+                <p className="text-sm text-muted-foreground">{f.a}</p>
+              </div>
+            ))}
           </div>
         </section>
 
