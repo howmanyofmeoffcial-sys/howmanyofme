@@ -4,10 +4,16 @@ import SEOHead from "@/components/SEOHead";
 
 const Terms = () => (
   <div className="min-h-screen bg-background">
-    <SEOHead noindex
+    <SEOHead
       title="Terms of Service — HowManyOfMe"
-      description="Read the Terms of Service for HowManyOfMe. Understand the rules and guidelines for using our name statistics platform."
+      description="The rules for using HowManyOfMe — acceptable use, accuracy disclaimer, intellectual property, and limitation of liability."
       canonical="https://howmanyofme.co/terms"
+      jsonLd={{
+        "@context": "https://schema.org",
+        "@type": "WebPage",
+        name: "Terms of Service",
+        url: "https://howmanyofme.co/terms",
+      }}
     />
     <SiteHeader />
     <main className="container py-12 max-w-3xl prose-content">

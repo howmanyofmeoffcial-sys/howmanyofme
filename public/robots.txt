@@ -7,11 +7,7 @@ Allow: /*.png$
 Allow: /*.jpg$
 Allow: /*.webp$
 
-# Block low-value routes from indexing
-Disallow: /privacy
-Disallow: /terms
-Disallow: /disclaimer
-Disallow: /contact
+# Block low-value tracking parameters from indexing
 Disallow: /*?*utm_
 Disallow: /*?*fbclid
 Disallow: /*?*gclid
@@ -27,6 +23,14 @@ User-agent: PerplexityBot
 Allow: /
 
 User-agent: Google-Extended
+Allow: /
+
+# Google AdSense crawler — must reach all content for ad serving
+User-agent: Mediapartners-Google
+Allow: /
+
+# Google AdsBot — must reach landing pages
+User-agent: AdsBot-Google
 Allow: /
 
 Host: https://howmanyofme.co

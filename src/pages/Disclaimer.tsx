@@ -4,10 +4,16 @@ import SEOHead from "@/components/SEOHead";
 
 const Disclaimer = () => (
   <div className="min-h-screen bg-background">
-    <SEOHead noindex
+    <SEOHead
       title="Disclaimer — HowManyOfMe"
-      description="Read the disclaimer for HowManyOfMe. Understand the limitations of our name statistics data and estimates."
+      description="Important disclaimers about HowManyOfMe's name statistics: estimates, limitations of data, and third-party sources."
       canonical="https://howmanyofme.co/disclaimer"
+      jsonLd={{
+        "@context": "https://schema.org",
+        "@type": "WebPage",
+        name: "Disclaimer",
+        url: "https://howmanyofme.co/disclaimer",
+      }}
     />
     <SiteHeader />
     <main className="container py-12 max-w-3xl prose-content">
@@ -31,7 +37,14 @@ const Disclaimer = () => (
       <p>The content on this website does not constitute legal, medical, financial, or professional advice of any kind. Do not make important decisions based solely on data from this website.</p>
 
       <h2>Third-Party Data Sources</h2>
-      <p>Our data is derived from publicly available records from agencies including the U.S. Social Security Administration, UK Office for National Statistics, Statistics Canada, and others. We are not affiliated with these agencies, and they do not endorse this website.</p>
+      <p>
+        Our data is derived from publicly available records published by agencies including the{" "}
+        <a className="text-primary hover:underline" href="https://www.ssa.gov/oact/babynames/" rel="noopener noreferrer" target="_blank">U.S. Social Security Administration</a>,
+        the <a className="text-primary hover:underline" href="https://www.census.gov/" rel="noopener noreferrer" target="_blank">U.S. Census Bureau</a>,
+        the UK Office for National Statistics, Statistics Canada, and global demographic indicators from{" "}
+        <a className="text-primary hover:underline" href="https://data.unicef.org/" rel="noopener noreferrer" target="_blank">UNICEF Data</a>.
+        We are not affiliated with these agencies, and they do not endorse this website.
+      </p>
 
       <h2>External Links</h2>
       <p>This website may contain links to external sites. We are not responsible for the content, accuracy, or practices of any third-party websites.</p>
