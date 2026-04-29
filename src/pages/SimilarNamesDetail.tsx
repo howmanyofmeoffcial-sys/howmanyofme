@@ -70,37 +70,11 @@ const SimilarNamesDetail = () => {
     {
       "@context": "https://schema.org",
       "@type": "FAQPage",
-      mainEntity: [
-        {
-          "@type": "Question",
-          name: `What names are similar to ${display}?`,
-          acceptedAnswer: {
-            "@type": "Answer",
-            text: `Names similar to ${display} include ${similar.combined.slice(0, 8).join(", ")}, and more. They share starting letter, length, or sound.`,
-          },
-        },
-        {
-          "@type": "Question",
-          name: `What does ${display} mean?`,
-          acceptedAnswer: {
-            "@type": "Answer",
-            text: `${display} is of ${ctx.origin} origin and means "${ctx.meaning}". It currently ranks around #${ctx.rank} with an estimated ${formatNumber(ctx.count)} bearers.`,
-          },
-        },
-        {
-          "@type": "Question",
-          name: `Is ${display} a rare name?`,
-          acceptedAnswer: {
-            "@type": "Answer",
-            text:
-              ctx.rank < 100
-                ? `${display} is a very common name (top 100). It has roughly ${formatNumber(ctx.count)} known bearers.`
-                : ctx.rank < 1000
-                ? `${display} is common but not in the top 100. It ranks around #${ctx.rank}.`
-                : `${display} is uncommon — ranked around #${ctx.rank}, with about ${formatNumber(ctx.count)} bearers.`,
-          },
-        },
-      ],
+      mainEntity: faqs.map((f) => ({
+        "@type": "Question",
+        name: f.q,
+        acceptedAnswer: { "@type": "Answer", text: f.a },
+      })),
     },
   ];
 
