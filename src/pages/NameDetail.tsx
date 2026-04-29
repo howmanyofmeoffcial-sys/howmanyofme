@@ -11,6 +11,9 @@ import { getNameData, formatNumber } from "@/data/nameData";
 import { Bookmark, Share2 } from "lucide-react";
 import RelatedPosts from "@/components/RelatedPosts";
 import Breadcrumbs from "@/components/Breadcrumbs";
+import DataSources from "@/components/DataSources";
+import { buildSimilarFaqs } from "@/lib/dynamicContent";
+import { getSimilarNamesFor } from "@/lib/similarNames";
 
 
 const NameDetail = () => {
@@ -50,12 +53,34 @@ const NameDetail = () => {
     }
   };
 
-  const jsonLd = {
-    "@context": "https://schema.org",
-    "@type": "Person",
+  const similar = getSimilarNamesFor(data.name, 8);
+  const faqs = buildSimilarFaqs({
     name: data.name,
-    description: `Approximately ${formatNumber(data.count)} people are named ${data.name} worldwide. Popularity rank #${formatNumber(data.rank)}. Origin: ${data.origin}.`,
-  };
+    origin: data.origin,
+    meaning: data.meaning,
+    rank: data.rank,
+    count: data.count,
+    similarSample: similar.combined.slice(0, 5),
+    formatNumber,
+  });
+
+  const jsonLd = [
+    {
+      "@context": "https://schema.org",
+      "@type": "Person",
+      name: data.name,
+      description: `Approximately ${formatNumber(data.count)} people are named ${data.name} worldwide. Popularity rank #${formatNumber(data.rank)}. Origin: ${data.origin}.`,
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      mainEntity: faqs.map((f) => ({
+        "@type": "Question",
+        name: f.q,
+        acceptedAnswer: { "@type": "Answer", text: f.a },
+      })),
+    },
+  ];
 
   return (
     <div className="min-h-screen bg-background">
