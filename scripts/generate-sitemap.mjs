@@ -43,7 +43,7 @@ const tools = [
 ];
 
 // Pillar pages
-const pillars = ["", "blog", "tools", "about", "methodology"];
+const pillars = ["", "blog", "tools", "about", "methodology", "contact", "privacy", "terms", "disclaimer"];
 
 const urls = [];
 const push = (loc, priority, changefreq) =>
