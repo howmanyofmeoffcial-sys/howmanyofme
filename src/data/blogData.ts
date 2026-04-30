@@ -3,10 +3,30 @@ export interface BlogFAQ {
   a: string;
 }
 
+export interface BlogDataSnapshotMetric {
+  label: string;
+  value: string;
+  context?: string;
+  trend?: "up" | "down" | "flat";
+}
+
+export interface BlogDataSnapshot {
+  title?: string;
+  summary?: string;
+  metrics: BlogDataSnapshotMetric[];
+  sources?: { label: string; url?: string }[];
+  lastUpdated?: string;
+  lastUpdatedLabel?: string;
+}
+
 export interface BlogArticle {
   slug: string;
   title: string;
   description: string;
+  /** CTR-optimized SEO title (<= 60 chars). Falls back to `title` if absent. */
+  seoTitle?: string;
+  /** CTR-optimized meta description (<= 160 chars). Falls back to `description`. */
+  seoDescription?: string;
   category: "trends" | "guides" | "location" | "help";
   readTime: number;
   date: string;
@@ -18,10 +38,14 @@ export interface BlogArticle {
    * - `| col | col |` table rows (separator row optional)
    * - `> callout text` (consecutive lines join into one box)
    * - `[AD]` on its own line — renders an in-content ad slot
+   * - `[ALPHABET_NAV]` on its own line — renders the A–Z jump nav
+   * - `[DATA_SNAPSHOT]` on its own line — renders this article's data snapshot widget
    */
   content: string[];
   /** Optional FAQ section — renders accordion + FAQPage JSON-LD. */
   faqs?: BlogFAQ[];
+  /** Optional data-snapshot widget shown at `[DATA_SNAPSHOT]` token. */
+  dataSnapshot?: BlogDataSnapshot;
 }
 
 export const blogArticles: BlogArticle[] = [
