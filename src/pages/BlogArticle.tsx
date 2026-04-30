@@ -7,7 +7,10 @@ import { Clock, ArrowLeft, ArrowRight, ChevronRight } from "lucide-react";
 import RelatedPosts from "@/components/RelatedPosts";
 import ToolCTA from "@/components/ToolCTA";
 import AdSlot from "@/components/AdSlot";
+import AlphabetJumpNav from "@/components/AlphabetJumpNav";
+import DataSnapshot from "@/components/DataSnapshot";
 import { getTagsForSlug } from "@/data/contentRegistry";
+import type { BlogDataSnapshot } from "@/data/blogData";
 import React from "react";
 
 const BlogArticle = () => {
