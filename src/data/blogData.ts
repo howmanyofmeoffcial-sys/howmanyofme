@@ -156,6 +156,21 @@ export const blogArticles: BlogArticle[] = [
       { q: "Why do some rare names become trendy later?", a: "Pop culture, period dramas, and celebrity births can pull a rare name into the mainstream within a single year. Names like Aria, Luna, and Maeve all moved from rare to top 100 after cultural triggers." },
       { q: "How do writers choose unusual names for fictional characters?", a: "Writers often pick names with strong sounds, clear origins, and a meaning that hints at character traits. The same logic applies to parents: a rare name with a clean meaning and memorable rhythm tends to wear well." },
     ],
+    dataSnapshot: {
+      title: "Unusual Names — Letter-Level US Snapshot",
+      summary: "How often the rarest letters appear in US baby names, based on SSA registrations.",
+      metrics: [
+        { label: "Names below SSA top 1,000", value: "~99% of all names", context: "Anything outside the top 1,000 counts as unusual", trend: "up" },
+        { label: "Rarest letters", value: "Q, X, U, Y", context: "Combined <2% of annual registrations", trend: "down" },
+        { label: "Avg unusual-name volume", value: "<500/year each", context: "Threshold used in this guide", trend: "flat" },
+      ],
+      sources: [
+        { label: "SSA 2025", url: "https://www.ssa.gov/oact/babynames/" },
+        { label: "US Census", url: "https://www.census.gov/" },
+      ],
+      lastUpdated: "2026-03-01",
+      lastUpdatedLabel: "March 2026",
+    },
   },
   {
     slug: "why-baby-names-becoming-unique",
