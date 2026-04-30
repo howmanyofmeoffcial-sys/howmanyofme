@@ -63,8 +63,8 @@ const BlogArticle = () => {
   return (
     <div className="min-h-screen bg-background">
       <SEOHead
-        title={`${article.title} | HowManyOfMe Blog`}
-        description={article.description}
+        title={article.seoTitle ?? `${article.title} | HowManyOfMe Blog`}
+        description={article.seoDescription ?? article.description}
         canonical={`https://howmanyofme.co/blog/${article.slug}`}
         jsonLd={jsonLd}
       />
