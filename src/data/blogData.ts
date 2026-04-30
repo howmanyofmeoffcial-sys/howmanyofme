@@ -1,3 +1,8 @@
+export interface BlogFAQ {
+  q: string;
+  a: string;
+}
+
 export interface BlogArticle {
   slug: string;
   title: string;
@@ -5,7 +10,18 @@ export interface BlogArticle {
   category: "trends" | "guides" | "location" | "help";
   readTime: number;
   date: string;
+  /**
+   * Each entry is a markdown-ish block. Supported syntax:
+   * - `## H2`, `### H3`
+   * - `- bullet`, `1. ordered`
+   * - `**bold**`, `[label](/internal-or-https-url)`
+   * - `| col | col |` table rows (separator row optional)
+   * - `> callout text` (consecutive lines join into one box)
+   * - `[AD]` on its own line — renders an in-content ad slot
+   */
   content: string[];
+  /** Optional FAQ section — renders accordion + FAQPage JSON-LD. */
+  faqs?: BlogFAQ[];
 }
 
 export const blogArticles: BlogArticle[] = [
