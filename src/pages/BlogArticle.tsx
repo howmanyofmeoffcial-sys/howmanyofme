@@ -97,7 +97,7 @@ const BlogArticle = () => {
           {/* Content */}
           <div className="prose prose-lg max-w-none">
             {article.content.map((block, i) => (
-              <ContentBlock key={i} text={block} />
+              <ContentBlock key={i} text={block} dataSnapshot={article.dataSnapshot} />
             ))}
           </div>
 
