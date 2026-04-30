@@ -98,14 +98,20 @@ export const blogArticles: BlogArticle[] = [
     slug: "unusual-baby-names-alphabet",
     title: "Unusual Baby Names by Alphabet (A–Z): Rare Picks With Meanings",
     description: "An A–Z guide to unusual baby names with meanings, origins, pronunciation tips, and rarity notes — built for parents, writers, and name researchers.",
+    seoTitle: "Unusual Baby Names A–Z: Rare Picks + Meanings",
+    seoDescription: "An A–Z guide to unusual baby names with meanings, origins, pronunciations, and US SSA rarity notes. One rare pick per letter. Updated 2026.",
     category: "trends",
     readTime: 14,
     date: "2026-02-10",
     content: [
-      // 1) SEO Intro
-      "Unusual baby names are first names that fall well outside the [US Social Security Administration's top 1,000](https://www.ssa.gov/oact/babynames/) list — names most people have heard once, twice, or never. This A–Z guide is designed for parents who want a name that feels rare without being unusable, for writers searching for distinctive character names, and for name researchers comparing rarity by letter. Each entry includes the name's meaning, origin, a pronunciation note when needed, a quick popularity note based on US naming data, and a one-line tag describing who the name may suit. Browsing alphabetically helps for two reasons: it surfaces hidden gems behind less-common letters (Q, X, Y) and makes it easy to align a first name with a sibling or family initial. We've prioritised names that are still pronounceable in English-speaking environments, that have at least one well-documented cultural source, and that aren't tied to negative public figures. Use this as a discovery tool — pair it with our [name popularity checker](/tools/popularity-checker) to confirm current US rank, and our [similar names finder](/similar-names) to expand any pick into a shortlist.",
+      // 1) SEO Intro — split into shorter paragraphs for readability
+      "Unusual baby names are first names that fall well outside the [US Social Security Administration's top 1,000](https://www.ssa.gov/oact/babynames/) list. They are names most people have heard once, twice, or never.\n\nThis A–Z guide is designed for parents who want a name that feels rare without being unusable, for writers searching for distinctive character names, and for name researchers comparing rarity by letter.\n\nEach entry includes the name's meaning, origin, a pronunciation note when needed, a quick popularity note based on US naming data, and a one-line tag describing who the name may suit.\n\nBrowsing alphabetically helps for two reasons. It surfaces hidden gems behind less-common letters (Q, X, Y), and it makes it easy to align a first name with a sibling or family initial.\n\nWe've prioritised names that are still pronounceable in English-speaking environments, that have at least one well-documented cultural source, and that aren't tied to negative public figures. Use this as a discovery tool — pair it with our [name popularity checker](/tools/popularity-checker) to confirm current US rank, and our [similar names finder](/similar-names) to expand any pick into a shortlist.",
 
       "> Quick answer: An unusual baby name is one given to fewer than ~500 babies a year in the US. The rarest letters by volume are Q, X, U, and Y. The most usable unusual names share simple phonetics, two or three syllables, and a clear cultural origin.",
+
+      "[ALPHABET_NAV]",
+
+      "[DATA_SNAPSHOT]",
 
       "[AD]",
 
