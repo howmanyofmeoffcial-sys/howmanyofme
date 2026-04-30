@@ -54,16 +54,44 @@ export const blogArticles: BlogArticle[] = [
     slug: "rare-baby-names-us",
     title: "10 Rare Baby Names Given to Only a Few Babies in the US",
     description: "Discover the most rare and unique baby names in the United States, each given to fewer than 10 babies per year according to SSA data.",
+    seoTitle: "10 Rarest Baby Names in the US (Under 10/Year)",
+    seoDescription: "See 10 ultra-rare US baby names — each given to fewer than 10 babies a year — with meanings, origins, and SSA data. Updated 2026.",
     category: "trends",
     readTime: 8,
     date: "2026-02-15",
     content: [
-      "In the vast landscape of American baby naming, some names stand out for their extraordinary rarity. The Social Security Administration (SSA) tracks every name given to at least five babies in a given year, and at the bottom of these lists lie names so uncommon that they border on unique identifiers.",
-      "## What Makes a Name Truly Rare?\n\nA name is considered rare when fewer than 100 babies receive it in a given year. But the names on our list go far beyond that threshold — these are names given to fewer than 10 babies annually, making them statistical anomalies in a country of over 330 million people.",
-      "## The Top 10 Rarest Baby Names\n\n1. **Zephyrine** — Given to only 5 babies in 2025, this French-origin name means 'west wind.' It's the feminine form of Zephyr and carries an ethereal, almost mythological quality.\n\n2. **Thalassa** — With just 6 registrations, this ancient Greek name meaning 'sea' appeals to parents seeking deep mythological roots.\n\n3. **Peregrine** — Only 7 babies received this Latin name meaning 'traveler' or 'pilgrim.' Despite its literary pedigree (think Tolkien), it remains extraordinarily uncommon.\n\n4. **Callidora** — A mere 5 registrations for this Greek name meaning 'gift of beauty.' Its melodic sound hasn't yet caught mainstream attention.\n\n5. **Lysander** — Just 8 babies were named Lysander, despite its Shakespearean heritage. This Greek name means 'liberator.'\n\n6. **Eulalia** — With 6 registrations, this Greek name meaning 'sweetly speaking' maintains an old-world charm that few parents discover.\n\n7. **Aurelius** — Only 9 babies received this imperial Roman name. While Marcus is common, Aurelius stands alone in its rarity.\n\n8. **Seraphina** — Despite celebrity usage, only 7 babies received the full Seraphina (not Sera or Seraph). The name means 'fiery ones' from Hebrew.\n\n9. **Thessaly** — A geographic name from Greece, given to just 5 babies. It combines place-name trends with classical appeal.\n\n10. **Octavian** — With 8 registrations, this Roman emperor's name meaning 'eighth' remains virtually unknown among modern parents.",
+      "In the vast landscape of American baby naming, some names stand out for their extraordinary rarity. The Social Security Administration (SSA) tracks every name given to at least five babies in a given year. At the bottom of these lists lie names so uncommon that they border on unique identifiers.",
+
+      "[DATA_SNAPSHOT]",
+
+      "## What Makes a Name Truly Rare?\n\nA name is considered rare when fewer than 100 babies receive it in a given year. The names on this list go far beyond that threshold.\n\nEach is given to fewer than 10 babies annually. In a country of over 330 million people, that makes them statistical anomalies.",
+
+      "## The Top 10 Rarest Baby Names\n\n1. **Zephyrine** — Given to only 5 babies in 2025. This French-origin name means 'west wind.' It's the feminine form of Zephyr and carries an ethereal, almost mythological quality.\n\n2. **Thalassa** — Just 6 registrations. This ancient Greek name meaning 'sea' appeals to parents seeking deep mythological roots.\n\n3. **Peregrine** — Only 7 babies received this Latin name meaning 'traveler' or 'pilgrim.' Despite its literary pedigree (think Tolkien), it remains extraordinarily uncommon.\n\n4. **Callidora** — A mere 5 registrations for this Greek name meaning 'gift of beauty.' Its melodic sound hasn't yet caught mainstream attention.\n\n5. **Lysander** — Just 8 babies were named Lysander, despite its Shakespearean heritage. The Greek name means 'liberator.'\n\n6. **Eulalia** — With 6 registrations, this Greek name meaning 'sweetly speaking' maintains an old-world charm that few parents discover.\n\n7. **Aurelius** — Only 9 babies received this imperial Roman name. While Marcus is common, Aurelius stands alone in its rarity.\n\n8. **Seraphina** — Despite celebrity usage, only 7 babies received the full Seraphina (not Sera or Seraph). The name means 'fiery ones' from Hebrew.\n\n9. **Thessaly** — A geographic name from Greece, given to just 5 babies. It combines place-name trends with classical appeal.\n\n10. **Octavian** — With 8 registrations, this Roman emperor's name meaning 'eighth' remains virtually unknown among modern parents.",
       "## Why Are These Names So Rare?\n\nSeveral factors contribute to name rarity:\n\n- **Pronunciation difficulty** — Names that aren't immediately phonetic in English tend to stay rare\n- **Cultural unfamiliarity** — Names from less commonly studied traditions remain niche\n- **Length** — Names with four or more syllables face natural resistance\n- **Historical associations** — Some names carry heavy historical baggage that gives parents pause",
-      "## The Appeal of Choosing a Rare Name\n\nParents who choose rare names often cite a desire for individuality. In an era where the top 10 names account for a smaller percentage of babies than ever before, rarity is increasingly valued. However, there are practical considerations:\n\n- Your child will rarely share a name with classmates\n- Spelling and pronunciation corrections may be frequent\n- The name becomes a conversation starter\n- Online searches for the name may be easier (or harder) to manage",
-      "## Data Methodology\n\nOur rarity analysis uses SSA birth registration data from 2020-2025, cross-referenced with international naming databases. Names must have at least 5 registrations to appear in SSA data, meaning even rarer names exist but cannot be tracked.",
+      "## The Appeal of Choosing a Rare Name\n\nParents who choose rare names often cite a desire for individuality. The top 10 names today account for a smaller percentage of babies than ever before, and rarity is increasingly valued.\n\nThere are practical considerations, however:\n\n- Your child will rarely share a name with classmates\n- Spelling and pronunciation corrections may be frequent\n- The name becomes a conversation starter\n- Online searches for the name may be easier (or harder) to manage",
+      "## Data Methodology\n\nOur rarity analysis uses [SSA birth registration data](https://www.ssa.gov/oact/babynames/) from 2020–2025, cross-referenced with international naming databases. Names must have at least 5 registrations to appear in SSA data, meaning even rarer names exist but cannot be tracked.",
+    ],
+    dataSnapshot: {
+      title: "US Rarity Snapshot",
+      summary: "How these 10 names compare to mainstream US baby names by annual SSA registrations.",
+      metrics: [
+        { label: "Avg registrations / year", value: "5–9", context: "Across all 10 names on this list", trend: "flat" },
+        { label: "Top-1,000 threshold", value: "~250 / year", context: "Names below this rank are 'rare'", trend: "up" },
+        { label: "SSA reporting floor", value: "5 babies", context: "Names with <5 are not published", trend: "flat" },
+      ],
+      sources: [
+        { label: "SSA 2025", url: "https://www.ssa.gov/oact/babynames/" },
+        { label: "US Census", url: "https://www.census.gov/" },
+      ],
+      lastUpdated: "2026-03-01",
+      lastUpdatedLabel: "March 2026",
+    },
+    faqs: [
+      { q: "What counts as a rare baby name in the US?", a: "Most naming researchers treat names given to fewer than ~250 babies per year as rare, and names given to fewer than 50 per year as ultra-rare. SSA only publishes names with at least 5 registrations, so anything below that threshold is even rarer than the data shows." },
+      { q: "Why do some names get fewer than 10 registrations a year?", a: "Usually a combination of unfamiliar phonetics, multi-syllable length, niche cultural origin, or limited media exposure. Names with all four traits — like Zephyrine or Callidora — almost always stay below 10 registrations a year." },
+      { q: "Are rare baby names a good choice?", a: "They work well when the name is still pronounceable and easy to spell. Read the name aloud with the surname, ask three people to spell it on first hearing, and check current SSA data before committing." },
+      { q: "Where does this rare-name data come from?", a: "All annual counts come from the US Social Security Administration's national baby name dataset, cross-checked with international naming databases. SSA suppresses any name given to fewer than 5 babies in a year for privacy." },
+      { q: "Will rare baby names become popular later?", a: "Some do — Aria, Luna, and Maeve all moved from rare to mainstream in under a decade. The most reliable predictors are pop-culture exposure, celebrity births, and rising rank velocity year over year." },
     ],
   },
   {
