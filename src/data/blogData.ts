@@ -3,10 +3,30 @@ export interface BlogFAQ {
   a: string;
 }
 
+export interface BlogDataSnapshotMetric {
+  label: string;
+  value: string;
+  context?: string;
+  trend?: "up" | "down" | "flat";
+}
+
+export interface BlogDataSnapshot {
+  title?: string;
+  summary?: string;
+  metrics: BlogDataSnapshotMetric[];
+  sources?: { label: string; url?: string }[];
+  lastUpdated?: string;
+  lastUpdatedLabel?: string;
+}
+
 export interface BlogArticle {
   slug: string;
   title: string;
   description: string;
+  /** CTR-optimized SEO title (<= 60 chars). Falls back to `title` if absent. */
+  seoTitle?: string;
+  /** CTR-optimized meta description (<= 160 chars). Falls back to `description`. */
+  seoDescription?: string;
   category: "trends" | "guides" | "location" | "help";
   readTime: number;
   date: string;
@@ -18,10 +38,14 @@ export interface BlogArticle {
    * - `| col | col |` table rows (separator row optional)
    * - `> callout text` (consecutive lines join into one box)
    * - `[AD]` on its own line — renders an in-content ad slot
+   * - `[ALPHABET_NAV]` on its own line — renders the A–Z jump nav
+   * - `[DATA_SNAPSHOT]` on its own line — renders this article's data snapshot widget
    */
   content: string[];
   /** Optional FAQ section — renders accordion + FAQPage JSON-LD. */
   faqs?: BlogFAQ[];
+  /** Optional data-snapshot widget shown at `[DATA_SNAPSHOT]` token. */
+  dataSnapshot?: BlogDataSnapshot;
 }
 
 export const blogArticles: BlogArticle[] = [
@@ -30,30 +54,64 @@ export const blogArticles: BlogArticle[] = [
     slug: "rare-baby-names-us",
     title: "10 Rare Baby Names Given to Only a Few Babies in the US",
     description: "Discover the most rare and unique baby names in the United States, each given to fewer than 10 babies per year according to SSA data.",
+    seoTitle: "10 Rarest Baby Names in the US (Under 10/Year)",
+    seoDescription: "See 10 ultra-rare US baby names — each given to fewer than 10 babies a year — with meanings, origins, and SSA data. Updated 2026.",
     category: "trends",
     readTime: 8,
     date: "2026-02-15",
     content: [
-      "In the vast landscape of American baby naming, some names stand out for their extraordinary rarity. The Social Security Administration (SSA) tracks every name given to at least five babies in a given year, and at the bottom of these lists lie names so uncommon that they border on unique identifiers.",
-      "## What Makes a Name Truly Rare?\n\nA name is considered rare when fewer than 100 babies receive it in a given year. But the names on our list go far beyond that threshold — these are names given to fewer than 10 babies annually, making them statistical anomalies in a country of over 330 million people.",
-      "## The Top 10 Rarest Baby Names\n\n1. **Zephyrine** — Given to only 5 babies in 2025, this French-origin name means 'west wind.' It's the feminine form of Zephyr and carries an ethereal, almost mythological quality.\n\n2. **Thalassa** — With just 6 registrations, this ancient Greek name meaning 'sea' appeals to parents seeking deep mythological roots.\n\n3. **Peregrine** — Only 7 babies received this Latin name meaning 'traveler' or 'pilgrim.' Despite its literary pedigree (think Tolkien), it remains extraordinarily uncommon.\n\n4. **Callidora** — A mere 5 registrations for this Greek name meaning 'gift of beauty.' Its melodic sound hasn't yet caught mainstream attention.\n\n5. **Lysander** — Just 8 babies were named Lysander, despite its Shakespearean heritage. This Greek name means 'liberator.'\n\n6. **Eulalia** — With 6 registrations, this Greek name meaning 'sweetly speaking' maintains an old-world charm that few parents discover.\n\n7. **Aurelius** — Only 9 babies received this imperial Roman name. While Marcus is common, Aurelius stands alone in its rarity.\n\n8. **Seraphina** — Despite celebrity usage, only 7 babies received the full Seraphina (not Sera or Seraph). The name means 'fiery ones' from Hebrew.\n\n9. **Thessaly** — A geographic name from Greece, given to just 5 babies. It combines place-name trends with classical appeal.\n\n10. **Octavian** — With 8 registrations, this Roman emperor's name meaning 'eighth' remains virtually unknown among modern parents.",
+      "In the vast landscape of American baby naming, some names stand out for their extraordinary rarity. The Social Security Administration (SSA) tracks every name given to at least five babies in a given year. At the bottom of these lists lie names so uncommon that they border on unique identifiers.",
+
+      "[DATA_SNAPSHOT]",
+
+      "## What Makes a Name Truly Rare?\n\nA name is considered rare when fewer than 100 babies receive it in a given year. The names on this list go far beyond that threshold.\n\nEach is given to fewer than 10 babies annually. In a country of over 330 million people, that makes them statistical anomalies.",
+
+      "## The Top 10 Rarest Baby Names\n\n1. **Zephyrine** — Given to only 5 babies in 2025. This French-origin name means 'west wind.' It's the feminine form of Zephyr and carries an ethereal, almost mythological quality.\n\n2. **Thalassa** — Just 6 registrations. This ancient Greek name meaning 'sea' appeals to parents seeking deep mythological roots.\n\n3. **Peregrine** — Only 7 babies received this Latin name meaning 'traveler' or 'pilgrim.' Despite its literary pedigree (think Tolkien), it remains extraordinarily uncommon.\n\n4. **Callidora** — A mere 5 registrations for this Greek name meaning 'gift of beauty.' Its melodic sound hasn't yet caught mainstream attention.\n\n5. **Lysander** — Just 8 babies were named Lysander, despite its Shakespearean heritage. The Greek name means 'liberator.'\n\n6. **Eulalia** — With 6 registrations, this Greek name meaning 'sweetly speaking' maintains an old-world charm that few parents discover.\n\n7. **Aurelius** — Only 9 babies received this imperial Roman name. While Marcus is common, Aurelius stands alone in its rarity.\n\n8. **Seraphina** — Despite celebrity usage, only 7 babies received the full Seraphina (not Sera or Seraph). The name means 'fiery ones' from Hebrew.\n\n9. **Thessaly** — A geographic name from Greece, given to just 5 babies. It combines place-name trends with classical appeal.\n\n10. **Octavian** — With 8 registrations, this Roman emperor's name meaning 'eighth' remains virtually unknown among modern parents.",
       "## Why Are These Names So Rare?\n\nSeveral factors contribute to name rarity:\n\n- **Pronunciation difficulty** — Names that aren't immediately phonetic in English tend to stay rare\n- **Cultural unfamiliarity** — Names from less commonly studied traditions remain niche\n- **Length** — Names with four or more syllables face natural resistance\n- **Historical associations** — Some names carry heavy historical baggage that gives parents pause",
-      "## The Appeal of Choosing a Rare Name\n\nParents who choose rare names often cite a desire for individuality. In an era where the top 10 names account for a smaller percentage of babies than ever before, rarity is increasingly valued. However, there are practical considerations:\n\n- Your child will rarely share a name with classmates\n- Spelling and pronunciation corrections may be frequent\n- The name becomes a conversation starter\n- Online searches for the name may be easier (or harder) to manage",
-      "## Data Methodology\n\nOur rarity analysis uses SSA birth registration data from 2020-2025, cross-referenced with international naming databases. Names must have at least 5 registrations to appear in SSA data, meaning even rarer names exist but cannot be tracked.",
+      "## The Appeal of Choosing a Rare Name\n\nParents who choose rare names often cite a desire for individuality. The top 10 names today account for a smaller percentage of babies than ever before, and rarity is increasingly valued.\n\nThere are practical considerations, however:\n\n- Your child will rarely share a name with classmates\n- Spelling and pronunciation corrections may be frequent\n- The name becomes a conversation starter\n- Online searches for the name may be easier (or harder) to manage",
+      "## Data Methodology\n\nOur rarity analysis uses [SSA birth registration data](https://www.ssa.gov/oact/babynames/) from 2020–2025, cross-referenced with international naming databases. Names must have at least 5 registrations to appear in SSA data, meaning even rarer names exist but cannot be tracked.",
+    ],
+    dataSnapshot: {
+      title: "US Rarity Snapshot",
+      summary: "How these 10 names compare to mainstream US baby names by annual SSA registrations.",
+      metrics: [
+        { label: "Avg registrations / year", value: "5–9", context: "Across all 10 names on this list", trend: "flat" },
+        { label: "Top-1,000 threshold", value: "~250 / year", context: "Names below this rank are 'rare'", trend: "up" },
+        { label: "SSA reporting floor", value: "5 babies", context: "Names with <5 are not published", trend: "flat" },
+      ],
+      sources: [
+        { label: "SSA 2025", url: "https://www.ssa.gov/oact/babynames/" },
+        { label: "US Census", url: "https://www.census.gov/" },
+      ],
+      lastUpdated: "2026-03-01",
+      lastUpdatedLabel: "March 2026",
+    },
+    faqs: [
+      { q: "What counts as a rare baby name in the US?", a: "Most naming researchers treat names given to fewer than ~250 babies per year as rare, and names given to fewer than 50 per year as ultra-rare. SSA only publishes names with at least 5 registrations, so anything below that threshold is even rarer than the data shows." },
+      { q: "Why do some names get fewer than 10 registrations a year?", a: "Usually a combination of unfamiliar phonetics, multi-syllable length, niche cultural origin, or limited media exposure. Names with all four traits — like Zephyrine or Callidora — almost always stay below 10 registrations a year." },
+      { q: "Are rare baby names a good choice?", a: "They work well when the name is still pronounceable and easy to spell. Read the name aloud with the surname, ask three people to spell it on first hearing, and check current SSA data before committing." },
+      { q: "Where does this rare-name data come from?", a: "All annual counts come from the US Social Security Administration's national baby name dataset, cross-checked with international naming databases. SSA suppresses any name given to fewer than 5 babies in a year for privacy." },
+      { q: "Will rare baby names become popular later?", a: "Some do — Aria, Luna, and Maeve all moved from rare to mainstream in under a decade. The most reliable predictors are pop-culture exposure, celebrity births, and rising rank velocity year over year." },
     ],
   },
   {
     slug: "unusual-baby-names-alphabet",
     title: "Unusual Baby Names by Alphabet (A–Z): Rare Picks With Meanings",
     description: "An A–Z guide to unusual baby names with meanings, origins, pronunciation tips, and rarity notes — built for parents, writers, and name researchers.",
+    seoTitle: "Unusual Baby Names A–Z: Rare Picks + Meanings",
+    seoDescription: "An A–Z guide to unusual baby names with meanings, origins, pronunciations, and US SSA rarity notes. One rare pick per letter. Updated 2026.",
     category: "trends",
     readTime: 14,
     date: "2026-02-10",
     content: [
-      // 1) SEO Intro
-      "Unusual baby names are first names that fall well outside the [US Social Security Administration's top 1,000](https://www.ssa.gov/oact/babynames/) list — names most people have heard once, twice, or never. This A–Z guide is designed for parents who want a name that feels rare without being unusable, for writers searching for distinctive character names, and for name researchers comparing rarity by letter. Each entry includes the name's meaning, origin, a pronunciation note when needed, a quick popularity note based on US naming data, and a one-line tag describing who the name may suit. Browsing alphabetically helps for two reasons: it surfaces hidden gems behind less-common letters (Q, X, Y) and makes it easy to align a first name with a sibling or family initial. We've prioritised names that are still pronounceable in English-speaking environments, that have at least one well-documented cultural source, and that aren't tied to negative public figures. Use this as a discovery tool — pair it with our [name popularity checker](/tools/popularity-checker) to confirm current US rank, and our [similar names finder](/similar-names) to expand any pick into a shortlist.",
+      // 1) SEO Intro — split into shorter paragraphs for readability
+      "Unusual baby names are first names that fall well outside the [US Social Security Administration's top 1,000](https://www.ssa.gov/oact/babynames/) list. They are names most people have heard once, twice, or never.\n\nThis A–Z guide is designed for parents who want a name that feels rare without being unusable, for writers searching for distinctive character names, and for name researchers comparing rarity by letter.\n\nEach entry includes the name's meaning, origin, a pronunciation note when needed, a quick popularity note based on US naming data, and a one-line tag describing who the name may suit.\n\nBrowsing alphabetically helps for two reasons. It surfaces hidden gems behind less-common letters (Q, X, Y), and it makes it easy to align a first name with a sibling or family initial.\n\nWe've prioritised names that are still pronounceable in English-speaking environments, that have at least one well-documented cultural source, and that aren't tied to negative public figures. Use this as a discovery tool — pair it with our [name popularity checker](/tools/popularity-checker) to confirm current US rank, and our [similar names finder](/similar-names) to expand any pick into a shortlist.",
 
       "> Quick answer: An unusual baby name is one given to fewer than ~500 babies a year in the US. The rarest letters by volume are Q, X, U, and Y. The most usable unusual names share simple phonetics, two or three syllables, and a clear cultural origin.",
+
+      "[ALPHABET_NAV]",
+
+      "[DATA_SNAPSHOT]",
 
       "[AD]",
 
@@ -98,19 +156,38 @@ export const blogArticles: BlogArticle[] = [
       { q: "Why do some rare names become trendy later?", a: "Pop culture, period dramas, and celebrity births can pull a rare name into the mainstream within a single year. Names like Aria, Luna, and Maeve all moved from rare to top 100 after cultural triggers." },
       { q: "How do writers choose unusual names for fictional characters?", a: "Writers often pick names with strong sounds, clear origins, and a meaning that hints at character traits. The same logic applies to parents: a rare name with a clean meaning and memorable rhythm tends to wear well." },
     ],
+    dataSnapshot: {
+      title: "Unusual Names — Letter-Level US Snapshot",
+      summary: "How often the rarest letters appear in US baby names, based on SSA registrations.",
+      metrics: [
+        { label: "Names below SSA top 1,000", value: "~99% of all names", context: "Anything outside the top 1,000 counts as unusual", trend: "up" },
+        { label: "Rarest letters", value: "Q, X, U, Y", context: "Combined <2% of annual registrations", trend: "down" },
+        { label: "Avg unusual-name volume", value: "<500/year each", context: "Threshold used in this guide", trend: "flat" },
+      ],
+      sources: [
+        { label: "SSA 2025", url: "https://www.ssa.gov/oact/babynames/" },
+        { label: "US Census", url: "https://www.census.gov/" },
+      ],
+      lastUpdated: "2026-03-01",
+      lastUpdatedLabel: "March 2026",
+    },
   },
   {
     slug: "why-baby-names-becoming-unique",
     title: "Why Baby Names Are Becoming More Unique: US Rarity Trends Explained",
     description: "A data-backed look at why US baby names are becoming more unique, with concentration trends from 1950 to 2026 and what it means for parents.",
+    seoTitle: "Why US Baby Names Are More Unique Than Ever (Data)",
+    seoDescription: "Top-10 baby names covered 28% of US births in 1950 and under 8% today. See the 5 forces driving the change — and what it means for parents.",
     category: "trends",
     readTime: 11,
     date: "2026-02-05",
     content: [
-      // 1) SEO intro
-      "Baby names in the United States are becoming dramatically more unique. In 1950, the top 10 boy names accounted for roughly 28% of all male births. In 2025, that figure is under 8%. The same shift has happened for girls. This isn't a fad — it's a 75-year structural change driven by cultural diversity, internet visibility, fragmented media, individualism, and creative spelling. This article explains why baby names are becoming more unique in the US, what the underlying [SSA baby name data](https://www.ssa.gov/oact/babynames/) shows, and what it means for parents trying to choose a name today. We'll cover the long-term trend, the five forces driving it, the trade-offs of unique names, what's likely by 2040, and how to balance uniqueness with usability.",
+      // 1) SEO intro — split for readability
+      "Baby names in the United States are becoming dramatically more unique. In 1950, the top 10 boy names accounted for roughly 28% of all male births. In 2025, that figure is under 8%.\n\nThe same shift has happened for girls. This isn't a fad — it's a 75-year structural change driven by cultural diversity, internet visibility, fragmented media, individualism, and creative spelling.\n\nThis article explains why baby names are becoming more unique in the US, what the underlying [SSA baby name data](https://www.ssa.gov/oact/babynames/) shows, and what it means for parents trying to choose a name today. We'll cover the long-term trend, the five forces driving it, the trade-offs of unique names, what's likely by 2040, and how to balance uniqueness with usability.",
 
       "> Quick answer: US baby names are becoming more unique because cultural diversity, internet 'Googleability', fragmented pop culture, rising individualism, and creative spellings have spread births across thousands more names. The top 10 share has fallen by about 72% since 1950.",
+
+      "[DATA_SNAPSHOT]",
 
       "[AD]",
 
@@ -145,19 +222,38 @@ export const blogArticles: BlogArticle[] = [
       { q: "How do I know if a baby name is too unusual?", a: "Read it aloud with your surname, ask three people to spell it on first hearing, and check its current SSA rank. If two of those three tests fail, the name is likely too unusual for low-friction daily use." },
       { q: "Why are creative spellings increasing?", a: "Parents use spelling variants — Jayden, Jaden, Jaiden — to keep a familiar sound while signalling individuality. SSA counts each spelling as a separate name, which amplifies the appearance of name diversity." },
     ],
+    dataSnapshot: {
+      title: "Top-10 Concentration: 1950 → 2025",
+      summary: "Share of US births accounted for by the top 10 names, by gender.",
+      metrics: [
+        { label: "Top 10 boys (1950)", value: "28.1%", context: "1 in 4 boys had a top-10 name", trend: "down" },
+        { label: "Top 10 boys (2025)", value: "7.9%", context: "Historic low — long tail dominates", trend: "down" },
+        { label: "Top 10 girls (2025)", value: "6.1%", context: "Down from 22.4% in 1950", trend: "down" },
+      ],
+      sources: [
+        { label: "SSA national data", url: "https://www.ssa.gov/oact/babynames/" },
+        { label: "US Census", url: "https://www.census.gov/" },
+      ],
+      lastUpdated: "2026-03-01",
+      lastUpdatedLabel: "March 2026",
+    },
   },
   {
     slug: "uncommon-girl-vs-boy-names",
     title: "Uncommon Girl Names vs Boy Names: Who Wins the Uniqueness Race?",
     description: "A data-driven comparison of uniqueness in girl vs boy baby names — diversity counts, top 10 concentration, new names per year, and what it means.",
+    seoTitle: "Girl Names vs Boy Names: Who Is More Unique? (Data)",
+    seoDescription: "Girls have ~18,000 unique names a year vs ~14,000 for boys. See the full diversity comparison, why it happens, and where boys are catching up.",
     category: "trends",
     readTime: 9,
     date: "2026-01-28",
     content: [
-      // Intro
-      "Are girl names more unique than boy names? In US baby naming data, yes — and it isn't close. Across every measurable signal (number of distinct names per year, share of births held by the top 10, and how many new names appear each year), girls win the uniqueness race by a wide margin. This article compares uncommon girl names vs boy names using [SSA-style baby name data](https://www.ssa.gov/oact/babynames/), explains why the gap exists, and shows where boy names are starting to catch up.",
+      // Intro — split for readability
+      "Are girl names more unique than boy names? In US baby naming data, yes — and it isn't close.\n\nAcross every measurable signal — number of distinct names per year, share of births held by the top 10, and how many new names appear each year — girls win the uniqueness race by a wide margin.\n\nThis article compares uncommon girl names vs boy names using [SSA-style baby name data](https://www.ssa.gov/oact/babynames/), explains why the gap exists, and shows where boy names are starting to catch up.",
 
       "> Quick answer: Yes — girl names are more unique than boy names. Girls show higher diversity (~18,000 distinct names/year vs ~14,000 for boys), lower concentration in the top 10 (6.1% vs 7.9%), and more new names each year (~800 vs ~500).",
+
+      "[DATA_SNAPSHOT]",
 
       "[AD]",
 
@@ -193,19 +289,38 @@ export const blogArticles: BlogArticle[] = [
       { q: "Can a boy name be as unique as a girl name?", a: "Absolutely. International picks (Cillian, Soren, Mateo), surnames (Brooks, Hayes), and vintage revivals (Arthur, Felix) all give boys the same level of rarity available to girls — they just take more searching." },
       { q: "Are nature names more common for girls?", a: "Yes. Names like Willow, Ivy, Rose, Hazel, and Juniper are heavily female-skewed in current US data, contributing significantly to girl-name diversity." },
     ],
+    dataSnapshot: {
+      title: "Girl vs Boy Name Diversity (US)",
+      summary: "Annual SSA-derived diversity metrics, comparing girl and boy naming patterns.",
+      metrics: [
+        { label: "Unique names / year", value: "~18,000 vs ~14,000", context: "Girls vs boys", trend: "up" },
+        { label: "Top-10 share of births", value: "6.1% vs 7.9%", context: "Lower = more diverse", trend: "down" },
+        { label: "New names introduced", value: "~800 vs ~500", context: "Per year", trend: "up" },
+      ],
+      sources: [
+        { label: "SSA national data", url: "https://www.ssa.gov/oact/babynames/" },
+        { label: "UNICEF", url: "https://data.unicef.org/" },
+      ],
+      lastUpdated: "2026-03-01",
+      lastUpdatedLabel: "March 2026",
+    },
   },
   {
     slug: "baby-name-trends",
     title: "Baby Name Trends 2026: Data-Driven Predictions for the Year Ahead",
     description: "Predicted baby name trends for 2026 — biblical revivals, soft boy names, place names, three-letter minimalism, cottagecore, heritage, and celestial picks.",
+    seoTitle: "Baby Name Trends 2026: 7 Big Predictions (Data)",
+    seoDescription: "From biblical revivals to celestial picks — see 2026's 7 biggest baby name trends, with rising names, examples, and which will age best.",
     category: "trends",
     readTime: 11,
     date: "2026-01-20",
     content: [
-      // Intro
-      "Baby name trends for 2026 are pointing in seven clear directions: biblical names with a twist, soft boy names, global place names, three-letter minimalism, cottagecore botanicals, heritage reclamation, and celestial picks. These predictions come from analysing SSA registration velocity, Google Trends search data, social mentions, pop-culture cycles, and historical naming patterns. This guide breaks down each trend with examples, explains who they fit, and gives a top-10 prediction list for 2026 — so you can choose a trendy name without choosing one that ages badly.",
+      // Intro — split for readability
+      "Baby name trends for 2026 are pointing in seven clear directions: biblical names with a twist, soft boy names, global place names, three-letter minimalism, cottagecore botanicals, heritage reclamation, and celestial picks.\n\nThese predictions come from analysing SSA registration velocity, Google Trends search data, social mentions, pop-culture cycles, and historical naming patterns.\n\nThis guide breaks down each trend with examples, explains who they fit, and gives a top-10 prediction list for 2026 — so you can choose a trendy name without choosing one that ages badly.",
 
       "> Quick answer: The biggest baby name trends for the year ahead are biblical revivals (Ezra, Naomi), soft boy names (Milo, Theo), short minimalist names (Kai, Ivy), heritage names (Saoirse, Astrid), cottagecore names (Juniper, Hazel), celestial names (Nova, Orion), and global place names (Cairo, Valencia).",
+
+      "[DATA_SNAPSHOT]",
 
       "[AD]",
 
@@ -247,18 +362,38 @@ export const blogArticles: BlogArticle[] = [
       { q: "How can I predict baby name trends?", a: "Watch SSA rank movement (not raw rank), Google Trends curves, and social mentions across TikTok and Instagram. Names rising 300+ rank positions in two years are the strongest forward signal." },
       { q: "How do I pick a trendy name that won't age badly?", a: "Choose names anchored in something older than the trend itself — botanicals, biblical figures, geography, mythology. Avoid names tied to a single TV show or viral moment, which tend to date fastest." },
     ],
+    dataSnapshot: {
+      title: "2026 Trend Velocity Snapshot",
+      summary: "Direction and strength of the seven largest 2026 baby name trends.",
+      metrics: [
+        { label: "Strongest rising trend", value: "Biblical-with-a-twist", context: "Ezra, Micah, Naomi, Delilah", trend: "up" },
+        { label: "Fastest-growing category", value: "Celestial names", context: "Nova, Orion, Atlas, Lyra", trend: "up" },
+        { label: "Steady but durable", value: "Cottagecore", context: "Hazel, Juniper, Wren", trend: "flat" },
+      ],
+      sources: [
+        { label: "SSA velocity", url: "https://www.ssa.gov/oact/babynames/" },
+        { label: "Google Trends" },
+        { label: "UNICEF", url: "https://data.unicef.org/" },
+      ],
+      lastUpdated: "2026-03-01",
+      lastUpdatedLabel: "March 2026",
+    },
   },
   {
     slug: "baby-names-by-decade",
     title: "Baby Names by Decade: Popular US Trends From 1900 to 2026",
     description: "How US baby names changed by decade — top names, cultural drivers, and naming style from the 1900s through the 2020s, with patterns parents can use today.",
+    seoTitle: "Baby Names by Decade: 1900–2026 US Trends",
+    seoDescription: "See how US baby names changed every decade since 1900 — top names, cultural drivers, and patterns parents can use to pick a name that ages well.",
     category: "trends",
     readTime: 16,
     date: "2026-01-15",
     content: [
-      "Baby names by decade are a cultural fingerprint. The names parents chose in 1910 reveal a country running on tradition; the names of 1980 reveal a country watching daytime TV; the names of 2025 reveal a country shaped by the internet. This guide tracks US baby naming style decade by decade from the 1900s to 2026, using [SSA name records](https://www.ssa.gov/oact/babynames/) as the backbone. You'll see how naming concentrated, fragmented, and re-concentrated through the 20th century, and which patterns help parents today choose names with staying power.",
+      "Baby names by decade are a cultural fingerprint.\n\nThe names parents chose in 1910 reveal a country running on tradition. The names of 1980 reveal a country watching daytime TV. The names of 2025 reveal a country shaped by the internet.\n\nThis guide tracks US baby naming style decade by decade from the 1900s to 2026, using [SSA name records](https://www.ssa.gov/oact/babynames/) as the backbone. You'll see how naming concentrated, fragmented, and re-concentrated through the 20th century, and which patterns help parents today choose names with staying power.",
 
       "> Quick answer: Baby names by decade show how culture, media, and social values reshape naming. The 1900s were dominated by tradition, the mid-century by Hollywood and the baby boom, the late 20th century by TV, and the 2010s–2020s by individualism and the internet.",
+
+      "[DATA_SNAPSHOT]",
 
       "[AD]",
 
@@ -300,19 +435,38 @@ export const blogArticles: BlogArticle[] = [
       { q: "How did TV affect baby names in the 1980s and 1990s?", a: "Daytime soap operas and primetime dramas drove names like Jessica, Ashley, Madison, and Tyler to the top of the charts. The 1980s–1990s show the strongest single-decade TV influence on US naming." },
       { q: "Is it better to pick a classic or trendy name?", a: "Classics give you predictability and aging; trendy names give you a moment-in-time feel that may date. A common compromise is a classic first name with a more modern middle, which balances longevity and freshness." },
     ],
+    dataSnapshot: {
+      title: "Decade-by-Decade Concentration",
+      summary: "Share of US births held by the top 10 names, by decade.",
+      metrics: [
+        { label: "1910s top-10 share", value: "~35%", context: "Highly concentrated", trend: "down" },
+        { label: "1970s top-10 share", value: "~17%", context: "Jennifer-era diversification", trend: "down" },
+        { label: "2020s top-10 share", value: "~7%", context: "Historic low — long tail wins", trend: "down" },
+      ],
+      sources: [
+        { label: "SSA national records", url: "https://www.ssa.gov/oact/babynames/" },
+        { label: "US Census", url: "https://www.census.gov/" },
+      ],
+      lastUpdated: "2026-03-01",
+      lastUpdatedLabel: "March 2026",
+    },
   },
   {
     slug: "vintage-baby-names-comeback",
     title: "Vintage Baby Names Making a Comeback in 2025–2026",
     description: "Old-fashioned baby names are rising again. See which vintage names are trending in 2025–2026, why the revival is happening, and which classics will return next.",
+    seoTitle: "Vintage Baby Names Coming Back in 2025–2026",
+    seoDescription: "Eleanor, Theodore, Hazel, Arthur, Felix — see the vintage baby names rising fastest right now, why it's happening, and which classics are next.",
     category: "trends",
     readTime: 10,
     date: "2026-01-10",
     content: [
-      // Intro
-      "Vintage baby names are making one of the strongest comebacks of the last 50 years. Names that sounded dated in the 1990s — Eleanor, Hazel, Theodore, Arthur — are now charging back into the US top 30. The driver is the well-documented 100-year cycle: names that were popular around 1920 sound fresh again to parents in the 2020s. This guide explains which vintage baby names are coming back in 2025–2026, why the revival is happening, and which old-fashioned names will probably return next.",
+      // Intro — split for readability
+      "Vintage baby names are making one of the strongest comebacks of the last 50 years. Names that sounded dated in the 1990s — Eleanor, Hazel, Theodore, Arthur — are now charging back into the US top 30.\n\nThe driver is the well-documented 100-year cycle: names that were popular around 1920 sound fresh again to parents in the 2020s.\n\nThis guide explains which vintage baby names are coming back in 2025–2026, why the revival is happening, and which old-fashioned names will probably return next.",
 
       "> Quick answer: Vintage baby names like Eleanor, Hazel, Violet, Theodore, Arthur, and August are rising fastest in 2025–2026. The revival is driven by the 100-year cycle, period drama influence, cottagecore aesthetics, and a reaction against invented names.",
+
+      "[DATA_SNAPSHOT]",
 
       "[AD]",
 
@@ -348,11 +502,28 @@ export const blogArticles: BlogArticle[] = [
       { q: "Why are names like Eleanor and Theodore so popular again?", a: "Both have royal and historic weight, both offer modern soft nicknames (Nora, Theo), and both fit the cottagecore and old-money aesthetics that dominate current visual culture." },
       { q: "Will vintage baby names keep rising after 2026?", a: "The 100-year cycle suggests yes. Names from the late 1920s and early 1930s (Mabel, Edwin, Opal, Percy) are next in line. The vintage trend is unlikely to peak before 2030." },
     ],
+    dataSnapshot: {
+      title: "Vintage Comeback Velocity",
+      summary: "How fast vintage names are rising in current SSA rank data.",
+      metrics: [
+        { label: "Theodore (boys)", value: "Top 15", context: "From outside top 300 in 1990", trend: "up" },
+        { label: "Eleanor (girls)", value: "Top 30", context: "Was outside top 600 in 1990", trend: "up" },
+        { label: "Vintage cohort growth", value: "+45% since 2015", context: "Names with 1900–1925 peaks", trend: "up" },
+      ],
+      sources: [
+        { label: "SSA national records", url: "https://www.ssa.gov/oact/babynames/" },
+        { label: "UNICEF", url: "https://data.unicef.org/" },
+      ],
+      lastUpdated: "2026-03-01",
+      lastUpdatedLabel: "March 2026",
+    },
   },
   {
     slug: "nature-inspired-baby-names",
     title: "Nature-Inspired Baby Names: The Rise of Earthy Choices",
     description: "Explore the growing trend of nature-inspired baby names, from classic flower names to modern wilderness picks, with popularity data.",
+    seoTitle: "Nature Baby Names: Botanical, Celestial, Animal Picks",
+    seoDescription: "Nature-inspired baby names have grown 350% since 2000. See the rising flower, tree, animal, and celestial names parents love right now.",
     category: "trends",
     readTime: 7,
     date: "2026-01-05",
@@ -362,11 +533,19 @@ export const blogArticles: BlogArticle[] = [
       "### Celestial Names\n- **Stars**: Stella, Nova, Vega, Sirius\n- **Moon**: Luna, Selene, Artemis\n- **Sky**: Aurora, Dawn, Twilight, Celeste\n\n### Earth & Water\n- **Earth**: Clay, Stone, Flint, Terra\n- **Water**: River, Brook, Lake, Ocean, Marina, Coral\n- **Weather**: Storm, Rain, Tempest, Misty",
       "## The Popularity Data\n\nNature name usage has increased 350% since 2000:\n- 2000: ~2% of all baby names had nature origins\n- 2010: ~4% \n- 2020: ~7%\n- 2025: ~9%\n\nThe fastest risers include Willow (+2,400%), Ivy (+1,800%), and River (+3,200%) over the past two decades.\n\n## Why Nature Names Resonate\n\nIn an increasingly digital world, nature names connect children to the organic world. They also tend to age well, work internationally, and carry inherently positive associations.",
     ],
+    faqs: [
+      { q: "Why are nature-inspired baby names so popular?", a: "They feel timeless, work internationally, and connect children to the organic world — a strong contrast to digital life. Use has grown roughly 350% since 2000." },
+      { q: "What are the most popular nature names today?", a: "Willow, Ivy, River, Hazel, and Luna lead the category. Willow alone is up roughly 2,400% since 2000." },
+      { q: "Are nature names good for boys?", a: "Yes — names like River, Rowan, Ash, Cedar, Reed, and Bear are increasingly common for boys and read as both nature-rooted and strong." },
+      { q: "Do nature names age well?", a: "Generally yes. Botanical and celestial names are anchored in something pre-modern, so they tend to date more slowly than pop-culture names." },
+    ],
   },
   {
     slug: "celebrity-baby-name-trends",
     title: "Celebrity Baby Name Trends: From Hollywood to Your Hometown",
     description: "How celebrity baby names influence mainstream naming trends, with data showing the 'celebrity bounce' effect on name popularity.",
+    seoTitle: "Celebrity Baby Names: Do They Really Influence Trends?",
+    seoDescription: "Celebrity baby names lift mainstream popularity by ~35% on average. See which names exploded, which flopped, and how the 'celebrity bounce' really works.",
     category: "trends",
     readTime: 8,
     date: "2025-12-28",
@@ -376,11 +555,19 @@ export const blogArticles: BlogArticle[] = [
       "## Case Studies\n\n### Names That Exploded\n- **Aria** (Game of Thrones, 2011): +800% over the following decade\n- **Khaleesi** (Game of Thrones): From zero to 500+ births per year\n- **Luna** (Harry Potter + Chrissy Teigen): Reached top 15\n\n### Names That Didn't Catch On\n- **Apple** (Gwyneth Paltrow): Never broke 20 annual registrations\n- **North** (Kim Kardashian): Peaked at about 50 per year\n- **Psalm** (Kim Kardashian): Under 30 per year\n\n### The Pattern\n\nNames that succeed are typically: already familiar as names, easy to spell and pronounce, and given by relatable (not ultra-eccentric) celebrities.",
       "## The Social Media Era\n\nInstagram and TikTok have democratized celebrity influence. Micro-influencers with 100K followers can now drive naming trends that previously required Hollywood fame. This has accelerated trend cycles and created more niche naming micro-trends.",
     ],
+    faqs: [
+      { q: "How much do celebrity baby names affect popularity?", a: "On average about a 35% lift in the year following the announcement, peaking 6–12 months later and lasting 2–3 years. Relatable celebrities tend to drive bigger bounces than ultra-A-list ones." },
+      { q: "Which celebrity baby name had the biggest impact?", a: "Aria, after Game of Thrones, rose more than 800% over the following decade — the largest single-show effect in modern naming." },
+      { q: "Do unusual celebrity names like Apple catch on?", a: "Rarely. Apple, North, and Psalm never broke into mainstream use because they read as celebrity-only choices rather than recognisable names." },
+      { q: "Are micro-influencers driving naming trends now?", a: "Yes. Instagram and TikTok creators with 100K+ followers can move a name's popularity in a way that previously required Hollywood-level fame." },
+    ],
   },
   {
     slug: "top-google-baby-name-searches",
     title: "Top Google Baby Name Searches: What Parents Are Googling",
     description: "Analysis of the most-searched baby name queries on Google, revealing what expecting parents really want to know about names today.",
+    seoTitle: "Top Google Baby Name Searches in 2026 (Real Data)",
+    seoDescription: "What are parents really Googling about baby names? See 2026's top searches, the rising names, and the questions parents care about most.",
     category: "trends",
     readTime: 6,
     date: "2026-03-01",
@@ -389,11 +576,18 @@ export const blogArticles: BlogArticle[] = [
       "## The Top 10 Most-Searched Baby Names in 2026\n\n1. **Liam** — Still generating massive search volume despite years at #1\n2. **Olivia** — The perennial queen of searches\n3. **Maeve** — The Irish name seeing explosive search growth (+180% YoY)\n4. **Kai** — Gender-neutral appeal drives consistent searches\n5. **Aurelia** — Rising star with +250% search growth\n6. **Soren** — Scandinavian names continue their surge\n7. **Juniper** — Nature name with strongest search growth\n8. **Silas** — Biblical name with modern appeal\n9. **Freya** — Norse mythology inspires parents\n10. **Atlas** — Map name reaches new peaks",
       "## What Parents Are Asking\n\nThe most common query patterns:\n\n- **\"[Name] meaning\"** — 45% of all name searches include 'meaning'\n- **\"Is [name] too popular?\"** — Uniqueness anxiety is real\n- **\"[Name] popularity 2026\"** — Parents check trends before committing\n- **\"Names like [name]\"** — Alternative discovery is huge\n- **\"[Name] pronunciation\"** — Especially for international names\n\n## The Uniqueness Anxiety Phenomenon\n\nA striking 32% of name-related searches include terms like 'unique,' 'rare,' 'unusual,' or 'uncommon.' Parents today are as concerned about a name being too popular as they are about finding one they love.",
     ],
+    faqs: [
+      { q: "What is the most-searched baby name on Google in 2026?", a: "Liam and Olivia still lead total search volume, but Maeve, Aurelia, and Juniper show the fastest year-over-year growth." },
+      { q: "What do parents Google about baby names?", a: "Almost half of name searches include the word 'meaning'. Other common patterns are 'is X too popular', 'X popularity 2026', 'names like X', and pronunciation." },
+      { q: "How big is the uniqueness anxiety?", a: "About 32% of name-related searches include 'unique', 'rare', 'unusual', or 'uncommon' — uniqueness is now as much a concern as personal preference." },
+    ],
   },
   {
     slug: "seasonal-baby-naming-patterns",
     title: "Seasonal Patterns in Baby Naming: Do Birth Months Matter?",
     description: "Data reveals surprising correlations between birth month and name choices. Learn how seasons influence baby naming decisions.",
+    seoTitle: "Birth Month & Baby Names: Seasonal Patterns Explained",
+    seoDescription: "Spring nature names, summer sun names, winter holiday names — see how birth month shapes US baby naming, with the strongest seasonal effects.",
     category: "trends",
     readTime: 7,
     date: "2025-12-20",
@@ -402,11 +596,18 @@ export const blogArticles: BlogArticle[] = [
       "## The Seasonal Name Effect\n\n### Spring Births (March-May)\n- Nature names spike: Lily (+15%), Violet (+12%), Robin (+18%)\n- Renewal-themed names rise: Dawn, Aurora, Genesis\n- Pastel-sounding names see bumps: Rose, Iris, Daisy\n\n### Summer Births (June-August)\n- Sun-related names peak: Soleil, Sunny, Ray\n- Water names surge: Marina, Ocean, River, Brook\n- Month names for their birth month: June, August\n\n### Fall Births (September-November)\n- Warm-toned names rise: Amber, Scarlet, Sienna, Autumn\n- Harvest names appear: Rowan (berry season), Hazel (harvest)\n\n### Winter Births (December-February)\n- Cold-weather names: Winter, Snow, Crystal, Frost\n- Holiday influence: Noelle, Holly, Eve, Nicholas spike in December\n- Star/night names: Stella, Luna, Noel",
       "## The December Effect\n\nDecember shows the strongest seasonal naming influence. Names like Noelle see a 400% spike for December births compared to June births. Holly increases 350%, and Nicholas rises 45%.\n\n## Is the Effect Growing or Shrinking?\n\nInterestingly, seasonal naming has increased over the past two decades. As parents become more intentional about naming, they're more likely to choose names that connect to their child's birth season.",
     ],
+    faqs: [
+      { q: "Does birth month really affect baby naming?", a: "Yes. Names like Noelle spike about 400% for December births vs June births, and nature names like Lily and Robin rise 12–18% for spring births." },
+      { q: "Which season has the strongest naming effect?", a: "December — by a large margin. Holiday-linked names (Noelle, Holly, Nicholas, Eve) have the highest single-month concentration in US data." },
+      { q: "Are seasonal naming effects growing?", a: "Yes. As parents become more intentional about naming, season-linked picks have steadily increased over the last two decades." },
+    ],
   },
   {
     slug: "urban-vs-rural-baby-naming",
     title: "Baby Naming Trends in Urban vs. Rural Areas (Data)",
     description: "How baby naming patterns differ between cities and rural areas, with data on uniqueness, tradition, and cultural influence.",
+    seoTitle: "Urban vs Rural Baby Naming: Where America Names Differ",
+    seoDescription: "Urban areas show 47% more name diversity than rural areas. See how cities, suburbs, and rural communities name their babies — and why the gap is closing.",
     category: "trends",
     readTime: 8,
     date: "2025-12-15",
@@ -416,11 +617,18 @@ export const blogArticles: BlogArticle[] = [
       "## Regional Hotspots\n\n### Most Unique-Name-Friendly Cities\n1. Portland, OR — Highest name diversity score\n2. Austin, TX — Leads in gender-neutral name adoption\n3. Brooklyn, NY — Pioneered the vintage revival trend\n4. San Francisco, CA — Most international names\n5. Nashville, TN — Unique blend of traditional and trendy\n\n### Most Traditional-Naming Areas\n1. Rural Alabama — Highest rate of family names\n2. Rural Utah — Religious naming traditions remain strong\n3. Rural Appalachia — Anglo-Saxon naming heritage persists\n4. Rural Midwest — German/Scandinavian naming traditions continue",
       "## The Convergence Trend\n\nSocial media and the internet are slowly equalizing urban-rural naming differences. Rural parents now have the same access to naming websites and Instagram trends as urban parents, leading to a gradual convergence in naming patterns.",
     ],
+    faqs: [
+      { q: "How different are urban and rural baby names?", a: "Cities show roughly 47% more unique names per 10,000 births than rural communities. Trend names also reach urban areas 2–3 years before rural ones." },
+      { q: "Which US city has the most unique baby names?", a: "Portland, OR scores highest on name diversity, followed by Austin, Brooklyn, San Francisco, and Nashville." },
+      { q: "Are urban-rural naming differences shrinking?", a: "Yes. Internet access has equalised exposure to naming trends, and the urban-rural gap is gradually narrowing." },
+    ],
   },
   {
     slug: "names-that-switched-genders",
     title: "Names That Switched Genders Over Time",
     description: "Fascinating history of names like Ashley, Lindsay, and Madison that transitioned from masculine to feminine (or vice versa) with data.",
+    seoTitle: "Boy Names That Became Girl Names (and Why)",
+    seoDescription: "Ashley, Madison, and Lindsay all started as boy names. See how names switch gender, why it almost only goes one way, and which names are mid-switch right now.",
     category: "trends",
     readTime: 9,
     date: "2025-12-10",
@@ -430,11 +638,18 @@ export const blogArticles: BlogArticle[] = [
       "## The One-Way Street\n\nA striking pattern: names almost exclusively move from male to female, rarely the reverse. Once a name is perceived as feminine, male usage drops rapidly. This is sometimes called the 'contamination effect' — parents stop using a name for boys once it's associated with girls.\n\n### Names Currently in Transition\n- **Riley**: Was 75% male in 2000, now 65% female\n- **Avery**: Was 80% male in 1990, now 75% female\n- **Rowan**: Currently 55% male but female usage is rising fast\n- **Sage**: Reached 50/50 in 2023",
       "## Why It Only Goes One Way\n\nResearchers suggest this pattern reflects broader gender dynamics: parents are comfortable giving girls 'strong' traditionally male names, but resist giving boys 'feminine' names due to perceived social risks. This asymmetry tells us as much about gender norms as it does about names.",
     ],
+    faqs: [
+      { q: "Why do boy names become girl names but not vice versa?", a: "Researchers call it the 'contamination effect'. Once a name reads as feminine, parents stop using it for boys, but families remain comfortable using a 'strong' male name for girls." },
+      { q: "Which name switched genders fastest?", a: "Madison — about a decade from primarily male to almost entirely female after the 1984 film Splash. It's one of the fastest gender switches ever recorded." },
+      { q: "Which names are switching genders right now?", a: "Riley, Avery, Rowan, and Sage are all in active transition. Riley moved from 75% male in 2000 to 65% female today." },
+    ],
   },
   {
     slug: "boy-only-vs-girl-only-trends",
     title: "Boy-Only vs Girl-Only Name Trends: Are Names Crossing Borders?",
     description: "Are traditionally single-gender names becoming more flexible? Data analysis of gendered naming trends and the rise of unisex options.",
+    seoTitle: "Are Boy Names and Girl Names Becoming the Same?",
+    seoDescription: "Gender-neutral baby names have tripled since 2000. See which names are crossing gender, which stay firmly traditional, and why neutrality is structural.",
     category: "trends",
     readTime: 7,
     date: "2025-12-05",
@@ -444,6 +659,11 @@ export const blogArticles: BlogArticle[] = [
       "## The Most Popular Gender-Neutral Names (2026)\n\n1. **Riley** — 55F/45M\n2. **Avery** — 60F/40M\n3. **Jordan** — 45F/55M\n4. **Quinn** — 55F/45M\n5. **Rowan** — 45F/55M\n6. **Sage** — 52F/48M\n7. **River** — 40F/60M\n8. **Finley** — 55F/45M\n9. **Emerson** — 58F/42M\n10. **Dakota** — 45F/55M",
       "## What Drives Gender Neutrality?\n\n- Non-binary visibility has increased interest in truly neutral names\n- Parents hedging before knowing baby's sex at birth\n- Cultural desire to not limit children's identity through naming\n- Celebrity influence (using traditionally male names for girls)\n\nThe trend toward gender neutrality appears structural, not cyclical, suggesting it will continue growing.",
     ],
+    faqs: [
+      { q: "Are boy names and girl names becoming more interchangeable?", a: "Yes. The number of names used meaningfully for both genders has tripled since 2000, from ~300 to ~900." },
+      { q: "Which classic names show no crossover?", a: "James, William, Robert, Thomas, Mary, Elizabeth, and Jennifer remain 99%+ single-gender and show no sign of crossing." },
+      { q: "Why are gender-neutral names rising?", a: "Non-binary visibility, parents hedging before knowing baby's sex, and a cultural desire to not pre-define a child's identity through naming." },
+    ],
   },
 
   // ===== Baby Name Guides =====
@@ -451,6 +671,8 @@ export const blogArticles: BlogArticle[] = [
     slug: "top-50-baby-names-meanings-usa",
     title: "Top 50 Baby Names and Their Meanings (USA)",
     description: "The definitive list of America's 50 most popular baby names with meanings, origins, popularity data, and famous namesakes.",
+    seoTitle: "Top 50 Baby Names in the USA: Meanings & Origins",
+    seoDescription: "America's 50 most popular baby names, with meanings, origins, peak decades, and famous namesakes. Updated with the latest SSA data.",
     category: "guides",
     readTime: 14,
     date: "2026-02-20",
@@ -461,11 +683,18 @@ export const blogArticles: BlogArticle[] = [
       "## Top 25 Boy Names\n\n### 1. Liam\n- **Meaning**: 'Strong-willed warrior' (Irish, short for William)\n- **Peak decade**: 2020s\n- **Famous namesakes**: Liam Neeson, Liam Hemsworth\n- **Why it's #1**: Short, strong, and internationally appealing\n\n### 2. Noah\n- **Meaning**: 'Rest' or 'comfort' (Hebrew)\n- **Famous namesakes**: Noah Centineo, biblical patriarch\n- **Why it's popular**: Gentle strength with deep religious roots\n\n### 3. Oliver\n- **Meaning**: 'Olive tree' (Latin/Old French)\n- **Famous namesakes**: Oliver Twist, Oliver Stone\n- **Why it's popular**: Friendly, literary, and works across cultures\n\n*[Names 4-25 include: James, Elijah, William, Henry, Lucas, Benjamin, Theodore, Jack, Levi, Alexander, Mason, Ethan, Daniel, Jacob, Logan, Sebastian, Mateo, Owen, Aiden]*",
       "## How to Use This List\n\n- Consider meaning alongside sound — a meaningful name adds depth\n- Check popularity trends if uniqueness matters to you\n- Say the full name aloud with your surname\n- Consider nicknames that naturally emerge\n- Search the name on our tool to see detailed statistics",
     ],
+    faqs: [
+      { q: "What is the #1 baby name in the US right now?", a: "Liam for boys and Olivia for girls. Both have held the top spot for several consecutive years in SSA data." },
+      { q: "What does the name Liam mean?", a: "Liam is the Irish short form of William, meaning 'strong-willed warrior'. It's now America's #1 boy name." },
+      { q: "Are the top 50 names changing each year?", a: "Yes — small movements every year, but the top 10 changes more slowly. Names typically take 3–5 years to enter or leave the top 50." },
+    ],
   },
   {
     slug: "baby-names-meaning-love",
     title: "Baby Names Meaning Love / Beloved",
     description: "A curated collection of baby names from around the world that mean love, beloved, dear, or cherished, with origins and popularity.",
+    seoTitle: "Baby Names That Mean Love (From Around the World)",
+    seoDescription: "Beautiful baby names meaning love, beloved, or cherished — from Amara and Priya to David and Habib. Origins, meanings, and popularity included.",
     category: "guides",
     readTime: 8,
     date: "2026-02-12",
@@ -475,11 +704,18 @@ export const blogArticles: BlogArticle[] = [
       "## Boy Names Meaning Love\n\n- **David** (Hebrew) — 'Beloved' — One of the most enduringly popular love-meaning names\n- **Amadeus** (Latin) — 'Love of God'\n- **Leif** (Scandinavian) — 'Beloved' or 'heir'\n- **Connell** (Irish) — 'Strong as a wolf' but also 'love'\n- **Erasmus** (Greek) — 'Beloved'\n- **Habib** (Arabic) — 'Beloved'\n- **Kama** (Sanskrit) — 'Love' (the god of love)\n\n## Gender-Neutral Love Names\n\n- **Love** — Used directly as a name in Scandinavian countries\n- **Valentine** — 'Strong, healthy' but associated with love\n- **Kerensa** (Cornish) — 'Love'\n- **Phoenix** — While meaning 'dark red,' associated with passionate love",
       "## Choosing a Love Name\n\nA name meaning love carries a beautiful intention, but consider:\n- Does the meaning work in your cultural context?\n- Is the name easy to pronounce in your community?\n- Will the meaning feel empowering as your child grows?\n\nEvery name on this list carries the hope that your child will feel deeply loved — which is ultimately every parent's wish.",
     ],
+    faqs: [
+      { q: "What baby name means love?", a: "Many. Amara, Priya, Habiba, Cara, and Aimée mean 'beloved' for girls; David, Habib, and Erasmus carry the same meaning for boys." },
+      { q: "What is the most popular boy name meaning love?", a: "David — Hebrew for 'beloved' and one of the most enduringly popular love-meaning names in the Western world." },
+      { q: "Are there gender-neutral names that mean love?", a: "Yes. Love itself is used as a name in Scandinavia, and Kerensa (Cornish) and Valentine work for any gender." },
+    ],
   },
   {
     slug: "baby-names-by-theme",
     title: "Baby Names by Theme: Nature, Virtue, Myth, and More",
     description: "Explore baby names organized by theme — from nature and virtue names to mythological, literary, and celestial-inspired choices.",
+    seoTitle: "Baby Names by Theme: Nature, Virtue, Myth & More",
+    seoDescription: "Hundreds of baby names organised by theme — nature, virtue, mythology, literature, royalty. Find the perfect vibe for your baby's name in one place.",
     category: "guides",
     readTime: 11,
     date: "2026-02-08",
@@ -489,11 +725,18 @@ export const blogArticles: BlogArticle[] = [
       "## Virtue Names\n\nHistorically popular among Puritans, virtue names are seeing a revival:\n\n- **Classic**: Grace, Hope, Faith, Joy, Honor, Mercy, Patience\n- **Modern Revival**: Serenity, Harmony, Journey, Destiny, Trinity\n- **Rare Virtues**: Verity (truth), Amity (friendship), Felicity (happiness), Clement (mercy)\n\n## Mythological Names\n\n### Greek\nAthena, Artemis, Apollo, Cassandra, Helen, Penelope, Jason, Theseus, Persephone, Daphne\n\n### Norse\nFreya, Astrid, Ingrid, Thor, Leif, Odin, Sigrid, Brynhild\n\n### Celtic\nRhiannon, Brigid, Finn, Niamh, Cernunnos, Morrigan",
       "## Literary Names\n\n### From Shakespeare\nMiranda, Cordelia, Juliet, Portia, Rosalind, Viola, Orlando, Sebastian\n\n### From Classic Literature\nDarcy, Atticus, Holden, Heathcliff, Scarlett, Scout, Lyra, Hermione\n\n### From Modern Fiction\nArya, Katniss, Rue, Peeta, Galadriel, Arwen, Eowyn\n\n## Royal Names\n\nElizabeth, Victoria, Catherine, Charlotte, George, Henry, William, Edward, Arthur, Albert",
     ],
+    faqs: [
+      { q: "What are baby name themes?", a: "Themes group names by the world they come from — nature, virtue, mythology, literature, royalty, celestial. Themed shortlists make it easier to find names that share a 'vibe'." },
+      { q: "Which theme is most popular right now?", a: "Nature names lead, especially botanical and celestial. Mythological names from Greek and Norse traditions are the fastest-growing sub-theme." },
+      { q: "Can themed names work as sibling sets?", a: "Yes — themed siblings (Iris and Wren, Atlas and Orion) feel intentional without sounding identical. Most parents pair theme with shared rhythm or origin." },
+    ],
   },
   {
     slug: "greek-roman-names-origins",
     title: "Ancient Greek & Roman Names: Origins and US Popularity",
     description: "Explore ancient Greek and Roman baby names, their mythological origins, historical significance, and current popularity in the US.",
+    seoTitle: "Greek & Roman Baby Names: Origins and US Popularity",
+    seoDescription: "Alexander, Sophia, Theodore, Marcus — see the ancient Greek and Roman baby names still topping US charts, with meanings and historical roots.",
     category: "guides",
     readTime: 10,
     date: "2026-01-25",
@@ -503,11 +746,18 @@ export const blogArticles: BlogArticle[] = [
       "## Roman Names Making a Comeback\n\n### Marcus\n- **Meaning**: From Mars, the god of war\n- **Modern descendants**: Mark, Marco, Marcel\n- **US Rank**: Currently rising after decades of decline\n\n### Aurelius\n- **Meaning**: 'Golden'\n- **Famous bearer**: Marcus Aurelius, philosopher-emperor\n- **US status**: Rare but trending among naming enthusiasts\n\n### Felix\n- **Meaning**: 'Happy' or 'lucky'\n- **US Rank**: Climbing steadily into the top 200\n- **Appeal**: Who doesn't want their child to be happy?",
       "## Classical Names That Should Be More Popular\n\n- **Cassius** — 'Hollow' but famous for Cassius Clay (Muhammad Ali)\n- **Octavia** — 'Eighth,' elegant and powerful\n- **Thalia** — The muse of comedy\n- **Leander** — 'Lion man,' a romantic hero of myth\n- **Callista** — 'Most beautiful'\n\nThese names carry thousands of years of history while feeling surprisingly fresh in a modern context.",
     ],
+    faqs: [
+      { q: "Which Greek baby names are most popular today?", a: "Alexander, Sophia, and Theodore lead the Greek-origin names in current US rankings, all sitting comfortably inside the top 15." },
+      { q: "Are Roman names making a comeback?", a: "Yes. Marcus, Aurelius, and Felix are all rising, with Felix climbing fastest into the top 200." },
+      { q: "What classical names are still under-used?", a: "Cassius, Octavia, Thalia, Leander, and Callista all have strong meanings and history but remain rare in current US data." },
+    ],
   },
   {
     slug: "mythological-baby-names-popular",
     title: "Mythological Baby Names That Are Becoming Popular",
     description: "From Norse to Greek to Celtic myths, these mythological baby names are surging in popularity. See which ancient names modern parents love.",
+    seoTitle: "Mythological Baby Names: Greek, Norse, and Celtic Picks",
+    seoDescription: "Athena, Freya, Apollo, Finn — see the mythological baby names rising fastest in the US, with origins from Greek, Norse, and Celtic traditions.",
     category: "guides",
     readTime: 8,
     date: "2026-01-18",
@@ -516,11 +766,18 @@ export const blogArticles: BlogArticle[] = [
       "## Currently Trending Mythological Names\n\n### From Greek Mythology\n- **Athena** (+450% since 2010): Goddess of wisdom and strategic warfare\n- **Apollo** (+300%): God of music, sun, and poetry\n- **Penelope** (+280%): Faithful wife of Odysseus\n- **Calliope** (+500%): Muse of epic poetry\n- **Artemis** (+350%): Goddess of the hunt and wilderness\n\n### From Norse Mythology\n- **Freya** (+600% since 2010): Goddess of love and beauty\n- **Odin** (+200%): King of the gods, god of wisdom\n- **Astrid** (+150%): Means 'divine strength'\n- **Leif** (+120%): Connected to exploration and discovery\n- **Thor** — Remaining steady, Marvel helped",
       "### From Celtic Mythology\n- **Finn/Fionn** — The legendary hero Fionn mac Cumhaill\n- **Niamh** — Princess who took Oisín to Tír na nÓg\n- **Brigid** — Goddess of fire, poetry, and healing\n- **Rhiannon** — Welsh goddess associated with horses\n\n### From Other Traditions\n- **Kali** (Hindu) — Goddess of destruction and renewal\n- **Amaterasu** (Japanese) — Sun goddess\n- **Isis** (Egyptian) — Though usage has declined for obvious reasons\n\n## Why Parents Choose Mythological Names\n\n1. They carry built-in stories and meaning\n2. They sound distinctive without being invented\n3. They connect children to cultural heritage\n4. They convey strength, wisdom, or beauty\n5. Pop culture (Marvel, Percy Jackson) has made them mainstream",
     ],
+    faqs: [
+      { q: "What's the fastest-growing mythological baby name?", a: "Calliope (Greek, +500% since 2010) and Freya (Norse, +600% since 2010) lead the mythological surge in US data." },
+      { q: "Why are parents picking mythological names?", a: "They carry built-in stories, sound distinctive without being invented, and have been pushed mainstream by Marvel, Percy Jackson, and similar franchises." },
+      { q: "Are mythological names age-appropriate?", a: "Yes — most are well-known names with thousands of years of use, so they age as well as any classic. Avoid names with strongly negative mythological associations." },
+    ],
   },
   {
     slug: "irish-baby-names-popularity",
     title: "Irish Baby Names for Boys and Girls and Their Popularity",
     description: "A guide to traditional and modern Irish baby names with Gaelic origins, pronunciations, meanings, and current US popularity data.",
+    seoTitle: "Irish Baby Names: Pronunciations, Meanings, US Popularity",
+    seoDescription: "From Liam and Nora to Saoirse and Niamh — Irish baby names with Gaelic origins, pronunciation guides, meanings, and US popularity.",
     category: "guides",
     readTime: 9,
     date: "2026-01-12",
@@ -530,11 +787,18 @@ export const blogArticles: BlogArticle[] = [
       "## Pronunciation Guide for Tricky Irish Names\n\n| Name | Pronunciation | Meaning |\n|------|-------------|--------|\n| Saoirse | SEER-sha | Freedom |\n| Caoimhe | KEE-va | Gentle |\n| Siobhán | shi-VAWN | God is gracious |\n| Tadhg |TIGE (rhymes with vague) | Poet |\n| Aoife | EE-fa | Beauty |\n| Cillian | KIL-ee-an | War strife |\n| Oisín | uh-SHEEN | Little deer |\n| Ríona | REE-na | Queenly |",
       "## The Irish Name Wave in America\n\nIrish names have surged in the US for several reasons:\n- 33 million Americans claim Irish heritage\n- Irish cultural exports (literature, music, film) maintain high prestige\n- The sounds of Irish names feel both familiar and exotic to American ears\n- Names like Liam and Nora are easy to spell while sounding distinctive",
     ],
+    faqs: [
+      { q: "What is the most popular Irish baby name in the US?", a: "Liam — currently the #1 boy name in America. Aiden, Declan, Finn, and Sean also rank high." },
+      { q: "How do you pronounce Saoirse?", a: "SEER-sha (or SUR-sha). It's an Irish name meaning 'freedom' and has been rising in US use thanks to actor Saoirse Ronan." },
+      { q: "Why are Irish baby names so popular in the US?", a: "Roughly 33 million Americans claim Irish heritage, and Irish names blend a familiar feel with a distinctive sound. Liam, Nora, and Maeve are easy to spell yet uncommon enough to feel fresh." },
+    ],
   },
   {
     slug: "gender-neutral-nature-names",
     title: "Gender-Neutral Names Inspired by Nature",
     description: "A curated list of beautiful gender-neutral nature names for babies, from River and Sage to lesser-known botanical and celestial options.",
+    seoTitle: "Gender-Neutral Nature Names for Babies (A–Z)",
+    seoDescription: "Sage, Rowan, River, Wren — beautiful gender-neutral nature names for any baby, with meanings, origins, and current US popularity.",
     category: "guides",
     readTime: 6,
     date: "2026-01-08",
@@ -544,11 +808,18 @@ export const blogArticles: BlogArticle[] = [
       "## Water & Sky Names\n\n- **River** — Currently 60% male but rapidly equalizing\n- **Ocean** — Vast and gender-free\n- **Rain/Raine** — Gentle weather name\n- **Storm** — Powerful weather name\n- **Sky/Skye** — Limitless and open\n- **Lake** — Calm and serene\n- **Brook** — A gentle flowing water name\n- **Cove** — Sheltered and peaceful\n- **North** — Directional name gaining traction\n- **Solstice** — Astronomical event name",
       "## Animal & Mineral Names\n\n- **Wren** — Tiny bird, mighty name\n- **Robin** — Classic bird name, historically male (Robin Hood) now mostly female\n- **Fox** — Sharp and clever\n- **Lark** — A songbird, joyful and light\n- **Onyx** — Dark gemstone name\n- **Jasper** — A gemstone name trending male but usable for any gender\n\nAll of these names connect your child to the natural world while avoiding gendered assumptions.",
     ],
+    faqs: [
+      { q: "What are the most popular gender-neutral nature names?", a: "Sage, River, Rowan, Wren, and Juniper lead the category. Sage is the most evenly split — currently 52% female, 48% male." },
+      { q: "Are gender-neutral nature names a trend or here to stay?", a: "Structural. Both nature naming and gender neutrality have grown for two decades and show no sign of reversing." },
+      { q: "Do these names work better for boys or girls?", a: "Most work equally well. River and Rowan lean slightly male; Juniper and Willow lean slightly female. Sage, Ash, and Wren are the most truly neutral." },
+    ],
   },
   {
     slug: "unique-unisex-names-az",
     title: "Unique Unisex Names for Your Baby: A–Z List",
     description: "An A to Z guide of unique gender-neutral baby names with meanings, origins, and popularity data for modern parents.",
+    seoTitle: "Unique Unisex Baby Names A–Z (Rare Picks)",
+    seoDescription: "An A–Z list of unique gender-neutral baby names — Arden, Bellamy, Indigo, Quinn, Zen — with meanings, origins, and US popularity.",
     category: "guides",
     readTime: 10,
     date: "2026-01-03",
@@ -559,6 +830,11 @@ export const blogArticles: BlogArticle[] = [
       "## M–R\n\n- **Merit** — 'Deserving' (English). Virtue name with strength\n- **Noel** — 'Christmas' (French). Traditionally male, now balanced\n- **Onyx** — Black gemstone. Edgy and distinctive\n- **Perry** — 'Pear tree' (English). Vintage unisex charm\n- **Quinn** — 'Counsel' (Irish). Well-established unisex\n- **Remy** — 'Oarsman' (French). Gaining popularity for both genders",
       "## S–Z\n\n- **Shea** — 'Admirable' (Irish). Soft and strong\n- **Tatum** — 'Cheerful' (English). Athletic associations\n- **Urban** — 'City dweller' (Latin). Bold and unexpected\n- **Vale** — 'Valley' (English). Nature name, simple and elegant\n- **Winter** — Season name. Increasingly used for both genders\n- **Xen** — 'Guest' (Greek). Minimalist and modern\n- **Yael** — 'Mountain goat' (Hebrew). Biblical strength\n- **Zen** — 'Meditation' (Japanese). Peaceful and cool",
     ],
+    faqs: [
+      { q: "What is the rarest unisex baby name?", a: "Names like Fable, Cypress, and Xen are virtually unused — fewer than 50 registrations a year in current US data." },
+      { q: "Are unisex names a recent trend?", a: "The trend itself is decades old, but it accelerated sharply after 2010. Names with both-gender use have roughly tripled since 2000." },
+      { q: "How do I pick a unique unisex name that's still usable?", a: "Choose names with predictable phonetics (Quinn, Sage, Remy) over invented spellings, and check current popularity for both genders before deciding." },
+    ],
   },
 
   // ===== Location / Data Articles =====
@@ -566,6 +842,8 @@ export const blogArticles: BlogArticle[] = [
     slug: "rare-surnames-america",
     title: "Rare Surnames in America: Uncommon Family Names",
     description: "Discover the rarest surnames in America, from nearly extinct family names to unusual surnames with fewer than 100 bearers nationwide.",
+    seoTitle: "Rare US Surnames: The Country's Uncommon Family Names",
+    seoDescription: "Some American surnames have fewer than 100 bearers nationwide. Explore the rarest US family names, their origins, and what's keeping them rare.",
     category: "location",
     readTime: 9,
     date: "2026-02-18",
@@ -575,11 +853,18 @@ export const blogArticles: BlogArticle[] = [
       "## Categories of Rare American Surnames\n\n### Modified Immigration Names\n- **Pfistershammer** — German origin, fewer than 50 bearers\n- **Szczyrbak** — Polish, under 100 bearers\n- **Bhattacharyya** — Bengali, rare due to complex spelling\n\n### Anglicized Rarities\n- **Miracle** — Possibly from French 'Miracel,' under 3,000 bearers\n- **Twelvetrees** — English, under 200 bearers\n- **Tumbledown** — English, virtually extinct\n\n### Indigenous Names\nMany Native American surnames are extremely rare due to small tribal populations. These names carry particular cultural significance and heritage.",
       "## The Most Common vs. Rarest\n\n| Rank | Most Common | Count | Rarest Examples | Count |\n|------|-----------|-------|----------------|-------|\n| 1 | Smith | 2.5M | Zzyzx | <10 |\n| 2 | Johnson | 2.0M | Quiddington | <20 |\n| 3 | Williams | 1.6M | Fernsby | <50 |\n| 4 | Brown | 1.4M | Vileli | <30 |\n| 5 | Jones | 1.4M | Miracel | <100 |\n\n## Preserving Rare Surnames\n\nMany rare surnames face extinction. Genealogists and family historians work to document these names before they disappear, creating records that connect future generations to their heritage.",
     ],
+    faqs: [
+      { q: "What is the rarest surname in America?", a: "Names like Zzyzx, Quiddington, and Vileli have fewer than 30 bearers nationwide and may face extinction within a generation." },
+      { q: "What makes a surname rare in the US?", a: "Fewer than 1,000 bearers nationally, presence in fewer than 5 states, and no common spelling variants. Rare surnames often come from recent immigration or unusual Ellis Island spelling changes." },
+      { q: "How can I find out if my surname is rare?", a: "Compare your surname's count against US Census data. Anything below 1,000 bearers nationwide is statistically rare." },
+    ],
   },
   {
     slug: "us-state-uncommon-names",
     title: "Which US State Chooses the Most Uncommon Names?",
     description: "State-by-state analysis of baby name uniqueness, revealing which states lead in creative naming and which prefer traditional choices.",
+    seoTitle: "Which US State Picks the Most Unique Baby Names?",
+    seoDescription: "Hawaii, California, and New Mexico lead the US in unique baby naming. See which states are the most creative — and which lean traditional.",
     category: "location",
     readTime: 8,
     date: "2026-02-14",
@@ -589,11 +874,18 @@ export const blogArticles: BlogArticle[] = [
       "## The Most Traditional Naming States\n\n### 1. Alabama\n- **Traditionalism Score**: 91/100\n- **Top names match national average closely\n- Family naming traditions remain very strong\n\n### 2. West Virginia\n- **Traditionalism Score**: 88/100\n- Anglo-Saxon naming heritage persists\n- Lower name diversity than national average\n\n### 3. Mississippi\n- **Traditionalism Score**: 86/100\n- Biblical and family names dominate\n- Slower to adopt national trends",
       "## Surprising Findings\n\n- **Utah** has the highest rate of invented names despite being traditional in other ways\n- **Texas** splits dramatically between its urban centers (very creative) and rural areas (very traditional)\n- **Oregon and Washington** lead in nature names and gender-neutral choices\n- **Louisiana** has unique naming patterns reflecting its French, Creole, and Cajun heritage",
     ],
+    faqs: [
+      { q: "Which US state has the most unique baby names?", a: "Hawaii, with a uniqueness score of 94/100, driven by Hawaiian, Asian, Pacific Islander, and mainland US naming traditions blending together." },
+      { q: "Which states are the most traditional in baby naming?", a: "Alabama, West Virginia, and Mississippi rank highest on traditionalism, with strong family-name and biblical patterns." },
+      { q: "Why does Utah produce so many invented names?", a: "Despite its overall traditional culture, Utah has the country's highest rate of invented and creatively spelled names — partly tied to a strong tradition of family-distinctive naming." },
+    ],
   },
   {
     slug: "popular-baby-names-california",
     title: "Popular Baby Names in California",
     description: "The most popular baby names in California, with state-specific trends, diversity data, and regional breakdowns from the latest SSA data.",
+    seoTitle: "Popular Baby Names in California (2026 SSA Data)",
+    seoDescription: "California's most popular baby names — Mia, Liam, Mateo, Sofia — with state-specific trends, regional differences, and the latest SSA rankings.",
     category: "location",
     readTime: 7,
     date: "2026-03-05",
@@ -602,11 +894,18 @@ export const blogArticles: BlogArticle[] = [
       "## Top 10 Baby Names in California (2026)\n\n### Girls\n1. Mia\n2. Olivia\n3. Camila\n4. Luna\n5. Sofia\n6. Emma\n7. Isabella\n8. Valentina\n9. Aria\n10. Amelia\n\n### Boys\n1. Liam\n2. Mateo\n3. Noah\n4. Sebastian\n5. Lucas\n6. Oliver\n7. Ethan\n8. Alexander\n9. Daniel\n10. Leo",
       "## What Makes California Naming Unique\n\n### Hispanic Influence\nCalifornia's large Hispanic population means names like Mateo, Santiago, Valentina, and Camila rank significantly higher than the national average.\n\n### Asian-American Names\nNames from Chinese, Korean, Vietnamese, Filipino, and Japanese traditions add diversity not seen in most states.\n\n### Tech Industry Influence\nSilicon Valley parents show higher rates of unusual and international names, possibly reflecting the tech industry's global workforce.\n\n### Regional Differences Within California\n- **LA**: Heavy Hispanic influence, celebrity-inspired names\n- **Bay Area**: Most internationally diverse names\n- **San Diego**: Military influence adds traditional names\n- **Central Valley**: More traditional and religious names\n- **Northern California**: Nature names and gender-neutral choices lead",
     ],
+    faqs: [
+      { q: "What is the #1 baby name in California?", a: "Mia for girls and Liam for boys lead California's 2026 rankings. Mateo also ranks much higher in California than in most other US states." },
+      { q: "Why are Spanish-language names so popular in California?", a: "California's large Hispanic population pushes names like Mateo, Sebastian, Camila, and Valentina well above their national rank." },
+      { q: "Do baby names differ across California regions?", a: "Yes. LA leans Hispanic and celebrity-driven, the Bay Area is the most internationally diverse, and Northern California favours nature and gender-neutral picks." },
+    ],
   },
   {
     slug: "popular-baby-names-texas",
     title: "Most Popular Baby Names in Texas",
     description: "Texas baby name trends featuring the Lone Star State's unique blend of traditional, Hispanic, and modern naming patterns from the latest SSA data.",
+    seoTitle: "Most Popular Baby Names in Texas (2026 Data)",
+    seoDescription: "Texas baby names blend Southern tradition, Hispanic heritage, and cowboy culture. See the 2026 top names and what makes Texas naming unique.",
     category: "location",
     readTime: 7,
     date: "2026-03-03",
@@ -615,11 +914,18 @@ export const blogArticles: BlogArticle[] = [
       "## Top 10 Baby Names in Texas (2026)\n\n### Girls\n1. Olivia\n2. Emma\n3. Mia\n4. Camila\n5. Charlotte\n6. Sofia\n7. Isabella\n8. Amelia\n9. Luna\n10. Harper\n\n### Boys\n1. Liam\n2. Noah\n3. Mateo\n4. Oliver\n5. Sebastian\n6. James\n7. Lucas\n8. Elijah\n9. Benjamin\n10. William",
       "## Texas-Specific Naming Trends\n\n### The Cowboy Factor\nNames like Wyatt, Austin, Dallas, and Maverick rank higher in Texas than nationally.\n\n### Hispanic Heritage\nWith 40% Hispanic population, names like Santiago, Diego, Valentina, and Ximena are mainstream.\n\n### Southern Tradition\nDouble names (Mary Jane, John David) and family surnames as first names remain popular, especially in East Texas.\n\n### Oil & Ranch Culture\nStrong, rugged names like Colton, Colt, Ryder, and Gunner are more popular in Texas than anywhere else.\n\n## Urban vs. Rural Texas\n\nAustin and Houston show naming patterns similar to coastal cities, while rural Texas maintains traditional Southern naming conventions. Dallas falls somewhere in between.",
     ],
+    faqs: [
+      { q: "What is the #1 baby name in Texas?", a: "Olivia for girls and Liam for boys, with Mateo and Camila ranking notably higher in Texas than in most US states." },
+      { q: "What names are uniquely popular in Texas?", a: "Wyatt, Austin, Maverick, Colton, and Ryder rank significantly higher in Texas than nationally — reflecting the state's cowboy and ranch culture." },
+      { q: "How does Texas naming differ between cities and rural areas?", a: "Austin and Houston pattern like coastal cities (more diverse and creative), while rural Texas keeps Southern traditions like double names and family-surname-as-first-name." },
+    ],
   },
   {
     slug: "baby-name-popularity-by-state",
     title: "How Baby Name Popularity Varies by State (Interactive Map)",
     description: "Explore how baby name popularity differs across US states with our interactive analysis, revealing surprising regional naming patterns.",
+    seoTitle: "How Baby Name Popularity Varies by US State",
+    seoDescription: "Names that top the charts in one US state can be rare in another. See the state-by-state baby name map and the regional naming patterns behind it.",
     category: "location",
     readTime: 10,
     date: "2026-02-25",
@@ -629,6 +935,11 @@ export const blogArticles: BlogArticle[] = [
       "## State Champions: Unique #1 Names\n\nWhile Liam and Olivia dominate nationally, some states have different #1 names:\n\n- **Hawaii**: Noah (boys), Mia (girls)\n- **New Mexico**: Mateo (boys), Mia (girls)\n- **Louisiana**: Liam (boys), Ava (girls)\n- **Utah**: Oliver (boys), Olivia (girls) — Oliver outranks Liam here\n\n## The Homogenization Trend\n\nDespite regional differences, state-by-state naming is becoming more similar over time. The internet and social media have created a shared naming culture that's slowly eroding regional distinctiveness. In 1960, a name could be #1 in one state and #200 in another. Today, the gaps are much smaller.",
       "## Interactive Exploration\n\nUse our Name Popularity Checker tool to see how any name ranks in different states. Simply enter a name and explore its geographic distribution across the United States.",
     ],
+    faqs: [
+      { q: "Do baby names vary a lot between US states?", a: "Yes — but less than they used to. In 1960 a name could be #1 in one state and #200 in another. Today the gaps are much smaller because internet exposure has homogenised naming." },
+      { q: "Which names are state-specific?", a: "Brantley, Waylon, and Paisley are concentrated in the South. Declan and Francesca are stronger in the Northeast. Kai and Sierra are stronger in the West." },
+      { q: "Are state #1 names different from the national #1?", a: "Sometimes — Hawaii's #1 is Noah, New Mexico's #1 is Mateo, Utah's top boy name is Oliver instead of Liam. Most states still mirror the national leaders." },
+    ],
   },
 
   // ===== Help / Explanation Articles =====
@@ -636,6 +947,8 @@ export const blogArticles: BlogArticle[] = [
     slug: "name-rarity-score-explained",
     title: "Name Rarity Score Explained: Understanding Your Name's Uniqueness",
     description: "Learn how our Name Rarity Score works, what it measures, and how to interpret your name's uniqueness rating on a scale of 1-100.",
+    seoTitle: "Name Rarity Score Explained: How We Rate Uniqueness",
+    seoDescription: "Our Rarity Score rates name uniqueness from 1 to 100 using SSA data. See exactly what each score range means and how we calculate it.",
     category: "help",
     readTime: 6,
     date: "2026-02-22",
@@ -644,11 +957,18 @@ export const blogArticles: BlogArticle[] = [
       "## What the Rarity Score Measures\n\nThe Rarity Score reflects how uncommon your name is relative to the total population. It considers:\n\n1. **Absolute frequency** — How many people have this name?\n2. **Trend direction** — Is usage increasing or decreasing?\n3. **Geographic concentration** — Is the name common only in specific regions?\n4. **Historical persistence** — Has the name been consistently used or had sporadic peaks?\n\n## Score Ranges\n\n| Score | Label | Meaning |\n|-------|-------|--------|\n| 1-10 | Extremely Common | Top 20 names (e.g., James, Mary) |\n| 11-30 | Very Common | Top 100 names |\n| 31-50 | Common | Top 500 names |\n| 51-70 | Uncommon | Rank 500-2,000 |\n| 71-85 | Rare | Rank 2,000-10,000 |\n| 86-95 | Very Rare | Rank 10,000+ |\n| 96-100 | Extremely Rare | Fewer than 100 known bearers |",
       "## How We Calculate It\n\nOur algorithm uses a logarithmic scale to handle the enormous range between names like James (4.7 million bearers) and names like Zephyrine (fewer than 50). The formula considers:\n\n```\nRarity Score = 100 - (log10(count) / log10(max_count)) × 100\n```\n\nThis is then adjusted for trend direction (rising names get a slight reduction, falling names get a boost) and geographic concentration.\n\n## Frequently Asked Questions\n\n**Q: Why does my score change over time?**\nA: As new birth data is published, frequencies update, and scores adjust accordingly.\n\n**Q: My name isn't found. What's my score?**\nA: Names not in our database are scored 99-100 by default, indicating extreme rarity.",
     ],
+    faqs: [
+      { q: "What is a Name Rarity Score?", a: "A 1–100 score reflecting how uncommon a name is, based on absolute frequency, trend direction, geographic concentration, and historical persistence." },
+      { q: "What does a score of 90+ mean?", a: "Very rare. Scores 86–95 indicate names ranked 10,000+ in SSA data; 96–100 are ultra-rare names with fewer than 100 known bearers." },
+      { q: "Why does my score change over time?", a: "Each new SSA release updates name frequencies, so scores shift annually. Names becoming more popular get lower (less rare) scores; declining names get higher ones." },
+    ],
   },
   {
     slug: "how-to-interpret-popularity-charts",
     title: "How to Interpret Baby Name Popularity Charts",
     description: "A step-by-step guide to reading and understanding baby name popularity charts, trend lines, and statistical data on HowManyOfMe.",
+    seoTitle: "How to Read Baby Name Popularity Charts",
+    seoDescription: "Decade bars, ranks, gender splits — a quick guide to reading HowManyOfMe's baby name popularity charts and understanding the numbers behind them.",
     category: "help",
     readTime: 5,
     date: "2026-02-16",
@@ -657,11 +977,18 @@ export const blogArticles: BlogArticle[] = [
       "## The Decade Popularity Bar Chart\n\nEach name page shows a horizontal bar chart with decades on the Y-axis and a popularity score (0-100) on the X-axis.\n\n- **Score meaning**: The relative popularity within that decade, where 100 = peak popularity for that name\n- **Reading the trend**: Bars getting longer = name was becoming more popular; shorter = less popular\n- **The peak**: The longest bar shows when the name was at its most popular",
       "## What the Numbers Tell You\n\n### Rank\nA name's rank indicates its position among all names. Rank #1 = most popular, Rank #50,000+ = very rare.\n\n### Count\nThe estimated number of people currently alive with this name. This is calculated from birth registrations, adjusted for mortality and immigration.\n\n### Gender Distribution\nShown as a percentage split. Most names are 95%+ one gender, but some show significant cross-gender usage.\n\n## Common Patterns to Look For\n\n1. **The Mountain**: Peak in one decade, decline before and after (e.g., Jennifer)\n2. **The Plateau**: Consistent popularity across many decades (e.g., James)\n3. **The U-Shape**: Popular, then unpopular, then popular again (e.g., Eleanor)\n4. **The Rocket**: Rapid rise from obscurity (e.g., Liam)\n5. **The Fade**: Gradual decline over many decades (e.g., Dorothy)",
     ],
+    faqs: [
+      { q: "What does the popularity bar chart show?", a: "Each bar represents the name's relative popularity in that decade, scored 0–100, where 100 = the name's all-time peak." },
+      { q: "What does a name's rank mean?", a: "Rank #1 is the most popular name in the dataset. Names ranked 50,000+ are rare. SSA only publishes names given to at least 5 babies per year." },
+      { q: "How is a name's count calculated?", a: "From birth registration data, adjusted for mortality and immigration to estimate how many people are alive today with that name." },
+    ],
   },
   {
     slug: "why-name-not-in-ssa-data",
     title: "Troubleshooting: Why Your Name Doesn't Show Up in SSA Data",
     description: "Common reasons why a name might not appear in Social Security Administration data, and how our tool handles missing names.",
+    seoTitle: "Why Your Name Might Not Show in SSA Data",
+    seoDescription: "The SSA only publishes names given to 5+ babies a year. See why your name may be missing, how spelling variants work, and how our tool fills the gap.",
     category: "help",
     readTime: 5,
     date: "2026-02-11",
@@ -670,11 +997,18 @@ export const blogArticles: BlogArticle[] = [
       "## The 5-Baby Threshold\n\nThe SSA only publishes names given to at least 5 babies of the same gender in a given year. This means:\n\n- Very rare names (1-4 babies/year) are excluded entirely\n- A name might appear in some years but not others\n- The total count for rare names is underestimated\n\n## Common Reasons Your Name Isn't Found\n\n### 1. Spelling Variations\nThe SSA treats each spelling as a separate name. If you search 'Katelynn' but it's registered as 'Caitlin,' 'Katelyn,' or 'Kaitlynn,' the results won't merge.\n\n### 2. Very Recent Names\nSSA data has a lag of about 1-2 years. Names from the most recent births may not yet be in the system.\n\n### 3. Non-English Characters\nNames with accents, tildes, or non-Latin characters may be simplified in SSA records.\n\n### 4. Privacy Protection\nNames with fewer than 5 bearers in a given year are suppressed to protect identity.",
       "## How Our Tool Handles Missing Names\n\nWhen a name isn't in our primary database, we:\n\n1. Generate a statistical estimate based on linguistic patterns\n2. Compare the name structure to known names for approximate data\n3. Clearly label the result as an estimate rather than confirmed data\n\n## Tips for Better Results\n\n- Try common alternative spellings\n- Search for the base form of the name (e.g., 'Catherine' instead of 'Kathryn')\n- Check if the name might be registered as part of a longer name\n- Remember that our database includes international data beyond the SSA",
     ],
+    faqs: [
+      { q: "Why is my name missing from SSA data?", a: "The SSA only publishes names given to at least 5 babies of the same gender in a year. Names below that threshold are suppressed for privacy." },
+      { q: "Do spelling variants count as the same name?", a: "No. Each spelling is treated as a separate name. Katelyn, Katelynn, Caitlin, and Kaitlyn each have their own entries." },
+      { q: "What happens when a name isn't in your database?", a: "We generate a statistical estimate based on linguistic patterns and label the result clearly as an estimate rather than confirmed SSA data." },
+    ],
   },
   {
     slug: "first-name-vs-surname-popularity",
     title: "First Name vs Surname: Popularity Differences and Meanings",
     description: "Understanding the key differences between first name and surname popularity, how they're measured, and why they follow different patterns.",
+    seoTitle: "First Name vs Surname: Why They Trend Differently",
+    seoDescription: "First names cycle every 30 years; surnames change over generations. See how popularity is measured for each and why the patterns are so different.",
     category: "help",
     readTime: 7,
     date: "2026-02-06",
@@ -683,6 +1017,11 @@ export const blogArticles: BlogArticle[] = [
       "## How First Names and Surnames Differ\n\n### First Names: Trend-Driven\n- Change with cultural trends\n- Peak and decline in roughly 30-year cycles\n- Parents actively choose them\n- Influenced by media, celebrities, and fashion\n- Pool is constantly expanding with new names\n\n### Surnames: Heritage-Driven\n- Change extremely slowly (mainly through immigration)\n- Remain stable for generations\n- Inherited, not chosen\n- Reflect historical occupations, locations, and family relationships\n- Pool is relatively fixed",
       "## Popularity Measurement Differences\n\n| Factor | First Names | Surnames |\n|--------|------------|----------|\n| Data source | Birth registrations | Census data |\n| Update frequency | Annual | Every 10 years |\n| Total unique entries | ~100,000 | ~6.3 million |\n| Top name concentration | ~0.7% (Liam) | ~0.8% (Smith) |\n| Trend speed | Fast (5-10 year cycles) | Very slow (generational) |",
       "## When First Names Become Surnames (and Vice Versa)\n\nThe boundary between first and last names is more porous than you'd think:\n\n- **Surnames → First names**: Madison, Taylor, Morgan, Carter, Brooks — all originally surnames now popular as first names\n- **First names → Surnames**: Thomas, James, Henry, Edward — common first names that became surnames centuries ago\n\n## On Our Platform\n\nOur tool primarily tracks first name data. For surname queries, we provide estimates based on census data and population modeling. The methodologies differ because the data sources and patterns differ.",
+    ],
+    faqs: [
+      { q: "Why do first names change faster than surnames?", a: "First names are actively chosen and respond to culture, media, and fashion. Surnames are inherited and only change through immigration or marriage, so they shift over generations." },
+      { q: "How are first name and surname popularity measured?", a: "First names use annual SSA birth registrations. Surnames use US Census data, updated every 10 years and covering ~6.3 million distinct surnames." },
+      { q: "Can a first name become a surname (or vice versa)?", a: "Yes — Madison, Taylor, and Carter began as surnames and are now common first names; Thomas, James, and Henry are first names that became surnames centuries ago." },
     ],
   },
 

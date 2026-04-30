@@ -7,7 +7,10 @@ import { Clock, ArrowLeft, ArrowRight, ChevronRight } from "lucide-react";
 import RelatedPosts from "@/components/RelatedPosts";
 import ToolCTA from "@/components/ToolCTA";
 import AdSlot from "@/components/AdSlot";
+import AlphabetJumpNav from "@/components/AlphabetJumpNav";
+import DataSnapshot from "@/components/DataSnapshot";
 import { getTagsForSlug } from "@/data/contentRegistry";
+import type { BlogDataSnapshot } from "@/data/blogData";
 import React from "react";
 
 const BlogArticle = () => {
@@ -60,8 +63,8 @@ const BlogArticle = () => {
   return (
     <div className="min-h-screen bg-background">
       <SEOHead
-        title={`${article.title} | HowManyOfMe Blog`}
-        description={article.description}
+        title={article.seoTitle ?? `${article.title} | HowManyOfMe Blog`}
+        description={article.seoDescription ?? article.description}
         canonical={`https://howmanyofme.co/blog/${article.slug}`}
         jsonLd={jsonLd}
       />
@@ -94,7 +97,7 @@ const BlogArticle = () => {
           {/* Content */}
           <div className="prose prose-lg max-w-none">
             {article.content.map((block, i) => (
-              <ContentBlock key={i} text={block} />
+              <ContentBlock key={i} text={block} dataSnapshot={article.dataSnapshot} />
             ))}
           </div>
 
@@ -165,7 +168,7 @@ const BlogArticle = () => {
 // ----- Content rendering -----
 
 interface Token {
-  kind: "h2" | "h3" | "ul" | "ol" | "p" | "table" | "callout" | "ad";
+  kind: "h2" | "h3" | "ul" | "ol" | "p" | "table" | "callout" | "ad" | "alphabet_nav" | "data_snapshot";
   // For block tokens that hold lines
   lines?: string[];
   // For ad token
@@ -207,6 +210,18 @@ function tokenize(text: string): Token[] {
     if (t === "[AD]") {
       flush();
       tokens.push({ kind: "ad", label: "Advertisement" });
+      i++;
+      continue;
+    }
+    if (t === "[ALPHABET_NAV]") {
+      flush();
+      tokens.push({ kind: "alphabet_nav" });
+      i++;
+      continue;
+    }
+    if (t === "[DATA_SNAPSHOT]") {
+      flush();
+      tokens.push({ kind: "data_snapshot" });
       i++;
       continue;
     }
@@ -265,7 +280,7 @@ function tokenize(text: string): Token[] {
   return tokens;
 }
 
-const ContentBlock = ({ text }: { text: string }) => {
+const ContentBlock = ({ text, dataSnapshot }: { text: string; dataSnapshot?: BlogDataSnapshot }) => {
   const tokens = tokenize(text);
   return (
     <div className="mb-8">
@@ -299,6 +314,10 @@ const ContentBlock = ({ text }: { text: string }) => {
                 <AdSlot label={tok.label} />
               </div>
             );
+          case "alphabet_nav":
+            return <AlphabetJumpNav key={i} />;
+          case "data_snapshot":
+            return dataSnapshot ? <DataSnapshot key={i} {...dataSnapshot} /> : null;
           case "table":
             return <MarkdownTable key={i} rows={tok.lines!} />;
           case "p":
