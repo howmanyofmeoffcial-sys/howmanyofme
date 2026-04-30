@@ -455,14 +455,18 @@ export const blogArticles: BlogArticle[] = [
     slug: "vintage-baby-names-comeback",
     title: "Vintage Baby Names Making a Comeback in 2025–2026",
     description: "Old-fashioned baby names are rising again. See which vintage names are trending in 2025–2026, why the revival is happening, and which classics will return next.",
+    seoTitle: "Vintage Baby Names Coming Back in 2025–2026",
+    seoDescription: "Eleanor, Theodore, Hazel, Arthur, Felix — see the vintage baby names rising fastest right now, why it's happening, and which classics are next.",
     category: "trends",
     readTime: 10,
     date: "2026-01-10",
     content: [
-      // Intro
-      "Vintage baby names are making one of the strongest comebacks of the last 50 years. Names that sounded dated in the 1990s — Eleanor, Hazel, Theodore, Arthur — are now charging back into the US top 30. The driver is the well-documented 100-year cycle: names that were popular around 1920 sound fresh again to parents in the 2020s. This guide explains which vintage baby names are coming back in 2025–2026, why the revival is happening, and which old-fashioned names will probably return next.",
+      // Intro — split for readability
+      "Vintage baby names are making one of the strongest comebacks of the last 50 years. Names that sounded dated in the 1990s — Eleanor, Hazel, Theodore, Arthur — are now charging back into the US top 30.\n\nThe driver is the well-documented 100-year cycle: names that were popular around 1920 sound fresh again to parents in the 2020s.\n\nThis guide explains which vintage baby names are coming back in 2025–2026, why the revival is happening, and which old-fashioned names will probably return next.",
 
       "> Quick answer: Vintage baby names like Eleanor, Hazel, Violet, Theodore, Arthur, and August are rising fastest in 2025–2026. The revival is driven by the 100-year cycle, period drama influence, cottagecore aesthetics, and a reaction against invented names.",
+
+      "[DATA_SNAPSHOT]",
 
       "[AD]",
 
