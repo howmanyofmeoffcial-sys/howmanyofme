@@ -242,14 +242,18 @@ export const blogArticles: BlogArticle[] = [
     slug: "uncommon-girl-vs-boy-names",
     title: "Uncommon Girl Names vs Boy Names: Who Wins the Uniqueness Race?",
     description: "A data-driven comparison of uniqueness in girl vs boy baby names — diversity counts, top 10 concentration, new names per year, and what it means.",
+    seoTitle: "Girl Names vs Boy Names: Who Is More Unique? (Data)",
+    seoDescription: "Girls have ~18,000 unique names a year vs ~14,000 for boys. See the full diversity comparison, why it happens, and where boys are catching up.",
     category: "trends",
     readTime: 9,
     date: "2026-01-28",
     content: [
-      // Intro
-      "Are girl names more unique than boy names? In US baby naming data, yes — and it isn't close. Across every measurable signal (number of distinct names per year, share of births held by the top 10, and how many new names appear each year), girls win the uniqueness race by a wide margin. This article compares uncommon girl names vs boy names using [SSA-style baby name data](https://www.ssa.gov/oact/babynames/), explains why the gap exists, and shows where boy names are starting to catch up.",
+      // Intro — split for readability
+      "Are girl names more unique than boy names? In US baby naming data, yes — and it isn't close.\n\nAcross every measurable signal — number of distinct names per year, share of births held by the top 10, and how many new names appear each year — girls win the uniqueness race by a wide margin.\n\nThis article compares uncommon girl names vs boy names using [SSA-style baby name data](https://www.ssa.gov/oact/babynames/), explains why the gap exists, and shows where boy names are starting to catch up.",
 
       "> Quick answer: Yes — girl names are more unique than boy names. Girls show higher diversity (~18,000 distinct names/year vs ~14,000 for boys), lower concentration in the top 10 (6.1% vs 7.9%), and more new names each year (~800 vs ~500).",
+
+      "[DATA_SNAPSHOT]",
 
       "[AD]",
 
