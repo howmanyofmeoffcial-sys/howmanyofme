@@ -280,7 +280,7 @@ function tokenize(text: string): Token[] {
   return tokens;
 }
 
-const ContentBlock = ({ text }: { text: string }) => {
+const ContentBlock = ({ text, dataSnapshot }: { text: string; dataSnapshot?: BlogDataSnapshot }) => {
   const tokens = tokenize(text);
   return (
     <div className="mb-8">
@@ -314,6 +314,10 @@ const ContentBlock = ({ text }: { text: string }) => {
                 <AdSlot label={tok.label} />
               </div>
             );
+          case "alphabet_nav":
+            return <AlphabetJumpNav key={i} />;
+          case "data_snapshot":
+            return dataSnapshot ? <DataSnapshot key={i} {...dataSnapshot} /> : null;
           case "table":
             return <MarkdownTable key={i} rows={tok.lines!} />;
           case "p":
