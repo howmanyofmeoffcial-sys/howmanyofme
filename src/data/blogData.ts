@@ -309,14 +309,18 @@ export const blogArticles: BlogArticle[] = [
     slug: "baby-name-trends",
     title: "Baby Name Trends 2026: Data-Driven Predictions for the Year Ahead",
     description: "Predicted baby name trends for 2026 — biblical revivals, soft boy names, place names, three-letter minimalism, cottagecore, heritage, and celestial picks.",
+    seoTitle: "Baby Name Trends 2026: 7 Big Predictions (Data)",
+    seoDescription: "From biblical revivals to celestial picks — see 2026's 7 biggest baby name trends, with rising names, examples, and which will age best.",
     category: "trends",
     readTime: 11,
     date: "2026-01-20",
     content: [
-      // Intro
-      "Baby name trends for 2026 are pointing in seven clear directions: biblical names with a twist, soft boy names, global place names, three-letter minimalism, cottagecore botanicals, heritage reclamation, and celestial picks. These predictions come from analysing SSA registration velocity, Google Trends search data, social mentions, pop-culture cycles, and historical naming patterns. This guide breaks down each trend with examples, explains who they fit, and gives a top-10 prediction list for 2026 — so you can choose a trendy name without choosing one that ages badly.",
+      // Intro — split for readability
+      "Baby name trends for 2026 are pointing in seven clear directions: biblical names with a twist, soft boy names, global place names, three-letter minimalism, cottagecore botanicals, heritage reclamation, and celestial picks.\n\nThese predictions come from analysing SSA registration velocity, Google Trends search data, social mentions, pop-culture cycles, and historical naming patterns.\n\nThis guide breaks down each trend with examples, explains who they fit, and gives a top-10 prediction list for 2026 — so you can choose a trendy name without choosing one that ages badly.",
 
       "> Quick answer: The biggest baby name trends for the year ahead are biblical revivals (Ezra, Naomi), soft boy names (Milo, Theo), short minimalist names (Kai, Ivy), heritage names (Saoirse, Astrid), cottagecore names (Juniper, Hazel), celestial names (Nova, Orion), and global place names (Cairo, Valencia).",
+
+      "[DATA_SNAPSHOT]",
 
       "[AD]",
 
