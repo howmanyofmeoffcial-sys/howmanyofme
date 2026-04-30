@@ -435,6 +435,21 @@ export const blogArticles: BlogArticle[] = [
       { q: "How did TV affect baby names in the 1980s and 1990s?", a: "Daytime soap operas and primetime dramas drove names like Jessica, Ashley, Madison, and Tyler to the top of the charts. The 1980s–1990s show the strongest single-decade TV influence on US naming." },
       { q: "Is it better to pick a classic or trendy name?", a: "Classics give you predictability and aging; trendy names give you a moment-in-time feel that may date. A common compromise is a classic first name with a more modern middle, which balances longevity and freshness." },
     ],
+    dataSnapshot: {
+      title: "Decade-by-Decade Concentration",
+      summary: "Share of US births held by the top 10 names, by decade.",
+      metrics: [
+        { label: "1910s top-10 share", value: "~35%", context: "Highly concentrated", trend: "down" },
+        { label: "1970s top-10 share", value: "~17%", context: "Jennifer-era diversification", trend: "down" },
+        { label: "2020s top-10 share", value: "~7%", context: "Historic low — long tail wins", trend: "down" },
+      ],
+      sources: [
+        { label: "SSA national records", url: "https://www.ssa.gov/oact/babynames/" },
+        { label: "US Census", url: "https://www.census.gov/" },
+      ],
+      lastUpdated: "2026-03-01",
+      lastUpdatedLabel: "March 2026",
+    },
   },
   {
     slug: "vintage-baby-names-comeback",
