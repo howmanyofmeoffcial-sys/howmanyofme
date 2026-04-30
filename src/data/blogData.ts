@@ -362,6 +362,22 @@ export const blogArticles: BlogArticle[] = [
       { q: "How can I predict baby name trends?", a: "Watch SSA rank movement (not raw rank), Google Trends curves, and social mentions across TikTok and Instagram. Names rising 300+ rank positions in two years are the strongest forward signal." },
       { q: "How do I pick a trendy name that won't age badly?", a: "Choose names anchored in something older than the trend itself — botanicals, biblical figures, geography, mythology. Avoid names tied to a single TV show or viral moment, which tend to date fastest." },
     ],
+    dataSnapshot: {
+      title: "2026 Trend Velocity Snapshot",
+      summary: "Direction and strength of the seven largest 2026 baby name trends.",
+      metrics: [
+        { label: "Strongest rising trend", value: "Biblical-with-a-twist", context: "Ezra, Micah, Naomi, Delilah", trend: "up" },
+        { label: "Fastest-growing category", value: "Celestial names", context: "Nova, Orion, Atlas, Lyra", trend: "up" },
+        { label: "Steady but durable", value: "Cottagecore", context: "Hazel, Juniper, Wren", trend: "flat" },
+      ],
+      sources: [
+        { label: "SSA velocity", url: "https://www.ssa.gov/oact/babynames/" },
+        { label: "Google Trends" },
+        { label: "UNICEF", url: "https://data.unicef.org/" },
+      ],
+      lastUpdated: "2026-03-01",
+      lastUpdatedLabel: "March 2026",
+    },
   },
   {
     slug: "baby-names-by-decade",
