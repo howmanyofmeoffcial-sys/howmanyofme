@@ -213,6 +213,18 @@ function tokenize(text: string): Token[] {
       i++;
       continue;
     }
+    if (t === "[ALPHABET_NAV]") {
+      flush();
+      tokens.push({ kind: "alphabet_nav" });
+      i++;
+      continue;
+    }
+    if (t === "[DATA_SNAPSHOT]") {
+      flush();
+      tokens.push({ kind: "data_snapshot" });
+      i++;
+      continue;
+    }
     // Callout: lines wrapped between > start and > end
     if (t.startsWith("> ")) {
       if (!calloutBuf) calloutBuf = [];
