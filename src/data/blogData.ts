@@ -289,6 +289,21 @@ export const blogArticles: BlogArticle[] = [
       { q: "Can a boy name be as unique as a girl name?", a: "Absolutely. International picks (Cillian, Soren, Mateo), surnames (Brooks, Hayes), and vintage revivals (Arthur, Felix) all give boys the same level of rarity available to girls — they just take more searching." },
       { q: "Are nature names more common for girls?", a: "Yes. Names like Willow, Ivy, Rose, Hazel, and Juniper are heavily female-skewed in current US data, contributing significantly to girl-name diversity." },
     ],
+    dataSnapshot: {
+      title: "Girl vs Boy Name Diversity (US)",
+      summary: "Annual SSA-derived diversity metrics, comparing girl and boy naming patterns.",
+      metrics: [
+        { label: "Unique names / year", value: "~18,000 vs ~14,000", context: "Girls vs boys", trend: "up" },
+        { label: "Top-10 share of births", value: "6.1% vs 7.9%", context: "Lower = more diverse", trend: "down" },
+        { label: "New names introduced", value: "~800 vs ~500", context: "Per year", trend: "up" },
+      ],
+      sources: [
+        { label: "SSA national data", url: "https://www.ssa.gov/oact/babynames/" },
+        { label: "UNICEF", url: "https://data.unicef.org/" },
+      ],
+      lastUpdated: "2026-03-01",
+      lastUpdatedLabel: "March 2026",
+    },
   },
   {
     slug: "baby-name-trends",
