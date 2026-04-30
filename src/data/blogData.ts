@@ -187,6 +187,8 @@ export const blogArticles: BlogArticle[] = [
 
       "> Quick answer: US baby names are becoming more unique because cultural diversity, internet 'Googleability', fragmented pop culture, rising individualism, and creative spellings have spread births across thousands more names. The top 10 share has fallen by about 72% since 1950.",
 
+      "[DATA_SNAPSHOT]",
+
       "[AD]",
 
       // 2) Data snapshot
