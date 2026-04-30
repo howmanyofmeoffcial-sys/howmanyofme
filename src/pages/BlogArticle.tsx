@@ -168,7 +168,7 @@ const BlogArticle = () => {
 // ----- Content rendering -----
 
 interface Token {
-  kind: "h2" | "h3" | "ul" | "ol" | "p" | "table" | "callout" | "ad";
+  kind: "h2" | "h3" | "ul" | "ol" | "p" | "table" | "callout" | "ad" | "alphabet_nav" | "data_snapshot";
   // For block tokens that hold lines
   lines?: string[];
   // For ad token
