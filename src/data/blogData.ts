@@ -383,13 +383,17 @@ export const blogArticles: BlogArticle[] = [
     slug: "baby-names-by-decade",
     title: "Baby Names by Decade: Popular US Trends From 1900 to 2026",
     description: "How US baby names changed by decade — top names, cultural drivers, and naming style from the 1900s through the 2020s, with patterns parents can use today.",
+    seoTitle: "Baby Names by Decade: 1900–2026 US Trends",
+    seoDescription: "See how US baby names changed every decade since 1900 — top names, cultural drivers, and patterns parents can use to pick a name that ages well.",
     category: "trends",
     readTime: 16,
     date: "2026-01-15",
     content: [
-      "Baby names by decade are a cultural fingerprint. The names parents chose in 1910 reveal a country running on tradition; the names of 1980 reveal a country watching daytime TV; the names of 2025 reveal a country shaped by the internet. This guide tracks US baby naming style decade by decade from the 1900s to 2026, using [SSA name records](https://www.ssa.gov/oact/babynames/) as the backbone. You'll see how naming concentrated, fragmented, and re-concentrated through the 20th century, and which patterns help parents today choose names with staying power.",
+      "Baby names by decade are a cultural fingerprint.\n\nThe names parents chose in 1910 reveal a country running on tradition. The names of 1980 reveal a country watching daytime TV. The names of 2025 reveal a country shaped by the internet.\n\nThis guide tracks US baby naming style decade by decade from the 1900s to 2026, using [SSA name records](https://www.ssa.gov/oact/babynames/) as the backbone. You'll see how naming concentrated, fragmented, and re-concentrated through the 20th century, and which patterns help parents today choose names with staying power.",
 
       "> Quick answer: Baby names by decade show how culture, media, and social values reshape naming. The 1900s were dominated by tradition, the mid-century by Hollywood and the baby boom, the late 20th century by TV, and the 2010s–2020s by individualism and the internet.",
+
+      "[DATA_SNAPSHOT]",
 
       "[AD]",
 
