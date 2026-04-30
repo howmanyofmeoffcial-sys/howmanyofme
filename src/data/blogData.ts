@@ -176,12 +176,14 @@ export const blogArticles: BlogArticle[] = [
     slug: "why-baby-names-becoming-unique",
     title: "Why Baby Names Are Becoming More Unique: US Rarity Trends Explained",
     description: "A data-backed look at why US baby names are becoming more unique, with concentration trends from 1950 to 2026 and what it means for parents.",
+    seoTitle: "Why US Baby Names Are More Unique Than Ever (Data)",
+    seoDescription: "Top-10 baby names covered 28% of US births in 1950 and under 8% today. See the 5 forces driving the change — and what it means for parents.",
     category: "trends",
     readTime: 11,
     date: "2026-02-05",
     content: [
-      // 1) SEO intro
-      "Baby names in the United States are becoming dramatically more unique. In 1950, the top 10 boy names accounted for roughly 28% of all male births. In 2025, that figure is under 8%. The same shift has happened for girls. This isn't a fad — it's a 75-year structural change driven by cultural diversity, internet visibility, fragmented media, individualism, and creative spelling. This article explains why baby names are becoming more unique in the US, what the underlying [SSA baby name data](https://www.ssa.gov/oact/babynames/) shows, and what it means for parents trying to choose a name today. We'll cover the long-term trend, the five forces driving it, the trade-offs of unique names, what's likely by 2040, and how to balance uniqueness with usability.",
+      // 1) SEO intro — split for readability
+      "Baby names in the United States are becoming dramatically more unique. In 1950, the top 10 boy names accounted for roughly 28% of all male births. In 2025, that figure is under 8%.\n\nThe same shift has happened for girls. This isn't a fad — it's a 75-year structural change driven by cultural diversity, internet visibility, fragmented media, individualism, and creative spelling.\n\nThis article explains why baby names are becoming more unique in the US, what the underlying [SSA baby name data](https://www.ssa.gov/oact/babynames/) shows, and what it means for parents trying to choose a name today. We'll cover the long-term trend, the five forces driving it, the trade-offs of unique names, what's likely by 2040, and how to balance uniqueness with usability.",
 
       "> Quick answer: US baby names are becoming more unique because cultural diversity, internet 'Googleability', fragmented pop culture, rising individualism, and creative spellings have spread births across thousands more names. The top 10 share has fallen by about 72% since 1950.",
 
