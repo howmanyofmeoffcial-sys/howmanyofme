@@ -222,6 +222,21 @@ export const blogArticles: BlogArticle[] = [
       { q: "How do I know if a baby name is too unusual?", a: "Read it aloud with your surname, ask three people to spell it on first hearing, and check its current SSA rank. If two of those three tests fail, the name is likely too unusual for low-friction daily use." },
       { q: "Why are creative spellings increasing?", a: "Parents use spelling variants — Jayden, Jaden, Jaiden — to keep a familiar sound while signalling individuality. SSA counts each spelling as a separate name, which amplifies the appearance of name diversity." },
     ],
+    dataSnapshot: {
+      title: "Top-10 Concentration: 1950 → 2025",
+      summary: "Share of US births accounted for by the top 10 names, by gender.",
+      metrics: [
+        { label: "Top 10 boys (1950)", value: "28.1%", context: "1 in 4 boys had a top-10 name", trend: "down" },
+        { label: "Top 10 boys (2025)", value: "7.9%", context: "Historic low — long tail dominates", trend: "down" },
+        { label: "Top 10 girls (2025)", value: "6.1%", context: "Down from 22.4% in 1950", trend: "down" },
+      ],
+      sources: [
+        { label: "SSA national data", url: "https://www.ssa.gov/oact/babynames/" },
+        { label: "US Census", url: "https://www.census.gov/" },
+      ],
+      lastUpdated: "2026-03-01",
+      lastUpdatedLabel: "March 2026",
+    },
   },
   {
     slug: "uncommon-girl-vs-boy-names",
