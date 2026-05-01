@@ -3,10 +3,28 @@
 
   "redirects": [
     {
+      "source": "/:path*",
+      "has": [{ "type": "host", "value": "www.howmanyofme.co" }],
+      "destination": "https://howmanyofme.co/:path*",
+      "permanent": true
+    },
+
+    {
       "source": "/:path+/",
       "destination": "/:path+",
       "permanent": true
     },
+
+    { "source": "/index.html",   "destination": "/",          "permanent": true },
+    { "source": "/contact.html", "destination": "/contact",   "permanent": true },
+    { "source": "/privacy.html", "destination": "/privacy",   "permanent": true },
+    { "source": "/terms.html",   "destination": "/terms",     "permanent": true },
+    { "source": "/about.html",   "destination": "/about",     "permanent": true },
+    { "source": "/about.hml",    "destination": "/about",     "permanent": true },
+    { "source": "/disclaimer.html", "destination": "/disclaimer", "permanent": true },
+    { "source": "/blog.html",    "destination": "/blog",      "permanent": true },
+    { "source": "/tools.html",   "destination": "/tools",     "permanent": true },
+
     {
       "source": "/blog/how-many-people-have-my-name-questions",
       "destination": "/#faq",
