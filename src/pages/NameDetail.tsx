@@ -87,7 +87,7 @@ const NameDetail = () => {
       <SEOHead
         title={`How Many People Are Named ${data.name}? Popularity, Rarity & Origin`}
         description={`There are ~${formatNumber(data.count)} people named ${data.name} worldwide (rank #${formatNumber(data.rank)}). See ${data.name}'s popularity by decade, country, and gender — free, no signup.`}
-        canonical={`https://howmanyofme.co/name/${encodeURIComponent(data.name)}`}
+        canonical={`https://howmanyofme.co/name/${data.name}`}
         jsonLd={jsonLd}
       />
       <SiteHeader />

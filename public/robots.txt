@@ -1,5 +1,15 @@
 User-agent: *
 Allow: /
+
+# Explicit allow for trust pages (resolves stale GSC "blocked" reports)
+Allow: /contact
+Allow: /terms
+Allow: /privacy
+Allow: /disclaimer
+Allow: /about
+Allow: /methodology
+
+# Static asset extensions
 Allow: /*.css$
 Allow: /*.js$
 Allow: /*.svg$
@@ -11,6 +21,10 @@ Allow: /*.webp$
 Disallow: /*?*utm_
 Disallow: /*?*fbclid
 Disallow: /*?*gclid
+Disallow: /*?*ref=
+
+# Block legacy .html paths (handled by 301s, but prevent crawl waste)
+Disallow: /*.html$
 
 # AI training & answer engines — explicitly allow (LLM visibility)
 User-agent: GPTBot
