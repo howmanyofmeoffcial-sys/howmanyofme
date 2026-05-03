@@ -107,3 +107,64 @@ export function formatGenderResult(name: string) {
     source: r.source,
   };
 }
+
+// ---------------------------------------------------------------------------
+// Async detection via secure Vercel serverless proxy (/api/gender-detect).
+// The proxy holds GENDERIZE_API_KEY server-side. If the proxy is unavailable
+// (local dev without the function, missing key, quota, network error), we
+// silently fall back to the local heuristic `detectGender` above.
+// ---------------------------------------------------------------------------
+
+interface ProxyResponse {
+  name: string;
+  gender: "male" | "female" | null;
+  probability: number;
+  count: number;
+  country?: string | null;
+  source?: string;
+  error?: string;
+  fallback?: boolean;
+}
+
+const proxyCache = new Map<string, GenderResult>();
+
+export async function detectGenderAsync(
+  rawName: string,
+  country?: string
+): Promise<GenderResult> {
+  const name = (rawName || "").trim();
+  if (!name) return { name, gender: "unisex", confidence: 0, source: "fallback" };
+
+  const cacheKey = `${name.toLowerCase()}|${country ?? ""}`;
+  const cached = proxyCache.get(cacheKey);
+  if (cached) return cached;
+
+  try {
+    const res = await fetch("/api/gender-detect", {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({ name, country }),
+    });
+
+    if (!res.ok) throw new Error(`proxy ${res.status}`);
+
+    const data = (await res.json()) as ProxyResponse;
+    if (data.fallback || !data.gender) throw new Error("no upstream gender");
+
+    const display = name.charAt(0).toUpperCase() + name.slice(1).toLowerCase();
+    const result: GenderResult = {
+      name: display,
+      gender: data.gender, // "male" | "female"
+      confidence: Math.round((data.probability ?? 0) * 100),
+      source: "global_dataset", // reuse existing union; treated as authoritative
+    };
+    proxyCache.set(cacheKey, result);
+    return result;
+  } catch {
+    // Silent fallback to local heuristic detection.
+    const local = detectGender(name);
+    proxyCache.set(cacheKey, local);
+    return local;
+  }
+}
+
