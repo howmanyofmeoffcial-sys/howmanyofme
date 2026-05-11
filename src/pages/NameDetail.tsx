@@ -7,6 +7,7 @@ import SEOHead from "@/components/SEOHead";
 import AdSlot from "@/components/AdSlot";
 import ToolCTA from "@/components/ToolCTA";
 import NameInsightReport from "@/components/NameInsightReport";
+import { NamePageErrorBoundary } from "@/components/NamePageErrorBoundary";
 import { getNameData, formatNumber } from "@/data/nameData";
 import { Bookmark, Share2 } from "lucide-react";
 import RelatedPosts from "@/components/RelatedPosts";
@@ -15,10 +16,17 @@ import DataSources from "@/components/DataSources";
 import { buildSimilarFaqs } from "@/lib/dynamicContent";
 import { getSimilarNamesFor } from "@/lib/similarNames";
 
+const safeDecodeName = (value?: string) => {
+  try {
+    return decodeURIComponent(value || "James");
+  } catch {
+    return "James";
+  }
+};
 
 const NameDetail = () => {
   const { name: rawName } = useParams<{ name: string }>();
-  const nameStr = decodeURIComponent(rawName || "James");
+  const nameStr = safeDecodeName(rawName);
   const data = getNameData(nameStr);
   const [saved, setSaved] = useState(false);
 
@@ -130,7 +138,9 @@ const NameDetail = () => {
         </div>
 
         {/* Modern rich report */}
-        <NameInsightReport name={data.name} />
+        <NamePageErrorBoundary name={data.name}>
+          <NameInsightReport name={data.name} />
+        </NamePageErrorBoundary>
 
         <div className="my-10">
           <AdSlot />

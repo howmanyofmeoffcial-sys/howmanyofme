@@ -66,6 +66,16 @@ Object.entries(COMMON_PREFIXES).forEach(([letter, names]) => {
 });
 
 export function getNameData(name: string) {
+  if (!name || typeof name !== "string" || name.trim().length === 0) {
+    name = "Unknown";
+  }
+  const sanitized = name.replace(/[^a-zA-Z]/g, "").slice(0, 30);
+  if (sanitized.length === 0) {
+    name = "Unknown";
+  } else {
+    name = sanitized;
+  }
+
   const normalized = name.charAt(0).toUpperCase() + name.slice(1).toLowerCase();
   if (POPULAR_NAMES[normalized]) {
     return { name: normalized, ...POPULAR_NAMES[normalized] };
@@ -77,8 +87,8 @@ export function getNameData(name: string) {
   return {
     name: normalized,
     count,
-    gender: genders[hash % 3],
-    rank: Math.min(count > 100000 ? hash % 500 : hash % 50000 + 500, 99999),
+    gender: genders[Math.abs(hash) % 3],
+    rank: Math.max(1, Math.min(999999, count > 100000 ? hash % 500 : hash % 50000 + 500)),
     regions: {
       "United States": Math.floor(count * 0.45),
       "United Kingdom": Math.floor(count * 0.15),
@@ -97,7 +107,7 @@ export function getNameData(name: string) {
       "2010s": (hash % 60) + 15,
       "2020s": (hash % 50) + 10,
     },
-    origin: ["English", "Latin", "Greek", "Hebrew", "Germanic", "Celtic", "Arabic", "Sanskrit"][hash % 8],
+    origin: ["English", "Latin", "Greek", "Hebrew", "Germanic", "Celtic", "Arabic", "Sanskrit"][Math.abs(hash) % 8],
     meaning: "A name of historical significance",
   };
 }
