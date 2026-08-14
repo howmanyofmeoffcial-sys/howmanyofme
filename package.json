@@ -13,7 +13,9 @@
     "data:update": "node scripts/data/pipeline.mjs",
     "data:build": "node scripts/data/generate-app-data.mjs",
     "data:validate": "node scripts/data/validate-names.mjs",
-    "data:report": "node scripts/data/report.mjs"
+    "data:report": "node scripts/monitoring/check-data-freshness.mjs",
+    "health:check": "node scripts/monitoring/run-health-check.mjs",
+    "seo:report": "node scripts/monitoring/check-gsc-performance.mjs"
   },
   "dependencies": {
     "@astrojs/react": "^6.0.2",
