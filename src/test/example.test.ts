@@ -7,14 +7,15 @@ describe("name result fallbacks", () => {
     vi.restoreAllMocks();
   });
 
-  it("generates complete estimated data for unknown names", () => {
+  it("generates safe, non-fabricated structure for unknown names", () => {
     const data = getNameData("meresfg");
 
     expect(data.name).toBe("Meresfg");
-    expect(data.count).toBeGreaterThan(0);
-    expect(data.rank).toBeGreaterThan(0);
-    expect(Object.keys(data.regions).length).toBeGreaterThan(0);
-    expect(Object.keys(data.decade_popularity).length).toBeGreaterThan(0);
+    expect(data.count).toBe(0);
+    expect(data.rank).toBe(0);
+    expect(data.origin).toBe("");
+    expect(data.meaning).toBe("");
+    expect(Object.keys(data.decade_popularity).length).toBe(0);
   });
 
   it("keeps local gender estimation when the API returns no gender", async () => {

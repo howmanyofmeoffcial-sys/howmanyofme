@@ -9,8 +9,8 @@ const SITE_ORIGIN = "https://howmanyofme.co";
  * e.g., "José", "García" -> "jose-garcia"
  */
 export function getFullNameSlug(firstName: string, lastName: string): string {
-  const normFirst = normalizeName(firstName).lowerSlug;
-  const normLast = normalizeName(lastName).lowerSlug;
+  const normFirst = normalizeName(firstName).asciiClean.toLowerCase().replace(/[^a-z0-9]/g, "");
+  const normLast = normalizeName(lastName).asciiClean.toLowerCase().replace(/[^a-z0-9]/g, "");
   return `${normFirst}-${normLast}`;
 }
 

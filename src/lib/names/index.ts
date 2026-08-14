@@ -1,6 +1,7 @@
 export * from "./normalizeName";
 export * from "./validateName";
 export * from "./getName";
+export * from "./getNameRecord";
 export * from "./getAllNames";
 export * from "./getSimilarNames";
 export * from "./getRelatedNames";
@@ -9,3 +10,4 @@ export * from "./insights";
 export * from "./linking";
 export * from "./statistics";
 export * from "./entityProfile";
+export * from "../estimation";

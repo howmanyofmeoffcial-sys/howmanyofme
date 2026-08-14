@@ -1,5 +1,7 @@
 import namesIndex from "./generated/names-index.json";
 import canonicalNamesList from "./generated/canonical-names.json";
+import { normalizeName } from "../lib/names/normalizeName";
+import { validateName } from "../lib/names/validateName";
 
 export interface NameRecordData {
   name: string;
@@ -37,8 +39,23 @@ const ALL_NAMES = canonicalNamesList as unknown as NameRecordData[];
 export const ALPHABET = "abcdefghijklmnopqrstuvwxyz".split("");
 
 export function getNameData(name: string): NameRecordData {
-  const normalized = name.charAt(0).toUpperCase() + name.slice(1).toLowerCase();
-  const key = normalized.toLowerCase();
+  if (!name || typeof name !== "string") {
+    return {
+      name: "",
+      count: 0,
+      gender: "unisex",
+      rank: 0,
+      regions: {},
+      decade_popularity: {},
+      origin: "",
+      meaning: "",
+      sources: ["none"],
+    };
+  }
+
+  const validation = validateName(name);
+  const normalizedDisplay = validation.normalized || normalizeName(name).display;
+  const key = normalizedDisplay.toLowerCase();
   const found = INDEX_MAP[key];
 
   if (found) {
@@ -48,28 +65,16 @@ export function getNameData(name: string): NameRecordData {
     };
   }
 
-  // Fallback for unindexed queries
-  const hash = simpleHash(normalized);
-  const count = Math.max(100, Math.floor(1000000 / (normalized.length * 15)));
+  // Non-fabricated safe return for unindexed queries
   return {
-    name: normalized,
-    count,
-    gender: hash % 2 === 0 ? "male" : "female",
-    rank: Math.max(1, (Math.abs(hash) % 50000) + 500),
-    regions: { "United States": count },
-    decade_popularity: {
-      "1940s": 50,
-      "1950s": 55,
-      "1960s": 60,
-      "1970s": 65,
-      "1980s": 70,
-      "1990s": 75,
-      "2000s": 80,
-      "2010s": 85,
-      "2020s": 90,
-    },
-    origin: "Traditional",
-    meaning: "A name of enduring significance",
+    name: normalizedDisplay,
+    count: 0,
+    gender: "unisex",
+    rank: 0,
+    regions: { "United States": 0 },
+    decade_popularity: {},
+    origin: "",
+    meaning: "",
     sources: ["derived-estimate"],
   };
 }
@@ -95,16 +100,7 @@ export function getSimilarNames(name: string): string[] {
   return names.filter((n) => n.toLowerCase() !== name.toLowerCase()).slice(0, 10);
 }
 
-function simpleHash(str: string): number {
-  let hash = 0;
-  for (let i = 0; i < str.length; i++) {
-    const char = str.charCodeAt(i);
-    hash = ((hash << 5) - hash) + char;
-    hash |= 0;
-  }
-  return Math.abs(hash);
-}
-
 export function formatNumber(num: number): string {
+  if (num === null || num === undefined || isNaN(num)) return "0";
   return num.toLocaleString("en-US");
 }

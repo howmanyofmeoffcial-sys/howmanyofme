@@ -32,3 +32,32 @@ Where:
 - **Immigration & Emigration**: SSA records capture all individuals issued a Social Security card, including naturalized citizens.
 - **Privacy Thresholds**: SSA data suppresses names with fewer than 5 occurrences in a single year to preserve individual confidentiality.
 - **Rounding Policy**: Demographic estimates are rounded to nearest whole person or significant digit to reflect statistical modeling uncertainty.
+
+---
+
+## 4. Name Estimation Engine & Result Modes (Phase A)
+
+The search resolver (`resolveNameSearch`) categorizes every query into explicit confidence and data modes:
+
+### A. Result Modes
+1. **Verified (`mode: "verified"`)**:
+   - **Condition**: Direct match in official indexed dataset (`canonical-names.json` or `canonical-fullnames.json`).
+   - **Label**: `"Source-backed profile"`.
+   - **Confidence**: High.
+   - **Profile URL**: Links to canonical static route (e.g. `/name/David`, `/people/david-smith`).
+2. **Modelled (`mode: "modelled"`)**:
+   - **Condition**: Valid name or combination without an indexed canonical record.
+   - **Label**: `"Statistical estimate"`.
+   - **Confidence**: Moderate / Low.
+   - **Profile URL**: `null` (Strictly prevents creating unvetted or thin programmatic SEO URLs).
+   - **Safety Guarantee**: Zero fabricated rank, zero fake origins, zero fake meanings, zero fake decade popularity curves.
+3. **Insufficient (`mode: "insufficient"`)**:
+   - **Condition**: Unlisted or rare input with inadequate demographic signals for estimation.
+   - **Label**: `"Limited data"`.
+4. **Invalid (`mode: "invalid"`)**:
+   - **Condition**: Numbers-only, URLs, repetitive spam, or malformed input strings.
+   - **Label**: `"Invalid input"`.
+
+### B. Supported Name Diversity
+- Full Unicode support across international characters (e.g., *José*, *María*, *Zoë*, *Søren*, *Wei*, *Yuki*, *Min-jun*).
+- Hyphenated names (e.g., *Anne-Marie*) and apostrophes (e.g., *O'Connor*) are preserved and correctly normalized.
