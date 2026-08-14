@@ -1,6 +1,7 @@
 import namesIndex from "../../data/generated/names-index.json";
 import { normalizeName } from "./normalizeName";
 import { validateName } from "./validateName";
+import type { TimelinePoint, StateShare } from "./statistics";
 
 export interface NameRecord {
   name: string;
@@ -23,6 +24,24 @@ export interface NameRecord {
     peakYearBirths: number;
     recentBirths: number;
     recentWindow: string;
+    recentTrend?: {
+      percentChange: number;
+      direction: string;
+      period: string;
+    };
+    history?: TimelinePoint[];
+  };
+  actuarial?: {
+    estimatedLiving: number;
+    estimatedAverageAge: number;
+    survivalModel: string;
+  };
+  sexBreakdown?: {
+    male: number;
+    female: number;
+    pctMale: number;
+    pctFemale: number;
+    primarySex: "male" | "female" | "unisex";
   };
   census2020?: {
     count: number;
@@ -31,6 +50,7 @@ export interface NameRecord {
     pctFemale: number;
     sourceYear: number;
   } | null;
+  stateDistribution?: StateShare[];
   sources: string[];
   isCurated?: boolean;
 }

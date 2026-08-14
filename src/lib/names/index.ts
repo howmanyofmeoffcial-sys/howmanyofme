@@ -7,3 +7,5 @@ export * from "./getRelatedNames";
 export * from "./contentQuality";
 export * from "./insights";
 export * from "./linking";
+export * from "./statistics";
+export * from "./entityProfile";
