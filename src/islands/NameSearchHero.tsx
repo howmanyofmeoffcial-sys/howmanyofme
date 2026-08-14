@@ -3,6 +3,8 @@ import { Search, Sparkles, Zap, Globe, ShieldCheck, ArrowRight } from "lucide-re
 import { searchNames } from "../data/nameData";
 import { validateSingleName } from "../lib/nameValidation";
 
+import { trackEvent } from "../lib/analytics/events";
+
 export default function NameSearchHero() {
   const [firstName, setFirstName] = useState("");
   const [suggestions, setSuggestions] = useState<string[]>([]);
@@ -40,19 +42,24 @@ export default function NameSearchHero() {
     if (!validation.ok) {
       triggerShake();
       setErrorMessage((validation as { ok: false; reason: string }).reason);
+      trackEvent("name_search_submitted", { search_mode: "first_name", result_found: false });
       return;
     }
+    trackEvent("name_search_submitted", { search_mode: "first_name", result_found: true });
     window.location.href = `/name/${encodeURIComponent(validation.value)}`;
     setSuggestions([]);
   };
 
   const tryExample = (name: string) => {
+    trackEvent("related_name_clicked", { source_page_type: "homepage" });
     window.location.href = `/name/${encodeURIComponent(name)}`;
   };
 
   const selectSuggestion = (name: string) => {
+    trackEvent("name_search_submitted", { search_mode: "first_name", result_found: true });
     setFirstName(name);
     setSuggestions([]);
+    window.location.href = `/name/${encodeURIComponent(name)}`;
   };
 
   return (

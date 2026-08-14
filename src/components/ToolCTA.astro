@@ -4,36 +4,42 @@ export interface Props {
   headline?: string;
   subhead?: string;
   prefill?: string;
+  className?: string;
 }
 
 const {
   variant = "full",
-  headline = "Check How Many People Have This Name",
-  subhead = "Free · No signup · Results in under 1 second — across 100M+ records from 80+ countries.",
+  headline = "Check How Many People Share Any Name",
+  subhead = "Instant demographic breakdown powered by official U.S. Social Security (1880–2024) & Census records.",
   prefill = "",
+  className = "",
 } = Astro.props;
 ---
 
 {variant === "compact" ? (
-  <div class="my-8 p-5 md:p-6 rounded-2xl border border-primary/20 bg-gradient-to-br from-primary/5 to-accent/5">
+  <div class={`my-8 p-5 md:p-6 rounded-2xl border border-primary/20 bg-gradient-to-br from-primary/5 to-accent/5 ${className}`}>
     <div class="flex items-center gap-2 mb-3">
       <span class="text-primary">✨</span>
       <h3 class="font-display font-bold text-base md:text-lg text-foreground">{headline}</h3>
     </div>
-    <form action="/name/James" onsubmit="event.preventDefault(); const val = this.elements.name.value.trim() || 'James'; window.location.href = '/name/' + encodeURIComponent(val);" class="flex gap-2">
+    <form
+      action="/name/James"
+      onsubmit="event.preventDefault(); const val = this.elements.name.value.trim() || 'James'; if (window.dataLayer) { window.dataLayer.push({ event: 'name_search_submitted', search_mode: 'first_name', source_page_type: 'tool_cta' }); } window.location.href = '/name/' + encodeURIComponent(val);"
+      class="flex gap-2"
+    >
       <div class="relative flex-1">
         <input
           type="text"
           name="name"
           value={prefill}
-          placeholder="Enter a first name…"
+          placeholder="Enter a first name (e.g. Liam, Emma)…"
           aria-label="First name"
           class="w-full h-11 rounded-lg border-2 border-border bg-background px-3 text-sm focus:outline-none focus:border-primary text-foreground"
         />
       </div>
       <button
         type="submit"
-        class="h-11 px-4 rounded-lg bg-primary text-primary-foreground text-sm font-semibold inline-flex items-center gap-1.5 hover:opacity-90 transition-opacity"
+        class="h-11 px-4 rounded-lg bg-primary text-primary-foreground text-sm font-semibold inline-flex items-center gap-1.5 hover:opacity-90 transition-opacity shadow-sm"
       >
         Check →
       </button>
@@ -42,18 +48,18 @@ const {
 ) : (
   <section
     aria-label="Name popularity checker"
-    class="my-10 md:my-14 p-6 md:p-8 rounded-2xl border border-primary/20 bg-gradient-to-br from-primary/5 via-card to-accent/5"
+    class={`my-10 md:my-14 p-6 md:p-8 rounded-2xl border border-primary/20 bg-gradient-to-br from-primary/5 via-card to-accent/5 ${className}`}
   >
     <div class="max-w-2xl mx-auto text-center">
       <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-semibold uppercase tracking-wider mb-3">
-        ✨ Try the tool
+        ✨ Free Demographic Tool
       </div>
       <h2 class="font-display text-2xl md:text-3xl font-bold mb-2 text-foreground">{headline}</h2>
       <p class="text-muted-foreground mb-6">{subhead}</p>
 
       <form
         action="/name/James"
-        onsubmit="event.preventDefault(); const val = this.elements.name.value.trim() || 'James'; window.location.href = '/name/' + encodeURIComponent(val);"
+        onsubmit="event.preventDefault(); const val = this.elements.name.value.trim() || 'James'; if (window.dataLayer) { window.dataLayer.push({ event: 'name_search_submitted', search_mode: 'first_name', source_page_type: 'tool_cta' }); } window.location.href = '/name/' + encodeURIComponent(val);"
         class="relative max-w-lg mx-auto"
       >
         <div class="relative flex items-center">
@@ -61,13 +67,13 @@ const {
             type="text"
             name="name"
             value={prefill}
-            placeholder="Try James, Liam, Sophia…"
+            placeholder="Try James, Liam, Sophia, Noah…"
             aria-label="First name"
             class="w-full h-14 rounded-xl border-2 border-border bg-background pl-4 pr-32 text-base focus:outline-none focus:border-primary text-foreground"
           />
           <button
             type="submit"
-            class="absolute right-1.5 top-1/2 -translate-y-1/2 h-11 px-5 rounded-lg bg-primary text-primary-foreground font-semibold text-sm inline-flex items-center gap-1.5 hover:opacity-90 transition-opacity"
+            class="absolute right-1.5 top-1/2 -translate-y-1/2 h-11 px-5 rounded-lg bg-primary text-primary-foreground font-semibold text-sm inline-flex items-center gap-1.5 hover:opacity-90 transition-opacity shadow-sm"
           >
             Check Now →
           </button>
@@ -75,9 +81,9 @@ const {
       </form>
 
       <div class="flex flex-wrap justify-center gap-x-5 gap-y-1 text-xs text-muted-foreground mt-5">
-        <span class="inline-flex items-center gap-1">⚡ Instant</span>
-        <span class="inline-flex items-center gap-1">🛡️ No signup</span>
-        <span class="inline-flex items-center gap-1">🌍 100M+ names · 80+ countries</span>
+        <span class="inline-flex items-center gap-1">⚡ Instant calculation</span>
+        <span class="inline-flex items-center gap-1">🛡️ No signup required</span>
+        <span class="inline-flex items-center gap-1">📊 Official SSA 1880–2024 data</span>
       </div>
     </div>
   </section>

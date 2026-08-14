@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { Check, Copy } from "lucide-react";
 
+import { trackEvent } from "../lib/analytics/events";
+
 interface CopyCitationButtonProps {
   citationText: string;
   url?: string;
@@ -20,6 +22,7 @@ export default function CopyCitationButton({
     try {
       await navigator.clipboard.writeText(fullText);
       setCopied(true);
+      trackEvent("citation_copied", { citation_topic: title || "general" });
       setTimeout(() => setCopied(false), 2000);
     } catch (err) {
       console.error("Failed to copy citation:", err);

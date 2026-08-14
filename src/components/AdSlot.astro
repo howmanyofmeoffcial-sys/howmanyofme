@@ -2,9 +2,32 @@
 export interface Props {
   label?: string;
   className?: string;
+  format?: 'rectangle' | 'leaderboard' | 'in-feed' | 'responsive';
 }
 
-const { label = "Advertisement", className = "" } = Astro.props;
+const {
+  label = "Advertisement",
+  className = "",
+  format = 'responsive',
+} = Astro.props;
+
+const formatClasses = {
+  rectangle: 'min-h-[250px] w-full max-w-[300px] md:max-w-[336px]',
+  leaderboard: 'min-h-[90px] w-full max-w-[728px]',
+  'in-feed': 'min-h-[120px] w-full',
+  responsive: 'min-h-[100px] md:min-h-[250px] w-full',
+}[format];
 ---
 
-<div class={`ad-slot ${className}`} aria-label={label}></div>
+<aside
+  class={`ad-slot relative flex flex-col items-center justify-center p-2 rounded-xl border border-border/60 bg-muted/20 text-center my-6 overflow-hidden contain-layout ${formatClasses} ${className}`}
+  aria-label={label}
+>
+  <span class="text-[10px] uppercase font-medium tracking-widest text-muted-foreground/70 mb-1 select-none">
+    {label}
+  </span>
+  <!-- Ad Network Tag Placeholder (Progressively hydrated in client) -->
+  <div class="w-full flex-1 flex items-center justify-center text-xs text-muted-foreground/50">
+    <slot />
+  </div>
+</aside>
