@@ -3,47 +3,114 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import SiteHeader from '../../islands/SiteHeader';
 import SiteFooter from '../../components/SiteFooter.astro';
 import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import AdSlot from '../../components/AdSlot.astro';
 import ToolCTA from '../../components/ToolCTA.astro';
+import RelatedPosts from '../../components/RelatedPosts.astro';
+import SimilarNamesIsland from '../../islands/tools/SimilarNamesIsland';
 import { getCuratedPopularNames } from '../../lib/names/getAllNames';
-import { getNameUrl, getSimilarNamesUrl } from '../../lib/seo/canonicalUrl';
-import { Search } from 'lucide-react';
+import { getSimilarNamesUrl } from '../../lib/seo/canonicalUrl';
+import {
+  Sparkles,
+  HelpCircle,
+  TrendingUp,
+  BarChart3,
+  Users,
+  ShieldCheck,
+  CheckCircle2,
+  AlertTriangle,
+  ArrowRight,
+  Database,
+  ArrowRightLeft,
+  BookOpen,
+  Search,
+  Layers,
+  Heart,
+  Volume2,
+} from 'lucide-react';
 
 const popular = getCuratedPopularNames();
 
+const title = "Similar Names Finder: Find Names Like Your Favorite";
+const description = "Find names similar to a name you love. Compare names by sound, spelling, style, origin, and length to discover the best baby name alternatives.";
+const canonical = "https://howmanyofme.co/similar-names";
+
 const faqs = [
   {
-    q: "What does 'similar names' mean?",
-    a: "Similar names are first names that share key features with a target name — same starting letter, similar length, similar sound (low edit distance), or shared cultural origin.",
+    q: "How does the Similar Names Finder work?",
+    a: "Our tool analyzes multiple linguistic and demographic signals—including Levenshtein spelling distance, shared starting and ending phonemes, linguistic origins, character lengths, and popularity tiers—to rank the closest name alternatives.",
   },
   {
-    q: "How do you generate the list of similar names?",
-    a: "We combine phonetic similarity (Levenshtein edit distance ≤ 2), names that begin with the same letter, and names of the same length.",
+    q: "What makes two names 'similar'?",
+    a: "Names can be similar in sound (phonetic rhythm and cadence), spelling (close character structure), linguistic origin (shared cultural roots), or demographic style (matching era and popularity).",
   },
   {
-    q: "Are these similar-name suggestions free to use?",
-    a: "Yes. Every page on howmanyofme.co/similar-names is 100% free with no signup.",
+    q: "What is the difference between a similar name and a name variant?",
+    a: "A name variant is a historical or linguistic derivation of the same root name (such as Sofia and Sophia). A similar name shares stylistic, phonetic, or aesthetic qualities without necessarily sharing the same linguistic root (such as Emma and Clara).",
+  },
+  {
+    q: "Can I find names like my favorite but less common?",
+    a: "Yes. Use the 'Popularity Tier' filter and select 'Less Common / Hidden Gems' to discover uncommon alternatives with comparable sound and structure.",
+  },
+  {
+    q: "How do I find compatible sibling names?",
+    a: "Look for names with a shared linguistic origin or matching syllable count rather than exact rhyming sounds. This creates a cohesive sibling pair (like Liam and Oliver) without feeling repetitive.",
+  },
+  {
+    q: "Can I filter similar names by gender?",
+    a: "Yes. You can filter results for Girls / Feminine, Boys / Masculine, or All Genders.",
+  },
+  {
+    q: "Are the similar name suggestions free to use?",
+    a: "Yes. Every tool and search on howmanyofme.co is 100% free with no sign-up or subscription required.",
+  },
+  {
+    q: "How can I check the popularity of a similar name I like?",
+    a: "Click on any result card to view its complete demographic profile, or explore our Popularity Checker and Trend Visualizer tools.",
   },
 ];
-
-const title = "Similar Names Finder — Find Soundalike & Related First Names";
-const description = "Discover names similar in sound, spelling, origin, and popularity to any first name. Perfect for finding baby name alternatives.";
-const canonical = "https://howmanyofme.co/similar-names";
 
 const jsonLd = [
   {
     "@context": "https://schema.org",
     "@type": "WebPage",
     name: title,
-    description,
+    description: description,
     url: canonical,
+    inLanguage: "en-US",
+    publisher: {
+      "@type": "Organization",
+      name: "HowManyOfMe",
+      url: "https://howmanyofme.co",
+    },
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: "Home",
+        item: "https://howmanyofme.co",
+      },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: "Similar Names",
+        item: canonical,
+      },
+    ],
   },
   {
     "@context": "https://schema.org",
     "@type": "FAQPage",
-    mainEntity: faqs.map(f => ({
+    mainEntity: faqs.map((f) => ({
       "@type": "Question",
       name: f.q,
-      acceptedAnswer: { "@type": "Answer", text: f.a },
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: f.a,
+      },
     })),
   },
 ];
@@ -53,49 +120,208 @@ const jsonLd = [
   <SiteHeader client:idle />
 
   <main class="container py-12 max-w-4xl">
-    <Breadcrumbs className="mb-6" items={[{ label: "Home", href: "/" }, { label: "Similar Names" }]} />
+    <!-- Breadcrumbs -->
+    <Breadcrumbs
+      className="mb-6"
+      items={[
+        { label: "Home", href: "/" },
+        { label: "Similar Names" },
+      ]}
+    />
 
-    <div class="mb-10">
-      <h1 class="font-display text-4xl md:text-5xl font-bold mb-3 text-foreground">
+    <!-- Header Section -->
+    <header class="mb-8">
+      <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary/10 text-primary font-semibold uppercase tracking-wider text-[11px] mb-3">
+        <Layers class="h-3.5 w-3.5" /> Name Alternatives &amp; Soundalikes
+      </span>
+      <h1 class="font-display text-3xl md:text-5xl font-bold text-foreground leading-tight tracking-tight">
         Similar Names Finder
       </h1>
-      <p class="text-lg text-muted-foreground leading-relaxed">
-        Find first names with comparable sounds, phonetic patterns, origins, and lengths. Select any popular name below or explore related profiles.
+      <p class="text-base md:text-lg text-muted-foreground mt-3 leading-relaxed">
+        Already have a name you love? Enter it below to discover first names with comparable sounds, phonetic cadences, linguistic origins, and lengths.
       </p>
-    </div>
+    </header>
 
-    <!-- Popular Name Chips Grid -->
-    <div class="p-6 rounded-2xl border border-border bg-card mb-12">
-      <h2 class="font-display text-xl font-bold mb-4 text-foreground">Explore Similar Names for Popular Names</h2>
-      <div class="flex flex-wrap gap-2.5">
-        {popular.map(p => (
-          <a
-            href={getSimilarNamesUrl(p.name)}
-            class="px-4 py-2 rounded-xl border border-border bg-secondary/50 hover:border-primary/40 hover:bg-primary/10 hover:text-primary transition font-medium text-sm text-foreground"
-          >
-            Similar to {p.name}
-          </a>
-        ))}
+    <!-- 1. Interactive Tool Container (Above the Fold) -->
+    <section class="my-8">
+      <SimilarNamesIsland client:load />
+    </section>
+
+    <!-- 2. Quick Answer Block (AEO / Snippet Ready) -->
+    <section class="my-10 rounded-2xl border-l-4 border-primary bg-primary/5 p-6 shadow-sm">
+      <h2 class="text-xs font-bold uppercase tracking-wider text-primary mb-1">
+        Quick Answer: What Are Similar Names?
+      </h2>
+      <p class="text-sm md:text-base text-foreground leading-relaxed">
+        <strong>Similar names</strong> are first names that share key structural or stylistic attributes with a reference name. Similarity is determined by <em>phonetic cadence</em> (how the name sounds), <em>spelling distance</em> (shared letters), <em>linguistic origin</em> (shared cultural roots), and <em>length rhythm</em> (syllables and letter count).
+      </p>
+    </section>
+
+    <AdSlot />
+
+    <!-- 3. Understanding Similarity Dimensions -->
+    <section class="my-12 space-y-6">
+      <h2 class="font-display text-2xl md:text-3xl font-bold text-foreground">
+        How We Calculate Name Similarity: 4 Key Dimensions
+      </h2>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div class="p-6 rounded-2xl border border-border bg-card shadow-xs space-y-2">
+          <div class="flex items-center gap-2 font-bold text-foreground text-base">
+            <Volume2 class="h-4 w-4 text-primary" />
+            <span>1. Sound &amp; Phonetic Cadence</span>
+          </div>
+          <p class="text-xs text-muted-foreground leading-relaxed">
+            Names that share vowel harmonics, consonant emphasis, and syllable counts (e.g. <em>Emma</em> and <em>Ella</em>, or <em>Liam</em> and <em>Nolan</em>).
+          </p>
+        </div>
+
+        <div class="p-6 rounded-2xl border border-border bg-card shadow-xs space-y-2">
+          <div class="flex items-center gap-2 font-bold text-foreground text-base">
+            <Search class="h-4 w-4 text-primary" />
+            <span>2. Spelling &amp; Edit Distance</span>
+          </div>
+          <p class="text-xs text-muted-foreground leading-relaxed">
+            Normalized Levenshtein edit distance identifies close structural cousins and variations with only 1 or 2 letter differences.
+          </p>
+        </div>
+
+        <div class="p-6 rounded-2xl border border-border bg-card shadow-xs space-y-2">
+          <div class="flex items-center gap-2 font-bold text-foreground text-base">
+            <BookOpen class="h-4 w-4 text-primary" />
+            <span>3. Shared Linguistic Origin</span>
+          </div>
+          <p class="text-xs text-muted-foreground leading-relaxed">
+            Connecting names from the same etymological cradle, such as classical Latin, ancient Greek, Old Norse, Celtic, or Hebrew.
+          </p>
+        </div>
+
+        <div class="p-6 rounded-2xl border border-border bg-card shadow-xs space-y-2">
+          <div class="flex items-center gap-2 font-bold text-foreground text-base">
+            <BarChart3 class="h-4 w-4 text-primary" />
+            <span>4. Style &amp; Popularity Tier</span>
+          </div>
+          <p class="text-xs text-muted-foreground leading-relaxed">
+            Matching modern popularity tiers so you can find familiar alternatives or discover hidden gem names with a similar vibe.
+          </p>
+        </div>
       </div>
-    </div>
+    </section>
 
-    <!-- FAQ Section -->
-    <section class="mb-12">
-      <h2 class="font-display text-2xl font-bold mb-4 text-foreground">Frequently Asked Questions</h2>
+    <!-- 4. Similar Names vs. Variants -->
+    <section class="my-12 space-y-4">
+      <h2 class="font-display text-2xl md:text-3xl font-bold text-foreground">
+        Similar Names vs. Name Variants: The Crucial Difference
+      </h2>
+      <div class="p-6 rounded-2xl border border-border/80 bg-secondary/30 space-y-3 text-sm text-muted-foreground leading-relaxed">
+        <p>
+          It is helpful to separate direct linguistic variations from stylistic alternatives:
+        </p>
+        <ul class="list-disc list-outside pl-5 space-y-1.5">
+          <li><strong>Name Variants:</strong> Direct linguistic offshoots or spelling adaptations of the exact same root (e.g. <em>Sofia</em> and <em>Sophia</em>, or <em>Liam</em> and <em>William</em>).</li>
+          <li><strong>Similar Names:</strong> Distinct names that share harmonious aesthetic, phonetic, or cultural features (e.g. <em>Emma</em> and <em>Clara</em>, or <em>Oliver</em> and <em>Arthur</em>).</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- 5. Popular Name Landing Links Grid -->
+    <section class="my-12 space-y-6">
+      <h2 class="font-display text-2xl md:text-3xl font-bold text-foreground">
+        Explore Similar Names for Top Registered Names
+      </h2>
+      <div class="p-6 rounded-2xl border border-border bg-card">
+        <div class="flex flex-wrap gap-2.5">
+          {popular.map((p) => (
+            <a
+              href={getSimilarNamesUrl(p.name)}
+              class="px-4 py-2 rounded-xl border border-border bg-secondary/40 hover:border-primary/40 hover:bg-primary/10 hover:text-primary transition font-medium text-xs text-foreground"
+            >
+              Similar to {p.name} →
+            </a>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- 6. Demographic & Naming Tools Ecosystem -->
+    <section class="my-12 space-y-6">
+      <div class="flex items-center justify-between">
+        <h2 class="font-display text-2xl md:text-3xl font-bold text-foreground">
+          Continue Your Name Research Journey
+        </h2>
+        <a href="/tools" class="text-xs font-semibold text-primary hover:underline flex items-center gap-1">
+          All Tools <ArrowRight class="h-3.5 w-3.5" />
+        </a>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        <a
+          href="/tools/meaning"
+          class="p-5 rounded-2xl border border-border bg-card hover:border-primary/40 hover:shadow-md transition-all group"
+        >
+          <div class="flex items-center gap-2 font-bold text-foreground group-hover:text-primary transition-colors text-base mb-1.5">
+            <BookOpen class="h-4 w-4 text-primary" />
+            <span>Name Meaning Lookup</span>
+          </div>
+          <p class="text-xs text-muted-foreground leading-relaxed">
+            Discover ancient roots, linguistic translations, and historical origins for any name.
+          </p>
+        </a>
+
+        <a
+          href="/tools/popularity-checker"
+          class="p-5 rounded-2xl border border-border bg-card hover:border-primary/40 hover:shadow-md transition-all group"
+        >
+          <div class="flex items-center gap-2 font-bold text-foreground group-hover:text-primary transition-colors text-base mb-1.5">
+            <BarChart3 class="h-4 w-4 text-primary" />
+            <span>Popularity Checker</span>
+          </div>
+          <p class="text-xs text-muted-foreground leading-relaxed">
+            Check living bearer counts, frequency ratios, and national popularity ranks.
+          </p>
+        </a>
+
+        <a
+          href="/tools/name-comparison"
+          class="p-5 rounded-2xl border border-border bg-card hover:border-primary/40 hover:shadow-md transition-all group"
+        >
+          <div class="flex items-center gap-2 font-bold text-foreground group-hover:text-primary transition-colors text-base mb-1.5">
+            <ArrowRightLeft class="h-4 w-4 text-primary" />
+            <span>Name Comparison</span>
+          </div>
+          <p class="text-xs text-muted-foreground leading-relaxed">
+            Compare two finalist names head-to-head on living population, rank, and history.
+          </p>
+        </a>
+      </div>
+    </section>
+
+    <!-- 7. Common Questions (FAQ Section) -->
+    <section class="my-12 space-y-6">
+      <div class="flex items-center gap-2">
+        <HelpCircle class="h-5 w-5 text-primary" />
+        <h2 class="font-display text-2xl md:text-3xl font-bold text-foreground">
+          Frequently Asked Questions
+        </h2>
+      </div>
+
       <div class="space-y-4">
-        {faqs.map(f => (
-          <div class="p-5 rounded-xl border border-border bg-card">
-            <h3 class="font-semibold text-foreground mb-1">{f.q}</h3>
-            <p class="text-sm text-muted-foreground">{f.a}</p>
+        {faqs.map((f) => (
+          <div class="p-6 rounded-2xl border border-border bg-card shadow-xs">
+            <h3 class="font-semibold text-foreground text-base mb-2">{f.q}</h3>
+            <p class="text-sm text-muted-foreground leading-relaxed">{f.a}</p>
           </div>
         ))}
       </div>
     </section>
 
+    <!-- 8. Contextual Demographic CTA -->
     <ToolCTA
-      headline="Looking for statistics on a specific name?"
-      subhead="Search our comprehensive U.S. demographic directory of verified names instantly."
+      headline="Check How Many People Share Your Favorite Name"
+      subhead="Discover living bearer counts and demographic rankings across the United States."
     />
+
+    <RelatedPosts currentSlug="similar-names" tags={["names", "tools", "comparison"]} count={6} />
   </main>
 
   <SiteFooter />
