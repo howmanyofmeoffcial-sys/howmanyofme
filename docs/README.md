@@ -4,6 +4,11 @@ Welcome to the central documentation hub for **HowManyOfMe.co**. This repository
 
 ---
 
+## 🌟 Master Operating Manual
+- 📘 **[Long-Term Operating System & Playbook](./OPERATING_SYSTEM.md)** — Core weekly, monthly, and quarterly workflows, incident protocols, data releases, and experiment frameworks.
+
+---
+
 ## 📚 Documentation Index
 
 ### 1. [Architecture](./architecture/ARCHITECTURE.md)
@@ -30,6 +35,7 @@ Welcome to the central documentation hub for **HowManyOfMe.co**. This repository
 ### 4. [Operations & Monitoring](./operations/MONITORING.md)
 - [Monitoring Framework](./operations/MONITORING.md) — Master health engine and automated exit-code-1 CI checks.
 - [Site Health Runbook](./operations/SITE_HEALTH_RUNBOOK.md) — Incident response and triage protocols.
+- [Incident Register](./operations/INCIDENTS.md) — Production post-mortems and preventative checks.
 - [Environment Configuration](./operations/ENVIRONMENT.md) — Environment variables and deployment settings.
 - [Release Process](./operations/RELEASE_PROCESS.md) — Pre-deployment verification checklist and build gate.
 
@@ -38,7 +44,11 @@ Welcome to the central documentation hub for **HowManyOfMe.co**. This repository
 - [Conversion Rate Optimization (CRO)](./monetization/CRO.md) — Tool engagement funnels and interaction rates.
 - [Experimentation Log](./monetization/EXPERIMENTS.md) — Active telemetry taxonomy and test histories.
 
-### 6. [Historical Archive](./archive/README.md)
+### 6. [Templates & Scorecards](./templates/)
+- [Monthly Growth Scorecard](./templates/MONTHLY_GROWTH_SCORECARD.md) — Monthly KPI audit template.
+- [Quarterly Strategy Review](./templates/QUARTERLY_STRATEGY_REVIEW.md) — Quarterly portfolio assessment template.
+
+### 7. [Historical Archive](./archive/README.md)
 - [Phase Archives](./archive/README.md) — Historical reports and pre-cutover audits (Phases 1–17).
 
 ---

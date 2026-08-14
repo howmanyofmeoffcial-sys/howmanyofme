@@ -8,10 +8,47 @@ Welcome to **HowManyOfMe.co**. This repository is engineered for high performanc
 
 Before modifying code or creating files:
 1. **Read this document thoroughly.**
-2. **Review canonical documentation in [`docs/`](./docs/README.md).**
+2. **Review canonical operating procedures in [`docs/OPERATING_SYSTEM.md`](./docs/OPERATING_SYSTEM.md) and [`docs/`](./docs/README.md).**
 3. **Inspect existing utilities in `src/lib/` before creating new helper functions.**
 4. **Never create loose phase reports or markdown documents in the root directory.**
 5. **Always run the validation suite before finishing.**
+
+---
+
+## 🛑 ABSOLUTE PERMANENT RULE: NO NEW NUMBERED PHASES
+
+The numbered migration and foundation roadmap (Phases 1–20) is **officially complete**.
+
+> ⛔ **DO NOT create `PHASE_21.md`, `PHASE_22.md`, or similar numbered roadmap files.**
+
+All ongoing development follows standard software engineering cycles:
+- **Tasks & Features**: Discrete improvements with measurable ROI.
+- **Experiments**: Controlled tests documented in [`docs/monetization/EXPERIMENTS.md`](./docs/monetization/EXPERIMENTS.md).
+- **Data Updates**: Scheduled releases governed by [`docs/data/DATA_PIPELINE.md`](./docs/data/DATA_PIPELINE.md).
+- **Incidents**: Bugfixes documented in [`docs/operations/INCIDENTS.md`](./docs/operations/INCIDENTS.md).
+
+---
+
+## 🌲 AI Agent Decision Tree
+
+```text
+Need to implement a change or resolve an issue?
+                    │
+                    ↓
+Does an existing utility / script / component already solve it?
+                    │
+           ┌────────┴────────┐
+         YES                 NO
+           │                 │
+           ↓                 ↓
+      Reuse it!     Does it belong to an existing domain module?
+                             │
+                    ┌────────┴────────┐
+                  YES                 NO
+                    │                 │
+                    ↓                 ↓
+               Extend it!    Create minimal new module in src/lib/
+```
 
 ---
 

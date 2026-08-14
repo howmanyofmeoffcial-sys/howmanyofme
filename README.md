@@ -67,9 +67,10 @@ npm run health:check
 
 ## 📚 Documentation
 Comprehensive documentation is available in the [`docs/`](./docs/README.md) directory:
-- [System Architecture](./docs/architecture/ARCHITECTURE.md)
-- [Data Platform & Pipeline](./docs/data/DATA_PLATFORM.md)
-- [SEO Operating System](./docs/seo/SEO_OPERATING_SYSTEM.md)
-- [Site Health Runbook](./docs/operations/SITE_HEALTH_RUNBOOK.md)
-- [Monetization & Zero-CLS Specs](./docs/monetization/MONETIZATION.md)
-- [Historical Phase Archives](./docs/archive/README.md)
+- [Long-Term Operating System](./docs/OPERATING_SYSTEM.md) — Master operating manual & workflows.
+- [System Architecture](./docs/architecture/ARCHITECTURE.md) — SSG & React Islands architecture.
+- [Data Platform & Pipeline](./docs/data/DATA_PLATFORM.md) — Ingestion pipeline & math methodology.
+- [SEO Operating System](./docs/seo/SEO_OPERATING_SYSTEM.md) — GSC clusters & query management.
+- [Site Health Runbook](./docs/operations/SITE_HEALTH_RUNBOOK.md) — Operational triage & troubleshooting.
+- [Monetization & Zero-CLS Specs](./docs/monetization/MONETIZATION.md) — AdSlot container engineering.
+- [Historical Phase Archives](./docs/archive/README.md) — Historical reports (Phases 1–17).
