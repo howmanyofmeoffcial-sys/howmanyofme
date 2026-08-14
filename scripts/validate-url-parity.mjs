@@ -38,6 +38,13 @@ for (const n of names) {
   expectedRoutes.add(`/name/${n}`);
   expectedRoutes.add(`/similar-names/${n.toLowerCase()}`);
 }
+const fullNamesFile = path.join(root, "src/data/generated/canonical-fullnames.json");
+if (fs.existsSync(fullNamesFile)) {
+  const fullNames = JSON.parse(fs.readFileSync(fullNamesFile, "utf8"));
+  for (const fn of fullNames) {
+    expectedRoutes.add(`/people/${fn.slug}`);
+  }
+}
 for (const l of letters) {
   expectedRoutes.add(`/names/${l}`);
 }

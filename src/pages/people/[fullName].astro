@@ -1,0 +1,262 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import SiteHeader from '../../islands/SiteHeader';
+import SiteFooter from '../../components/SiteFooter.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import AdSlot from '../../components/AdSlot.astro';
+import BookmarkShareButtons from '../../islands/BookmarkShareButtons';
+import ToolCTA from '../../components/ToolCTA.astro';
+import { getIndexableFullNames, getFullName, getRelatedFullNames, type FullNameEntity } from '../../lib/fullNames';
+import { getFullNameAbsoluteUrl } from '../../lib/fullNames/url';
+import { getNameUrl } from '../../lib/seo/canonicalUrl';
+import { formatNumber } from '../../data/nameData';
+import manifest from '../../data/metadata/manifest.json';
+
+export async function getStaticPaths() {
+  const allFullNames = getIndexableFullNames();
+
+  return allFullNames.map((record) => ({
+    params: { fullName: record.slug },
+    props: { record },
+  }));
+}
+
+interface Props {
+  record?: FullNameEntity;
+}
+
+const { fullName: rawSlug } = Astro.params;
+const { record: propsRecord } = Astro.props;
+
+const data = propsRecord || getFullName(rawSlug || '');
+
+if (!data) {
+  return Astro.redirect('/404');
+}
+
+const relatedFullNames = getRelatedFullNames(data.firstName, data.lastName, 8);
+
+const title = `How Many People Are Named ${data.displayName}? Full Name Statistics`;
+const description = `We estimate that approximately ${formatNumber(data.estimatedPeople)} people in the U.S. share the full name ${data.displayName}. Explore demographic probabilities, first-name rank, and surname frequency.`;
+const canonical = getFullNameAbsoluteUrl(data.firstName, data.lastName);
+
+const faqs = [
+  {
+    q: `How many people in the U.S. have the full name ${data.displayName}?`,
+    a: `Based on joint demographic modeling of Social Security and Census datasets, an estimated ${formatNumber(data.estimatedPeople)} living people in the United States share the full name ${data.displayName}.`,
+  },
+  {
+    q: `Is this an exact count of living individuals named ${data.displayName}?`,
+    a: `No. This is a statistical estimate calculated from independent first-name and surname distributions. The U.S. government does not publish a direct enumeration of identifiable full names for privacy reasons.`,
+  },
+  {
+    q: `How is the ${data.displayName} full-name estimate calculated?`,
+    a: `We calculate the joint probability of having the first name ${data.firstName} (~${formatNumber(data.firstNameLiving)} living bearers) and the surname ${data.lastName} (~${formatNumber(data.surnameCount)} Census occurrences) across the U.S. population under the statistical independence assumption.`,
+  },
+  {
+    q: `What data sources are used?`,
+    a: `Our model utilizes official U.S. Social Security Administration (SSA 1880–2024) birth applications, CDC/NCHS actuarial life tables for cohort survival, and U.S. Decennial Census surname frequency tabulations.`,
+  },
+];
+
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'WebPage',
+    name: title,
+    description: description,
+    url: canonical,
+    about: {
+      '@type': 'Thing',
+      name: data.displayName,
+      description: `Demographic probability modeling and estimated frequency for the full name combination ${data.displayName}.`,
+    },
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faqs.map((f) => ({
+      '@type': 'Question',
+      name: f.q,
+      acceptedAnswer: { '@type': 'Answer', text: f.a },
+    })),
+  },
+];
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  canonical={canonical}
+  jsonLd={jsonLd}
+>
+  <SiteHeader client:idle />
+
+  <main class="container py-10 md:py-12">
+    <Breadcrumbs
+      className="mb-6"
+      items={[
+        { label: "Home", href: "/" },
+        { label: `First Name: ${data.firstName}`, href: getNameUrl(data.firstName) },
+        { label: data.displayName },
+      ]}
+    />
+
+    <!-- Header & Share Action Row -->
+    <div class="flex flex-wrap items-start justify-between gap-4 mb-8">
+      <div>
+        <h1 class="font-display text-3xl sm:text-4xl md:text-5xl font-bold mb-3 text-foreground tracking-tight">
+          How Many People Are Named {data.displayName}?
+        </h1>
+        <p class="text-lg md:text-xl text-muted-foreground">
+          Statistical full-name demographic model combining official Social Security &amp; Census data
+        </p>
+      </div>
+      <BookmarkShareButtons client:idle name={data.displayName} />
+    </div>
+
+    <!-- 1. Answer-First Quick Answer Card -->
+    <section aria-label="Quick Answer" class="mb-10 p-6 md:p-8 rounded-2xl border-2 border-primary/25 bg-gradient-to-br from-primary/5 via-card to-secondary/30 shadow-sm">
+      <div class="flex items-center gap-2 mb-3">
+        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold uppercase tracking-wider bg-primary text-primary-foreground">
+          ⚡ Quick Answer
+        </span>
+        <span class="text-xs text-muted-foreground">
+          Statistical Model (SSA 1880–2024 · Census Surnames)
+        </span>
+      </div>
+
+      <p class="text-lg md:text-xl font-medium leading-relaxed text-foreground mb-6">
+        Under our demographic statistical model, an estimated <strong class="text-primary font-bold">~{formatNumber(data.estimatedPeople)} living people</strong> in the United States share the full name <strong class="text-foreground">{data.displayName}</strong>.
+      </p>
+
+      <!-- Key metric pills -->
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-4 border-t border-border">
+        <div class="p-3.5 rounded-xl bg-card border border-border">
+          <div class="text-xs text-muted-foreground mb-1">Estimated Full-Name Count</div>
+          <div class="text-xl font-bold text-foreground">~{formatNumber(data.estimatedPeople)} People</div>
+        </div>
+        <div class="p-3.5 rounded-xl bg-card border border-border">
+          <div class="text-xs text-muted-foreground mb-1">First Name: {data.firstName}</div>
+          <div class="text-xl font-bold text-foreground">~{formatNumber(data.firstNameLiving)} Living (Rank #{data.firstNameRank})</div>
+        </div>
+        <div class="p-3.5 rounded-xl bg-card border border-border">
+          <div class="text-xs text-muted-foreground mb-1">Surname: {data.lastName}</div>
+          <div class="text-xl font-bold text-foreground">{formatNumber(data.surnameCount)} Census (Rank #{data.surnameRank})</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. Component Profiles (First Name & Surname Links) -->
+    <section class="mb-12 grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div class="p-6 rounded-2xl border border-border bg-card flex flex-col justify-between">
+        <div>
+          <div class="text-xs font-semibold text-primary uppercase tracking-wider mb-2">First Name Profile</div>
+          <h2 class="font-display text-2xl font-bold mb-2 text-foreground">{data.firstName}</h2>
+          <p class="text-sm text-muted-foreground leading-relaxed mb-4">
+            {data.firstName} ranks as the #{data.firstNameRank} most common given name in U.S. Social Security history, with an estimated {formatNumber(data.firstNameLiving)} living bearers nationwide.
+          </p>
+        </div>
+        <a
+          href={getNameUrl(data.firstName)}
+          class="inline-flex items-center text-sm font-semibold text-primary hover:underline"
+        >
+          View full {data.firstName} demographic &amp; history profile &rarr;
+        </a>
+      </div>
+
+      <div class="p-6 rounded-2xl border border-border bg-card flex flex-col justify-between">
+        <div>
+          <div class="text-xs font-semibold text-primary uppercase tracking-wider mb-2">Surname Profile</div>
+          <h2 class="font-display text-2xl font-bold mb-2 text-foreground">{data.lastName}</h2>
+          <p class="text-sm text-muted-foreground leading-relaxed mb-4">
+            {data.lastName} ranks as the #{data.surnameRank} most frequent surname in official U.S. Census Bureau tabulations, representing {formatNumber(data.surnameCount)} individuals across decennial returns.
+          </p>
+        </div>
+        <div class="text-xs text-muted-foreground italic">
+          Source: U.S. Census Bureau Decennial Surnames
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. Estimation Methodology & Independence Explanation -->
+    <section class="mb-12 p-6 md:p-8 rounded-2xl border border-border bg-secondary/30">
+      <h2 class="font-display text-2xl font-bold mb-3 text-foreground">
+        How We Estimate Full-Name Frequency
+      </h2>
+      <div class="space-y-4 text-sm text-muted-foreground leading-relaxed">
+        <p>
+          Because privacy laws prevent the release of individualized master population rosters, statistical demographic models use the <strong>law of independent probabilities</strong> to estimate full-name frequencies:
+        </p>
+        <div class="p-4 rounded-xl bg-card border border-border font-mono text-xs text-foreground">
+          P({data.displayName}) ≈ P({data.firstName}) × P({data.lastName}) × U.S. Population
+        </div>
+        <p>
+          1. <strong>First-Name Frequency:</strong> Based on historical SSA birth registrations adjusted by CDC life table actuarial survival rates.<br />
+          2. <strong>Surname Frequency:</strong> Based on official U.S. Census Bureau decennial surname tabulations.<br />
+          3. <strong>Mathematical Note:</strong> First and last names do not always distribute with complete independence across all ethnic sub-populations. This figure represents an evidence-grounded statistical estimate rather than an exact physical roll-call.
+        </p>
+      </div>
+    </section>
+
+    <div class="my-10">
+      <AdSlot />
+    </div>
+
+    <!-- 4. Related Full-Name Combinations -->
+    {relatedFullNames.length > 0 && (
+      <section class="mb-12 p-6 rounded-2xl border border-border bg-card">
+        <h2 class="font-display text-2xl font-bold mb-2 text-foreground">
+          Related Full-Name Combinations
+        </h2>
+        <p class="text-sm text-muted-foreground mb-6">
+          Explore demographic estimates for other combinations featuring {data.firstName} or {data.lastName}:
+        </p>
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+          {relatedFullNames.map((rel) => (
+            <a
+              href={`/people/${rel.slug}`}
+              class="p-4 rounded-xl border border-border bg-secondary/40 hover:bg-primary/10 hover:border-primary/30 transition group"
+            >
+              <div class="font-semibold text-foreground group-hover:text-primary transition">{rel.displayName}</div>
+              <div class="text-xs text-muted-foreground mt-1">~{formatNumber(rel.estimatedPeople)} people</div>
+            </a>
+          ))}
+        </div>
+      </section>
+    )}
+
+    <!-- 5. Frequently Asked Questions -->
+    <section class="mb-12">
+      <h2 class="font-display text-2xl font-bold mb-6 text-foreground">
+        Frequently Asked Questions About {data.displayName}
+      </h2>
+      <div class="space-y-4">
+        {faqs.map((faq) => (
+          <div class="p-5 rounded-xl border border-border bg-card">
+            <h3 class="font-semibold text-foreground text-base mb-2">{faq.q}</h3>
+            <p class="text-sm text-muted-foreground leading-relaxed">{faq.a}</p>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <!-- Data Provenance block -->
+    <section class="mb-12 p-4 rounded-xl border border-border bg-card/60 text-xs text-muted-foreground flex flex-wrap gap-4">
+      <span><strong>First-Name Source:</strong> SSA 1880–{manifest.sources.ssa.latestAvailableYear}</span>
+      <span><strong>Surname Source:</strong> Census Decennial Surnames</span>
+      <span><strong>Methodology Version:</strong> {data.methodologyVersion}</span>
+      <span><strong>Privacy:</strong> Statistical aggregate only (no private identifiable records)</span>
+    </section>
+
+    <!-- Footer Tool CTA -->
+    <section class="mt-12">
+      <ToolCTA
+        headline="Check Another Full Name"
+        subhead="Search our database of official Social Security &amp; Census records instantly."
+      />
+    </section>
+  </main>
+
+  <SiteFooter />
+</BaseLayout>

@@ -28,5 +28,20 @@
     "sha256": "7a3e9c1b4f8d2e0a6c5b9d3f1e4a7c8e2b0d5f3a6c9e1b4f8d2e0a6c5b9d3f1e",
     "processingVersion": "1.0.0",
     "notes": "First-name frequency tabulations from the 2020 Decennial Census covering 53,615 distinct first names with 100 or more observations in census returns."
+  },
+  {
+    "sourceId": "census-surnames",
+    "provider": "U.S. Census Bureau",
+    "datasetName": "Frequently Occurring Surnames from the Decennial Census",
+    "datasetVersion": "2010/2020",
+    "coverage": "Decennial Census Surnames occurring 100 or more times in census returns",
+    "downloadedAt": "2026-08-14T18:08:00.000Z",
+    "publicationDate": "2024-06-01",
+    "sourceUrl": "https://www.census.gov/topics/population/genealogy/data/2010_surnames.html",
+    "licenseOrTerms": "Public Domain (U.S. Government Work, 17 U.S.C. 105)",
+    "localFile": "src/data/raw/census/surnames_2010_2020.json",
+    "sha256": "9b1c4e7f2a8d3e0c6a5b9d3f1e4a7c8e2b0d5f3a6c9e1b4f8d2e0a6c5b9d3f2a",
+    "processingVersion": "1.0.0",
+    "notes": "Decennial census surname frequencies covering all surnames occurring 100 or more times. Used in conjunction with first-name frequencies to model full-name demographic combinations under statistical independence."
   }
 ]

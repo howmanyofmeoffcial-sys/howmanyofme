@@ -26,8 +26,11 @@ export function normalizeName(raw: string): NormalizedName {
   }
 
   const decoded = decodeURIComponent(raw).trim();
-  // Strip non-alpha characters for normalization
-  const cleaned = decoded.replace(/[^a-zA-Z]/g, "");
+  // Strip diacritics / accents and non-alpha characters for normalization
+  const cleaned = decoded
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/[^a-zA-Z]/g, "");
 
   if (!cleaned) {
     return {

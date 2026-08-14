@@ -10,6 +10,7 @@ import NameHistoryChart from '../../islands/NameHistoryChart';
 import { getIndexableNames, getName, type NameRecord } from '../../lib/names';
 import { buildNameEntityProfile } from '../../lib/names/entityProfile';
 import { getNameLinkGraph } from '../../lib/names/linking';
+import { getRelatedFullNames } from '../../lib/fullNames/data';
 import { getNameAbsoluteUrl, getSimilarNamesUrl } from '../../lib/seo/canonicalUrl';
 import { formatNumber } from '../../data/nameData';
 import { buildSimilarFaqs } from '../../lib/dynamicContent';
@@ -39,6 +40,7 @@ if (!data) {
 
 const profile = buildNameEntityProfile(data);
 const linkGraph = getNameLinkGraph(data);
+const popularFullNames = getRelatedFullNames(profile.name, '', 8);
 
 const faqs = buildSimilarFaqs({
   name: profile.name,
@@ -464,7 +466,30 @@ const decades = Object.entries(data.decade_popularity || {});
       </section>
     )}
 
-    <!-- 12. Frequently Asked Questions -->
+    <!-- 12. Popular Full-Name Combinations -->
+    {popularFullNames.length > 0 && (
+      <section class="mb-12 p-6 rounded-xl border border-border bg-card">
+        <h2 class="font-display text-xl font-bold mb-2 text-foreground">
+          Popular Full-Name Combinations for {profile.name}
+        </h2>
+        <p class="text-xs text-muted-foreground mb-4">
+          Estimated frequency of common first-name + surname combinations:
+        </p>
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
+          {popularFullNames.map((fn) => (
+            <a
+              href={`/people/${fn.slug}`}
+              class="p-3 rounded-lg border border-border bg-secondary/40 hover:bg-primary/10 hover:border-primary/30 transition text-center group"
+            >
+              <div class="font-semibold text-foreground group-hover:text-primary transition">{fn.displayName}</div>
+              <div class="text-xs text-muted-foreground">~{formatNumber(fn.estimatedPeople)} people</div>
+            </a>
+          ))}
+        </div>
+      </section>
+    )}
+
+    <!-- 13. Frequently Asked Questions -->
     <section class="mb-12">
       <h2 class="font-display text-2xl font-bold mb-6 text-foreground">
         Frequently Asked Questions About {profile.name}

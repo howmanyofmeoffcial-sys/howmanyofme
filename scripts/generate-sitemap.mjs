@@ -20,6 +20,9 @@ const canonicalNames = JSON.parse(
 );
 const allNames = canonicalNames.map((n) => n.name).sort();
 
+const fullNamesFile = path.join(root, "src/data/generated/canonical-fullnames.json");
+const allFullNames = fs.existsSync(fullNamesFile) ? JSON.parse(fs.readFileSync(fullNamesFile, "utf8")) : [];
+
 // Alphabet
 const alphabet = "abcdefghijklmnopqrstuvwxyz".split("");
 
@@ -49,6 +52,7 @@ alphabet.forEach((l) => push(`/names/${l}`, "0.6", "monthly"));
 allNames.forEach((n) => push(`/name/${n}`, "0.7", "monthly"));
 push(`/similar-names`, "0.8", "weekly");
 allNames.forEach((n) => push(`/similar-names/${n.toLowerCase()}`, "0.6", "monthly"));
+allFullNames.forEach((fn) => push(`/people/${fn.slug}`, "0.6", "monthly"));
 blogSlugs.forEach((s) => push(`/blog/${s}`, "0.7", "monthly"));
 
 // De-dupe

@@ -12,8 +12,10 @@ const steps = [
   { name: "Fetch SSA Dataset Snapshot", script: "fetch-ssa.mjs" },
   { name: "Parse SSA Raw Records", script: "parse-ssa.mjs" },
   { name: "Parse Census 2020 Tabulations", script: "parse-census.mjs" },
+  { name: "Seed Census Decennial Surnames", script: "seed-surnames.mjs" },
   { name: "Validate Schemas & Slug Uniqueness", script: "validate-names.mjs" },
   { name: "Build Derived Metrics & Historical Curves", script: "build-derived-data.mjs" },
+  { name: "Build Full-Name Combination Index", script: "build-fullnames.mjs" },
   { name: "Generate Application Dataset & Manifest", script: "generate-app-data.mjs" },
   { name: "Print Provenance & Quality Report", script: "report.mjs" },
 ];
