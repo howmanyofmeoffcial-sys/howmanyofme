@@ -15,12 +15,11 @@ export interface NameInsights {
 }
 
 export const DATASET_METADATA = {
-  version: "2026.1",
-  ssaDataRange: "1880–present",
-  countriesCovered: "80+",
-  recordsIndexed: "100M+",
-  lastUpdatedYear: 2026,
-  confidenceInterval: "±5% (common names) to ±15% (uncommon names)",
+  version: "2026.08",
+  ssaDataRange: "1880–2024",
+  sourceCoverage: "U.S. Social Security Administration & U.S. Census Bureau",
+  lastUpdatedYear: 2024,
+  methodology: "Cohort actuarial survival modeling paired with decennial census distributions",
 };
 
 /**

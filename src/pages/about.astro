@@ -6,8 +6,8 @@ import Breadcrumbs from '../components/Breadcrumbs.astro';
 import ToolCTA from '../components/ToolCTA.astro';
 import { Users, Database, Globe, BarChart3, ExternalLink } from 'lucide-react';
 
-const title = "About HowManyOfMe — How Many People Have My Name | Creator Story";
-const description = "Learn about HowManyOfMe, the platform that answers 'how many of me are there?' Discover name popularity, rarity rankings, and data across 100M+ records in 80+ countries.";
+const title = "About HowManyOfMe — U.S. Name Demographics & Statistics | Creator Story";
+const description = "Learn about HowManyOfMe, the platform that answers 'how many people have my name?' Discover name popularity, rarity rankings, and evidence-based demographic data.";
 const canonical = "https://howmanyofme.co/about";
 
 const jsonLd = [
@@ -15,7 +15,7 @@ const jsonLd = [
     "@context": "https://schema.org",
     "@type": "AboutPage",
     name: "About HowManyOfMe",
-    description: "Learn about the creator and mission behind HowManyOfMe, a name statistics platform covering 100M+ names.",
+    description: "Learn about the creator and mission behind HowManyOfMe, a name statistics platform covering official U.S. demographic data.",
     url: "https://howmanyofme.co/about",
   },
   {
@@ -45,30 +45,30 @@ const jsonLd = [
       About HowManyOfMe
     </h1>
     <p class="text-lg text-muted-foreground mb-10 leading-relaxed">
-      Ever wondered "how many people have my name?" or "how common is my name?" — you're in the right place. HowManyOfMe is the platform built to answer exactly that, using real demographic data from over 100 million records across 80+ countries.
+      Ever wondered "how many people have my name?" or "how common is my name in the United States?" — you're in the right place. HowManyOfMe provides clean, transparent demographic name insights derived from official government datasets and actuarial models.
     </p>
 
     <!-- Stats Grid -->
     <div class="grid grid-cols-2 gap-4 mb-14">
       <div class="p-5 rounded-xl border border-border bg-card text-center">
         <Database className="h-6 w-6 text-primary mx-auto mb-2" />
-        <div class="text-2xl font-bold text-foreground">100M+</div>
-        <div class="text-sm text-muted-foreground">Names in database</div>
+        <div class="text-2xl font-bold text-foreground">1880–2024</div>
+        <div class="text-sm text-muted-foreground">SSA Cohort Records</div>
       </div>
       <div class="p-5 rounded-xl border border-border bg-card text-center">
         <Globe className="h-6 w-6 text-primary mx-auto mb-2" />
-        <div class="text-2xl font-bold text-foreground">80+</div>
-        <div class="text-sm text-muted-foreground">Countries covered</div>
+        <div class="text-2xl font-bold text-foreground">2020 Census</div>
+        <div class="text-sm text-muted-foreground">Decennial Tabulations</div>
       </div>
       <div class="p-5 rounded-xl border border-border bg-card text-center">
         <Users className="h-6 w-6 text-primary mx-auto mb-2" />
-        <div class="text-2xl font-bold text-foreground">Millions</div>
-        <div class="text-sm text-muted-foreground">Monthly searches</div>
+        <div class="text-2xl font-bold text-foreground">330M+</div>
+        <div class="text-sm text-muted-foreground">U.S. Population Baseline</div>
       </div>
       <div class="p-5 rounded-xl border border-border bg-card text-center">
         <BarChart3 className="h-6 w-6 text-primary mx-auto mb-2" />
-        <div class="text-2xl font-bold text-foreground">140+</div>
-        <div class="text-sm text-muted-foreground">Years of historical data</div>
+        <div class="text-2xl font-bold text-foreground">145 Yrs</div>
+        <div class="text-sm text-muted-foreground">Historical Cohort Span</div>
       </div>
     </div>
 

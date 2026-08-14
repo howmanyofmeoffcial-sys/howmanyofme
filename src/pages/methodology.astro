@@ -7,7 +7,7 @@ import DataSources from '../components/DataSources.astro';
 import ToolCTA from '../components/ToolCTA.astro';
 
 const title = "Data Methodology & Statistical Sources — HowManyOfMe";
-const description = "Learn how HowManyOfMe calculates living name bearer estimates using actuarial cohort survival models, SSA archives, and international census data.";
+const description = "Learn how HowManyOfMe calculates living name bearer estimates using actuarial cohort survival models, SSA archives, and U.S. Census data.";
 const canonical = "https://howmanyofme.co/methodology";
 ---
 
@@ -19,7 +19,7 @@ const canonical = "https://howmanyofme.co/methodology";
 
     <h1 class="font-display text-4xl md:text-5xl font-bold mb-4 text-foreground">Data Methodology &amp; Sources</h1>
     <p class="text-lg text-muted-foreground mb-8 leading-relaxed">
-      How we transform historical birth registries into accurate estimates of the living population sharing any first name.
+      How we transform historical birth registries and census tabulations into transparent, evidence-based demographic estimates.
     </p>
 
     <div class="prose-content">
@@ -28,20 +28,20 @@ const canonical = "https://howmanyofme.co/methodology";
         Most baby name websites only show annual newborn ranks. HowManyOfMe answers a fundamentally different question: <em>How many living people have this name today?</em>
       </p>
       <p>
-        To compute this, we apply cohort-component demographic analysis. For every birth year from 1880 to the present, we apply actuarial life tables from the U.S. Social Security Administration and the UN Population Division to calculate the surviving proportion of each birth cohort.
+        To compute this, we apply cohort-component demographic analysis. For every birth year from 1880 through 2024, we apply actuarial life tables from the U.S. Social Security Administration and CDC to calculate the surviving proportion of each historical birth cohort.
       </p>
 
-      <h2>2. Primary Data Sources</h2>
+      <h2>2. Primary Government Data Sources</h2>
       <ul>
-        <li><strong>U.S. Social Security Administration (SSA):</strong> Complete national birth registration records from 1880 through the latest available reporting year.</li>
-        <li><strong>U.S. Census Bureau:</strong> Decade-by-decade decennial census distributions and population totals.</li>
-        <li><strong>UK Office for National Statistics (ONS):</strong> England and Wales first name registries.</li>
-        <li><strong>International Statistical Agencies:</strong> Statistics Canada, Australian Bureau of Statistics (ABS), and Eurostat.</li>
+        <li><strong>U.S. Social Security Administration (SSA):</strong> Complete national given-name birth registration records from 1880 through 2024 (minimum 5 occurrences per sex/year).</li>
+        <li><strong>U.S. Census Bureau (2020 Decennial Census):</strong> First-name tabulations covering 53,615 distinct given names observed in census returns.</li>
+        <li><strong>U.S. Census Bureau Frequently Occurring Surnames:</strong> Decennial census surname frequencies covering all surnames with 100 or more observations.</li>
+        <li><strong>CDC National Center for Health Statistics:</strong> Actuarial cohort survival tables.</li>
       </ul>
 
-      <h2>3. Global Extrapolation</h2>
+      <h2>3. Full-Name &amp; Modelled Estimation</h2>
       <p>
-        For names with international distribution, regional multipliers are calculated based on linguistic origin, diaspora migration modeling, and cultural naming density across 80+ jurisdictions.
+        For full names, joint demographic probability is computed by combining first-name living counts with Census surname probabilities under statistical independence. For uncommon names outside primary Social Security records, our engine provides clearly labelled statistical estimates based on national frequency distribution brackets without fabricating arbitrary rankings.
       </p>
     </div>
 

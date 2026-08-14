@@ -5,15 +5,16 @@ import { Database, CheckCircle2, RefreshCw } from "lucide-react";
  * underlying name data so every tool page shows the same trust signals.
  */
 export const DATASET = {
-  lastUpdated: "March 2026",
-  records: "100M+ names",
+  lastUpdated: "August 2026",
+  records: "1880–2024 SSA & Census",
   sources: [
-    "U.S. Social Security Administration (SSA) birth records, 1880–2025",
-    "UK Office for National Statistics (ONS) baby names",
-    "International census & demographic registries (80+ countries)",
+    "U.S. Social Security Administration (SSA) card applications, 1880–2024",
+    "U.S. Census Bureau Decennial Census first-name tabulations (2020)",
+    "U.S. Census Bureau Decennial Census Frequently Occurring Surnames",
+    "CDC & Social Security Actuarial Life Tables for living cohort modeling",
   ],
-  coverage: "First names, gender, popularity rank, decade-by-decade trend, and regional distribution.",
-  refreshCadence: "Quarterly",
+  coverage: "First names, surnames, demographic rankings, historical cohort trajectories, and living population estimates.",
+  refreshCadence: "Annual Government Release",
 } as const;
 
 interface DataFreshnessProps {

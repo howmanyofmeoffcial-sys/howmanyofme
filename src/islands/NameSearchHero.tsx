@@ -90,28 +90,23 @@ export default function NameSearchHero() {
             </div>
 
             <h1 className="font-display text-4xl md:text-5xl lg:text-6xl font-bold text-primary-foreground mb-5 leading-[1.1]">
-              How many people<br />
-              have{" "}
-              <span className="underline decoration-wavy decoration-primary-foreground/40 underline-offset-8">
-                your name
-              </span>
-              ?
+              How Many People Have Your Name?
             </h1>
 
-            <p className="text-lg text-primary-foreground/85 max-w-xl mx-auto lg:mx-0 mb-6">
-              Check your first name or full name instantly. Get evidence-backed demographic counts, national rankings, and living population estimates in seconds.
+            <p className="text-lg text-primary-foreground/85 max-w-xl mx-auto lg:mx-0 mb-6 leading-relaxed">
+              Check how common your first name, last name, or full name may be in the United States using public name statistics and clearly labelled estimates.
             </p>
 
             {/* Trust signals */}
             <div className="flex flex-wrap justify-center lg:justify-start gap-x-5 gap-y-2 text-primary-foreground/80 text-sm">
               <span className="inline-flex items-center gap-1.5">
-                <Zap className="h-4 w-4" /> Instant inline results
+                <Zap className="h-4 w-4" /> Free & instant
               </span>
               <span className="inline-flex items-center gap-1.5">
-                <Globe className="h-4 w-4" /> SSA & U.S. Census models
+                <ShieldCheck className="h-4 w-4" /> No signup required
               </span>
               <span className="inline-flex items-center gap-1.5">
-                <ShieldCheck className="h-4 w-4" /> 100% Free · No signup
+                <Globe className="h-4 w-4" /> Source-backed where available
               </span>
             </div>
           </div>
