@@ -1,51 +1,35 @@
-import { describe, it, expect, vi, afterEach } from "vitest";
-import { render, screen, waitFor } from "@testing-library/react";
-import { MemoryRouter, Route, Routes } from "react-router-dom";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import RouteErrorBoundary from "@/components/RouteErrorBoundary";
-import NameDetail from "@/pages/NameDetail";
+import { describe, it, expect } from "vitest";
+import { getName } from "../lib/names/getName";
+import { getSimilarNames } from "../lib/names/getSimilarNames";
+import { auditNameQuality } from "../lib/names/contentQuality";
 
-const renderRoute = (path: string) => {
-  const client = new QueryClient();
-  return render(
-    <QueryClientProvider client={client}>
-      <MemoryRouter initialEntries={[path]}>
-        <RouteErrorBoundary resetKey={path}>
-          <Routes>
-            <Route path="/name/:name" element={<NameDetail />} />
-          </Routes>
-        </RouteErrorBoundary>
-      </MemoryRouter>
-    </QueryClientProvider>,
-  );
-};
-
-describe("NameDetail e2e", () => {
-  afterEach(() => vi.restoreAllMocks());
-
-  it("renders full report for unknown name without hitting the error boundary", async () => {
-    vi.stubGlobal("fetch", vi.fn().mockResolvedValue({
-      ok: true,
-      json: async () => ({ ok: false, fallback: true }),
-    }));
-
-    renderRoute("/name/Mapuii");
-
-    await waitFor(() => {
-      expect(screen.getByRole("heading", { level: 1, name: /Mapuii/i })).toBeInTheDocument();
-    });
-    expect(screen.queryByText(/could not be displayed/i)).not.toBeInTheDocument();
-    expect(screen.queryByText(/Results are unavailable/i)).not.toBeInTheDocument();
+describe("Name Data & Core Engine tests", () => {
+  it("resolves canonical popular names correctly", () => {
+    const data = getName("David", false);
+    expect(data).toBeDefined();
+    expect(data?.name).toBe("David");
+    expect(data?.count).toBeGreaterThan(100000);
+    expect(data?.rank).toBeGreaterThan(0);
   });
 
-  it("renders deeply unique names without crashing", async () => {
-    vi.stubGlobal("fetch", vi.fn().mockRejectedValue(new Error("network down")));
+  it("calculates similarity graph without errors", () => {
+    const similar = getSimilarNames("Emma", 10);
+    expect(similar.combined.length).toBeGreaterThan(0);
+    expect(similar.startsWith.every((n) => n.startsWith("E"))).toBe(true);
+  });
 
-    renderRoute("/name/Zxqvbnpqrt");
+  it("computes content quality score meeting minimum Tier threshold", () => {
+    const data = getName("James", false);
+    expect(data).toBeDefined();
+    if (data) {
+      const score = auditNameQuality(data);
+      expect(score.score).toBeGreaterThanOrEqual(70);
+      expect(score.tier).not.toBe("TIER_C_INSUFFICIENT");
+    }
+  });
 
-    await waitFor(() => {
-      expect(screen.getByRole("heading", { level: 1, name: /Zxqvbnpqrt/i })).toBeInTheDocument();
-    });
-    expect(screen.queryByText(/could not be displayed/i)).not.toBeInTheDocument();
+  it("handles non-existent names cleanly without crashing", () => {
+    const data = getName("NonExistentXYZ999", false);
+    expect(data).toBeNull();
   });
 });

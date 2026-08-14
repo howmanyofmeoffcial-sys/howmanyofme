@@ -1,0 +1,125 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import SiteHeader from '../../islands/SiteHeader';
+import SiteFooter from '../../components/SiteFooter.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import AdSlot from '../../components/AdSlot.astro';
+import RelatedPosts from '../../components/RelatedPosts.astro';
+import {
+  TrendingUp, Shuffle, Baby, User, BookOpen, Globe, GitCompare,
+  LineChart, Sparkles, HelpCircle, Search, ArrowRight
+} from 'lucide-react';
+
+const tools = [
+  { title: "Name Popularity Checker", desc: "Track how any name's popularity has changed decade by decade with detailed charts.", link: "/tools/popularity-checker", icon: TrendingUp },
+  { title: "Name Popularity Comparison", desc: "Compare two names side by side — popularity, trends, and regional differences.", link: "/tools/name-comparison", icon: GitCompare },
+  { title: "Baby Name Trend Visualizer", desc: "Visualize popularity trends for up to 4 names with interactive time-series charts.", link: "/tools/trend-visualizer", icon: LineChart },
+  { title: "Unique Baby Name Generator", desc: "Discover rare and unique baby names with customizable filters for gender and popularity.", link: "/tools/unique-name-generator", icon: Sparkles },
+  { title: "Random Name Generator", desc: "Generate random real names from our database with filters for gender and origin.", link: "/tools/random-name", icon: Shuffle },
+  { title: "Baby Name Ideas", desc: "Browse curated baby name suggestions filtered by letter and gender.", link: "/tools/baby-names", icon: Baby },
+  { title: "Username Generator", desc: "Create unique username ideas based on any name for social media and gaming.", link: "/tools/username-generator", icon: User },
+  { title: "Name Meaning Lookup", desc: "Discover the etymology, origin, and cultural significance of any name.", link: "/tools/meaning", icon: BookOpen },
+  { title: "Similar Names Finder", desc: "Find names that look or sound like any first name — great for shortlists and alternatives.", link: "/similar-names", icon: Search },
+  { title: "How Many People Have My Name?", desc: "Find out how many people worldwide share your name with detailed statistics.", link: "/", icon: Globe },
+  { title: "How to Use the Popularity Checker", desc: "Step-by-step guide to getting the most out of our name popularity tools.", link: "/tools/popularity-guide", icon: HelpCircle },
+];
+
+const faqs = [
+  { q: "Are these name tools really free to use?", a: "Yes — every tool on HowManyOfMe is 100% free, with no signup, no email capture, and no paywall. You can run unlimited searches, comparisons, and generations." },
+  { q: "Where does the data behind these tools come from?", a: "We aggregate data from official government sources, primarily the U.S. Social Security Administration (350M+ records since 1880), UK ONS, Statistics Canada, Australian ABS, and Eurostat — covering 100M+ names across 80+ countries." },
+  { q: "Which tool should I start with?", a: "If you want to know how rare your name is, start with the Name Popularity Checker. If you're picking a baby name, try the Unique Baby Name Generator or the Trend Visualizer. For social media, use the Username Generator." },
+  { q: "Do the tools work on mobile?", a: "Yes — every tool is fully responsive and works on phone, tablet, and desktop. No app installation required." },
+];
+
+const title = "Free Name Tools & Calculators — Popularity, Generator, Trends | HowManyOfMe";
+const description = "Suite of 10 free name tools: popularity checker, name comparison, trend visualizer, unique baby name generator, random names, username generator, and meaning lookup.";
+const canonical = "https://howmanyofme.co/tools";
+
+const jsonLd = [
+  {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    name: "Free Name Tools & Utilities",
+    url: "https://howmanyofme.co/tools",
+    description,
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    itemListElement: tools.map((t, i) => ({
+      "@type": "ListItem",
+      position: i + 1,
+      url: `https://howmanyofme.co${t.link}`,
+      name: t.title,
+    })),
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: faqs.map(f => ({
+      "@type": "Question",
+      name: f.q,
+      acceptedAnswer: { "@type": "Answer", text: f.a },
+    })),
+  },
+];
+---
+
+<BaseLayout title={title} description={description} canonical={canonical} jsonLd={jsonLd}>
+  <SiteHeader client:idle />
+
+  <main class="container py-12">
+    <Breadcrumbs className="mb-6" items={[{ label: "Home", href: "/" }, { label: "Tools" }]} />
+
+    <div class="max-w-3xl mb-10">
+      <h1 class="font-display text-4xl md:text-5xl font-bold mb-4 text-foreground">Free Name Tools &amp; Calculators</h1>
+      <p class="text-lg text-muted-foreground leading-relaxed">
+        Explore our comprehensive collection of free name analytics tools. Whether you're researching your own name's rarity, finding unique baby names, comparing trends, or generating creative usernames — we've got you covered.
+      </p>
+    </div>
+
+    <!-- Tools Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-16">
+      {tools.map(tool => (
+        <a
+          href={tool.link}
+          class="p-6 rounded-2xl border border-border bg-card hover:border-primary/40 hover:shadow-lg transition-all flex flex-col justify-between group"
+        >
+          <div>
+            <div class="h-12 w-12 rounded-xl bg-primary/10 flex items-center justify-center mb-4 group-hover:bg-primary/20 transition-colors">
+              <tool.icon className="h-6 w-6 text-primary" />
+            </div>
+            <h2 class="font-display text-xl font-bold mb-2 text-foreground group-hover:text-primary transition-colors">
+              {tool.title}
+            </h2>
+            <p class="text-sm text-muted-foreground leading-relaxed mb-4">
+              {tool.desc}
+            </p>
+          </div>
+          <div class="flex items-center text-sm font-semibold text-primary group-hover:translate-x-1 transition-transform">
+            Try Tool <ArrowRight className="h-4 w-4 ml-1" />
+          </div>
+        </a>
+      ))}
+    </div>
+
+    <AdSlot />
+
+    <!-- FAQ Section -->
+    <section class="max-w-3xl my-16">
+      <h2 class="font-display text-2xl font-bold mb-6 text-foreground">Frequently Asked Questions About Our Name Tools</h2>
+      <div class="space-y-4">
+        {faqs.map(f => (
+          <div class="p-6 rounded-xl border border-border bg-card">
+            <h3 class="font-semibold text-base mb-2 text-foreground">{f.q}</h3>
+            <p class="text-sm text-muted-foreground leading-relaxed">{f.a}</p>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <RelatedPosts currentSlug="tools" tags={["tools", "baby names", "popularity", "statistics", "generator"]} count={6} />
+  </main>
+
+  <SiteFooter />
+</BaseLayout>

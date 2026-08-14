@@ -1,0 +1,104 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import SiteHeader from '../islands/SiteHeader';
+import SiteFooter from '../components/SiteFooter.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import ToolCTA from '../components/ToolCTA.astro';
+import { Users, Database, Globe, BarChart3, ExternalLink } from 'lucide-react';
+
+const title = "About HowManyOfMe — How Many People Have My Name | Creator Story";
+const description = "Learn about HowManyOfMe, the platform that answers 'how many of me are there?' Discover name popularity, rarity rankings, and data across 100M+ records in 80+ countries.";
+const canonical = "https://howmanyofme.co/about";
+
+const jsonLd = [
+  {
+    "@context": "https://schema.org",
+    "@type": "AboutPage",
+    name: "About HowManyOfMe",
+    description: "Learn about the creator and mission behind HowManyOfMe, a name statistics platform covering 100M+ names.",
+    url: "https://howmanyofme.co/about",
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    name: "Ziven Borceg",
+    url: "https://medium.com/@zivenborceg",
+    sameAs: ["https://medium.com/@zivenborceg"],
+    jobTitle: "Creator of HowManyOfMe",
+  },
+];
+---
+
+<BaseLayout title={title} description={description} canonical={canonical} jsonLd={jsonLd}>
+  <SiteHeader client:idle />
+
+  <main class="container py-12 max-w-3xl">
+    <Breadcrumbs
+      className="mb-6"
+      items={[
+        { label: "Home", href: "/" },
+        { label: "About" },
+      ]}
+    />
+
+    <h1 class="font-display text-4xl md:text-5xl font-bold mb-6 text-foreground">
+      About HowManyOfMe
+    </h1>
+    <p class="text-lg text-muted-foreground mb-10 leading-relaxed">
+      Ever wondered "how many people have my name?" or "how common is my name?" — you're in the right place. HowManyOfMe is the platform built to answer exactly that, using real demographic data from over 100 million records across 80+ countries.
+    </p>
+
+    <!-- Stats Grid -->
+    <div class="grid grid-cols-2 gap-4 mb-14">
+      <div class="p-5 rounded-xl border border-border bg-card text-center">
+        <Database className="h-6 w-6 text-primary mx-auto mb-2" />
+        <div class="text-2xl font-bold text-foreground">100M+</div>
+        <div class="text-sm text-muted-foreground">Names in database</div>
+      </div>
+      <div class="p-5 rounded-xl border border-border bg-card text-center">
+        <Globe className="h-6 w-6 text-primary mx-auto mb-2" />
+        <div class="text-2xl font-bold text-foreground">80+</div>
+        <div class="text-sm text-muted-foreground">Countries covered</div>
+      </div>
+      <div class="p-5 rounded-xl border border-border bg-card text-center">
+        <Users className="h-6 w-6 text-primary mx-auto mb-2" />
+        <div class="text-2xl font-bold text-foreground">Millions</div>
+        <div class="text-sm text-muted-foreground">Monthly searches</div>
+      </div>
+      <div class="p-5 rounded-xl border border-border bg-card text-center">
+        <BarChart3 className="h-6 w-6 text-primary mx-auto mb-2" />
+        <div class="text-2xl font-bold text-foreground">140+</div>
+        <div class="text-sm text-muted-foreground">Years of historical data</div>
+      </div>
+    </div>
+
+    <!-- Creator Section -->
+    <section class="mb-12">
+      <h2 class="font-display text-2xl font-bold mb-4 text-foreground">Meet the Creator</h2>
+      <p class="text-muted-foreground leading-relaxed mb-3">
+        I'm <strong class="text-foreground">Ziven Borceg</strong> — a builder, tinkerer, and someone who genuinely enjoys making useful things on the internet. I've always been drawn to the intersection of data and everyday curiosity.
+      </p>
+      <p class="text-muted-foreground leading-relaxed mb-4">
+        You can read more of my writing and follow what I'm building on <a href="https://medium.com/@zivenborceg" target="_blank" rel="noopener noreferrer" class="text-primary hover:underline inline-flex items-center gap-1 font-medium">Medium <ExternalLink className="h-3 w-3 inline" /></a>.
+      </p>
+    </section>
+
+    <!-- Mission -->
+    <section class="mb-12">
+      <h2 class="font-display text-2xl font-bold mb-4 text-foreground">Why HowManyOfMe Exists</h2>
+      <p class="text-muted-foreground leading-relaxed mb-3">
+        Most name websites fall into one of two camps: dry government archives that are impossible to search, or content farms that give you a generic "your name means beloved" paragraph without any real data.
+      </p>
+      <p class="text-muted-foreground leading-relaxed">
+        HowManyOfMe takes official census figures, birth registries, and demographic records, runs them through statistical models, and serves them up in clean, interactive reports.
+      </p>
+    </section>
+
+    <ToolCTA
+      headline="Try the free name search tool"
+      subhead="Enter any first name and discover how many people share it worldwide."
+    />
+  </main>
+
+  <SiteFooter />
+</BaseLayout>

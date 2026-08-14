@@ -1,0 +1,48 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import SiteHeader from '../../islands/SiteHeader';
+import SiteFooter from '../../components/SiteFooter.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import AdSlot from '../../components/AdSlot.astro';
+import ToolCTA from '../../components/ToolCTA.astro';
+import RelatedPosts from '../../components/RelatedPosts.astro';
+import TrendVisualizerIsland from '../../islands/tools/TrendVisualizerIsland';
+
+const title = "Baby Name Trend Visualizer — Time-Series Popularity Charts | HowManyOfMe";
+const description = "Visualize and compare popularity curves for up to 4 names simultaneously across 140+ years of demographic data.";
+const canonical = "https://howmanyofme.co/tools/trend-visualizer";
+---
+
+<BaseLayout title={title} description={description} canonical={canonical}>
+  <SiteHeader client:idle />
+
+  <main class="container py-12 max-w-4xl">
+    <Breadcrumbs
+      className="mb-6"
+      items={[
+        { label: "Home", href: "/" },
+        { label: "Tools", href: "/tools" },
+        { label: "Trend Visualizer" },
+      ]}
+    />
+
+    <h1 class="font-display text-4xl md:text-5xl font-bold mb-4 text-foreground">Baby Name Trend Visualizer</h1>
+    <p class="text-muted-foreground mb-8 leading-relaxed">
+      Compare historical popularity trajectories for up to 4 names across nine decades of recorded birth data (1940s–2020s).
+    </p>
+
+    <!-- Interactive Island -->
+    <TrendVisualizerIsland client:load />
+
+    <AdSlot />
+
+    <ToolCTA
+      headline="Explore Unique Names"
+      subhead="Discover rare and modern alternatives with our Unique Baby Name Generator."
+    />
+
+    <RelatedPosts currentSlug="trend-visualizer" tags={["trends", "charts", "tools"]} count={6} />
+  </main>
+
+  <SiteFooter />
+</BaseLayout>

@@ -1,0 +1,46 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import SiteHeader from '../islands/SiteHeader';
+import SiteFooter from '../components/SiteFooter.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+
+const title = "Data Disclaimer — HowManyOfMe";
+const description = "Understand the methodology, confidence intervals, and statistical modeling behind HowManyOfMe name estimates.";
+const canonical = "https://howmanyofme.co/disclaimer";
+---
+
+<BaseLayout title={title} description={description} canonical={canonical}>
+  <SiteHeader client:idle />
+
+  <main class="container py-12 max-w-3xl">
+    <Breadcrumbs className="mb-6" items={[{ label: "Home", href: "/" }, { label: "Disclaimer" }]} />
+
+    <h1 class="font-display text-4xl md:text-5xl font-bold mb-4 text-foreground">Data Disclaimer</h1>
+    <p class="text-sm text-muted-foreground mb-8">Statistical Estimates &amp; Limitations</p>
+
+    <div class="prose-content">
+      <p>
+        HowManyOfMe uses actuarial demographic modeling to estimate living name populations. Please review our data limitations below:
+      </p>
+
+      <h2>Statistical Estimation vs. Exact Census</h2>
+      <p>
+        National governments do not conduct real-time censuses of living first names on a continuous daily basis. Our figures are mathematically derived by combining historical birth registration records (1880–present from the U.S. Social Security Administration) with World Health Organization cohort survival curves and demographic life tables.
+      </p>
+
+      <h2>Confidence Intervals</h2>
+      <ul>
+        <li><strong>Common Names (Rank 1–500):</strong> Estimated margin of error is typically within ±5%.</li>
+        <li><strong>Moderate Frequency Names (Rank 501–5,000):</strong> Estimated margin of error is within ±10%.</li>
+        <li><strong>Rare / Edge Names:</strong> Estimated margin of error is within ±15% to ±25%.</li>
+      </ul>
+
+      <h2>Intended Use</h2>
+      <p>
+        The statistics provided on this website are intended for informational, educational, and naming exploration purposes only.
+      </p>
+    </div>
+  </main>
+
+  <SiteFooter />
+</BaseLayout>

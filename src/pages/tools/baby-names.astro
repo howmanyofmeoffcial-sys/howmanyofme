@@ -1,0 +1,88 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import SiteHeader from '../../islands/SiteHeader';
+import SiteFooter from '../../components/SiteFooter.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import AdSlot from '../../components/AdSlot.astro';
+import ToolCTA from '../../components/ToolCTA.astro';
+import RelatedPosts from '../../components/RelatedPosts.astro';
+import BabyNamesBrowser from '../../islands/tools/BabyNamesBrowser';
+
+const title = "Baby Name Browser A–Z — Filter by Letter and Gender | HowManyOfMe";
+const description = "Free A–Z baby name browser. Filter thousands of real recorded baby names by starting letter and gender. No signup required.";
+const canonical = "https://howmanyofme.co/tools/baby-names";
+
+const faqs = [
+  { q: "How do I browse baby names alphabetically?", a: "Click any letter A–Z above to view all names beginning with that letter. Use the gender dropdown to narrow further." },
+  { q: "Are these all the baby names that exist?", a: "We cover 100,000+ recorded names from US SSA, UK ONS, and 78 other registries." },
+  { q: "Can I filter by gender?", a: "Yes — choose Boy, Girl, or Any (which includes unisex names)." },
+];
+
+const jsonLd = [
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    name: "Baby Name Browser",
+    applicationCategory: "UtilityApplication",
+    operatingSystem: "Any",
+    url: canonical,
+    description,
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: faqs.map((f) => ({
+      "@type": "Question",
+      name: f.q,
+      acceptedAnswer: { "@type": "Answer", text: f.a },
+    })),
+  },
+];
+---
+
+<BaseLayout title={title} description={description} canonical={canonical} jsonLd={jsonLd}>
+  <SiteHeader client:idle />
+
+  <main class="container py-12 max-w-3xl">
+    <Breadcrumbs
+      className="mb-6"
+      items={[
+        { label: "Home", href: "/" },
+        { label: "Tools", href: "/tools" },
+        { label: "Baby Names" },
+      ]}
+    />
+
+    <h1 class="font-display text-4xl md:text-5xl font-bold mb-4 text-foreground">Baby Name Browser</h1>
+    <p class="text-muted-foreground mb-8 leading-relaxed">
+      Browse real recorded baby names alphabetically. Filter by starting letter and gender, then select any name for complete popularity statistics and decade curves.
+    </p>
+
+    <!-- Interactive Island -->
+    <BabyNamesBrowser client:load />
+
+    <AdSlot />
+
+    <!-- FAQ Section -->
+    <section class="my-12">
+      <h2 class="font-display text-2xl font-bold mb-4 text-foreground">Frequently Asked Questions</h2>
+      <div class="space-y-3">
+        {faqs.map((f) => (
+          <div class="p-5 rounded-xl border border-border bg-card">
+            <h3 class="font-semibold text-foreground mb-1">{f.q}</h3>
+            <p class="text-sm text-muted-foreground">{f.a}</p>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <ToolCTA
+      headline="Explore Unique Baby Names"
+      subhead="Looking for something rare? Use our Unique Name Generator to filter by maximum bearer counts."
+    />
+
+    <RelatedPosts currentSlug="baby-names" tags={["baby names", "tools", "trends"]} count={6} />
+  </main>
+
+  <SiteFooter />
+</BaseLayout>

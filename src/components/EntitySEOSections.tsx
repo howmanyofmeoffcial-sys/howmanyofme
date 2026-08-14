@@ -1,4 +1,3 @@
-import { Link } from "react-router-dom";
 import { Check, X, ArrowRight } from "lucide-react";
 
 /**
@@ -180,9 +179,9 @@ export const RelatedToolsInline = ({ tools }: { tools: RelatedTool[] }) => (
         <li key={t.to} className="flex items-start gap-2">
           <ArrowRight size={16} className="text-primary mt-1 shrink-0" />
           <p className="text-sm">
-            <Link to={t.to} className="font-semibold text-primary hover:underline">
+            <a href={t.to} className="font-semibold text-primary hover:underline">
               {t.name}
-            </Link>
+            </a>
             <span className="text-muted-foreground"> — {t.blurb}</span>
           </p>
         </li>

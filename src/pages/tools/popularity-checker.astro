@@ -1,0 +1,67 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import SiteHeader from '../../islands/SiteHeader';
+import SiteFooter from '../../components/SiteFooter.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import AdSlot from '../../components/AdSlot.astro';
+import ToolCTA from '../../components/ToolCTA.astro';
+import RelatedPosts from '../../components/RelatedPosts.astro';
+import PopularityCheckerIsland from '../../islands/tools/PopularityCheckerIsland';
+
+const title = "Name Popularity Checker — Free Name Ranking & Trends | HowManyOfMe";
+const description = "Check how common your name is worldwide. View living bearer counts, popularity by decade, and regional rankings for any first name.";
+const canonical = "https://howmanyofme.co/tools/popularity-checker";
+
+const faqs = [
+  { q: "How accurate is the Name Popularity Checker?", a: "Accuracy is within ±5% for common names by synthesizing U.S. SSA records (1880–present), UK ONS, and international census data." },
+  { q: "Can I check any name with this tool?", a: "Yes — the checker covers over 100,000 unique first names across multiple linguistic origins." },
+  { q: "Is the Name Popularity Checker free?", a: "Yes, 100% free with unlimited lookups and zero signup requirements." },
+];
+---
+
+<BaseLayout title={title} description={description} canonical={canonical}>
+  <SiteHeader client:idle />
+
+  <main class="container py-12 max-w-3xl">
+    <Breadcrumbs
+      className="mb-6"
+      items={[
+        { label: "Home", href: "/" },
+        { label: "Tools", href: "/tools" },
+        { label: "Popularity Checker" },
+      ]}
+    />
+
+    <h1 class="font-display text-4xl md:text-5xl font-bold mb-4 text-foreground">Name Popularity Checker</h1>
+    <p class="text-muted-foreground mb-8 leading-relaxed">
+      Check how common or rare any first name is today. Instantly compute living bearer counts, ranking percentiles, and decade-by-decade trends.
+    </p>
+
+    <!-- Interactive Island -->
+    <PopularityCheckerIsland client:load />
+
+    <AdSlot />
+
+    <!-- FAQ Section -->
+    <section class="my-12">
+      <h2 class="font-display text-2xl font-bold mb-4 text-foreground">Frequently Asked Questions</h2>
+      <div class="space-y-3">
+        {faqs.map((f) => (
+          <div class="p-5 rounded-xl border border-border bg-card">
+            <h3 class="font-semibold text-foreground mb-1">{f.q}</h3>
+            <p class="text-sm text-muted-foreground">{f.a}</p>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <ToolCTA
+      headline="Compare Two Names"
+      subhead="Want to see which of two names is more popular? Try our head-to-head comparison tool."
+    />
+
+    <RelatedPosts currentSlug="popularity-checker" tags={["popularity", "tools", "trends"]} count={6} />
+  </main>
+
+  <SiteFooter />
+</BaseLayout>

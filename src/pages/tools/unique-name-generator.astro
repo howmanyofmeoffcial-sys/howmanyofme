@@ -1,0 +1,48 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import SiteHeader from '../../islands/SiteHeader';
+import SiteFooter from '../../components/SiteFooter.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import AdSlot from '../../components/AdSlot.astro';
+import ToolCTA from '../../components/ToolCTA.astro';
+import RelatedPosts from '../../components/RelatedPosts.astro';
+import UniqueNameIsland from '../../islands/tools/UniqueNameIsland';
+
+const title = "Unique Baby Name Generator — Filter by Rarity Thresholds | HowManyOfMe";
+const description = "Discover rare and distinctive baby names. Filter real recorded names by maximum bearer count and gender.";
+const canonical = "https://howmanyofme.co/tools/unique-name-generator";
+---
+
+<BaseLayout title={title} description={description} canonical={canonical}>
+  <SiteHeader client:idle />
+
+  <main class="container py-12 max-w-3xl">
+    <Breadcrumbs
+      className="mb-6"
+      items={[
+        { label: "Home", href: "/" },
+        { label: "Tools", href: "/tools" },
+        { label: "Unique Name Generator" },
+      ]}
+    />
+
+    <h1 class="font-display text-4xl md:text-5xl font-bold mb-4 text-foreground">Unique Baby Name Generator</h1>
+    <p class="text-muted-foreground mb-8 leading-relaxed">
+      Find rare, distinctive baby names that stand out without being artificial. Filter real recorded names by maximum living bearer thresholds.
+    </p>
+
+    <!-- Interactive Island -->
+    <UniqueNameIsland client:load />
+
+    <AdSlot />
+
+    <ToolCTA
+      headline="Explore Name Meanings"
+      subhead="Found a rare name you like? Discover its ancient linguistic roots with our Meaning Lookup."
+    />
+
+    <RelatedPosts currentSlug="unique-name-generator" tags={["unique names", "baby names", "tools"]} count={6} />
+  </main>
+
+  <SiteFooter />
+</BaseLayout>

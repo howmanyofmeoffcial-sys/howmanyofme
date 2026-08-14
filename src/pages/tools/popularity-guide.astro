@@ -1,0 +1,84 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import SiteHeader from '../../islands/SiteHeader';
+import SiteFooter from '../../components/SiteFooter.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import AdSlot from '../../components/AdSlot.astro';
+import ToolCTA from '../../components/ToolCTA.astro';
+import RelatedPosts from '../../components/RelatedPosts.astro';
+
+const title = "How to Use the Name Popularity Checker — Guide & Interpretations | HowManyOfMe";
+const description = "Learn how to read decade popularity curves, interpret rarity ratings, and evaluate demographic name statistics.";
+const canonical = "https://howmanyofme.co/tools/popularity-guide";
+
+const faqs = [
+  { q: "What does the 0-100 popularity index mean?", a: "The popularity index normalizes birth frequency so 100 represents peak nationwide saturation for that name during that specific decade." },
+  { q: "How are living bearer counts calculated?", a: "By applying cohort-survival actuarial curves to annual birth registries from 1880 to the present." },
+  { q: "What is considered a rare name?", a: "Any name given to fewer than 1 in 10,000 babies per year, or with fewer than 5,000 living bearers nationwide." },
+];
+---
+
+<BaseLayout title={title} description={description} canonical={canonical}>
+  <SiteHeader client:idle />
+
+  <main class="container py-12 max-w-3xl">
+    <Breadcrumbs
+      className="mb-6"
+      items={[
+        { label: "Home", href: "/" },
+        { label: "Tools", href: "/tools" },
+        { label: "Popularity Guide" },
+      ]}
+    />
+
+    <h1 class="font-display text-4xl md:text-5xl font-bold mb-4 text-foreground">
+      How to Use the Name Popularity Tools
+    </h1>
+    <p class="text-lg text-muted-foreground mb-8 leading-relaxed">
+      A step-by-step guide to interpreting demographic name data, historical popularity trends, and rarity tiers.
+    </p>
+
+    <div class="prose-content my-8">
+      <h2>1. Understanding the Metrics</h2>
+      <ul>
+        <li><strong>Living Bearers:</strong> The estimated number of living people with this first name today.</li>
+        <li><strong>Global / National Rank:</strong> Where the name sits relative to all recorded names in the demographic registry.</li>
+        <li><strong>1-in-X Frequency:</strong> The probability of meeting someone with this name in the general population.</li>
+      </ul>
+
+      <h2>2. Reading the Decade Trend Curves</h2>
+      <p>
+        Names follow distinct lifecycle shapes: classic steady (e.g. <em>James</em>, <em>Elizabeth</em>), mid-century peak (e.g. <em>Gary</em>, <em>Linda</em>), vintage revival (e.g. <em>Hazel</em>, <em>Theodore</em>), and modern spike (e.g. <em>Liam</em>, <em>Luna</em>).
+      </p>
+
+      <h2>3. Choosing the Right Name</h2>
+      <p>
+        Whether picking a baby name, researching a pen name, or exploring your own family history, direct comparison of decade trends ensures you understand a name's historical trajectory.
+      </p>
+    </div>
+
+    <AdSlot />
+
+    <!-- FAQ Section -->
+    <section class="my-12">
+      <h2 class="font-display text-2xl font-bold mb-4 text-foreground">Frequently Asked Questions</h2>
+      <div class="space-y-3">
+        {faqs.map((f) => (
+          <div class="p-5 rounded-xl border border-border bg-card">
+            <h3 class="font-semibold text-foreground mb-1">{f.q}</h3>
+            <p class="text-sm text-muted-foreground">{f.a}</p>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <ToolCTA
+      headline="Try the Popularity Checker Now"
+      subhead="Put this guide into practice by checking any first name in our database."
+    />
+
+    <RelatedPosts currentSlug="popularity-guide" tags={["guide", "popularity", "tools"]} count={6} />
+  </main>
+
+  <SiteFooter />
+</BaseLayout>

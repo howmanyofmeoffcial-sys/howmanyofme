@@ -1,0 +1,48 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import SiteHeader from '../../islands/SiteHeader';
+import SiteFooter from '../../components/SiteFooter.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import AdSlot from '../../components/AdSlot.astro';
+import ToolCTA from '../../components/ToolCTA.astro';
+import RelatedPosts from '../../components/RelatedPosts.astro';
+import MeaningLookupIsland from '../../islands/tools/MeaningLookupIsland';
+
+const title = "Name Meaning Lookup — Etymology & Cultural Origin Search | HowManyOfMe";
+const description = "Discover the ancient roots, linguistic history, and literal translations of thousands of personal names.";
+const canonical = "https://howmanyofme.co/tools/meaning";
+---
+
+<BaseLayout title={title} description={description} canonical={canonical}>
+  <SiteHeader client:idle />
+
+  <main class="container py-12 max-w-3xl">
+    <Breadcrumbs
+      className="mb-6"
+      items={[
+        { label: "Home", href: "/" },
+        { label: "Tools", href: "/tools" },
+        { label: "Name Meaning Lookup" },
+      ]}
+    />
+
+    <h1 class="font-display text-4xl md:text-5xl font-bold mb-4 text-foreground">Name Meaning Lookup</h1>
+    <p class="text-muted-foreground mb-8 leading-relaxed">
+      Discover the origin, historical meaning, and cultural significance behind any first name across 80+ naming traditions.
+    </p>
+
+    <!-- Interactive Island -->
+    <MeaningLookupIsland client:load />
+
+    <AdSlot />
+
+    <ToolCTA
+      headline="Explore Name Popularity Trends"
+      subhead="View how popularity has evolved decade-by-decade with our free Popularity Checker."
+    />
+
+    <RelatedPosts currentSlug="meaning" tags={["meaning", "etymology", "tools"]} count={6} />
+  </main>
+
+  <SiteFooter />
+</BaseLayout>

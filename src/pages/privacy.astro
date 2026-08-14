@@ -1,0 +1,49 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import SiteHeader from '../islands/SiteHeader';
+import SiteFooter from '../components/SiteFooter.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+
+const title = "Privacy Policy — HowManyOfMe";
+const description = "Privacy policy for HowManyOfMe. Learn how we handle cookies, analytics, advertising, and protect user data.";
+const canonical = "https://howmanyofme.co/privacy";
+---
+
+<BaseLayout title={title} description={description} canonical={canonical}>
+  <SiteHeader client:idle />
+
+  <main class="container py-12 max-w-3xl">
+    <Breadcrumbs className="mb-6" items={[{ label: "Home", href: "/" }, { label: "Privacy Policy" }]} />
+
+    <h1 class="font-display text-4xl md:text-5xl font-bold mb-4 text-foreground">Privacy Policy</h1>
+    <p class="text-sm text-muted-foreground mb-8">Last updated: January 2026</p>
+
+    <div class="prose-content">
+      <p>
+        At HowManyOfMe (accessible from https://howmanyofme.co), the privacy of our visitors is of utmost importance. This Privacy Policy document outlines the types of information collected and recorded by HowManyOfMe and how we use it.
+      </p>
+
+      <h2>No Personal Account Required</h2>
+      <p>
+        HowManyOfMe is a 100% free tool that does not require user registration, account creation, or login. We do not store or collect personally identifiable information such as names, physical addresses, or credit card numbers.
+      </p>
+
+      <h2>Log Files &amp; Analytics</h2>
+      <p>
+        Like most websites, HowManyOfMe uses standard log files and privacy-focused analytics (Google Analytics) to understand traffic patterns and improve performance. These logs record non-personally identifiable information such as browser type, referring pages, and visit timestamps.
+      </p>
+
+      <h2>Advertising Partners</h2>
+      <p>
+        Third-party ad networks (such as Google AdSense and Mediavine/Grow) may use cookies and web beacons on our site to serve relevant advertisements. Users can manage or opt out of personalized advertising by visiting Google's Ads Settings or aboutads.info.
+      </p>
+
+      <h2>Contact Us</h2>
+      <p>
+        If you have any questions about this Privacy Policy, please contact us at <a href="mailto:contact@howmanyofme.co">contact@howmanyofme.co</a>.
+      </p>
+    </div>
+  </main>
+
+  <SiteFooter />
+</BaseLayout>

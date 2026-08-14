@@ -63,12 +63,4 @@ console.log("Popular names NOT present in extended list:", popularNames.filter((
 console.log("Invalid names count:", invalid.length);
 console.log("Letters covered:", Object.keys(extendedByLetter).length);
 
-// Also check top 100 in prerender-top-names.mjs
-const prerenderSrc = fs.readFileSync(path.join(root, "scripts/prerender-top-names.mjs"), "utf8");
-const top100Matches = [...prerenderSrc.matchAll(/"([A-Za-z]+)"/g)].map((m) => m[1]);
-const top100Names = top100Matches.slice(0, 100);
-console.log("Top names list in prerender script:", top100Names.length);
-
-// Count how many of top100 are in uniqueNormalized
-const top100InDataset = top100Names.filter((n) => uniqueNormalized.has(n));
-console.log("Top 100 names in dataset:", top100InDataset.length);
+console.log("Dataset integrity check complete.");

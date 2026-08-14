@@ -1,0 +1,57 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import SiteHeader from '../islands/SiteHeader';
+import SiteFooter from '../components/SiteFooter.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import DataSources from '../components/DataSources.astro';
+import ToolCTA from '../components/ToolCTA.astro';
+
+const title = "Data Methodology & Statistical Sources — HowManyOfMe";
+const description = "Learn how HowManyOfMe calculates living name bearer estimates using actuarial cohort survival models, SSA archives, and international census data.";
+const canonical = "https://howmanyofme.co/methodology";
+---
+
+<BaseLayout title={title} description={description} canonical={canonical}>
+  <SiteHeader client:idle />
+
+  <main class="container py-12 max-w-3xl">
+    <Breadcrumbs className="mb-6" items={[{ label: "Home", href: "/" }, { label: "Methodology" }]} />
+
+    <h1 class="font-display text-4xl md:text-5xl font-bold mb-4 text-foreground">Data Methodology &amp; Sources</h1>
+    <p class="text-lg text-muted-foreground mb-8 leading-relaxed">
+      How we transform historical birth registries into accurate estimates of the living population sharing any first name.
+    </p>
+
+    <div class="prose-content">
+      <h2>1. The Cohort-Survival Model</h2>
+      <p>
+        Most baby name websites only show annual newborn ranks. HowManyOfMe answers a fundamentally different question: <em>How many living people have this name today?</em>
+      </p>
+      <p>
+        To compute this, we apply cohort-component demographic analysis. For every birth year from 1880 to the present, we apply actuarial life tables from the U.S. Social Security Administration and the UN Population Division to calculate the surviving proportion of each birth cohort.
+      </p>
+
+      <h2>2. Primary Data Sources</h2>
+      <ul>
+        <li><strong>U.S. Social Security Administration (SSA):</strong> Complete national birth registration records from 1880 through the latest available reporting year.</li>
+        <li><strong>U.S. Census Bureau:</strong> Decade-by-decade decennial census distributions and population totals.</li>
+        <li><strong>UK Office for National Statistics (ONS):</strong> England and Wales first name registries.</li>
+        <li><strong>International Statistical Agencies:</strong> Statistics Canada, Australian Bureau of Statistics (ABS), and Eurostat.</li>
+      </ul>
+
+      <h2>3. Global Extrapolation</h2>
+      <p>
+        For names with international distribution, regional multipliers are calculated based on linguistic origin, diaspora migration modeling, and cultural naming density across 80+ jurisdictions.
+      </p>
+    </div>
+
+    <DataSources className="my-8" />
+
+    <ToolCTA
+      headline="Explore Name Statistics"
+      subhead="Try our methodology on any name and explore decade curves and living estimates."
+    />
+  </main>
+
+  <SiteFooter />
+</BaseLayout>

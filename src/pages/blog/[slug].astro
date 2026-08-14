@@ -1,0 +1,148 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import SiteHeader from '../../islands/SiteHeader';
+import SiteFooter from '../../components/SiteFooter.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import AdSlot from '../../components/AdSlot.astro';
+import ToolCTA from '../../components/ToolCTA.astro';
+import RelatedPosts from '../../components/RelatedPosts.astro';
+import { blogArticles, getBlogArticle, blogCategories } from '../../data/blogData';
+import { Clock, ArrowLeft, ArrowRight } from 'lucide-react';
+
+export async function getStaticPaths() {
+  return blogArticles.map((article) => ({
+    params: { slug: article.slug },
+    props: { article },
+  }));
+}
+
+interface Props {
+  article?: typeof blogArticles[0];
+}
+
+const { slug: rawSlug } = Astro.params;
+const { article: propsArticle } = Astro.props;
+
+const article = propsArticle || getBlogArticle(rawSlug || '');
+
+if (!article) {
+  return Astro.redirect('/404');
+}
+
+const catLabel = blogCategories.find((c) => c.id === article.category)?.label || '';
+const idx = blogArticles.findIndex((a) => a.slug === article.slug);
+const prev = idx > 0 ? blogArticles[idx - 1] : null;
+const next = idx < blogArticles.length - 1 ? blogArticles[idx + 1] : null;
+
+const title = `${article.title} | HowManyOfMe`;
+const description = article.description;
+const canonical = `https://howmanyofme.co/blog/${article.slug}`;
+
+const jsonLd = [
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    headline: article.title,
+    description: article.description,
+    datePublished: article.date,
+    author: { "@type": "Person", name: "Ziven Borceg", url: "https://medium.com/@zivenborceg" },
+    publisher: { "@type": "Organization", name: "HowManyOfMe", url: "https://howmanyofme.co" },
+  },
+  ...(article.faqs && article.faqs.length > 0
+    ? [
+        {
+          "@context": "https://schema.org",
+          "@type": "FAQPage",
+          mainEntity: article.faqs.map((f) => ({
+            "@type": "Question",
+            name: f.q,
+            acceptedAnswer: { "@type": "Answer", text: f.a },
+          })),
+        },
+      ]
+    : []),
+];
+---
+
+<BaseLayout title={title} description={description} canonical={canonical} jsonLd={jsonLd}>
+  <SiteHeader client:idle />
+
+  <main class="container py-12 max-w-3xl">
+    <Breadcrumbs
+      className="mb-6"
+      items={[
+        { label: "Home", href: "/" },
+        { label: "Blog", href: "/blog" },
+        { label: article.title },
+      ]}
+    />
+
+    <article>
+      <header class="mb-8">
+        <div class="flex items-center gap-3 text-xs text-muted-foreground mb-3">
+          <span class="px-2.5 py-1 rounded-full bg-primary/10 text-primary font-semibold uppercase tracking-wider">
+            {catLabel}
+          </span>
+          <span>{article.date}</span>
+          <span>•</span>
+          <span class="flex items-center gap-1">
+            <Clock className="h-3 w-3" /> {article.readTime}
+          </span>
+        </div>
+        <h1 class="font-display text-3xl md:text-5xl font-bold text-foreground leading-tight">
+          {article.title}
+        </h1>
+      </header>
+
+      <div class="prose-content my-8" set:html={article.content} />
+
+      {article.faqs && article.faqs.length > 0 && (
+        <section class="my-10">
+          <h2 class="font-display text-2xl font-bold mb-4 text-foreground">Frequently Asked Questions</h2>
+          <div class="space-y-3">
+            {article.faqs.map((f) => (
+              <div class="p-5 rounded-xl border border-border bg-card">
+                <h3 class="font-semibold text-foreground mb-1">{f.q}</h3>
+                <p class="text-sm text-muted-foreground">{f.a}</p>
+              </div>
+            ))}
+          </div>
+        </section>
+      )}
+    </article>
+
+    <AdSlot />
+
+    <!-- Prev / Next Article Navigation -->
+    <div class="grid grid-cols-2 gap-4 my-10">
+      {prev ? (
+        <a
+          href={`/blog/${prev.slug}`}
+          class="p-4 rounded-xl border border-border bg-card hover:bg-secondary/50 transition group"
+        >
+          <div class="text-xs text-muted-foreground mb-1 group-hover:text-primary transition-colors">← Previous</div>
+          <div class="font-semibold text-sm line-clamp-1 text-foreground">{prev.title}</div>
+        </a>
+      ) : <div />}
+
+      {next ? (
+        <a
+          href={`/blog/${next.slug}`}
+          class="p-4 rounded-xl border border-border bg-card hover:bg-secondary/50 transition text-right group"
+        >
+          <div class="text-xs text-muted-foreground mb-1 group-hover:text-primary transition-colors">Next →</div>
+          <div class="font-semibold text-sm line-clamp-1 text-foreground">{next.title}</div>
+        </a>
+      ) : <div />}
+    </div>
+
+    <ToolCTA
+      headline="Explore your name statistics"
+      subhead="Enter your first name to see how many people share it worldwide."
+    />
+
+    <RelatedPosts currentSlug={article.slug} tags={article.tags || ['baby names', 'trends']} count={6} />
+  </main>
+
+  <SiteFooter />
+</BaseLayout>

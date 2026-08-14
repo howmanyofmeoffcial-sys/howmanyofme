@@ -1,0 +1,48 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import SiteHeader from '../../islands/SiteHeader';
+import SiteFooter from '../../components/SiteFooter.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import AdSlot from '../../components/AdSlot.astro';
+import ToolCTA from '../../components/ToolCTA.astro';
+import RelatedPosts from '../../components/RelatedPosts.astro';
+import NameComparisonIsland from '../../islands/tools/NameComparisonIsland';
+
+const title = "Name Comparison Tool — Compare Name Popularity Side by Side | HowManyOfMe";
+const description = "Compare two names side-by-side: popularity trends, living bearer counts, historical peak decades, and regional distributions.";
+const canonical = "https://howmanyofme.co/tools/name-comparison";
+---
+
+<BaseLayout title={title} description={description} canonical={canonical}>
+  <SiteHeader client:idle />
+
+  <main class="container py-12 max-w-3xl">
+    <Breadcrumbs
+      className="mb-6"
+      items={[
+        { label: "Home", href: "/" },
+        { label: "Tools", href: "/tools" },
+        { label: "Name Comparison" },
+      ]}
+    />
+
+    <h1 class="font-display text-4xl md:text-5xl font-bold mb-4 text-foreground">Name Popularity Comparison</h1>
+    <p class="text-muted-foreground mb-8 leading-relaxed">
+      Compare two names side by side to see which is more common today, their historical peak periods, and meaning origins.
+    </p>
+
+    <!-- Interactive Island -->
+    <NameComparisonIsland client:load />
+
+    <AdSlot />
+
+    <ToolCTA
+      headline="Visualize Multiple Names on One Chart"
+      subhead="Use the Baby Name Trend Visualizer to plot up to 4 names on an interactive time-series chart."
+    />
+
+    <RelatedPosts currentSlug="name-comparison" tags={["comparison", "tools", "popularity"]} count={6} />
+  </main>
+
+  <SiteFooter />
+</BaseLayout>

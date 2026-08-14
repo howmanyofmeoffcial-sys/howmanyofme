@@ -15,14 +15,41 @@ const names = Array.from(
 
 const letters = "abcdefghijklmnopqrstuvwxyz".split("");
 
+const blogSrc = fs.readFileSync(path.join(root, "src/data/blogData.ts"), "utf8");
+const blogSlugs = [...blogSrc.matchAll(/slug:\s*"([a-z0-9-]+)"/g)].map((m) => m[1]);
+
+const tools = [
+  "popularity-checker",
+  "random-name",
+  "baby-names",
+  "username-generator",
+  "name-comparison",
+  "trend-visualizer",
+  "unique-name-generator",
+  "popularity-guide",
+  "meaning",
+];
+
+const pillars = ["about", "methodology", "contact", "privacy", "terms", "disclaimer", "tools", "blog", "similar-names"];
+
 // Build expected core SEO routes
 const expectedRoutes = new Set();
 expectedRoutes.add("/");
 for (const n of names) {
   expectedRoutes.add(`/name/${n}`);
+  expectedRoutes.add(`/similar-names/${n.toLowerCase()}`);
 }
 for (const l of letters) {
   expectedRoutes.add(`/names/${l}`);
+}
+for (const t of tools) {
+  expectedRoutes.add(`/tools/${t}`);
+}
+for (const p of pillars) {
+  expectedRoutes.add(`/${p}`);
+}
+for (const s of blogSlugs) {
+  expectedRoutes.add(`/blog/${s}`);
 }
 
 // 2. Gather actual generated routes in dist/
@@ -46,6 +73,7 @@ const canonicalMismatches = [];
 
 for (const file of htmlFiles) {
   const rel = path.relative(distDir, file);
+  if (rel.includes("googlebe8b9a62790246a0.html") || rel === "404.html" || rel.includes("404/index.html")) continue;
   let routePath = "/" + rel.replace(/\/index\.html$/, "").replace(/\.html$/, "");
   if (routePath === "/index") routePath = "/";
   actualRoutes.add(routePath);
@@ -86,7 +114,7 @@ for (const act of actualRoutes) {
 }
 
 console.log("=== URL PARITY & CANONICAL VALIDATION REPORT ===");
-console.log(`Expected Core Production Routes: ${expectedRoutes.size}`);
+console.log(`Expected Production Routes: ${expectedRoutes.size}`);
 console.log(`Actual Generated Routes in dist/: ${actualRoutes.size}`);
 console.log(`Exact Matched Canonical Routes: ${matched.length}`);
 console.log(`Missing Routes from Astro: ${missing.length}`);

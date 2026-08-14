@@ -1,0 +1,60 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import SiteHeader from '../islands/SiteHeader';
+import SiteFooter from '../components/SiteFooter.astro';
+import { ArrowRight, AlertCircle, Search, TrendingUp, Users } from 'lucide-react';
+
+const title = "404 — Page Not Found | HowManyOfMe";
+const description = "The requested name statistics page could not be found. Search our database of 100M+ names across 80+ countries.";
+---
+
+<BaseLayout title={title} description={description} noindex={true}>
+  <SiteHeader client:idle />
+
+  <main class="container py-20 text-center max-w-2xl">
+    <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-destructive/10 text-destructive text-sm font-medium mb-6 border border-destructive/20">
+      <AlertCircle className="w-4 h-4" />
+      <span>Error 404: Page Not Found</span>
+    </div>
+
+    <h1 class="text-4xl md:text-6xl font-extrabold text-foreground mb-4 tracking-tight">
+      Lost in the Crowd
+    </h1>
+
+    <p class="text-lg text-muted-foreground mb-10 leading-relaxed">
+      We couldn't find the exact page or name you're looking for, but you can explore our complete database of over 100 million names worldwide!
+    </p>
+
+    <!-- Search box CTA -->
+    <div class="p-8 rounded-3xl border border-border bg-card shadow-lg max-w-md mx-auto mb-12">
+      <h3 class="text-xl font-bold mb-2 text-foreground">
+        Check Any Name's Popularity
+      </h3>
+      <p class="text-muted-foreground mb-6 text-sm">
+        Instant living bearer count, rarity score, and decade trends.
+      </p>
+      <a
+        href="/"
+        class="inline-flex w-full items-center justify-center gap-2 bg-primary hover:bg-primary/90 text-primary-foreground font-bold py-3.5 px-6 rounded-xl transition-all shadow-md"
+      >
+        Search Names on Homepage
+        <ArrowRight className="w-4 h-4" />
+      </a>
+    </div>
+
+    <!-- Quick Links -->
+    <div class="flex flex-wrap justify-center gap-3 text-sm">
+      <a href="/names/a" class="px-4 py-2 rounded-lg border border-border bg-secondary/50 hover:bg-primary/10 transition">
+        Browse Names A–Z
+      </a>
+      <a href="/tools" class="px-4 py-2 rounded-lg border border-border bg-secondary/50 hover:bg-primary/10 transition">
+        Explore Name Tools
+      </a>
+      <a href="/blog" class="px-4 py-2 rounded-lg border border-border bg-secondary/50 hover:bg-primary/10 transition">
+        Read Name Trends
+      </a>
+    </div>
+  </main>
+
+  <SiteFooter />
+</BaseLayout>

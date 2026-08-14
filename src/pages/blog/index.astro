@@ -1,0 +1,84 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import SiteHeader from '../../islands/SiteHeader';
+import SiteFooter from '../../components/SiteFooter.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import ToolCTA from '../../components/ToolCTA.astro';
+import { blogArticles, blogCategories } from '../../data/blogData';
+import { Clock, ArrowRight } from 'lucide-react';
+
+const title = "Baby Name Blog — Trends, Guides & Insights | HowManyOfMe";
+const description = "Explore baby name trends, guides, popularity data, and expert insights. Articles on naming trends, regional data, and name meanings.";
+const canonical = "https://howmanyofme.co/blog";
+
+const jsonLd = [
+  {
+    "@context": "https://schema.org",
+    "@type": "Blog",
+    name: "HowManyOfMe Blog",
+    description,
+    url: canonical,
+    blogPost: blogArticles.map((a) => ({
+      "@type": "BlogPosting",
+      headline: a.title,
+      description: a.description,
+      datePublished: a.date,
+      url: `https://howmanyofme.co/blog/${a.slug}`,
+    })),
+  },
+];
+---
+
+<BaseLayout title={title} description={description} canonical={canonical} jsonLd={jsonLd}>
+  <SiteHeader client:idle />
+
+  <main class="container py-12">
+    <Breadcrumbs className="mb-6" items={[{ label: "Home", href: "/" }, { label: "Blog" }]} />
+
+    <div class="max-w-3xl mb-12">
+      <h1 class="font-display text-4xl md:text-5xl font-bold mb-4 text-foreground">
+        Baby Name Blog &amp; Insights
+      </h1>
+      <p class="text-lg text-muted-foreground leading-relaxed">
+        Data-driven articles, guides, and insights about baby names — from popularity trends and regional data to naming guides and expert analysis.
+      </p>
+    </div>
+
+    <!-- Blog Articles Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-16">
+      {blogArticles.map(article => (
+        <a
+          href={`/blog/${article.slug}`}
+          class="p-6 rounded-2xl border border-border bg-card hover:border-primary/40 hover:shadow-lg transition-all flex flex-col justify-between group"
+        >
+          <div>
+            <div class="flex items-center justify-between text-xs text-muted-foreground mb-3">
+              <span class="px-2.5 py-1 rounded-full bg-primary/10 text-primary font-semibold uppercase tracking-wider text-[10px]">
+                {article.category}
+              </span>
+              <span class="flex items-center gap-1">
+                <Clock className="h-3 w-3" /> {article.readTime}
+              </span>
+            </div>
+            <h2 class="font-display text-xl font-bold mb-2 text-foreground group-hover:text-primary transition-colors leading-snug">
+              {article.title}
+            </h2>
+            <p class="text-sm text-muted-foreground line-clamp-3 leading-relaxed mb-4">
+              {article.description}
+            </p>
+          </div>
+          <div class="flex items-center text-sm font-semibold text-primary group-hover:translate-x-1 transition-transform">
+            Read Article <ArrowRight className="h-4 w-4 ml-1" />
+          </div>
+        </a>
+      ))}
+    </div>
+
+    <ToolCTA
+      headline="Check how many people share your name"
+      subhead="Use our free living name checker to explore instant demographics across 80+ countries."
+    />
+  </main>
+
+  <SiteFooter />
+</BaseLayout>

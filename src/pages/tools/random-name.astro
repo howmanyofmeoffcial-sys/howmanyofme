@@ -1,0 +1,66 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import SiteHeader from '../../islands/SiteHeader';
+import SiteFooter from '../../components/SiteFooter.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import AdSlot from '../../components/AdSlot.astro';
+import ToolCTA from '../../components/ToolCTA.astro';
+import RelatedPosts from '../../components/RelatedPosts.astro';
+import RandomNameIsland from '../../islands/tools/RandomNameIsland';
+
+const title = "Random Name Generator — 10 Real Names Per Click | HowManyOfMe";
+const description = "Free random name generator. Get 10 real recorded human names per click from our global 100,000-name registry database.";
+const canonical = "https://howmanyofme.co/tools/random-name";
+
+const faqs = [
+  { q: "Are these names real human names?", a: "Yes — every name is sampled from verified U.S. SSA and national birth registries. Never an AI hallucination." },
+  { q: "Can I filter by gender?", a: "Yes — choose Male, Female, or Any (which includes unisex names)." },
+];
+---
+
+<BaseLayout title={title} description={description} canonical={canonical}>
+  <SiteHeader client:idle />
+
+  <main class="container py-12 max-w-3xl">
+    <Breadcrumbs
+      className="mb-6"
+      items={[
+        { label: "Home", href: "/" },
+        { label: "Tools", href: "/tools" },
+        { label: "Random Name Generator" },
+      ]}
+    />
+
+    <h1 class="font-display text-4xl md:text-5xl font-bold mb-4 text-foreground">Random Name Generator</h1>
+    <p class="text-muted-foreground mb-8 leading-relaxed">
+      Get 10 random real names per click from our verified database of 100,000+ names. Filter by gender and click any name to explore full statistics.
+    </p>
+
+    <!-- Interactive Island -->
+    <RandomNameIsland client:load />
+
+    <AdSlot />
+
+    <!-- FAQ Section -->
+    <section class="my-12">
+      <h2 class="font-display text-2xl font-bold mb-4 text-foreground">Frequently Asked Questions</h2>
+      <div class="space-y-3">
+        {faqs.map((f) => (
+          <div class="p-5 rounded-xl border border-border bg-card">
+            <h3 class="font-semibold text-foreground mb-1">{f.q}</h3>
+            <p class="text-sm text-muted-foreground">{f.a}</p>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <ToolCTA
+      headline="Explore Name Popularity"
+      subhead="Want to see the popularity curve of a specific name? Check our live database."
+    />
+
+    <RelatedPosts currentSlug="random-name" tags={["generator", "tools", "baby names"]} count={6} />
+  </main>
+
+  <SiteFooter />
+</BaseLayout>

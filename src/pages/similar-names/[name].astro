@@ -1,0 +1,131 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import SiteHeader from '../../islands/SiteHeader';
+import SiteFooter from '../../components/SiteFooter.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import AdSlot from '../../components/AdSlot.astro';
+import ToolCTA from '../../components/ToolCTA.astro';
+import RelatedPosts from '../../components/RelatedPosts.astro';
+import { getIndexableNames, getName, type NameRecord } from '../../lib/names';
+import { getSimilarNames } from '../../lib/names/getSimilarNames';
+import { getNameUrl, getSimilarNamesUrl } from '../../lib/seo/canonicalUrl';
+import { formatNumber } from '../../data/nameData';
+
+export async function getStaticPaths() {
+  const allNames = getIndexableNames();
+  return allNames.map((record) => ({
+    params: { name: record.name.toLowerCase() },
+    props: { record },
+  }));
+}
+
+interface Props {
+  record?: NameRecord;
+}
+
+const { name: rawName } = Astro.params;
+const { record: propsRecord } = Astro.props;
+
+const data = propsRecord || getName(rawName || '', false);
+
+if (!data) {
+  return Astro.redirect('/404');
+}
+
+const similarData = getSimilarNames(data.name, 12);
+const title = `Names Similar to ${data.name} — Soundalikes & Alternatives | HowManyOfMe`;
+const description = `Find names similar to ${data.name} by sound, length, starting letter, and origin. Compare popularity and bearer statistics.`;
+const canonical = `https://howmanyofme.co${getSimilarNamesUrl(data.name)}`;
+
+const jsonLd = [
+  {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    name: title,
+    description,
+    url: canonical,
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    name: `Names Similar to ${data.name}`,
+    itemListElement: similarData.combined.map((name, i) => ({
+      "@type": "ListItem",
+      position: i + 1,
+      name,
+      url: `https://howmanyofme.co${getNameUrl(name)}`,
+    })),
+  },
+];
+---
+
+<BaseLayout title={title} description={description} canonical={canonical} jsonLd={jsonLd}>
+  <SiteHeader client:idle />
+
+  <main class="container py-12 max-w-4xl">
+    <Breadcrumbs
+      className="mb-6"
+      items={[
+        { label: "Home", href: "/" },
+        { label: "Similar Names", href: "/similar-names" },
+        { label: `Similar to ${data.name}` },
+      ]}
+    />
+
+    <div class="mb-8">
+      <h1 class="font-display text-4xl md:text-5xl font-bold mb-3 text-foreground">
+        Names Similar to {data.name}
+      </h1>
+      <p class="text-lg text-muted-foreground leading-relaxed">
+        Looking for alternatives to <strong class="text-foreground">{data.name}</strong>? Explore first names that share similar sounds, syllable counts, starting letters, or linguistic origins.
+      </p>
+    </div>
+
+    <!-- Target Name Card -->
+    <div class="p-6 rounded-2xl border border-primary/20 bg-primary/5 mb-10 flex flex-wrap items-center justify-between gap-4">
+      <div>
+        <div class="text-xs uppercase font-bold tracking-wider text-primary mb-1">Target Name</div>
+        <div class="text-2xl font-bold text-foreground">{data.name}</div>
+        <div class="text-sm text-muted-foreground">~{formatNumber(data.count)} living bearers (rank #{formatNumber(data.rank)})</div>
+      </div>
+      <a
+        href={getNameUrl(data.name)}
+        class="px-5 py-2.5 rounded-xl bg-primary text-primary-foreground font-semibold text-sm hover:bg-primary/90 transition shadow-sm"
+      >
+        View Full {data.name} Report →
+      </a>
+    </div>
+
+    <AdSlot />
+
+    <!-- Similar Names Grid -->
+    <section class="my-10">
+      <h2 class="font-display text-2xl font-bold mb-4 text-foreground">Closest Matching Names</h2>
+      <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
+        {similarData.combined.map((name) => (
+          <a
+            href={getNameUrl(name)}
+            class="p-4 rounded-xl border border-border bg-card hover:border-primary/40 hover:shadow-md transition text-center group"
+          >
+            <div class="font-semibold text-foreground group-hover:text-primary transition-colors mb-1">
+              {name}
+            </div>
+            <div class="text-xs text-muted-foreground">
+              Explore {name} stats →
+            </div>
+          </a>
+        ))}
+      </div>
+    </section>
+
+    <!-- Contextual Tool CTA -->
+    <ToolCTA
+      headline={`Compare ${data.name} with another name`}
+      subhead="Use our free Name Comparison Tool to compare decade trends and living counts side-by-side."
+    />
+
+    <RelatedPosts currentSlug={`similar-${data.name.toLowerCase()}`} tags={["similar names", "baby names", "popularity", "alternatives"]} count={6} />
+  </main>
+
+  <SiteFooter />
+</BaseLayout>

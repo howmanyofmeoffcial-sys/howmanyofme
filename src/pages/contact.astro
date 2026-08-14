@@ -1,0 +1,44 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import SiteHeader from '../islands/SiteHeader';
+import SiteFooter from '../components/SiteFooter.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+
+const title = "Contact Us — HowManyOfMe";
+const description = "Get in touch with the HowManyOfMe team. We welcome feedback, data inquiries, bug reports, and partnership opportunities.";
+const canonical = "https://howmanyofme.co/contact";
+---
+
+<BaseLayout title={title} description={description} canonical={canonical}>
+  <SiteHeader client:idle />
+
+  <main class="container py-12 max-w-2xl">
+    <Breadcrumbs className="mb-6" items={[{ label: "Home", href: "/" }, { label: "Contact" }]} />
+
+    <h1 class="font-display text-4xl md:text-5xl font-bold mb-4 text-foreground">Contact Us</h1>
+    <p class="text-muted-foreground text-lg mb-8 leading-relaxed">
+      Have a question, feedback, or found an issue with name data? We'd love to hear from you.
+    </p>
+
+    <div class="p-6 rounded-2xl border border-border bg-card mb-8">
+      <h2 class="font-display text-xl font-bold mb-3 text-foreground">Direct Inquiries</h2>
+      <p class="text-sm text-muted-foreground mb-4">
+        For all general questions, data corrections, or media inquiries, please reach out via email:
+      </p>
+      <a href="mailto:contact@howmanyofme.co" class="text-primary font-semibold text-lg hover:underline">
+        contact@howmanyofme.co
+      </a>
+    </div>
+
+    <div class="prose-content">
+      <h2>Common Topics</h2>
+      <ul>
+        <li><strong>Data Corrections:</strong> If you believe a name count or origin has an error, please provide the name and any relevant reference sources.</li>
+        <li><strong>Tool Suggestions:</strong> We're always working on new name analytics features. Let us know what you'd like to see next!</li>
+        <li><strong>Partnerships &amp; Press:</strong> We provide custom demographic name analyses and quotes for publications.</li>
+      </ul>
+    </div>
+  </main>
+
+  <SiteFooter />
+</BaseLayout>

@@ -1,0 +1,45 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import SiteHeader from '../islands/SiteHeader';
+import SiteFooter from '../components/SiteFooter.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+
+const title = "Terms of Service — HowManyOfMe";
+const description = "Terms of service and usage conditions for the HowManyOfMe name popularity and statistical analysis platform.";
+const canonical = "https://howmanyofme.co/terms";
+---
+
+<BaseLayout title={title} description={description} canonical={canonical}>
+  <SiteHeader client:idle />
+
+  <main class="container py-12 max-w-3xl">
+    <Breadcrumbs className="mb-6" items={[{ label: "Home", href: "/" }, { label: "Terms of Service" }]} />
+
+    <h1 class="font-display text-4xl md:text-5xl font-bold mb-4 text-foreground">Terms of Service</h1>
+    <p class="text-sm text-muted-foreground mb-8">Last updated: January 2026</p>
+
+    <div class="prose-content">
+      <h2>1. Acceptance of Terms</h2>
+      <p>
+        By accessing and using HowManyOfMe (https://howmanyofme.co), you accept and agree to be bound by these Terms of Service. If you do not agree to these terms, please do not use the website.
+      </p>
+
+      <h2>2. Nature of the Service &amp; Disclaimer</h2>
+      <p>
+        HowManyOfMe provides statistical estimates, historical name frequency models, and linguistic insights for entertainment, educational, and research purposes. While we aggregate data from authoritative sources (such as the U.S. Social Security Administration and national census records), population counts are statistical models and should not be used as legal or official census records.
+      </p>
+
+      <h2>3. Intellectual Property</h2>
+      <p>
+        The compilation, design, algorithms, visual charts, and editorial content on HowManyOfMe are protected by intellectual property laws. You may quote or link to our data with appropriate attribution.
+      </p>
+
+      <h2>4. Modifications</h2>
+      <p>
+        We reserve the right to modify these terms at any time. Continued use of the website following changes constitutes acceptance of revised terms.
+      </p>
+    </div>
+  </main>
+
+  <SiteFooter />
+</BaseLayout>

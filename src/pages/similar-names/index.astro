@@ -1,0 +1,102 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import SiteHeader from '../../islands/SiteHeader';
+import SiteFooter from '../../components/SiteFooter.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import ToolCTA from '../../components/ToolCTA.astro';
+import { getCuratedPopularNames } from '../../lib/names/getAllNames';
+import { getNameUrl, getSimilarNamesUrl } from '../../lib/seo/canonicalUrl';
+import { Search } from 'lucide-react';
+
+const popular = getCuratedPopularNames();
+
+const faqs = [
+  {
+    q: "What does 'similar names' mean?",
+    a: "Similar names are first names that share key features with a target name — same starting letter, similar length, similar sound (low edit distance), or shared cultural origin.",
+  },
+  {
+    q: "How do you generate the list of similar names?",
+    a: "We combine phonetic similarity (Levenshtein edit distance ≤ 2), names that begin with the same letter, and names of the same length.",
+  },
+  {
+    q: "Are these similar-name suggestions free to use?",
+    a: "Yes. Every page on howmanyofme.co/similar-names is 100% free with no signup.",
+  },
+];
+
+const title = "Similar Names Finder — Find Soundalike & Related First Names | HowManyOfMe";
+const description = "Discover names similar in sound, spelling, origin, and popularity to any first name. Perfect for finding baby name alternatives.";
+const canonical = "https://howmanyofme.co/similar-names";
+
+const jsonLd = [
+  {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    name: title,
+    description,
+    url: canonical,
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: faqs.map(f => ({
+      "@type": "Question",
+      name: f.q,
+      acceptedAnswer: { "@type": "Answer", text: f.a },
+    })),
+  },
+];
+---
+
+<BaseLayout title={title} description={description} canonical={canonical} jsonLd={jsonLd}>
+  <SiteHeader client:idle />
+
+  <main class="container py-12 max-w-4xl">
+    <Breadcrumbs className="mb-6" items={[{ label: "Home", href: "/" }, { label: "Similar Names" }]} />
+
+    <div class="mb-10">
+      <h1 class="font-display text-4xl md:text-5xl font-bold mb-3 text-foreground">
+        Similar Names Finder
+      </h1>
+      <p class="text-lg text-muted-foreground leading-relaxed">
+        Find first names with comparable sounds, phonetic patterns, origins, and lengths. Select any popular name below or explore related profiles.
+      </p>
+    </div>
+
+    <!-- Popular Name Chips Grid -->
+    <div class="p-6 rounded-2xl border border-border bg-card mb-12">
+      <h2 class="font-display text-xl font-bold mb-4 text-foreground">Explore Similar Names for Popular Names</h2>
+      <div class="flex flex-wrap gap-2.5">
+        {popular.map(p => (
+          <a
+            href={getSimilarNamesUrl(p.name)}
+            class="px-4 py-2 rounded-xl border border-border bg-secondary/50 hover:border-primary/40 hover:bg-primary/10 hover:text-primary transition font-medium text-sm text-foreground"
+          >
+            Similar to {p.name}
+          </a>
+        ))}
+      </div>
+    </div>
+
+    <!-- FAQ Section -->
+    <section class="mb-12">
+      <h2 class="font-display text-2xl font-bold mb-4 text-foreground">Frequently Asked Questions</h2>
+      <div class="space-y-4">
+        {faqs.map(f => (
+          <div class="p-5 rounded-xl border border-border bg-card">
+            <h3 class="font-semibold text-foreground mb-1">{f.q}</h3>
+            <p class="text-sm text-muted-foreground">{f.a}</p>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <ToolCTA
+      headline="Looking for statistics on a specific name?"
+      subhead="Search our database of 100M+ names across 80+ countries instantly."
+    />
+  </main>
+
+  <SiteFooter />
+</BaseLayout>

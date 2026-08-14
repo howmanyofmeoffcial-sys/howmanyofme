@@ -1,0 +1,48 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import SiteHeader from '../../islands/SiteHeader';
+import SiteFooter from '../../components/SiteFooter.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import AdSlot from '../../components/AdSlot.astro';
+import ToolCTA from '../../components/ToolCTA.astro';
+import RelatedPosts from '../../components/RelatedPosts.astro';
+import UsernameGeneratorIsland from '../../islands/tools/UsernameGeneratorIsland';
+
+const title = "Username Generator — Creative Social & Gaming Handles | HowManyOfMe";
+const description = "Generate unique, styled usernames, gamertags, and social media handles based on any first name.";
+const canonical = "https://howmanyofme.co/tools/username-generator";
+---
+
+<BaseLayout title={title} description={description} canonical={canonical}>
+  <SiteHeader client:idle />
+
+  <main class="container py-12 max-w-3xl">
+    <Breadcrumbs
+      className="mb-6"
+      items={[
+        { label: "Home", href: "/" },
+        { label: "Tools", href: "/tools" },
+        { label: "Username Generator" },
+      ]}
+    />
+
+    <h1 class="font-display text-4xl md:text-5xl font-bold mb-4 text-foreground">Username Generator</h1>
+    <p class="text-muted-foreground mb-8 leading-relaxed">
+      Turn any name into 8 creative, styled username variants with numbers, suffixes, reversals, and clean separators.
+    </p>
+
+    <!-- Interactive Island -->
+    <UsernameGeneratorIsland client:load />
+
+    <AdSlot />
+
+    <ToolCTA
+      headline="Check How Many People Share Your Name"
+      subhead="Discover how rare your real first name is across 80+ countries."
+    />
+
+    <RelatedPosts currentSlug="username-generator" tags={["tools", "generator"]} count={6} />
+  </main>
+
+  <SiteFooter />
+</BaseLayout>
