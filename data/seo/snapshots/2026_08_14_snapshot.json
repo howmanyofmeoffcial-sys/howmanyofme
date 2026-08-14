@@ -1,0 +1,263 @@
+{
+  "metadata": {
+    "snapshotDate": "2026-08-14",
+    "period": "last_28_days",
+    "totalImpressions": 1420500,
+    "totalClicks": 98420,
+    "averageCtr": 0.0693,
+    "averagePosition": 7.8,
+    "recordsCount": 25
+  },
+  "queries": [
+    {
+      "query": "how many of me",
+      "page": "/",
+      "clicks": 8200,
+      "impressions": 45000,
+      "ctr": 0.1822,
+      "position": 1.2,
+      "classification": "brand",
+      "cluster": "brand-core"
+    },
+    {
+      "query": "how many people have my name",
+      "page": "/",
+      "clicks": 4500,
+      "impressions": 38000,
+      "ctr": 0.1184,
+      "position": 2.1,
+      "classification": "brand",
+      "cluster": "brand-discovery"
+    },
+    {
+      "query": "how many of me calculator",
+      "page": "/",
+      "clicks": 2100,
+      "impressions": 14000,
+      "ctr": 0.15,
+      "position": 1.4,
+      "classification": "brand",
+      "cluster": "brand-calculator"
+    },
+    {
+      "query": "how many people are named david",
+      "page": "/name/David",
+      "clicks": 1850,
+      "impressions": 24500,
+      "ctr": 0.0755,
+      "position": 4.8,
+      "classification": "first-name",
+      "cluster": "first-name-count"
+    },
+    {
+      "query": "how many people are named james",
+      "page": "/name/James",
+      "clicks": 2400,
+      "impressions": 32000,
+      "ctr": 0.075,
+      "position": 4.2,
+      "classification": "first-name",
+      "cluster": "first-name-count"
+    },
+    {
+      "query": "how many people are named mary",
+      "page": "/name/Mary",
+      "clicks": 1620,
+      "impressions": 21800,
+      "ctr": 0.0743,
+      "position": 5.1,
+      "classification": "first-name",
+      "cluster": "first-name-count"
+    },
+    {
+      "query": "how many people have the name michael",
+      "page": "/name/Michael",
+      "clicks": 1950,
+      "impressions": 27400,
+      "ctr": 0.0711,
+      "position": 5.4,
+      "classification": "first-name",
+      "cluster": "first-name-count"
+    },
+    {
+      "query": "how common is the name emma",
+      "page": "/name/Emma",
+      "clicks": 1420,
+      "impressions": 19500,
+      "ctr": 0.0728,
+      "position": 4.9,
+      "classification": "first-name",
+      "cluster": "first-name-rarity"
+    },
+    {
+      "query": "how many people are named john",
+      "page": "/name/John",
+      "clicks": 2100,
+      "impressions": 29000,
+      "ctr": 0.0724,
+      "position": 5.8,
+      "classification": "first-name",
+      "cluster": "first-name-count"
+    },
+    {
+      "query": "how many people are named robert",
+      "page": "/name/Robert",
+      "clicks": 1750,
+      "impressions": 23600,
+      "ctr": 0.0741,
+      "position": 6.2,
+      "classification": "first-name",
+      "cluster": "first-name-count"
+    },
+    {
+      "query": "how many people are named patricia",
+      "page": "/name/Patricia",
+      "clicks": 1200,
+      "impressions": 16800,
+      "ctr": 0.0714,
+      "position": 6.8,
+      "classification": "first-name",
+      "cluster": "first-name-count"
+    },
+    {
+      "query": "how many people are named jennifer",
+      "page": "/name/Jennifer",
+      "clicks": 1540,
+      "impressions": 21000,
+      "ctr": 0.0733,
+      "position": 6.1,
+      "classification": "first-name",
+      "cluster": "first-name-count"
+    },
+    {
+      "query": "how common is the name olivia",
+      "page": "/name/Olivia",
+      "clicks": 1350,
+      "impressions": 18200,
+      "ctr": 0.0741,
+      "position": 5.3,
+      "classification": "first-name",
+      "cluster": "first-name-rarity"
+    },
+    {
+      "query": "how many people named liam",
+      "page": "/name/Liam",
+      "clicks": 1100,
+      "impressions": 15400,
+      "ctr": 0.0714,
+      "position": 7.2,
+      "classification": "first-name",
+      "cluster": "first-name-count"
+    },
+    {
+      "query": "how many people named noah",
+      "page": "/name/Noah",
+      "clicks": 1050,
+      "impressions": 14900,
+      "ctr": 0.0704,
+      "position": 7.6,
+      "classification": "first-name",
+      "cluster": "first-name-count"
+    },
+    {
+      "query": "how many david smiths are there",
+      "page": "/people/david-smith",
+      "clicks": 420,
+      "impressions": 9400,
+      "ctr": 0.0446,
+      "position": 8.4,
+      "classification": "full-name",
+      "cluster": "full-name-count"
+    },
+    {
+      "query": "how many people are named james smith",
+      "page": "/people/james-smith",
+      "clicks": 540,
+      "impressions": 11200,
+      "ctr": 0.0482,
+      "position": 7.9,
+      "classification": "full-name",
+      "cluster": "full-name-count"
+    },
+    {
+      "query": "how many michael johnsons are there",
+      "page": "/people/michael-johnson",
+      "clicks": 380,
+      "impressions": 8600,
+      "ctr": 0.0441,
+      "position": 9.1,
+      "classification": "full-name",
+      "cluster": "full-name-count"
+    },
+    {
+      "query": "how many people named robert brown",
+      "page": "/people/robert-brown",
+      "clicks": 290,
+      "impressions": 7200,
+      "ctr": 0.0402,
+      "position": 11.2,
+      "classification": "full-name",
+      "cluster": "full-name-count"
+    },
+    {
+      "query": "how common is the name mary williams",
+      "page": "/people/mary-williams",
+      "clicks": 210,
+      "impressions": 6100,
+      "ctr": 0.0344,
+      "position": 12.5,
+      "classification": "full-name",
+      "cluster": "full-name-rarity"
+    },
+    {
+      "query": "names starting with j",
+      "page": "/names/j",
+      "clicks": 1840,
+      "impressions": 22400,
+      "ctr": 0.0821,
+      "position": 3.8,
+      "classification": "directory",
+      "cluster": "directory-letter"
+    },
+    {
+      "query": "names starting with m",
+      "page": "/names/m",
+      "clicks": 1620,
+      "impressions": 19800,
+      "ctr": 0.0818,
+      "position": 4.1,
+      "classification": "directory",
+      "cluster": "directory-letter"
+    },
+    {
+      "query": "names starting with a",
+      "page": "/names/a",
+      "clicks": 1950,
+      "impressions": 24100,
+      "ctr": 0.0809,
+      "position": 3.6,
+      "classification": "directory",
+      "cluster": "directory-letter"
+    },
+    {
+      "query": "most common first names in the us",
+      "page": "/tools/popularity-checker",
+      "clicks": 890,
+      "impressions": 14500,
+      "ctr": 0.0613,
+      "position": 8.9,
+      "classification": "tool",
+      "cluster": "general-statistical"
+    },
+    {
+      "query": "how is name frequency calculated",
+      "page": "/methodology",
+      "clicks": 340,
+      "impressions": 5800,
+      "ctr": 0.0586,
+      "position": 6.4,
+      "classification": "informational",
+      "cluster": "methodology"
+    }
+  ]
+}
