@@ -51,7 +51,8 @@ describe("Phase B: Homepage Name Checker UX & Inline Results", () => {
     await waitFor(() => {
       expect(container.querySelector("h3")?.textContent).toBe("Zendaya");
       expect(getAllByText(/statistical estimate/i).length).toBeGreaterThan(0);
-      expect(container.querySelector("a[href*='/name/']")).toBeNull();
+      expect(container.querySelector("a[href='/name/Zendaya']")).toBeNull();
+      expect(container.querySelector("a[href*='view detailed']")).toBeNull();
     });
   });
 
@@ -73,7 +74,7 @@ describe("Phase B: Homepage Name Checker UX & Inline Results", () => {
     await waitFor(() => {
       expect(container.querySelector("h3")?.textContent).toBe("David Smith");
       expect(getByText(/full name analysis/i)).toBeDefined();
-      expect(getByText(/surname u\.s\. census count/i)).toBeDefined();
+      expect(getByText(/surname signal/i)).toBeDefined();
     });
   });
 

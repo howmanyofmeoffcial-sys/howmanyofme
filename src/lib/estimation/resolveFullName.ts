@@ -7,6 +7,7 @@ import { normalizeName } from "../names/normalizeName";
 import { validateName } from "../names/validateName";
 import { estimateFirstName } from "./estimateFirstName";
 import type { NameEstimateResult } from "./types";
+import { buildRichInsights } from "./richInsights";
 
 /**
  * Deterministic estimate for an unindexed surname.
@@ -76,6 +77,9 @@ export function resolveFullName(rawFirst: string, rawLast: string): NameEstimate
     const rawConf = canonicalEntity.confidence.toLowerCase();
     const confidence: "high" | "moderate" | "low" =
       rawConf === "high" ? "high" : rawConf === "low" ? "low" : "moderate";
+    const firstRec = getNameRecord(normFirst);
+    const richInsights = buildRichInsights(displayName, canonicalEntity.estimatedPeople, firstRec, "full-name");
+
     return {
       mode: "verified",
       queryType: "full-name",
@@ -107,6 +111,7 @@ export function resolveFullName(rawFirst: string, rawLast: string): NameEstimate
           isIndexed: true,
         },
       },
+      richInsights,
     };
   }
 
@@ -128,6 +133,8 @@ export function resolveFullName(rawFirst: string, rawLast: string): NameEstimate
   } else if (!isFirstIndexed || !isSurnameIndexed || calc.confidence === "LOW") {
     confidence = "low";
   }
+
+  const richInsights = buildRichInsights(displayName, calc.roundedEstimate, firstRecord, "full-name");
 
   return {
     mode: "modelled",
@@ -161,6 +168,7 @@ export function resolveFullName(rawFirst: string, rawLast: string): NameEstimate
         isIndexed: isSurnameIndexed,
       },
     },
+    richInsights,
     warnings: [
       calc.independenceAssumptionNote,
       "This full-name combination is modeled on population probabilities and does not represent an exact individual directory.",

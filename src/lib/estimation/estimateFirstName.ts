@@ -3,6 +3,7 @@ import { normalizeName } from "../names/normalizeName";
 import { validateName } from "../names/validateName";
 import type { NameEstimateResult } from "./types";
 import { getNameUrl } from "../seo/canonicalUrl";
+import { buildRichInsights } from "./richInsights";
 
 /**
  * Deterministic helper to generate a consistent demographic tier for unindexed names.
@@ -52,6 +53,7 @@ export function estimateFirstName(rawName: string): NameEstimateResult {
   if (officialRecord) {
     const livingCount = officialRecord.actuarial?.estimatedLiving || officialRecord.count;
     const ssaPeakYear = officialRecord.ssa?.peakYear || null;
+    const richInsights = buildRichInsights(officialRecord.name, livingCount, officialRecord, "first-name");
 
     return {
       mode: "verified",
@@ -77,11 +79,13 @@ export function estimateFirstName(rawName: string): NameEstimateResult {
           isIndexed: true,
         },
       },
+      richInsights,
     };
   }
 
   // 2. MODELLED MODE (Unindexed valid name)
   const modelledCount = calculateDeterministicModelCount(norm.display);
+  const richInsights = buildRichInsights(norm.display, modelledCount, null, "first-name");
 
   return {
     mode: "modelled",
@@ -106,6 +110,7 @@ export function estimateFirstName(rawName: string): NameEstimateResult {
         isIndexed: false,
       },
     },
+    richInsights,
     warnings: [
       "This name is not in the top indexed Social Security records. Value is a modeled statistical estimate, not an official census count.",
     ],

@@ -15,6 +15,8 @@ export type AnalyticsEventName =
   | "second_search_clicked"
   | "full_name_cta_clicked"
   | "related_name_clicked"
+  | "birth_year_submitted"
+  | "personalized_insights_viewed"
   | "citation_copied"
   | "dataset_downloaded"
   | "affiliate_resource_clicked";
