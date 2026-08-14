@@ -1,0 +1,10 @@
+---
+export interface Props {
+  label?: string;
+  className?: string;
+}
+
+const { label = "Advertisement", className = "" } = Astro.props;
+---
+
+<div class={`ad-slot ${className}`} aria-label={label}></div>

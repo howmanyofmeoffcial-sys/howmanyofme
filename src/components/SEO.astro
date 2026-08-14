@@ -1,0 +1,128 @@
+---
+export interface Props {
+  title: string;
+  description: string;
+  canonical?: string;
+  ogImage?: string;
+  ogType?: 'website' | 'article';
+  noindex?: boolean;
+  jsonLd?: Record<string, unknown> | Record<string, unknown>[];
+  author?: string;
+  publishedTime?: string;
+}
+
+const {
+  title,
+  description,
+  canonical,
+  ogImage = 'https://howmanyofme.co/og-image.jpg',
+  ogType = 'website',
+  noindex = false,
+  jsonLd,
+  author = 'Ziven Borceg',
+  publishedTime,
+} = Astro.props;
+
+const SITE_URL = 'https://howmanyofme.co';
+
+// Normalize canonical URL: strip trailing slash (except root) and ensure apex domain
+let canonicalUrl = canonical;
+if (!canonicalUrl) {
+  let pathname = Astro.url.pathname || '/';
+  if (pathname.length > 1 && pathname.endsWith('/')) {
+    pathname = pathname.slice(0, -1);
+  }
+  canonicalUrl = `${SITE_URL}${pathname}`;
+}
+
+const defaultWebsiteJsonLd = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'WebSite',
+      '@id': 'https://howmanyofme.co/#website',
+      url: 'https://howmanyofme.co/',
+      name: 'HowManyOfMe',
+      description: 'How many people have your name? Check instantly using 100M+ global records.',
+      inLanguage: 'en-US',
+      potentialAction: {
+        '@type': 'SearchAction',
+        target: 'https://howmanyofme.co/name/{search_term_string}',
+        'query-input': 'required name=search_term_string',
+      },
+    },
+    {
+      '@type': 'Organization',
+      '@id': 'https://howmanyofme.co/#organization',
+      name: 'HowManyOfMe',
+      url: 'https://howmanyofme.co/',
+      logo: 'https://howmanyofme.co/og-image.jpg',
+      founder: { '@type': 'Person', name: 'Ziven Borceg' },
+    },
+  ],
+};
+
+const jsonLdItems: Record<string, unknown>[] = [];
+if (jsonLd) {
+  if (Array.isArray(jsonLd)) {
+    jsonLdItems.push(...jsonLd);
+  } else {
+    jsonLdItems.push(jsonLd);
+  }
+} else {
+  jsonLdItems.push(defaultWebsiteJsonLd);
+}
+---
+
+<!-- Primary Meta Tags -->
+<title>{title}</title>
+<meta name="title" content={title} />
+<meta name="description" content={description} />
+<meta name="author" content={author} />
+<meta name="google-site-verification" content="mu13LHCJdzcQGEj69hBuFNH0G3tiqwMOlqWlEpe4Afc" />
+
+<!-- Crawl Directives -->
+{noindex ? (
+  <meta name="robots" content="noindex, nofollow" />
+  <meta name="googlebot" content="noindex, nofollow" />
+) : (
+  <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
+  <meta name="googlebot" content="index, follow, max-snippet:-1, max-image-preview:large" />
+)}
+
+<!-- Geo & Language Targeting -->
+<meta name="geo.region" content="US" />
+<meta name="geo.placename" content="United States" />
+<meta name="language" content="English" />
+<meta http-equiv="content-language" content="en-US" />
+<meta name="theme-color" content="#1f5fcf" />
+
+<!-- Canonical & Hreflang -->
+<link rel="canonical" href={canonicalUrl} />
+<link rel="alternate" hreflang="en-us" href={canonicalUrl} />
+<link rel="alternate" hreflang="x-default" href={canonicalUrl} />
+
+<!-- Open Graph / Facebook -->
+<meta property="og:site_name" content="HowManyOfMe" />
+<meta property="og:locale" content="en_US" />
+<meta property="og:type" content={ogType} />
+<meta property="og:url" content={canonicalUrl} />
+<meta property="og:title" content={title} />
+<meta property="og:description" content={description} />
+<meta property="og:image" content={ogImage} />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+{publishedTime && <meta property="article:published_time" content={publishedTime} />}
+
+<!-- Twitter -->
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:site" content="@howmanyofme" />
+<meta name="twitter:url" content={canonicalUrl} />
+<meta name="twitter:title" content={title} />
+<meta name="twitter:description" content={description} />
+<meta name="twitter:image" content={ogImage} />
+
+<!-- Structured Data (JSON-LD) - Server/Build Rendered -->
+{jsonLdItems.map((item) => (
+  <script type="application/ld+json" set:html={JSON.stringify(item)} />
+))}

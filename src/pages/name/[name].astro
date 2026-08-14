@@ -1,0 +1,389 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import SiteHeader from '../../islands/SiteHeader';
+import SiteFooter from '../../components/SiteFooter.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import AdSlot from '../../components/AdSlot.astro';
+import ToolCTA from '../../components/ToolCTA.astro';
+import DataSources from '../../components/DataSources.astro';
+import RelatedPosts from '../../components/RelatedPosts.astro';
+import NameInsightReport from '../../islands/NameInsightReport';
+import BookmarkShareButtons from '../../islands/BookmarkShareButtons';
+import { getIndexableNames, getName, type NameRecord } from '../../lib/names';
+import { getNameLinkGraph } from '../../lib/names/linking';
+import { getNameInsights, DATASET_METADATA } from '../../lib/names/insights';
+import { getNameAbsoluteUrl, getSimilarNamesUrl } from '../../lib/seo/canonicalUrl';
+import { formatNumber } from '../../data/nameData';
+import { buildSimilarFaqs } from '../../lib/dynamicContent';
+
+export async function getStaticPaths() {
+  const allNames = getIndexableNames();
+
+  return allNames.map((record) => ({
+    params: { name: record.slug },
+    props: { record },
+  }));
+}
+
+interface Props {
+  record?: NameRecord;
+}
+
+const { name: rawName } = Astro.params;
+const { record: propsRecord } = Astro.props;
+
+const data = propsRecord || getName(rawName || '', false);
+
+if (!data) {
+  return Astro.redirect('/404');
+}
+
+const decades = Object.entries(data.decade_popularity);
+const linkGraph = getNameLinkGraph(data);
+const insights = getNameInsights(data);
+
+const faqs = buildSimilarFaqs({
+  name: data.name,
+  origin: data.origin,
+  meaning: data.meaning,
+  rank: data.rank,
+  count: data.count,
+  similarSample: linkGraph.similarNames.slice(0, 5).map((s) => s.name),
+  formatNumber,
+});
+
+const title = `How Many People Are Named ${data.name}? Popularity, Rarity & Origin`;
+const description = `There are ~${formatNumber(data.count)} people named ${data.name} worldwide (rank #${formatNumber(data.rank)}). See ${data.name}'s popularity by decade, country, and gender — free, no signup.`;
+const canonical = getNameAbsoluteUrl(data.name);
+
+// High-precision WebPage + FAQPage schemas (replacing unsupported Person schema)
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'WebPage',
+    name: title,
+    description: description,
+    url: canonical,
+    about: {
+      '@type': 'Thing',
+      name: data.name,
+      description: `Demographic statistics, frequency rank #${formatNumber(data.rank)}, and etymology for the personal name ${data.name}.`,
+    },
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faqs.map((f) => ({
+      '@type': 'Question',
+      name: f.q,
+      acceptedAnswer: { '@type': 'Answer', text: f.a },
+    })),
+  },
+];
+
+const firstLetter = data.name.charAt(0).toUpperCase();
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  canonical={canonical}
+  jsonLd={jsonLd}
+>
+  <SiteHeader client:idle />
+
+  <main class="container py-12">
+    <Breadcrumbs
+      className="mb-6"
+      items={[
+        { label: "Home", href: "/" },
+        { label: `Names: ${firstLetter}`, href: linkGraph.letterHub.url },
+        { label: data.name },
+      ]}
+    />
+
+    <!-- Header & Action Row -->
+    <div class="flex flex-wrap items-start justify-between gap-4 mb-6">
+      <div>
+        <h1 class="font-display text-4xl md:text-6xl font-bold mb-3 text-foreground">
+          How Many People Are Named {data.name}?
+        </h1>
+        <p class="text-xl text-muted-foreground">
+          Global popularity, rarity rating, and demographic statistics for <strong class="text-foreground">{data.name}</strong>
+        </p>
+      </div>
+      <BookmarkShareButtons client:idle name={data.name} />
+    </div>
+
+    <!-- Answer-First Quick Answer Card (Featured Snippet / AEO Target) -->
+    <section aria-label="Quick Answer" class="mb-10 p-6 md:p-8 rounded-2xl border-2 border-primary/20 bg-gradient-to-br from-primary/5 via-card to-secondary/30 shadow-sm">
+      <div class="flex items-center gap-2 mb-3">
+        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold uppercase tracking-wider bg-primary text-primary-foreground">
+          ⚡ Quick Answer
+        </span>
+        <span class="text-xs text-muted-foreground">
+          Dataset {DATASET_METADATA.version} · {DATASET_METADATA.countriesCovered} countries
+        </span>
+      </div>
+
+      <p class="text-lg md:text-xl font-medium leading-relaxed text-foreground mb-6">
+        {insights.quickAnswer}
+      </p>
+
+      <!-- Key metric pills -->
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-4 border-t border-border">
+        <div class="p-3 rounded-xl bg-card border border-border">
+          <div class="text-xs text-muted-foreground mb-1">Global Bearers</div>
+          <div class="text-lg font-bold text-foreground">~{formatNumber(data.count)}</div>
+        </div>
+        <div class="p-3 rounded-xl bg-card border border-border">
+          <div class="text-xs text-muted-foreground mb-1">Popularity Rank</div>
+          <div class="text-lg font-bold text-foreground">#{formatNumber(data.rank)}</div>
+        </div>
+        <div class="p-3 rounded-xl bg-card border border-border">
+          <div class="text-xs text-muted-foreground mb-1">Rarity Tier</div>
+          <div class="text-lg font-bold text-foreground">{insights.popularityTier}</div>
+        </div>
+        <div class="p-3 rounded-xl bg-card border border-border">
+          <div class="text-xs text-muted-foreground mb-1">Origin / Etymology</div>
+          <div class="text-lg font-bold text-foreground">{data.origin}</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Interactive Recharts insight report island -->
+    <NameInsightReport client:visible name={data.name} />
+
+    <div class="my-10">
+      <AdSlot />
+    </div>
+
+    <!-- Editorial Deep-Dive Content (100% Server Rendered HTML) -->
+    <article class="prose-content">
+      <h2>About the Name {data.name}</h2>
+      <p>
+        The name <strong>{data.name}</strong> is estimated to be held by approximately <strong>{formatNumber(data.count)}</strong> people worldwide, placing it at rank <strong>#{formatNumber(data.rank)}</strong> in global frequency. This {data.gender === 'unisex' ? 'gender-neutral' : data.gender} name has roots in the <strong>{data.origin}</strong> tradition, and its historical meaning is associated with "{data.meaning}."
+      </p>
+      <p>
+        {insights.comparativeText}
+      </p>
+
+      <h2>Historical Popularity &amp; Decade Trends</h2>
+      <p>
+        {insights.peakDecadeText} {insights.trendText}
+      </p>
+      <p>
+        The table below shows relative popularity scores for {data.name} by decade, scored on an index from 0 (virtually unused) to 100 (peak era):
+      </p>
+
+      <!-- Decade trend grid -->
+      <div class="grid grid-cols-3 sm:grid-cols-5 gap-3 my-6">
+        {decades.map(([decade, score]) => (
+          <div class="text-center p-3 rounded-lg bg-secondary">
+            <div class="text-xs text-muted-foreground mb-1">{decade}</div>
+            <div class="h-2 rounded-full bg-border overflow-hidden">
+              <div class="h-full rounded-full bg-primary transition-all" style={{ width: `${score}%` }} />
+            </div>
+            <div class="text-sm font-semibold mt-1 text-foreground">{score}/100</div>
+          </div>
+        ))}
+      </div>
+
+      <h2>Regional &amp; Geographic Distribution</h2>
+      <p>
+        {insights.geographicText} Frequency varies across international jurisdictions based on cultural adoption and migration patterns:
+      </p>
+      <div class="space-y-3 my-6">
+        {Object.entries(data.regions).sort((a, b) => b[1] - a[1]).map(([region, count]) => {
+          const pct = Math.round((count / data.count) * 100);
+          return (
+            <div>
+              <div class="flex justify-between text-sm mb-1">
+                <span class="font-medium text-foreground">{region}</span>
+                <span class="text-muted-foreground">{formatNumber(count)} ({pct}%)</span>
+              </div>
+              <div class="h-2.5 rounded-full bg-secondary overflow-hidden">
+                <div class="h-full rounded-full bg-primary/70" style={{ width: `${pct}%` }} />
+              </div>
+            </div>
+          );
+        })}
+      </div>
+
+      <h2>Gender Distribution &amp; Cultural Background</h2>
+      <p>
+        {insights.genderText}
+      </p>
+      <p>
+        {insights.etymologyText} Over multiple generations, {data.name} has been adopted across international borders with various cultural pronunciations and regional variations while maintaining its distinctive etymological heritage.
+      </p>
+
+      <AdSlot />
+
+      <h2>Interesting Statistical Facts About {data.name}</h2>
+      <ul class="space-y-2">
+        {insights.factsList.map((fact) => (
+          <li>{fact}</li>
+        ))}
+      </ul>
+
+      <h2>What Does This Estimate Mean?</h2>
+      <p>
+        Our estimate of <strong>{formatNumber(data.count)} living bearers</strong> reflects actuarial population modeling that combines historical birth registration records with demographic life tables. Unlike single-year birth rankings that only count newborns, this figure estimates the total living population worldwide currently carrying the name {data.name}.
+      </p>
+    </article>
+
+    <!-- Related Names by Origin (Server-Rendered HTML Links) -->
+    {linkGraph.relatedByOrigin.length > 0 && (
+      <section class="mt-10 p-6 rounded-xl border border-border bg-card">
+        <h2 class="font-display text-xl font-bold mb-3 text-foreground">
+          Names with Similar Origin ({data.origin})
+        </h2>
+        <p class="text-sm text-muted-foreground mb-4">
+          Discover other popular names sharing {data.origin} roots and demographic patterns:
+        </p>
+        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-2.5">
+          {linkGraph.relatedByOrigin.map((rel) => (
+            <a
+              href={rel.url}
+              class="p-3 rounded-lg border border-border bg-secondary/40 hover:bg-primary/10 hover:border-primary/30 transition text-center group"
+            >
+              <div class="font-medium text-sm text-foreground group-hover:text-primary transition-colors">
+                {rel.name}
+              </div>
+              <div class="text-[11px] text-muted-foreground">
+                ~{formatNumber(rel.count)}
+              </div>
+            </a>
+          ))}
+        </div>
+      </section>
+    )}
+
+    <!-- Similar Names (Server-Rendered HTML Links) -->
+    {linkGraph.similarNames.length > 0 && (
+      <section class="mt-8 p-6 rounded-xl border border-border bg-card">
+        <h2 class="font-display text-xl font-bold mb-3 text-foreground">
+          Similar Names to {data.name}
+        </h2>
+        <p class="text-sm text-muted-foreground mb-4">
+          Names with comparable letter patterns, length, or sound:
+        </p>
+        <div class="flex flex-wrap gap-2">
+          {linkGraph.similarNames.map((sim) => (
+            <a
+              href={sim.url}
+              class="px-3.5 py-1.5 rounded-full border border-border bg-secondary/50 hover:bg-primary/10 hover:border-primary/40 hover:text-primary transition text-sm font-medium text-foreground"
+            >
+              {sim.name}
+            </a>
+          ))}
+        </div>
+      </section>
+    )}
+
+    <!-- Dynamic FAQ with Question/Answer markup -->
+    <section class="mt-12 max-w-3xl">
+      <h2 class="font-display text-2xl font-bold mb-4 text-foreground">Frequently Asked Questions About {data.name}</h2>
+      <div class="space-y-3">
+        {faqs.map((f) => (
+          <div class="p-5 rounded-xl border border-border bg-card">
+            <h3 class="font-semibold mb-2 text-foreground">{f.q}</h3>
+            <p class="text-sm text-muted-foreground">{f.a}</p>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <!-- Alphabet Neighbor Discovery (Next / Prev Name in Letter Directory) -->
+    <section aria-label="Alphabetical navigation" class="mt-10 grid grid-cols-1 sm:grid-cols-2 gap-4">
+      {linkGraph.prevName && (
+        <a
+          href={linkGraph.prevName.url}
+          class="p-4 rounded-xl border border-border bg-card hover:bg-secondary/50 hover:border-primary/30 transition-colors group"
+        >
+          <div class="text-xs text-muted-foreground mb-1 group-hover:text-primary transition-colors">
+            ← Previous {firstLetter} name
+          </div>
+          <div class="font-semibold text-foreground">
+            {linkGraph.prevName.name}
+          </div>
+        </a>
+      )}
+      {linkGraph.nextName && (
+        <a
+          href={linkGraph.nextName.url}
+          class="p-4 rounded-xl border border-border bg-card hover:bg-secondary/50 hover:border-primary/30 transition-colors text-right group"
+        >
+          <div class="text-xs text-muted-foreground mb-1 group-hover:text-primary transition-colors">
+            Next {firstLetter} name →
+          </div>
+          <div class="font-semibold text-foreground">
+            {linkGraph.nextName.name}
+          </div>
+        </a>
+      )}
+    </section>
+
+    <!-- Explore Related Names & Tools -->
+    <section class="mt-10 p-6 rounded-xl border border-border bg-card/50">
+      <h2 class="font-display text-xl font-bold mb-3 text-foreground">Explore Related Names &amp; Tools</h2>
+      <ul class="grid sm:grid-cols-2 gap-2 text-sm list-none p-0 m-0">
+        <li>
+          <a href={getSimilarNamesUrl(data.name)} class="text-primary hover:underline font-medium">
+            Find names similar to {data.name}
+          </a>
+        </li>
+        <li>
+          <a href={linkGraph.letterHub.url} class="text-primary hover:underline font-medium">
+            Browse all names starting with {firstLetter}
+          </a>
+        </li>
+        {linkGraph.contextualTools.map((tool) => (
+          <li>
+            <a href={tool.url} class="text-primary hover:underline font-medium">
+              {tool.description}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </section>
+
+    <!-- Trust block & Methodology Details -->
+    <DataSources
+      className="mt-8 max-w-3xl"
+      context={`Living bearer estimates and popularity rank for ${data.name} combine U.S. Social Security Administration records (${DATASET_METADATA.ssaDataRange}), U.S. Census Bureau data, and global actuarial survival modeling across ${DATASET_METADATA.countriesCovered} countries.`}
+    />
+
+    <!-- Tool CTA -->
+    <ToolCTA
+      headline={`Check another name like ${data.name}`}
+      subhead="Same free tool — instant popularity, rarity score, and regional breakdown for any first name."
+    />
+
+    <!-- Contextual internal links -->
+    <div class="mt-10 p-6 rounded-xl bg-secondary/30 border border-border">
+      <h3 class="font-display text-lg font-bold mb-3 text-foreground">Related guides &amp; articles</h3>
+      <div class="flex flex-wrap gap-2">
+        {linkGraph.contextualArticles.map((art) => (
+          <a
+            href={art.url}
+            class="px-3 py-1.5 text-sm rounded-lg bg-card border border-border hover:border-primary/40 hover:text-primary transition-colors text-foreground"
+          >
+            {art.title}
+          </a>
+        ))}
+        <a
+          href={linkGraph.letterHub.url}
+          class="px-3 py-1.5 text-sm rounded-lg bg-card border border-border hover:border-primary/40 hover:text-primary transition-colors text-foreground"
+        >
+          More names starting with {firstLetter}
+        </a>
+      </div>
+    </div>
+
+    <RelatedPosts currentSlug={`name-${data.name.toLowerCase()}`} tags={["baby names", "popularity", "statistics", data.gender === "male" ? "boy names" : data.gender === "female" ? "girl names" : "unisex", "meanings", "trends"]} count={12} />
+  </main>
+
+  <SiteFooter />
+</BaseLayout>

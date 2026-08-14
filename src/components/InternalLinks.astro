@@ -1,0 +1,85 @@
+---
+export interface LinkItem {
+  title: string;
+  href: string;
+  badge?: string;
+}
+
+export interface Props {
+  title?: string;
+  description?: string;
+  links?: LinkItem[];
+  variant?: 'chips' | 'cards' | 'list';
+  className?: string;
+}
+
+const defaultLinks: LinkItem[] = [
+  { title: 'Name Popularity Checker', href: '/tools/popularity-checker' },
+  { title: 'Compare Two Names', href: '/tools/name-comparison' },
+  { title: 'Name Trend Visualizer', href: '/tools/trend-visualizer' },
+  { title: 'Similar Names Finder', href: '/similar-names' },
+  { title: 'Unique Baby Names', href: '/tools/unique-name-generator' },
+  { title: 'Random Name Generator', href: '/tools/random-name' },
+  { title: 'Browse Names A–Z', href: '/names/a' },
+  { title: 'Baby Name Blog', href: '/blog' },
+];
+
+const {
+  title = 'Explore More Name Tools & Guides',
+  description,
+  links = defaultLinks,
+  variant = 'chips',
+  className = '',
+} = Astro.props;
+---
+
+<section class={`p-6 rounded-xl bg-secondary/40 border border-border ${className}`} aria-label={title}>
+  <h2 class="font-display text-lg md:text-xl font-bold mb-2 text-foreground">{title}</h2>
+  {description && <p class="text-sm text-muted-foreground mb-4">{description}</p>}
+
+  {variant === 'chips' && (
+    <div class="flex flex-wrap gap-2">
+      {links.map((item) => (
+        <a
+          href={item.href}
+          class="px-3 py-1.5 text-sm rounded-lg bg-card border border-border hover:border-primary/40 hover:text-primary transition-colors inline-flex items-center gap-1.5 text-foreground/90 font-medium"
+        >
+          {item.title}
+          {item.badge && (
+            <span class="text-[10px] px-1.5 py-0.5 rounded bg-primary/10 text-primary font-semibold">
+              {item.badge}
+            </span>
+          )}
+        </a>
+      ))}
+    </div>
+  )}
+
+  {variant === 'cards' && (
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+      {links.map((item) => (
+        <a
+          href={item.href}
+          class="p-4 rounded-lg bg-card border border-border hover:border-primary/40 hover:shadow-sm transition-all group"
+        >
+          <div class="font-semibold text-foreground group-hover:text-primary transition-colors flex items-center justify-between">
+            <span>{item.title}</span>
+            <span class="text-primary text-sm opacity-0 group-hover:opacity-100 transition-opacity">→</span>
+          </div>
+        </a>
+      ))}
+    </div>
+  )}
+
+  {variant === 'list' && (
+    <ul class="space-y-2 list-none p-0 m-0 text-sm">
+      {links.map((item) => (
+        <li>
+          <a href={item.href} class="text-primary hover:underline font-medium inline-flex items-center gap-1">
+            <span>▸</span> {item.title}
+          </a>
+        </li>
+      ))}
+    </ul>
+  )}
+</section>

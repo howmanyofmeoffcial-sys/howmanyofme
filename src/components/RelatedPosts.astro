@@ -1,0 +1,107 @@
+---
+import { getRelatedContent, topicHubs, type ContentItem } from "../data/contentRegistry";
+
+export interface Props {
+  currentSlug: string;
+  tags: string[];
+  count?: number;
+}
+
+const { currentSlug, tags, count = 12 } = Astro.props;
+
+const items = getRelatedContent(currentSlug, tags, count);
+
+// Relevant topic hubs based on current tags
+const relevantHubs = topicHubs
+  .filter((hub) =>
+    tags.some((t) => t.toLowerCase().includes(hub.tag) || hub.tag.includes(t.toLowerCase()))
+  )
+  .slice(0, 5);
+---
+
+{items.length > 0 && (
+  <div class="mt-12 md:mt-16">
+    <section aria-label="Related content">
+      {/* Topic hubs */}
+      {relevantHubs.length > 0 && (
+        <div class="mb-8">
+          <h3 class="text-sm font-semibold text-muted-foreground uppercase tracking-wider mb-3 flex items-center gap-2">
+            <svg class="h-3.5 w-3.5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 2H2v10l9.29 9.29c.94.94 2.48.94 3.42 0l6.58-6.58c.94-.94.94-2.48 0-3.42L12 2Z"/><path d="M7 7h.01"/>
+            </svg>
+            Explore Topics
+          </h3>
+          <div class="flex flex-wrap gap-2">
+            {relevantHubs.map((hub) => (
+              <a
+                href={hub.path}
+                class="px-3 py-1.5 text-xs font-medium rounded-full border border-border bg-secondary/50 text-muted-foreground hover:bg-primary/10 hover:text-primary hover:border-primary/30 transition-colors"
+              >
+                {hub.label}
+              </a>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Tags display */}
+      <div class="mb-6">
+        <h3 class="text-sm font-semibold text-muted-foreground uppercase tracking-wider mb-3">
+          Article Tags
+        </h3>
+        <div class="flex flex-wrap gap-1.5">
+          {tags.slice(0, 8).map((tag) => (
+            <span class="px-2.5 py-1 text-xs rounded-md bg-muted text-muted-foreground">
+              {tag}
+            </span>
+          ))}
+        </div>
+      </div>
+
+      {/* Related posts grid */}
+      <div class="pt-6 border-t border-border">
+        <h2 class="font-display text-2xl font-bold mb-2 text-foreground">You May Also Like</h2>
+        <p class="text-sm text-muted-foreground mb-6">
+          Explore related articles and tools based on this topic
+        </p>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          {items.map((item) => (
+            <a
+              href={item.path}
+              class="group flex flex-col p-4 rounded-xl border border-border bg-card hover:shadow-md hover:border-primary/20 transition-all"
+            >
+              <div class="flex items-center gap-2 mb-2.5">
+                {item.type === "tool" ? (
+                  <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-primary/10 text-primary">
+                    🔧 Tool
+                  </span>
+                ) : (
+                  <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-accent/10 text-accent-foreground">
+                    📄 Article
+                  </span>
+                )}
+                {item.readTime && (
+                  <span class="text-[10px] text-muted-foreground">{item.readTime} min</span>
+                )}
+              </div>
+
+              <h3 class="text-sm font-bold leading-snug mb-1.5 group-hover:text-primary transition-colors line-clamp-2 text-foreground">
+                {item.title}
+              </h3>
+
+              <p class="text-xs text-muted-foreground leading-relaxed line-clamp-2 flex-1">
+                {item.description}
+              </p>
+
+              <div class="flex items-center gap-1 text-xs text-primary font-medium mt-3 pt-2.5 border-t border-border/50 group-hover:gap-2 transition-all">
+                {item.type === "tool" ? "Try it" : "Read more"}
+                <span>→</span>
+              </div>
+            </a>
+          ))}
+        </div>
+      </div>
+    </section>
+  </div>
+)}

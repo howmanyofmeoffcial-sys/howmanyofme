@@ -1,0 +1,92 @@
+{
+  "framework": "vite",
+  "trailingSlash": false,
+
+  "redirects": [
+    {
+      "source": "/:path*",
+      "has": [{ "type": "host", "value": "www.howmanyofme.co" }],
+      "destination": "https://howmanyofme.co/:path*",
+      "permanent": true
+    },
+
+    {
+      "source": "/:path+/",
+      "destination": "/:path+",
+      "permanent": true
+    },
+
+    {
+      "source": "/ads.txt",
+      "destination": "https://adstxt.journeymv.com/sites/4521ab76-baf8-4ec9-ae60-73e3b33b5a2b/ads.txt",
+      "permanent": true
+    },
+
+    { "source": "/index.html",   "destination": "/",          "permanent": true },
+    { "source": "/contact.html", "destination": "/contact",   "permanent": true },
+    { "source": "/privacy.html", "destination": "/privacy",   "permanent": true },
+    { "source": "/terms.html",   "destination": "/terms",     "permanent": true },
+    { "source": "/about.html",   "destination": "/about",     "permanent": true },
+    { "source": "/about.hml",    "destination": "/about",     "permanent": true },
+    { "source": "/disclaimer.html", "destination": "/disclaimer", "permanent": true },
+    { "source": "/blog.html",    "destination": "/blog",      "permanent": true },
+    { "source": "/tools.html",   "destination": "/tools",     "permanent": true },
+
+    {
+      "source": "/blog/how-many-people-have-my-name-questions",
+      "destination": "/#faq",
+      "permanent": true
+    },
+    {
+      "source": "/blog/baby-name-trends-2026",
+      "destination": "/blog/baby-name-trends",
+      "permanent": true
+    },
+    {
+      "source": "/blog/baby-name-trends-:year(20\\d{2})",
+      "destination": "/blog/baby-name-trends",
+      "permanent": true
+    },
+    {
+      "source": "/blog/top-google-baby-name-searches-2026",
+      "destination": "/blog/top-google-baby-name-searches",
+      "permanent": true
+    },
+    {
+      "source": "/blog/top-google-baby-name-searches-:year(20\\d{2})",
+      "destination": "/blog/top-google-baby-name-searches",
+      "permanent": true
+    },
+    {
+      "source": "/blog/popular-baby-names-california-2026",
+      "destination": "/blog/popular-baby-names-california",
+      "permanent": true
+    },
+    {
+      "source": "/blog/popular-baby-names-california-:year(20\\d{2})",
+      "destination": "/blog/popular-baby-names-california",
+      "permanent": true
+    },
+    {
+      "source": "/blog/popular-baby-names-texas-2026",
+      "destination": "/blog/popular-baby-names-texas",
+      "permanent": true
+    },
+    {
+      "source": "/blog/popular-baby-names-texas-:year(20\\d{2})",
+      "destination": "/blog/popular-baby-names-texas",
+      "permanent": true
+    }
+  ],
+
+  "rewrites": [
+    {
+      "source": "/api/(.*)",
+      "destination": "/api/$1"
+    },
+    {
+      "source": "/((?!api/).*)",
+      "destination": "/index.html"
+    }
+  ]
+}

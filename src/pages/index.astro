@@ -1,0 +1,321 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import SiteHeader from '../islands/SiteHeader';
+import NameSearchHero from '../islands/NameSearchHero';
+import SiteFooter from '../components/SiteFooter.astro';
+import AdSlot from '../components/AdSlot.astro';
+import { getPopularNames, formatNumber, ALPHABET } from '../data/nameData';
+
+const popularNames = getPopularNames().slice(0, 20);
+
+const faqGroups: { category: string; items: { q: string; a: string }[] }[] = [
+  {
+    category: "Curiosity",
+    items: [
+      { q: "How many people have my exact name worldwide right now?", a: "Type your first name into the checker above to see a live estimate of global bearers, based on 100M+ records from 80+ countries. Most common English first names have between 500,000 and 10 million living bearers worldwide." },
+      { q: "How many people share my first name in the United States?", a: "We combine U.S. Social Security Administration birth records (1880–present) with actuarial life tables to estimate how many living Americans share your first name. Results appear in under 1 second with no signup." },
+      { q: "Am I the only person in the world with my name?", a: "For truly unique first-name + surname combinations, yes — our tool can flag a name as 'likely unique' (fewer than 5 estimated bearers). Enter your full name to check if you may be the only one." },
+      { q: "Is it possible that no one else has my exact full name?", a: "Yes. Roughly 1 in 8 full-name combinations in the U.S. are estimated to be unique. Add your surname in the optional field to see whether your first + last name combination is one-of-a-kind." },
+      { q: "How many babies were born with my name last year?", a: "Our popularity checker shows year-by-year birth counts back to 1880 and forward to the most recent release (typically prior year). You'll see exact annual figures for the U.S., UK, and major English-speaking countries." },
+      { q: "Which country has the most people with my first name?", a: "After you search a name, the results page lists the top 10 countries by estimated living bearers, so you'll see instantly whether your name is most common in the US, India, Brazil, Nigeria, or elsewhere." },
+    ],
+  },
+  {
+    category: "Comparison",
+    items: [
+      { q: "Is my name rarer than the average American name?", a: "The average U.S. first name is held by about 45,000 living people. If your name has fewer bearers, it's rarer than average. Our tool shows a percentile rarity score so you can compare against the full U.S. population." },
+      { q: "Is my name more common than Michael or Jennifer?", a: "Michael (~4.4M living U.S. bearers) and Jennifer (~1.5M) are benchmark 'very common' names. Search your name to see a side-by-side bearer count against these anchors." },
+      { q: "How does my name rank among the top 1000 most popular names?", a: "If your name is in the top 1,000, we display its exact rank (e.g. #247) plus how that rank has changed decade by decade since 1880." },
+      { q: "Is my name considered rare, uncommon, common, or very common?", a: "We label every name with a rarity tier: Very Common (top 100), Common (top 1,000), Uncommon (top 10,000), Rare (under 1 in 100,000 bearers), or Ultra-Rare (fewer than 100 bearers globally)." },
+      { q: "How does the popularity of my name compare to my parents' generation?", a: "Our decade-by-decade popularity chart shows whether your name peaked in the 1950s, 1980s, or today — so you can see exactly how your name's popularity compares to when your parents were born." },
+      { q: "Which is rarer — my first name or my last name?", a: "Enter both your first name and surname. The results page shows separate rarity scores and bearer estimates for each, so you can compare which one makes you more unique." },
+    ],
+  },
+  {
+    category: "Accuracy Doubt",
+    items: [
+      { q: "How accurate is the data behind your name popularity checker?", a: "For common names in well-documented countries (US, UK, Canada, Australia), our estimates are accurate within ±5%. For rarer names or countries with less comprehensive records, accuracy ranges from ±10% to ±25%. Each estimate includes a confidence score." },
+      { q: "Where do you get your name data from and can I trust it?", a: "We aggregate data from official government sources: the U.S. SSA (350M+ records since 1880), UK ONS, Statistics Canada, Australian ABS, Eurostat, and peer-reviewed academic research. All sources are cited on our Methodology page." },
+      { q: "Why do different name checker tools give different numbers?", a: "Different sites use different data sources, time periods, and methodologies. Some only count current-year births; we estimate total living bearers using actuarial survival modeling. Some use only U.S. data; we aggregate globally across 80+ countries." },
+      { q: "How often do you update your name frequency database?", a: "We refresh our core dataset quarterly, incorporating newly released birth registration data. Most countries release annual name data with a 6–18 month lag, so our figures are typically current to within a year." },
+      { q: "Can I really find out how many people have my name in 1 second?", a: "Yes. Results are pre-computed and served from an indexed database, so you'll see your name's bearer count, rarity score, and global distribution in well under 1 second — no signup, no waiting, no email required." },
+      { q: "Is the result an exact number or an estimate?", a: "For U.S. first names, we use SSA-recorded counts plus survival modeling — these are point estimates with ±5% confidence. Global numbers are always estimates because not every country publishes full name data." },
+    ],
+  },
+  {
+    category: "Tool Usage",
+    items: [
+      { q: "What's the best free tool to check how many people share my name?", a: "HowManyOfMe.co is free, requires no signup, and covers 100M+ name records across 80+ countries — the most comprehensive free tool available. Type your name into the search bar above to try it now." },
+      { q: "Do I have to sign up or enter my email to use this name checker?", a: "No. The tool is 100% free with zero signup, no email required, and no download. Just type your first name and get instant results." },
+      { q: "Can I check how many people have my name without downloading an app?", a: "Yes — everything runs in your browser. No app, no install, no account. Works on phone, tablet, and desktop." },
+      { q: "Is my name stored or tracked when I search?", a: "No. We do not store, log, or associate your name search with any personal identifier. Searches are anonymous and your privacy is protected." },
+      { q: "Can I use this name checker on my phone?", a: "Yes — our tool is fully mobile-optimized. Search, see rarity scores, and browse the A–Z name directory on any device." },
+      { q: "Are there voice-assistant friendly queries I can ask about my name?", a: "Yes. You can ask voice assistants things like 'how many people have my name' or 'is my name rare' and our pages are structured for AI answer engines and AI overviews." },
+    ],
+  },
+  {
+    category: "Personalization",
+    items: [
+      { q: "How many people have my full name including my surname?", a: "Add your last name in the optional field. We'll estimate how many people share your exact first + last name combination using linked birth and census records." },
+      { q: "Can I check how many people share my name with a specific middle name?", a: "Middle name support is limited — most public records index first + last name. You can, however, check each name separately and multiply approximate frequencies for a rough middle-name combo estimate." },
+      { q: "How many people have the same first and last name as me in my country?", a: "Our country filter lets you narrow a full-name search to a specific country (e.g. 'how many John Smiths live in the UK'), returning a country-specific bearer estimate." },
+      { q: "How many people in my age group share my name?", a: "Our decade-by-decade breakdown shows how many people in each birth-year cohort were given your name, so you can see how many people your age share your name specifically." },
+      { q: "Can I check how rare my name is for my gender?", a: "Yes. Every name page shows a gender split percentage (e.g. 97% female / 3% male) so you can see whether your name is rare for your specific gender." },
+      { q: "How many people share my name and were born in the same decade as me?", a: "Enter your name and check the historical popularity chart — it shows the exact number of bearers born in the 1980s, 1990s, 2000s, 2010s, and 2020s, so you can isolate your own cohort." },
+    ],
+  },
+];
+
+const allFaqs = faqGroups.flatMap((g) => g.items);
+
+const ctrVariations = [
+  "How many people have my name instantly",
+  "Check how many people share my name — free tool",
+  "How many of me are there worldwide?",
+  "Is my name rare or common? Find out in 1 second",
+  "How many people have my exact full name?",
+];
+
+const jsonLd = [
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    name: "HowManyOfMe",
+    url: "https://howmanyofme.co",
+    potentialAction: {
+      "@type": "SearchAction",
+      target: "https://howmanyofme.co/name/{search_term_string}",
+      "query-input": "required name=search_term_string",
+    },
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: allFaqs.map((f) => ({
+      "@type": "Question",
+      name: f.q,
+      acceptedAnswer: { "@type": "Answer", text: f.a },
+    })),
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    name: "Most Common Names in the United States",
+    itemListElement: [
+      "James","Mary","Robert","Patricia","John","Jennifer","Michael","Linda","William","Elizabeth",
+      "David","Barbara","Richard","Susan","Joseph","Jessica","Thomas","Sarah","Charles","Karen",
+    ].map((n, i) => ({
+      "@type": "ListItem",
+      position: i + 1,
+      url: `https://howmanyofme.co/name/${n}`,
+      name: n,
+    })),
+  },
+];
+const canonical = 'https://howmanyofme.co';
+---
+
+<BaseLayout
+  title="How Many People Have My Name? Free Instant Checker 🌍"
+  description="Find out how many people share your name worldwide in 1 second. Free name popularity, rarity & origin checker — 100M+ records, 80+ countries, no signup."
+  canonical={canonical}
+  jsonLd={jsonLd}
+>
+  <SiteHeader client:idle />
+  <NameSearchHero client:load />
+
+  <!-- CTR-optimized query variations for featured-snippet / AI Overview capture -->
+  <section aria-label="Popular ways people ask this question" class="border-b border-border bg-secondary/30">
+    <div class="container py-5">
+      <div class="flex flex-wrap items-center justify-center gap-2 text-sm">
+        <span class="text-xs font-semibold uppercase tracking-wider text-muted-foreground mr-1">
+          People also ask:
+        </span>
+        {ctrVariations.map((v) => (
+          <span class="px-3 py-1.5 rounded-full bg-card border border-border text-foreground/90 hover:border-primary/40 hover:text-primary transition-colors">
+            {v}
+          </span>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <main class="container">
+    <!-- Section 2: Query-based H2 — featured-snippet optimized -->
+    <section class="py-16">
+      <div class="text-center mb-10">
+        <h2 id="how-many-people-have-my-name" class="font-display text-3xl md:text-4xl font-bold mb-3 text-foreground">
+          How Many People Have My Name?
+        </h2>
+        <p class="text-muted-foreground text-lg max-w-2xl mx-auto">
+          We combine official government registries, census surname frequencies, and actuarial demographic modeling across 80+ countries to estimate how many living people share your name.
+        </p>
+      </div>
+
+      <!-- Popular Names Grid -->
+      <div class="mb-12">
+        <div class="flex items-center justify-between mb-6">
+          <div>
+            <h3 class="font-display text-2xl font-bold text-foreground">Popular Names Right Now</h3>
+            <p class="text-sm text-muted-foreground">Click any name to see its full breakdown, ranking, and origin</p>
+          </div>
+          <a href="/names/a" class="text-primary text-sm font-medium hover:underline inline-flex items-center gap-1">
+            Browse A–Z directory →
+          </a>
+        </div>
+
+        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
+          {popularNames.map((n) => (
+            <a
+              href={`/name/${n.name}`}
+              class="p-4 rounded-xl border border-border bg-card hover:border-primary/40 hover:shadow-md transition-all group"
+            >
+              <div class="flex items-center justify-between mb-1">
+                <span class="font-semibold text-foreground group-hover:text-primary transition-colors">{n.name}</span>
+                <span class="text-[10px] uppercase font-bold px-1.5 py-0.5 rounded bg-secondary text-muted-foreground">
+                  {n.gender}
+                </span>
+              </div>
+              <div class="text-xs text-muted-foreground">~{formatNumber(n.count)} people</div>
+            </a>
+          ))}
+        </div>
+      </div>
+
+      <div class="my-8">
+        <AdSlot />
+      </div>
+
+      <!-- Feature cards -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 my-12">
+        <div class="p-6 rounded-2xl border border-border bg-card">
+          <div class="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center text-primary text-xl font-bold mb-4">
+            🌍
+          </div>
+          <h3 class="font-display text-xl font-bold mb-2 text-foreground">Global Dataset</h3>
+          <p class="text-muted-foreground text-sm leading-relaxed">
+            Over 100 million recorded names across 80+ countries, derived from official government birth registers, census returns, and international demographic datasets.
+          </p>
+        </div>
+        <div class="p-6 rounded-2xl border border-border bg-card">
+          <div class="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center text-primary text-xl font-bold mb-4">
+            📊
+          </div>
+          <h3 class="font-display text-xl font-bold mb-2 text-foreground">Decade-by-Decade Trends</h3>
+          <p class="text-muted-foreground text-sm leading-relaxed">
+            See how your name's popularity evolved from the 1880s through today. Pinpoint the peak decade and discover if your name is trending upward or declining.
+          </p>
+        </div>
+        <div class="p-6 rounded-2xl border border-border bg-card">
+          <div class="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center text-primary text-xl font-bold mb-4">
+            ⚡
+          </div>
+          <h3 class="font-display text-xl font-bold mb-2 text-foreground">Instant & 100% Free</h3>
+          <p class="text-muted-foreground text-sm leading-relaxed">
+            No signup, no email required, no paywalls. Search any first name, surname, or combination and see instant rarity scores and regional estimates in under 1 second.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 3: A–Z Directory Navigation -->
+    <section class="py-12 border-t border-border">
+      <div class="text-center max-w-2xl mx-auto mb-8">
+        <h2 class="font-display text-2xl md:text-3xl font-bold mb-2 text-foreground">
+          Browse Names by First Letter (A–Z Directory)
+        </h2>
+        <p class="text-muted-foreground text-sm">
+          Explore thousands of verified first names organized alphabetically with popularity data, origin, and meanings.
+        </p>
+      </div>
+
+      <div class="flex flex-wrap justify-center gap-2 max-w-4xl mx-auto">
+        {ALPHABET.map((l) => (
+          <a
+            href={`/names/${l}`}
+            class="w-10 h-10 md:w-12 md:h-12 flex items-center justify-center rounded-xl border border-border bg-card hover:bg-primary hover:text-primary-foreground hover:border-primary text-sm md:text-base font-bold uppercase transition-all shadow-sm"
+          >
+            {l}
+          </a>
+        ))}
+      </div>
+    </section>
+
+    <!-- Section 4: Suite of Free Name Tools -->
+    <section class="py-12 border-t border-border">
+      <div class="flex items-center justify-between mb-8">
+        <div>
+          <h2 class="font-display text-2xl md:text-3xl font-bold text-foreground">Explore Our Free Name Tools</h2>
+          <p class="text-sm text-muted-foreground">Interactive utilities to analyze, compare, generate, and explore names</p>
+        </div>
+        <a href="/tools" class="text-primary text-sm font-medium hover:underline inline-flex items-center gap-1">
+          View all tools →
+        </a>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <a href="/tools/popularity-checker" class="p-5 rounded-xl border border-border bg-card hover:border-primary/40 hover:shadow-md transition-all group">
+          <div class="text-2xl mb-2">📈</div>
+          <h3 class="font-bold text-base mb-1 text-foreground group-hover:text-primary transition-colors">Popularity Checker</h3>
+          <p class="text-xs text-muted-foreground leading-relaxed">Check exact rank and bearer counts for any first name.</p>
+        </a>
+        <a href="/tools/name-comparison" class="p-5 rounded-xl border border-border bg-card hover:border-primary/40 hover:shadow-md transition-all group">
+          <div class="text-2xl mb-2">⚖️</div>
+          <h3 class="font-bold text-base mb-1 text-foreground group-hover:text-primary transition-colors">Name Comparison</h3>
+          <p class="text-xs text-muted-foreground leading-relaxed">Compare two names side-by-side on popularity and trends.</p>
+        </a>
+        <a href="/tools/trend-visualizer" class="p-5 rounded-xl border border-border bg-card hover:border-primary/40 hover:shadow-md transition-all group">
+          <div class="text-2xl mb-2">📊</div>
+          <h3 class="font-bold text-base mb-1 text-foreground group-hover:text-primary transition-colors">Trend Visualizer</h3>
+          <p class="text-xs text-muted-foreground leading-relaxed">140 years of historical baby name data visualized.</p>
+        </a>
+        <a href="/tools/random-name" class="p-5 rounded-xl border border-border bg-card hover:border-primary/40 hover:shadow-md transition-all group">
+          <div class="text-2xl mb-2">🎲</div>
+          <h3 class="font-bold text-base mb-1 text-foreground group-hover:text-primary transition-colors">Random Name Generator</h3>
+          <p class="text-xs text-muted-foreground leading-relaxed">Generate 10 real recorded human names per click.</p>
+        </a>
+      </div>
+    </section>
+
+    <div class="my-8">
+      <AdSlot />
+    </div>
+
+    <!-- Section 5: 30 FAQs Accordion (Crawlable HTML-first) -->
+    <section class="py-12 border-t border-border" id="faq">
+      <div class="text-center max-w-2xl mx-auto mb-10">
+        <h2 class="font-display text-3xl font-bold mb-3 text-foreground">
+          Frequently Asked Questions About Name Statistics
+        </h2>
+        <p class="text-muted-foreground text-sm">
+          Everything you need to know about how many people have your name, our data sources, and methodology.
+        </p>
+      </div>
+
+      <div class="space-y-8 max-w-4xl mx-auto">
+        {faqGroups.map((group) => (
+          <div>
+            <h3 class="font-display text-xl font-bold mb-4 text-primary border-b border-border pb-2">
+              {group.category} Questions
+            </h3>
+            <div class="space-y-3">
+              {group.items.map((item) => (
+                <details class="group p-4 rounded-xl border border-border bg-card open:bg-card/80 transition-colors">
+                  <summary class="font-semibold text-foreground cursor-pointer list-none flex items-center justify-between gap-3">
+                    <span>{item.q}</span>
+                    <span class="text-primary text-lg transition-transform group-open:rotate-45 shrink-0">+</span>
+                  </summary>
+                  <p class="mt-3 text-sm text-muted-foreground leading-relaxed border-t border-border/50 pt-3">
+                    {item.a}
+                  </p>
+                </details>
+              ))}
+            </div>
+          </div>
+        ))}
+      </div>
+    </section>
+  </main>
+
+  <SiteFooter />
+</BaseLayout>

@@ -1,0 +1,71 @@
+---
+export interface Props {
+  context?: string;
+  className?: string;
+}
+
+const { context, className = "" } = Astro.props;
+---
+
+<aside
+  class={`p-5 rounded-xl border border-border bg-card/60 ${className}`}
+  aria-labelledby="data-sources-heading"
+>
+  <div class="flex items-center gap-2 mb-2">
+    <svg class="h-4 w-4 text-primary" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5V19A9 3 0 0 0 21 19V5"/><path d="M3 12A9 3 0 0 0 21 12"/>
+    </svg>
+    <h3 id="data-sources-heading" class="font-semibold text-sm text-foreground">
+      Data sources &amp; methodology
+    </h3>
+  </div>
+  {context && <p class="text-xs text-muted-foreground mb-3">{context}</p>}
+  <ul class="text-xs text-muted-foreground space-y-1.5 list-none p-0 m-0">
+    <li>
+      <a
+        href="https://www.ssa.gov/oact/babynames/"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="inline-flex items-center gap-1 hover:text-primary transition-colors"
+      >
+        U.S. Social Security Administration — Baby Names
+        <svg class="h-3 w-3" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
+        </svg>
+      </a>
+    </li>
+    <li>
+      <a
+        href="https://www.census.gov/topics/population/genealogy/data/2010_surnames.html"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="inline-flex items-center gap-1 hover:text-primary transition-colors"
+      >
+        U.S. Census Bureau — Population &amp; Surnames
+        <svg class="h-3 w-3" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
+        </svg>
+      </a>
+    </li>
+    <li>
+      <a
+        href="https://data.unicef.org/"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="inline-flex items-center gap-1 hover:text-primary transition-colors"
+      >
+        UNICEF — Global population &amp; birth data
+        <svg class="h-3 w-3" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
+        </svg>
+      </a>
+    </li>
+    <li>
+      Read our full{" "}
+      <a href="/methodology" class="text-primary hover:underline font-medium">
+        methodology
+      </a>{" "}
+      for how estimates are calculated.
+    </li>
+  </ul>
+</aside>
