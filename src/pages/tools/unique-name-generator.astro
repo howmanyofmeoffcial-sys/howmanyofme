@@ -7,16 +7,121 @@ import AdSlot from '../../components/AdSlot.astro';
 import ToolCTA from '../../components/ToolCTA.astro';
 import RelatedPosts from '../../components/RelatedPosts.astro';
 import UniqueNameIsland from '../../islands/tools/UniqueNameIsland';
+import manifest from '../../data/metadata/manifest.json';
+import {
+  Sparkles,
+  HelpCircle,
+  TrendingUp,
+  BarChart3,
+  Users,
+  ShieldCheck,
+  CheckCircle2,
+  AlertTriangle,
+  ArrowRight,
+  Database,
+  ArrowRightLeft,
+  BookOpen,
+  CheckSquare,
+  Search,
+} from 'lucide-react';
 
-const title = "Unique Baby Name Generator — Filter by Rarity Thresholds";
-const description = "Discover rare and distinctive baby names. Filter real recorded names by maximum bearer count and gender.";
+const title = "Unique Baby Name Generator: Find Rare & Uncommon Names";
+const description = "Looking for a baby name that feels distinctive? Generate rare and uncommon real names by gender, rarity level, and letter, then explore meanings and popularity.";
 const canonical = "https://howmanyofme.co/tools/unique-name-generator";
+
+const faqs = [
+  {
+    q: "How does the Unique Baby Name Generator work?",
+    a: "Our generator filters our comprehensive database of real recorded names by demographic living bearer thresholds (e.g. Under 1,000, Under 5,000, or Under 20,000), gender, starting letter, and character length. It surfaces genuine historical and international names rather than inventing artificial words.",
+  },
+  {
+    q: "Are the generated baby names guaranteed to be 100% unique?",
+    a: "We use 'unique' in the practical sense of distinctive and uncommon. A name in our 'Very Rare' bracket (under 1,000 living bearers in the U.S.) is shared by fewer than 1 in 330,000 Americans, giving your child a distinctive name that still has real historical and etymological roots.",
+  },
+  {
+    q: "How do I choose the best baby name?",
+    a: "Start by selecting names you love, then evaluate them against practical criteria: test how the full name sounds with your surname, check the initials for unintended acronyms, consider nicknames, verify the linguistic meaning, and check 140-year historical popularity trends.",
+  },
+  {
+    q: "Can I generate baby boy names specifically?",
+    a: "Yes. Select 'Boy Names' in the gender filter to generate distinctive masculine and classic male names that fall below your chosen rarity threshold.",
+  },
+  {
+    q: "Can I generate baby girl names specifically?",
+    a: "Yes. Select 'Girl Names' in the gender filter to discover uncommon female names ranging from soft vintage revivals to distinctive international gems.",
+  },
+  {
+    q: "What is the difference between an uncommon name and a rare name?",
+    a: "An uncommon name typically has between 20,000 and 99,999 living bearers (recognized but rarely shared by multiple classmates). A rare name has between 2,000 and 19,999 bearers, and a very rare name has fewer than 2,000 living bearers nationwide.",
+  },
+  {
+    q: "Can I check the meaning and popularity of generated names?",
+    a: "Yes. Every generated name card links directly to its full profile, allowing you to explore its ancient linguistic origin, literal translation, and decade-by-decade historical popularity chart.",
+  },
+  {
+    q: "Why choose a real recorded rare name over an invented name?",
+    a: "Real recorded names carry authentic linguistic roots, cultural heritage, and established etymologies across Latin, Greek, Celtic, Hebrew, Sanskrit, and other traditions, providing distinctiveness without feeling artificial.",
+  },
+];
+
+const jsonLd = [
+  {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    name: title,
+    description: description,
+    url: canonical,
+    inLanguage: "en-US",
+    publisher: {
+      "@type": "Organization",
+      name: "HowManyOfMe",
+      url: "https://howmanyofme.co",
+    },
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: "Home",
+        item: "https://howmanyofme.co",
+      },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: "Tools",
+        item: "https://howmanyofme.co/tools",
+      },
+      {
+        "@type": "ListItem",
+        position: 3,
+        name: "Unique Name Generator",
+        item: canonical,
+      },
+    ],
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: faqs.map((f) => ({
+      "@type": "Question",
+      name: f.q,
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: f.a,
+      },
+    })),
+  },
+];
 ---
 
-<BaseLayout title={title} description={description} canonical={canonical}>
+<BaseLayout title={title} description={description} canonical={canonical} jsonLd={jsonLd}>
   <SiteHeader client:idle />
 
-  <main class="container py-12 max-w-3xl">
+  <main class="container py-12 max-w-4xl">
+    <!-- Breadcrumbs -->
     <Breadcrumbs
       className="mb-6"
       items={[
@@ -26,19 +131,334 @@ const canonical = "https://howmanyofme.co/tools/unique-name-generator";
       ]}
     />
 
-    <h1 class="font-display text-4xl md:text-5xl font-bold mb-4 text-foreground">Unique Baby Name Generator</h1>
-    <p class="text-muted-foreground mb-8 leading-relaxed">
-      Find rare, distinctive baby names that stand out without being artificial. Filter real recorded names by maximum living bearer thresholds.
-    </p>
+    <!-- Header Section -->
+    <header class="mb-8">
+      <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary/10 text-primary font-semibold uppercase tracking-wider text-[11px] mb-3">
+        <Sparkles class="h-3.5 w-3.5" /> Distinctive Baby Name Finder
+      </span>
+      <h1 class="font-display text-3xl md:text-5xl font-bold text-foreground leading-tight tracking-tight">
+        Unique Baby Name Generator
+      </h1>
+      <p class="text-base md:text-lg text-muted-foreground mt-3 leading-relaxed">
+        Looking for a baby name that feels distinctive without being artificial? Filter thousands of real recorded names by living bearer rarity thresholds, gender, starting letter, and character length to discover hidden gems with authentic heritage.
+      </p>
+    </header>
 
-    <!-- Interactive Island -->
-    <UniqueNameIsland client:load />
+    <!-- 1. Interactive Tool Container (Above the Fold) -->
+    <section class="my-8">
+      <UniqueNameIsland client:load />
+    </section>
+
+    <!-- 2. Quick Answer Block (AEO / Snippet Ready) -->
+    <section class="my-10 rounded-2xl border-l-4 border-primary bg-primary/5 p-6 shadow-sm">
+      <h2 class="text-xs font-bold uppercase tracking-wider text-primary mb-1">
+        Quick Answer: What Makes a Baby Name Truly Distinctive?
+      </h2>
+      <p class="text-sm md:text-base text-foreground leading-relaxed">
+        A distinctive baby name does not have to be an invented string of letters. The most enduring approach is finding <strong>real recorded names with low demographic frequencies</strong> (fewer than 5,000 living bearers in official records) that carry genuine linguistic origins, straightforward pronunciation, and timeless appeal.
+      </p>
+    </section>
 
     <AdSlot />
 
+    <!-- 3. How to Pick a Baby Name (10 Practical Decision Criteria) -->
+    <section class="my-12 space-y-6">
+      <h2 class="font-display text-2xl md:text-3xl font-bold text-foreground">
+        How to Pick a Baby Name: 10 Practical Decision Steps
+      </h2>
+      <p class="text-sm md:text-base text-muted-foreground leading-relaxed">
+        Choosing a name for your child is one of the most meaningful decisions you will make. Here is a practical, step-by-step framework to narrow down your shortlist:
+      </p>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 my-6">
+        <div class="p-5 rounded-2xl border border-border bg-card shadow-xs space-y-2">
+          <div class="flex items-center gap-2 font-bold text-foreground text-sm">
+            <span class="h-6 w-6 rounded-full bg-primary/10 text-primary flex items-center justify-center text-xs">1</span>
+            <span>Start with Sounds You Love</span>
+          </div>
+          <p class="text-xs text-muted-foreground leading-relaxed">
+            Note the vowel sounds, soft consonants, or classic rhythms that naturally appeal to you before worrying about rankings.
+          </p>
+        </div>
+
+        <div class="p-5 rounded-2xl border border-border bg-card shadow-xs space-y-2">
+          <div class="flex items-center gap-2 font-bold text-foreground text-sm">
+            <span class="h-6 w-6 rounded-full bg-primary/10 text-primary flex items-center justify-center text-xs">2</span>
+            <span>Decide on Your Rarity Target</span>
+          </div>
+          <p class="text-xs text-muted-foreground leading-relaxed">
+            Determine whether you prefer a familiar name (Top 100), an uncommon gem (under 50k), or a rare heritage name (under 5k).
+          </p>
+        </div>
+
+        <div class="p-5 rounded-2xl border border-border bg-card shadow-xs space-y-2">
+          <div class="flex items-center gap-2 font-bold text-foreground text-sm">
+            <span class="h-6 w-6 rounded-full bg-primary/10 text-primary flex items-center justify-center text-xs">3</span>
+            <span>Say the Full Name Out Loud</span>
+          </div>
+          <p class="text-xs text-muted-foreground leading-relaxed">
+            Pair the first name with your chosen middle name and surname. Check the cadence, rhythm, and flow when spoken casually.
+          </p>
+        </div>
+
+        <div class="p-5 rounded-2xl border border-border bg-card shadow-xs space-y-2">
+          <div class="flex items-center gap-2 font-bold text-foreground text-sm">
+            <span class="h-6 w-6 rounded-full bg-primary/10 text-primary flex items-center justify-center text-xs">4</span>
+            <span>Check Pronunciation &amp; Spelling</span>
+          </div>
+          <p class="text-xs text-muted-foreground leading-relaxed">
+            Ask friends to read the name aloud. If it requires repeated corrections, consider whether you are comfortable with that trade-off.
+          </p>
+        </div>
+
+        <div class="p-5 rounded-2xl border border-border bg-card shadow-xs space-y-2">
+          <div class="flex items-center gap-2 font-bold text-foreground text-sm">
+            <span class="h-6 w-6 rounded-full bg-primary/10 text-primary flex items-center justify-center text-xs">5</span>
+            <span>Think About Nicknames</span>
+          </div>
+          <p class="text-xs text-muted-foreground leading-relaxed">
+            Identify intuitive short forms (e.g. <em>Theodore $\rightarrow$ Theo</em> or <em>Eleanor $\rightarrow$ Nora</em>) and ensure you like them.
+          </p>
+        </div>
+
+        <div class="p-5 rounded-2xl border border-border bg-card shadow-xs space-y-2">
+          <div class="flex items-center gap-2 font-bold text-foreground text-sm">
+            <span class="h-6 w-6 rounded-full bg-primary/10 text-primary flex items-center justify-center text-xs">6</span>
+            <span>Inspect the Initials</span>
+          </div>
+          <p class="text-xs text-muted-foreground leading-relaxed">
+            Write down the 3-letter monogram (First + Middle + Last) to avoid unintended, embarrassing acronyms.
+          </p>
+        </div>
+
+        <div class="p-5 rounded-2xl border border-border bg-card shadow-xs space-y-2">
+          <div class="flex items-center gap-2 font-bold text-foreground text-sm">
+            <span class="h-6 w-6 rounded-full bg-primary/10 text-primary flex items-center justify-center text-xs">7</span>
+            <span>Verify the Linguistic Meaning</span>
+          </div>
+          <p class="text-xs text-muted-foreground leading-relaxed">
+            Check the ancient etymological root and translation in our <a href="/tools/meaning" class="text-primary underline">Meaning Lookup</a>.
+          </p>
+        </div>
+
+        <div class="p-5 rounded-2xl border border-border bg-card shadow-xs space-y-2">
+          <div class="flex items-center gap-2 font-bold text-foreground text-sm">
+            <span class="h-6 w-6 rounded-full bg-primary/10 text-primary flex items-center justify-center text-xs">8</span>
+            <span>Test Across All Ages</span>
+          </div>
+          <p class="text-xs text-muted-foreground leading-relaxed">
+            Picture the name on a baby, a school child, a college graduate, and a professional adult on a resume.
+          </p>
+        </div>
+
+        <div class="p-5 rounded-2xl border border-border bg-card shadow-xs space-y-2">
+          <div class="flex items-center gap-2 font-bold text-foreground text-sm">
+            <span class="h-6 w-6 rounded-full bg-primary/10 text-primary flex items-center justify-center text-xs">9</span>
+            <span>Check 140-Year Historical Trends</span>
+          </div>
+          <p class="text-xs text-muted-foreground leading-relaxed">
+            Use the <a href="/tools/trend-visualizer" class="text-primary underline">Trend Visualizer</a> to see if a name is an enduring classic or an explosive spike.
+          </p>
+        </div>
+
+        <div class="p-5 rounded-2xl border border-border bg-card shadow-xs space-y-2">
+          <div class="flex items-center gap-2 font-bold text-foreground text-sm">
+            <span class="h-6 w-6 rounded-full bg-primary/10 text-primary flex items-center justify-center text-xs">10</span>
+            <span>Ensure Mutual Agreement</span>
+          </div>
+          <p class="text-xs text-muted-foreground leading-relaxed">
+            Both parents should feel confident and excited about the final selection.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. Baby Name Decision Checklist -->
+    <section class="my-12 space-y-4">
+      <div class="flex items-center gap-2">
+        <CheckSquare class="h-5 w-5 text-primary" />
+        <h2 class="font-display text-2xl md:text-3xl font-bold text-foreground">
+          Baby Name Final Checklist
+        </h2>
+      </div>
+      <div class="p-6 rounded-2xl border border-border/80 bg-secondary/30 space-y-3 text-sm text-muted-foreground leading-relaxed">
+        <p>Before making a final announcement, review these quick sanity checks:</p>
+        <ul class="space-y-2">
+          <li class="flex items-center gap-2"><CheckCircle2 class="h-4 w-4 text-primary shrink-0" /> Does the name roll smoothly off the tongue with our last name?</li>
+          <li class="flex items-center gap-2"><CheckCircle2 class="h-4 w-4 text-primary shrink-0" /> Are we happy with the most common one-syllable nickname?</li>
+          <li class="flex items-center gap-2"><CheckCircle2 class="h-4 w-4 text-primary shrink-0" /> Have we confirmed the three-letter monogram initials?</li>
+          <li class="flex items-center gap-2"><CheckCircle2 class="h-4 w-4 text-primary shrink-0" /> Does the name carry a positive, inspiring etymological meaning?</li>
+          <li class="flex items-center gap-2"><CheckCircle2 class="h-4 w-4 text-primary shrink-0" /> Are we comfortable with its demographic rarity level in official U.S. records?</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- 5. Boy vs Girl Generator Guidance -->
+    <section class="my-12 space-y-6">
+      <h2 class="font-display text-2xl md:text-3xl font-bold text-foreground">
+        Discovering Rare Boy and Girl Names
+      </h2>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <!-- Boy Names -->
+        <div class="p-6 rounded-2xl border border-border bg-card shadow-xs space-y-3">
+          <span class="text-xs font-bold uppercase tracking-wider text-blue-600 dark:text-blue-400 block">
+            Boy Name Generator Guidance
+          </span>
+          <h3 class="font-display text-xl font-bold text-foreground">Looking for a Baby Boy Name?</h3>
+          <p class="text-xs text-muted-foreground leading-relaxed">
+            Uncommon boy names often draw strength from ancient classical roots, nature references, and historical surnames. By selecting the <strong>Boy Names</strong> filter with a threshold of <strong>Under 5,000</strong>, you can discover distinctive names like:
+          </p>
+          <ul class="text-xs text-muted-foreground space-y-1">
+            <li>• <strong>Silas:</strong> Latin origin meaning "of the forest" (~15k bearers)</li>
+            <li>• <strong>Gideon:</strong> Hebrew origin meaning "great warrior" (~18k bearers)</li>
+            <li>• <strong>Lysander:</strong> Greek heritage meaning "freer of people" (&lt;1k bearers)</li>
+            <li>• <strong>Cormac:</strong> Irish heritage meaning "son of defilement" (&lt;2k bearers)</li>
+          </ul>
+        </div>
+
+        <!-- Girl Names -->
+        <div class="p-6 rounded-2xl border border-border bg-card shadow-xs space-y-3">
+          <span class="text-xs font-bold uppercase tracking-wider text-purple-600 dark:text-purple-400 block">
+            Girl Name Generator Guidance
+          </span>
+          <h3 class="font-display text-xl font-bold text-foreground">Looking for a Baby Girl Name?</h3>
+          <p class="text-xs text-muted-foreground leading-relaxed">
+            Uncommon girl names often balance lyrical vowel cadence with timeless elegance. By selecting the <strong>Girl Names</strong> filter with a threshold of <strong>Under 5,000</strong>, you can surface distinctive choices like:
+          </p>
+          <ul class="text-xs text-muted-foreground space-y-1">
+            <li>• <strong>Cosima:</strong> Greek origin meaning "order and beauty" (&lt;1k bearers)</li>
+            <li>• <strong>Elowen:</strong> Cornish origin meaning "elm tree" (&lt;1k bearers)</li>
+            <li>• <strong>Callidora:</strong> Greek origin meaning "gift of beauty" (&lt;500 bearers)</li>
+            <li>• <strong>Thea:</strong> Greek origin meaning "goddess" (~22k bearers)</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- 6. What Does "Unique" Mean Here? -->
+    <section class="my-12 space-y-4">
+      <h2 class="font-display text-2xl md:text-3xl font-bold text-foreground">
+        What Does "Unique" Mean in Demographic Data?
+      </h2>
+      <div class="p-6 rounded-2xl border border-border/80 bg-secondary/30 space-y-3 text-sm text-muted-foreground leading-relaxed">
+        <p>
+          To maintain scientific integrity and transparency, we clarify our definition of uniqueness:
+        </p>
+        <ul class="list-disc list-outside pl-5 space-y-1.5">
+          <li><strong>Distinctive vs. Literally One-of-a-Kind:</strong> In everyday naming language, "unique" refers to names that are rare and distinctive. Very few first names in human history belong to only a single living person.</li>
+          <li><strong>Threshold-Based Rarity:</strong> Our generator filters names based on living population estimates derived from official Social Security birth cohorts (1880–2024).</li>
+          <li><strong>Authentic Origins:</strong> All suggested names are real recorded historical names with documented linguistic roots, avoiding artificially generated random strings.</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- 7. Demographic Tools Ecosystem -->
+    <section class="my-12 space-y-6">
+      <div class="flex items-center justify-between">
+        <h2 class="font-display text-2xl md:text-3xl font-bold text-foreground">
+          Explore More Demographic Name Tools
+        </h2>
+        <a href="/tools" class="text-xs font-semibold text-primary hover:underline flex items-center gap-1">
+          View All Tools <ArrowRight class="h-3.5 w-3.5" />
+        </a>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        <a
+          href="/tools/meaning"
+          class="p-5 rounded-2xl border border-border bg-card hover:border-primary/40 hover:shadow-md transition-all group"
+        >
+          <div class="flex items-center gap-2 font-bold text-foreground group-hover:text-primary transition-colors text-base mb-1.5">
+            <BookOpen class="h-4 w-4 text-primary" />
+            <span>Meaning Lookup</span>
+          </div>
+          <p class="text-xs text-muted-foreground leading-relaxed">
+            Found a name you love? Discover its ancient linguistic roots and literal translations.
+          </p>
+        </a>
+
+        <a
+          href="/tools/popularity-checker"
+          class="p-5 rounded-2xl border border-border bg-card hover:border-primary/40 hover:shadow-md transition-all group"
+        >
+          <div class="flex items-center gap-2 font-bold text-foreground group-hover:text-primary transition-colors text-base mb-1.5">
+            <BarChart3 class="h-4 w-4 text-primary" />
+            <span>Popularity Checker</span>
+          </div>
+          <p class="text-xs text-muted-foreground leading-relaxed">
+            Check how common any name is across living Americans and explore its rarity tier.
+          </p>
+        </a>
+
+        <a
+          href="/tools/trend-visualizer"
+          class="p-5 rounded-2xl border border-border bg-card hover:border-primary/40 hover:shadow-md transition-all group"
+        >
+          <div class="flex items-center gap-2 font-bold text-foreground group-hover:text-primary transition-colors text-base mb-1.5">
+            <TrendingUp class="h-4 w-4 text-primary" />
+            <span>Trend Visualizer</span>
+          </div>
+          <p class="text-xs text-muted-foreground leading-relaxed">
+            Plot 140-year multi-decade popularity curves to see if a name is rising or falling.
+          </p>
+        </a>
+      </div>
+    </section>
+
+    <!-- 8. Federal Data Snapshot -->
+    <section class="my-12 rounded-2xl border border-primary/20 bg-primary/5 p-6 shadow-xs space-y-4">
+      <div class="flex items-center justify-between border-b border-primary/15 pb-3">
+        <div class="flex items-center gap-2">
+          <Database class="h-4 w-4 text-primary" />
+          <h3 class="font-display text-lg font-bold text-foreground">Federal Data Snapshot</h3>
+        </div>
+        <span class="text-xs text-muted-foreground">Release: {manifest.datasetVersion}</span>
+      </div>
+
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs">
+        <div class="p-3 rounded-xl bg-card border border-border">
+          <span class="text-muted-foreground block">Geographic Scope</span>
+          <strong class="text-foreground text-sm font-bold">United States</strong>
+        </div>
+        <div class="p-3 rounded-xl bg-card border border-border">
+          <span class="text-muted-foreground block">Name Registry</span>
+          <strong class="text-foreground text-sm font-bold">SSA 1880–2024</strong>
+        </div>
+        <div class="p-3 rounded-xl bg-card border border-border">
+          <span class="text-muted-foreground block">Filter Engine</span>
+          <strong class="text-foreground text-sm font-bold">Living Bearer Caps</strong>
+        </div>
+        <div class="p-3 rounded-xl bg-card border border-border">
+          <span class="text-muted-foreground block">Classification</span>
+          <strong class="text-foreground text-sm font-bold">Rarity Tiers</strong>
+        </div>
+      </div>
+    </section>
+
+    <!-- 9. Common Questions (FAQ Section) -->
+    <section class="my-12 space-y-6">
+      <div class="flex items-center gap-2">
+        <HelpCircle class="h-5 w-5 text-primary" />
+        <h2 class="font-display text-2xl md:text-3xl font-bold text-foreground">
+          Frequently Asked Questions About Unique Baby Names
+        </h2>
+      </div>
+
+      <div class="space-y-4">
+        {faqs.map((f) => (
+          <div class="p-6 rounded-2xl border border-border bg-card shadow-xs">
+            <h3 class="font-semibold text-foreground text-base mb-2">{f.q}</h3>
+            <p class="text-sm text-muted-foreground leading-relaxed">{f.a}</p>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <!-- 10. Final CTA -->
     <ToolCTA
-      headline="Explore Name Meanings"
-      subhead="Found a rare name you like? Discover its ancient linguistic roots with our Meaning Lookup."
+      headline="Find the Perfect Baby Name Today"
+      subhead="Adjust the rarity threshold and gender filters above to generate distinctive real names."
     />
 
     <RelatedPosts currentSlug="unique-name-generator" tags={["unique names", "baby names", "tools"]} count={6} />
