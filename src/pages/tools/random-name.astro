@@ -7,21 +7,123 @@ import AdSlot from '../../components/AdSlot.astro';
 import ToolCTA from '../../components/ToolCTA.astro';
 import RelatedPosts from '../../components/RelatedPosts.astro';
 import RandomNameIsland from '../../islands/tools/RandomNameIsland';
+import manifest from '../../data/metadata/manifest.json';
+import {
+  Sparkles,
+  HelpCircle,
+  TrendingUp,
+  BarChart3,
+  Users,
+  ShieldCheck,
+  CheckCircle2,
+  AlertTriangle,
+  ArrowRight,
+  Database,
+  ArrowRightLeft,
+  BookOpen,
+  Shuffle,
+  Gamepad2,
+  PenTool,
+  Code,
+} from 'lucide-react';
 
-const title = "Random Name Generator — Real Recorded Names Per Click";
-const description = "Free random name generator. Get real recorded first names per click from official demographic registries.";
+const title = "Random Name Generator: Generate Real Names Instantly";
+const description = "Generate random real first, last, and full names in seconds. Filter by gender and quantity, copy names to clipboard, and explore authentic demographic statistics.";
 const canonical = "https://howmanyofme.co/tools/random-name";
 
 const faqs = [
-  { q: "Are these names real human names?", a: "Yes — every name is sampled from verified U.S. SSA and national birth registries. Never an AI hallucination." },
-  { q: "Can I filter by gender?", a: "Yes — choose Male, Female, or Any (which includes unisex names)." },
+  {
+    q: "How does the Random Name Generator work?",
+    a: "Our generator randomly samples real historical names from official public demographic registries. You can choose between First Names, Surnames, or Full Name combinations, adjust the gender filter, select a batch quantity (5, 10, or 20), and generate instant non-duplicate lists.",
+  },
+  {
+    q: "Are the generated names real recorded names?",
+    a: "Yes. Every first name is sourced from official U.S. Social Security Administration birth records (1880–2024) and every surname is derived from U.S. Census Bureau tabulations. The generator does not create artificial or hallucinated words.",
+  },
+  {
+    q: "Can I generate random full names with both a first and last name?",
+    a: "Yes. In 'Full Name' mode, the generator pairs a random first name with a verified Census surname. You can click any generated full name to explore its combined demographic bearer estimate on our site.",
+  },
+  {
+    q: "Can I filter random names by gender?",
+    a: "Yes. You can filter first-name results by Male, Female, or Any Gender (which includes unisex and gender-neutral names).",
+  },
+  {
+    q: "What are the most common use cases for a random name generator?",
+    a: "Random name generators are widely used by fiction authors creating believable characters, game masters drafting NPCs for tabletop RPGs, software developers generating realistic mockup test data, and parents seeking unexpected naming inspiration.",
+  },
+  {
+    q: "Can I copy generated names to my clipboard?",
+    a: "Yes. You can click the copy icon on any individual name card or use the 'Copy All' button to copy the entire batch as a clean, newline-separated list ready to paste into documents or spreadsheets.",
+  },
+  {
+    q: "Is a random name guaranteed to be rare or unique?",
+    a: "No. 'Random' describes the selection process, not the rarity level. A random batch may include widely common names (like James Smith) as well as uncommon historical names. If you specifically want rare names, use our Unique Baby Name Generator.",
+  },
+  {
+    q: "Does a generated full name belong to a specific real person?",
+    a: "No. The tool randomly pairs public historical first names and surnames. It does not represent, target, or disclose the personal identity or private records of any specific living individual.",
+  },
+];
+
+const jsonLd = [
+  {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    name: title,
+    description: description,
+    url: canonical,
+    inLanguage: "en-US",
+    publisher: {
+      "@type": "Organization",
+      name: "HowManyOfMe",
+      url: "https://howmanyofme.co",
+    },
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: "Home",
+        item: "https://howmanyofme.co",
+      },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: "Tools",
+        item: "https://howmanyofme.co/tools",
+      },
+      {
+        "@type": "ListItem",
+        position: 3,
+        name: "Random Name Generator",
+        item: canonical,
+      },
+    ],
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: faqs.map((f) => ({
+      "@type": "Question",
+      name: f.q,
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: f.a,
+      },
+    })),
+  },
 ];
 ---
 
-<BaseLayout title={title} description={description} canonical={canonical}>
+<BaseLayout title={title} description={description} canonical={canonical} jsonLd={jsonLd}>
   <SiteHeader client:idle />
 
-  <main class="container py-12 max-w-3xl">
+  <main class="container py-12 max-w-4xl">
+    <!-- Breadcrumbs -->
     <Breadcrumbs
       className="mb-6"
       items={[
@@ -31,32 +133,259 @@ const faqs = [
       ]}
     />
 
-    <h1 class="font-display text-4xl md:text-5xl font-bold mb-4 text-foreground">Random Name Generator</h1>
-    <p class="text-muted-foreground mb-8 leading-relaxed">
-      Get 10 random real names per click from our verified database of 100,000+ names. Filter by gender and click any name to explore full statistics.
-    </p>
+    <!-- Header Section -->
+    <header class="mb-8">
+      <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary/10 text-primary font-semibold uppercase tracking-wider text-[11px] mb-3">
+        <Shuffle class="h-3.5 w-3.5" /> Real-Name Randomizer
+      </span>
+      <h1 class="font-display text-3xl md:text-5xl font-bold text-foreground leading-tight tracking-tight">
+        Random Name Generator
+      </h1>
+      <p class="text-base md:text-lg text-muted-foreground mt-3 leading-relaxed">
+        Need realistic names quickly? Generate batches of random real first names, surnames, and full names sourced directly from official U.S. public demographic archives. Filter by gender, copy results with one click, and explore full population statistics.
+      </p>
+    </header>
 
-    <!-- Interactive Island -->
-    <RandomNameIsland client:load />
+    <!-- 1. Interactive Tool Container (Above the Fold) -->
+    <section class="my-8">
+      <RandomNameIsland client:load />
+    </section>
+
+    <!-- 2. Quick Answer Block (AEO / Snippet Ready) -->
+    <section class="my-10 rounded-2xl border-l-4 border-primary bg-primary/5 p-6 shadow-sm">
+      <h2 class="text-xs font-bold uppercase tracking-wider text-primary mb-1">
+        Quick Answer: What Is a Real-Name Random Generator?
+      </h2>
+      <p class="text-sm md:text-base text-foreground leading-relaxed">
+        A random name generator selects names from a verified public registry according to your chosen filters (first, last, or full names; male, female, or any gender) and produces a fresh, non-duplicate batch each time. Because all results are sampled from <strong>official Social Security and Census datasets</strong>, they provide natural, authentic names without artificial strings.
+      </p>
+    </section>
 
     <AdSlot />
 
-    <!-- FAQ Section -->
-    <section class="my-12">
-      <h2 class="font-display text-2xl font-bold mb-4 text-foreground">Frequently Asked Questions</h2>
-      <div class="space-y-3">
+    <!-- 3. What Can You Use Random Names For? -->
+    <section class="my-12 space-y-6">
+      <h2 class="font-display text-2xl md:text-3xl font-bold text-foreground">
+        What Can You Use a Random Name Generator For?
+      </h2>
+      <p class="text-sm md:text-base text-muted-foreground leading-relaxed">
+        Random real names are widely useful across creative writing, digital design, gaming, and software development:
+      </p>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 my-6">
+        <div class="p-5 rounded-2xl border border-border bg-card shadow-xs space-y-2">
+          <div class="flex items-center gap-2 font-bold text-foreground text-sm">
+            <PenTool class="h-4 w-4 text-primary" />
+            <span>Character Naming for Writers &amp; Authors</span>
+          </div>
+          <p class="text-xs text-muted-foreground leading-relaxed">
+            Quickly generate authentic-sounding names for main protagonists, secondary characters, and background figures without getting stalled during first drafts.
+          </p>
+        </div>
+
+        <div class="p-5 rounded-2xl border border-border bg-card shadow-xs space-y-2">
+          <div class="flex items-center gap-2 font-bold text-foreground text-sm">
+            <Gamepad2 class="h-4 w-4 text-primary" />
+            <span>Tabletop RPGs &amp; Game Development</span>
+          </div>
+          <p class="text-xs text-muted-foreground leading-relaxed">
+            Create instant NPC identities, player character aliases, and townspeople rosters for Dungeons &amp; Dragons, story campaigns, and video games.
+          </p>
+        </div>
+
+        <div class="p-5 rounded-2xl border border-border bg-card shadow-xs space-y-2">
+          <div class="flex items-center gap-2 font-bold text-foreground text-sm">
+            <Code class="h-4 w-4 text-primary" />
+            <span>UI Mockups &amp; Software Testing</span>
+          </div>
+          <p class="text-xs text-muted-foreground leading-relaxed">
+            Populate prototype interfaces, Figma designs, customer profile mockups, and sample database records with realistic placeholder names.
+          </p>
+        </div>
+
+        <div class="p-5 rounded-2xl border border-border bg-card shadow-xs space-y-2">
+          <div class="flex items-center gap-2 font-bold text-foreground text-sm">
+            <Sparkles class="h-4 w-4 text-primary" />
+            <span>Creative Brainstorming &amp; Discovery</span>
+          </div>
+          <p class="text-xs text-muted-foreground leading-relaxed">
+            Step outside conventional Top 100 lists to discover unexpected historical names you might not have encountered on standard popularity charts.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. Random vs Unique vs Popular Comparison Matrix -->
+    <section class="my-12 space-y-6">
+      <h2 class="font-display text-2xl md:text-3xl font-bold text-foreground">
+        Random Names vs. Unique Names vs. Popular Names
+      </h2>
+      <p class="text-sm md:text-base text-muted-foreground leading-relaxed">
+        Understanding the difference between random selection and demographic frequency helps you pick the right tool for your project:
+      </p>
+
+      <div class="overflow-x-auto rounded-2xl border border-border bg-card shadow-xs my-4">
+        <table class="w-full text-left text-sm border-collapse">
+          <thead class="bg-secondary/70 text-xs font-semibold text-foreground uppercase tracking-wider border-b border-border">
+            <tr>
+              <th scope="col" class="p-3.5">Category</th>
+              <th scope="col" class="p-3.5">What It Means</th>
+              <th scope="col" class="p-3.5">Best Used For</th>
+              <th scope="col" class="p-3.5">Dedicated Tool</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-border/60 text-xs text-muted-foreground">
+            <tr class="hover:bg-secondary/20 transition-colors">
+              <th scope="row" class="p-3.5 font-semibold text-foreground">Random Names</th>
+              <td class="p-3.5">Sampled without ranking bias across the entire registry.</td>
+              <td class="p-3.5">Characters, mockups, game NPCs, quick brainstorming.</td>
+              <td class="p-3.5 text-primary font-medium">Random Name Generator</td>
+            </tr>
+            <tr class="hover:bg-secondary/20 transition-colors">
+              <th scope="row" class="p-3.5 font-semibold text-foreground">Unique / Rare Names</th>
+              <td class="p-3.5">Filtered specifically to low demographic bearer frequencies (&lt;5k).</td>
+              <td class="p-3.5">Parents seeking distinctive real baby names with heritage.</td>
+              <td class="p-3.5 text-primary font-medium">
+                <a href="/tools/unique-name-generator" class="underline">Unique Name Generator</a>
+              </td>
+            </tr>
+            <tr class="hover:bg-secondary/20 transition-colors">
+              <th scope="row" class="p-3.5 font-semibold text-foreground">Popular Names</th>
+              <td class="p-3.5">Ranked by highest living population or annual newborn counts.</td>
+              <td class="p-3.5">Checking personal name popularity and national frequency ratios.</td>
+              <td class="p-3.5 text-primary font-medium">
+                <a href="/tools/popularity-checker" class="underline">Popularity Checker</a>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- 5. Data Sources & Limitations -->
+    <section class="my-12 space-y-4">
+      <h2 class="font-display text-2xl md:text-3xl font-bold text-foreground">
+        Where Do the Random Names Come From?
+      </h2>
+      <div class="p-6 rounded-2xl border border-border/80 bg-secondary/30 space-y-3 text-sm text-muted-foreground leading-relaxed">
+        <p>
+          Unlike AI generators that invent fictional or grammatically awkward strings, our randomizer samples from established public registries:
+        </p>
+        <ul class="list-disc list-outside pl-5 space-y-1.5">
+          <li><strong>First Names:</strong> Sourced from official <strong>Social Security Administration (SSA)</strong> annual birth cohorts (1880–2024).</li>
+          <li><strong>Surnames:</strong> Sourced from decennial <strong>U.S. Census Bureau</strong> surname tabulations.</li>
+          <li><strong>Zero Hallucination:</strong> Every generated first name and surname has a documented history of real-world demographic usage.</li>
+          <li><strong>Privacy Protection:</strong> Full names are generated through independent random combination. They do not represent real-world individual personal records or confidential PII.</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- 6. Demographic Tools Ecosystem -->
+    <section class="my-12 space-y-6">
+      <div class="flex items-center justify-between">
+        <h2 class="font-display text-2xl md:text-3xl font-bold text-foreground">
+          Explore More Demographic Name Tools
+        </h2>
+        <a href="/tools" class="text-xs font-semibold text-primary hover:underline flex items-center gap-1">
+          View All Tools <ArrowRight class="h-3.5 w-3.5" />
+        </a>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        <a
+          href="/tools/unique-name-generator"
+          class="p-5 rounded-2xl border border-border bg-card hover:border-primary/40 hover:shadow-md transition-all group"
+        >
+          <div class="flex items-center gap-2 font-bold text-foreground group-hover:text-primary transition-colors text-base mb-1.5">
+            <Sparkles class="h-4 w-4 text-primary" />
+            <span>Unique Name Generator</span>
+          </div>
+          <p class="text-xs text-muted-foreground leading-relaxed">
+            Filter real baby names by demographic rarity thresholds, starting letter, and length.
+          </p>
+        </a>
+
+        <a
+          href="/tools/popularity-checker"
+          class="p-5 rounded-2xl border border-border bg-card hover:border-primary/40 hover:shadow-md transition-all group"
+        >
+          <div class="flex items-center gap-2 font-bold text-foreground group-hover:text-primary transition-colors text-base mb-1.5">
+            <BarChart3 class="h-4 w-4 text-primary" />
+            <span>Popularity Checker</span>
+          </div>
+          <p class="text-xs text-muted-foreground leading-relaxed">
+            Check how common any generated name is across living Americans and view its rarity tier.
+          </p>
+        </a>
+
+        <a
+          href="/tools/meaning"
+          class="p-5 rounded-2xl border border-border bg-card hover:border-primary/40 hover:shadow-md transition-all group"
+        >
+          <div class="flex items-center gap-2 font-bold text-foreground group-hover:text-primary transition-colors text-base mb-1.5">
+            <BookOpen class="h-4 w-4 text-primary" />
+            <span>Meaning Lookup</span>
+          </div>
+          <p class="text-xs text-muted-foreground leading-relaxed">
+            Found an interesting random name? Discover its ancient linguistic roots and translations.
+          </p>
+        </a>
+      </div>
+    </section>
+
+    <!-- 7. Federal Data Snapshot -->
+    <section class="my-12 rounded-2xl border border-primary/20 bg-primary/5 p-6 shadow-xs space-y-4">
+      <div class="flex items-center justify-between border-b border-primary/15 pb-3">
+        <div class="flex items-center gap-2">
+          <Database class="h-4 w-4 text-primary" />
+          <h3 class="font-display text-lg font-bold text-foreground">Federal Data Snapshot</h3>
+        </div>
+        <span class="text-xs text-muted-foreground">Release: {manifest.datasetVersion}</span>
+      </div>
+
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs">
+        <div class="p-3 rounded-xl bg-card border border-border">
+          <span class="text-muted-foreground block">Geographic Scope</span>
+          <strong class="text-foreground text-sm font-bold">United States</strong>
+        </div>
+        <div class="p-3 rounded-xl bg-card border border-border">
+          <span class="text-muted-foreground block">First Names</span>
+          <strong class="text-foreground text-sm font-bold">SSA 1880–2024</strong>
+        </div>
+        <div class="p-3 rounded-xl bg-card border border-border">
+          <span class="text-muted-foreground block">Surnames</span>
+          <strong class="text-foreground text-sm font-bold">Census Decennial</strong>
+        </div>
+        <div class="p-3 rounded-xl bg-card border border-border">
+          <span class="text-muted-foreground block">Sampling Mode</span>
+          <strong class="text-foreground text-sm font-bold">Real Public Data</strong>
+        </div>
+      </div>
+    </section>
+
+    <!-- 8. Common Questions (FAQ Section) -->
+    <section class="my-12 space-y-6">
+      <div class="flex items-center gap-2">
+        <HelpCircle class="h-5 w-5 text-primary" />
+        <h2 class="font-display text-2xl md:text-3xl font-bold text-foreground">
+          Frequently Asked Questions About Random Names
+        </h2>
+      </div>
+
+      <div class="space-y-4">
         {faqs.map((f) => (
-          <div class="p-5 rounded-xl border border-border bg-card">
-            <h3 class="font-semibold text-foreground mb-1">{f.q}</h3>
-            <p class="text-sm text-muted-foreground">{f.a}</p>
+          <div class="p-6 rounded-2xl border border-border bg-card shadow-xs">
+            <h3 class="font-semibold text-foreground text-base mb-2">{f.q}</h3>
+            <p class="text-sm text-muted-foreground leading-relaxed">{f.a}</p>
           </div>
         ))}
       </div>
     </section>
 
+    <!-- 9. Final CTA -->
     <ToolCTA
-      headline="Explore Name Popularity"
-      subhead="Want to see the popularity curve of a specific name? Check our live database."
+      headline="Need More Name Ideas?"
+      subhead="Adjust the format, gender, or batch size above to generate a fresh list of random real names."
     />
 
     <RelatedPosts currentSlug="random-name" tags={["generator", "tools", "baby names"]} count={6} />
