@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { getNamesForLetter, getNameData, formatNumber, ALPHABET } from "../../data/nameData";
-import { Sparkles, Copy, Check, Filter, RotateCcw, ExternalLink, BookOpen, Search } from "lucide-react";
+import { Sparkles, Copy, Check, RotateCcw, ExternalLink } from "lucide-react";
 import { trackEvent } from "../../lib/analytics/events";
 
 const PRESETS = [

@@ -24,7 +24,8 @@ export type AnalyticsEventName =
   | "dataset_downloaded"
   | "affiliate_resource_clicked"
   | "comparison_completed"
-  | "swap_names_clicked";
+  | "swap_names_clicked"
+  | "letter_clicked";
 
 export interface AnalyticsEventPayload {
   search_mode?: "first_name" | "full_name";

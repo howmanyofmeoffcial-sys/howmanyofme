@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Search, Sparkles, TrendingUp, Award, BarChart3, RotateCcw } from "lucide-react";
+import { Search, Sparkles, TrendingUp, BarChart3, RotateCcw } from "lucide-react";
 import { resolveNameSearch } from "../../lib/estimation/resolveNameSearch";
 import type { NameEstimateResult } from "../../lib/estimation/types";
 import { NameEstimateCard } from "../homepage/NameEstimateCard";

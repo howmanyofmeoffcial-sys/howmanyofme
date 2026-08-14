@@ -7,26 +7,102 @@ import AdSlot from '../../components/AdSlot.astro';
 import ToolCTA from '../../components/ToolCTA.astro';
 import RelatedPosts from '../../components/RelatedPosts.astro';
 import BabyNamesBrowser from '../../islands/tools/BabyNamesBrowser';
+import manifest from '../../data/metadata/manifest.json';
+import {
+  Sparkles,
+  HelpCircle,
+  TrendingUp,
+  BarChart3,
+  Users,
+  ShieldCheck,
+  CheckCircle2,
+  AlertTriangle,
+  ArrowRight,
+  Database,
+  ArrowRightLeft,
+  BookOpen,
+  Shuffle,
+  Search,
+  Layers,
+  Heart,
+} from 'lucide-react';
 
-const title = "Baby Name Browser A–Z — Filter by Letter and Gender";
-const description = "Free A–Z baby name browser. Filter thousands of real recorded baby names by starting letter and gender. No signup required.";
+const title = "Baby Names: Search & Browse Names A–Z by Letter & Gender";
+const description = "Browse and search baby names alphabetically by letter and gender. Explore real recorded names, ancient linguistic meanings, and 140+ years of popularity statistics.";
 const canonical = "https://howmanyofme.co/tools/baby-names";
 
 const faqs = [
-  { q: "How do I browse baby names alphabetically?", a: "Click any letter A–Z above to view all names beginning with that letter. Use the gender dropdown to narrow further." },
-  { q: "Are these all the baby names that exist?", a: "We cover 100,000+ recorded names from US SSA, UK ONS, and 78 other registries." },
-  { q: "Can I filter by gender?", a: "Yes — choose Boy, Girl, or Any (which includes unisex names)." },
+  {
+    q: "How do I search for a baby name in the directory?",
+    a: "Type any name or partial spelling into the search box above to instantly filter through thousands of recorded names. You can also click any letter from A to Z to browse names alphabetically, or filter specifically by Boy or Girl names.",
+  },
+  {
+    q: "Can I filter baby names by gender?",
+    a: "Yes. You can toggle the gender filter between All Genders, Boy Names, and Girl Names. Gender classifications reflect official Social Security Administration historical birth registrations.",
+  },
+  {
+    q: "Where does the baby-name data come from?",
+    a: "All first names in our directory are sourced directly from official United States Social Security Administration annual birth cohorts spanning 1880 through 2024. We do not use artificially invented AI name strings.",
+  },
+  {
+    q: "Does a popular baby name mean many living people have it today?",
+    a: "Not necessarily. Annual baby-name rankings measure how many newborn infants received a name in a given year. Cumulative living bearer counts across all age groups depend on historical birth waves and survival rates, which you can check on our homepage or Popularity Checker.",
+  },
+  {
+    q: "Can I check the meaning and origin of a baby name?",
+    a: "Yes. Selecting any name card in the directory opens its complete demographic and etymological profile, revealing its documented linguistic origin, literal translation, and decade-by-decade popularity chart.",
+  },
+  {
+    q: "How can I find rare or uncommon baby names?",
+    a: "If you are specifically searching for distinctive names with low living population frequencies, use our dedicated Unique Baby Name Generator to filter by exact living bearer thresholds (e.g. Under 1,000 or Under 5,000).",
+  },
+  {
+    q: "Can I see how a baby name's popularity has changed over time?",
+    a: "Yes. Our Trend Visualizer allows you to plot 140-year multi-decade historical curves for any name to see whether it is an enduring classic, a vintage revival, or a fast modern climber.",
+  },
+  {
+    q: "Can I compare two baby names side-by-side?",
+    a: "Yes. Our Name Comparison Tool allows you to evaluate two finalist baby names across living population scale, historical peak years, and recent 10-year trajectories.",
+  },
 ];
 
 const jsonLd = [
   {
     "@context": "https://schema.org",
-    "@type": "SoftwareApplication",
-    name: "Baby Name Browser",
-    applicationCategory: "UtilityApplication",
-    operatingSystem: "Any",
+    "@type": "WebPage",
+    name: title,
+    description: description,
     url: canonical,
-    description,
+    inLanguage: "en-US",
+    publisher: {
+      "@type": "Organization",
+      name: "HowManyOfMe",
+      url: "https://howmanyofme.co",
+    },
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: "Home",
+        item: "https://howmanyofme.co",
+      },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: "Tools",
+        item: "https://howmanyofme.co/tools",
+      },
+      {
+        "@type": "ListItem",
+        position: 3,
+        name: "Baby Names",
+        item: canonical,
+      },
+    ],
   },
   {
     "@context": "https://schema.org",
@@ -34,7 +110,10 @@ const jsonLd = [
     mainEntity: faqs.map((f) => ({
       "@type": "Question",
       name: f.q,
-      acceptedAnswer: { "@type": "Answer", text: f.a },
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: f.a,
+      },
     })),
   },
 ];
@@ -43,7 +122,8 @@ const jsonLd = [
 <BaseLayout title={title} description={description} canonical={canonical} jsonLd={jsonLd}>
   <SiteHeader client:idle />
 
-  <main class="container py-12 max-w-3xl">
+  <main class="container py-12 max-w-4xl">
+    <!-- Breadcrumbs -->
     <Breadcrumbs
       className="mb-6"
       items={[
@@ -53,32 +133,211 @@ const jsonLd = [
       ]}
     />
 
-    <h1 class="font-display text-4xl md:text-5xl font-bold mb-4 text-foreground">Baby Name Browser</h1>
-    <p class="text-muted-foreground mb-8 leading-relaxed">
-      Browse real recorded baby names alphabetically. Filter by starting letter and gender, then select any name for complete popularity statistics and decade curves.
-    </p>
+    <!-- Header Section -->
+    <header class="mb-8">
+      <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary/10 text-primary font-semibold uppercase tracking-wider text-[11px] mb-3">
+        <BookOpen class="h-3.5 w-3.5" /> Baby Names Directory &amp; Discovery Hub
+      </span>
+      <h1 class="font-display text-3xl md:text-5xl font-bold text-foreground leading-tight tracking-tight">
+        Baby Names
+      </h1>
+      <p class="text-base md:text-lg text-muted-foreground mt-3 leading-relaxed">
+        Choosing a baby name starts with discovery. Search thousands of real recorded names from official U.S. Social Security archives, browse alphabetically from A to Z, filter by gender, and open any name to explore its linguistic origin, living bearer count, and 140-year popularity history.
+      </p>
+    </header>
 
-    <!-- Interactive Island -->
-    <BabyNamesBrowser client:load />
+    <!-- 1. Interactive Directory Island (Above the Fold) -->
+    <section class="my-8">
+      <BabyNamesBrowser client:load />
+    </section>
+
+    <!-- 2. Quick Answer Block (AEO / Snippet Ready) -->
+    <section class="my-10 rounded-2xl border-l-4 border-primary bg-primary/5 p-6 shadow-sm">
+      <h2 class="text-xs font-bold uppercase tracking-wider text-primary mb-1">
+        Quick Answer: What Is a Baby Name Directory?
+      </h2>
+      <p class="text-sm md:text-base text-foreground leading-relaxed">
+        A baby name directory is a searchable, categorized collection of real recorded given names that enables parents to browse by starting letter, gender, and popularity. HowManyOfMe pairs alphabetical discovery with <strong>demographic frequency data and historical Social Security cohorts (1880–2024)</strong>, providing instant insights into any name's rarity and heritage.
+      </p>
+    </section>
 
     <AdSlot />
 
-    <!-- FAQ Section -->
-    <section class="my-12">
-      <h2 class="font-display text-2xl font-bold mb-4 text-foreground">Frequently Asked Questions</h2>
-      <div class="space-y-3">
+    <!-- 3. How to Narrow Down Baby Names (5 Practical Steps) -->
+    <section class="my-12 space-y-6">
+      <h2 class="font-display text-2xl md:text-3xl font-bold text-foreground">
+        How to Narrow Down Your Baby Name Shortlist
+      </h2>
+      <p class="text-sm md:text-base text-muted-foreground leading-relaxed">
+        With thousands of possibilities, finding the perfect name is easiest when approached in clear stages:
+      </p>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 my-6">
+        <div class="p-5 rounded-2xl border border-border bg-card shadow-xs space-y-2">
+          <div class="flex items-center gap-2 font-bold text-foreground text-sm">
+            <span class="h-6 w-6 rounded-full bg-primary/10 text-primary flex items-center justify-center text-xs">1</span>
+            <span>Browse by Sound &amp; Starting Letter</span>
+          </div>
+          <p class="text-xs text-muted-foreground leading-relaxed">
+            Use the A–Z letter bar above to explore names with phonetic cadences that pair naturally with your surname.
+          </p>
+        </div>
+
+        <div class="p-5 rounded-2xl border border-border bg-card shadow-xs space-y-2">
+          <div class="flex items-center gap-2 font-bold text-foreground text-sm">
+            <span class="h-6 w-6 rounded-full bg-primary/10 text-primary flex items-center justify-center text-xs">2</span>
+            <span>Check the Ancient Linguistic Meaning</span>
+          </div>
+          <p class="text-xs text-muted-foreground leading-relaxed">
+            Explore authentic Latin, Greek, Hebrew, Celtic, and Sanskrit roots in our <a href="/tools/meaning" class="text-primary underline">Meaning Lookup</a>.
+          </p>
+        </div>
+
+        <div class="p-5 rounded-2xl border border-border bg-card shadow-xs space-y-2">
+          <div class="flex items-center gap-2 font-bold text-foreground text-sm">
+            <span class="h-6 w-6 rounded-full bg-primary/10 text-primary flex items-center justify-center text-xs">3</span>
+            <span>Check Living Frequency &amp; Rarity</span>
+          </div>
+          <p class="text-xs text-muted-foreground leading-relaxed">
+            Evaluate national rarity ratios and living population scale in the <a href="/tools/popularity-checker" class="text-primary underline">Popularity Checker</a>.
+          </p>
+        </div>
+
+        <div class="p-5 rounded-2xl border border-border bg-card shadow-xs space-y-2">
+          <div class="flex items-center gap-2 font-bold text-foreground text-sm">
+            <span class="h-6 w-6 rounded-full bg-primary/10 text-primary flex items-center justify-center text-xs">4</span>
+            <span>Plot 140-Year Popularity Curves</span>
+          </div>
+          <p class="text-xs text-muted-foreground leading-relaxed">
+            See if a name is an enduring classic, vintage revival, or fast climber in the <a href="/tools/trend-visualizer" class="text-primary underline">Trend Visualizer</a>.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. Baby Names vs Living Population (Demographic Distinction) -->
+    <section class="my-12 space-y-4">
+      <h2 class="font-display text-2xl md:text-3xl font-bold text-foreground">
+        Baby Name Popularity vs. Total Living Population
+      </h2>
+      <div class="p-6 rounded-2xl border border-border/80 bg-secondary/30 space-y-3 text-sm text-muted-foreground leading-relaxed">
+        <p>
+          It is essential to understand the difference between newborn rankings and living population scale:
+        </p>
+        <ul class="list-disc list-outside pl-5 space-y-1.5">
+          <li><strong>Annual Baby Name Rankings:</strong> Measure how many newborn infants received a specific name during a single calendar year (e.g. <em>Liam</em> leading newborn registrations in recent years).</li>
+          <li><strong>Cumulative Living Population:</strong> Reflects the total living individuals across all living age groups (e.g. <em>James</em> and <em>Robert</em> having millions of living adult bearers nationwide).</li>
+          <li><strong>The HowManyOfMe Ecosystem:</strong> Our site connects both dimensions, allowing you to examine historical newborn waves alongside present-day living bearer estimates.</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- 5. Demographic Tools Ecosystem Grid -->
+    <section class="my-12 space-y-6">
+      <div class="flex items-center justify-between">
+        <h2 class="font-display text-2xl md:text-3xl font-bold text-foreground">
+          Explore More Demographic Name Tools
+        </h2>
+        <a href="/tools" class="text-xs font-semibold text-primary hover:underline flex items-center gap-1">
+          View All Tools <ArrowRight class="h-3.5 w-3.5" />
+        </a>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        <a
+          href="/tools/unique-name-generator"
+          class="p-5 rounded-2xl border border-border bg-card hover:border-primary/40 hover:shadow-md transition-all group"
+        >
+          <div class="flex items-center gap-2 font-bold text-foreground group-hover:text-primary transition-colors text-base mb-1.5">
+            <Sparkles class="h-4 w-4 text-primary" />
+            <span>Unique Name Generator</span>
+          </div>
+          <p class="text-xs text-muted-foreground leading-relaxed">
+            Filter real baby names by demographic rarity thresholds, starting letters, and length.
+          </p>
+        </a>
+
+        <a
+          href="/tools/popularity-checker"
+          class="p-5 rounded-2xl border border-border bg-card hover:border-primary/40 hover:shadow-md transition-all group"
+        >
+          <div class="flex items-center gap-2 font-bold text-foreground group-hover:text-primary transition-colors text-base mb-1.5">
+            <BarChart3 class="h-4 w-4 text-primary" />
+            <span>Popularity Checker</span>
+          </div>
+          <p class="text-xs text-muted-foreground leading-relaxed">
+            Check living frequency, national rarity tier, and demographic ratios for any name.
+          </p>
+        </a>
+
+        <a
+          href="/tools/trend-visualizer"
+          class="p-5 rounded-2xl border border-border bg-card hover:border-primary/40 hover:shadow-md transition-all group"
+        >
+          <div class="flex items-center gap-2 font-bold text-foreground group-hover:text-primary transition-colors text-base mb-1.5">
+            <TrendingUp class="h-4 w-4 text-primary" />
+            <span>Trend Visualizer</span>
+          </div>
+          <p class="text-xs text-muted-foreground leading-relaxed">
+            Compare 140-year multi-decade popularity curves across up to 4 names simultaneously.
+          </p>
+        </a>
+      </div>
+    </section>
+
+    <!-- 6. Federal Data Snapshot -->
+    <section class="my-12 rounded-2xl border border-primary/20 bg-primary/5 p-6 shadow-xs space-y-4">
+      <div class="flex items-center justify-between border-b border-primary/15 pb-3">
+        <div class="flex items-center gap-2">
+          <Database class="h-4 w-4 text-primary" />
+          <h3 class="font-display text-lg font-bold text-foreground">Baby Name Data Snapshot</h3>
+        </div>
+        <span class="text-xs text-muted-foreground">Release: {manifest.datasetVersion}</span>
+      </div>
+
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs">
+        <div class="p-3 rounded-xl bg-card border border-border">
+          <span class="text-muted-foreground block">Geographic Scope</span>
+          <strong class="text-foreground text-sm font-bold">United States</strong>
+        </div>
+        <div class="p-3 rounded-xl bg-card border border-border">
+          <span class="text-muted-foreground block">Primary Registry</span>
+          <strong class="text-foreground text-sm font-bold">SSA 1880–2024</strong>
+        </div>
+        <div class="p-3 rounded-xl bg-card border border-border">
+          <span class="text-muted-foreground block">Discovery Mode</span>
+          <strong class="text-foreground text-sm font-bold">Search &amp; A–Z Filter</strong>
+        </div>
+        <div class="p-3 rounded-xl bg-card border border-border">
+          <span class="text-muted-foreground block">Integration</span>
+          <strong class="text-foreground text-sm font-bold">Profiles &amp; Trends</strong>
+        </div>
+      </div>
+    </section>
+
+    <!-- 7. Common Questions (FAQ Section) -->
+    <section class="my-12 space-y-6">
+      <div class="flex items-center gap-2">
+        <HelpCircle class="h-5 w-5 text-primary" />
+        <h2 class="font-display text-2xl md:text-3xl font-bold text-foreground">
+          Frequently Asked Questions About Baby Names
+        </h2>
+      </div>
+
+      <div class="space-y-4">
         {faqs.map((f) => (
-          <div class="p-5 rounded-xl border border-border bg-card">
-            <h3 class="font-semibold text-foreground mb-1">{f.q}</h3>
-            <p class="text-sm text-muted-foreground">{f.a}</p>
+          <div class="p-6 rounded-2xl border border-border bg-card shadow-xs">
+            <h3 class="font-semibold text-foreground text-base mb-2">{f.q}</h3>
+            <p class="text-sm text-muted-foreground leading-relaxed">{f.a}</p>
           </div>
         ))}
       </div>
     </section>
 
+    <!-- 8. Final CTA -->
     <ToolCTA
-      headline="Explore Unique Baby Names"
-      subhead="Looking for something rare? Use our Unique Name Generator to filter by maximum bearer counts."
+      headline="Ready to Find Your Favorite Baby Name?"
+      subhead="Search by name above or browse through any letter from A to Z to explore profiles."
     />
 
     <RelatedPosts currentSlug="baby-names" tags={["baby names", "tools", "trends"]} count={6} />

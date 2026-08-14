@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { getNamesForLetter, getNameData, formatNumber, ALPHABET } from "../../data/nameData";
 import { getAllSurnames } from "../../lib/surnames/data";
-import { Sparkles, Copy, Check, RotateCcw, ExternalLink, Users, FileText } from "lucide-react";
+import { Sparkles, Copy, Check, RotateCcw, ExternalLink, FileText } from "lucide-react";
 import { trackEvent } from "../../lib/analytics/events";
 
 interface GeneratedItem {
