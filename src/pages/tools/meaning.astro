@@ -7,38 +7,362 @@ import AdSlot from '../../components/AdSlot.astro';
 import ToolCTA from '../../components/ToolCTA.astro';
 import RelatedPosts from '../../components/RelatedPosts.astro';
 import MeaningLookupIsland from '../../islands/tools/MeaningLookupIsland';
+import manifest from '../../data/metadata/manifest.json';
+import {
+  BookOpen,
+  Globe2,
+  Sparkles,
+  HelpCircle,
+  TrendingUp,
+  BarChart3,
+  Users,
+  ShieldCheck,
+  CheckCircle2,
+  AlertTriangle,
+  ArrowRight,
+  Database,
+  ArrowRightLeft,
+  Search,
+  Compass,
+  History,
+} from 'lucide-react';
 
-const title = "Name Meaning Lookup — Etymology & Cultural Origin Search";
-const description = "Discover the ancient roots, linguistic history, and literal translations of thousands of personal names.";
+const title = "Name Meaning & Origin Finder: What Does Your Name Mean?";
+const description = "Search a first name or surname to discover its meaning, linguistic origin, and etymology. Explore name history, cultural roots, and popularity trends.";
 const canonical = "https://howmanyofme.co/tools/meaning";
+
+const faqs = [
+  {
+    q: "What does my name mean?",
+    a: "Your name's meaning is the symbolic attribute or literal translation inherited from its historical language root. Enter your name in the search box above to retrieve its recorded etymology and cultural origin.",
+  },
+  {
+    q: "What is the difference between a name's origin and its meaning?",
+    a: "A name's origin is the language family or geographic region where it was first formed (e.g., Celtic, Hebrew, Latin, or Old Norse). Its meaning is what that root word originally signified (e.g., 'bringer of light' or 'resolute protector').",
+  },
+  {
+    q: "Can a name have more than one meaning or origin?",
+    a: "Yes. Many ancient names evolved independently in multiple cultures or adopted secondary meanings as they migrated across languages, such as names with both Hebrew and Latin historical derivations.",
+  },
+  {
+    q: "How are surname origins classified?",
+    a: "Surnames are historically classified into four main categories: Patronymics/Matronymics (e.g., Johnson, Rodriguez), Occupational (e.g., Smith, Miller), Topographic/Locational (e.g., Moore, Hill), and Descriptive nicknames (e.g., Brown, Young).",
+  },
+  {
+    q: "Where does the name meaning data come from?",
+    a: "Our name meanings and etymologies are synthesized from established onomastic lexicons, historical linguistics archives, and official demographic databases.",
+  },
+  {
+    q: "Are name meanings connected to how popular a name is?",
+    a: "No. A name's etymology is rooted in ancient language history, whereas its popularity reflects modern demographic usage measured by birth registries and census records.",
+  },
+  {
+    q: "How can I see how common my name is after finding its meaning?",
+    a: "You can explore living bearer counts with our Popularity Checker or trace its 140-year historical trajectory using the Trend Visualizer.",
+  },
+  {
+    q: "Can I search the origin of any surname?",
+    a: "Yes. Switch to 'Surname & Last Name Origin' mode to look up historical classifications for top U.S. surnames recorded in the Decennial Census.",
+  },
+];
+
+const jsonLd = [
+  {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    name: title,
+    description: description,
+    url: canonical,
+    inLanguage: "en-US",
+    publisher: {
+      "@type": "Organization",
+      name: "HowManyOfMe",
+      url: "https://howmanyofme.co",
+    },
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: "Home",
+        item: "https://howmanyofme.co",
+      },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: "Tools",
+        item: "https://howmanyofme.co/tools",
+      },
+      {
+        "@type": "ListItem",
+        position: 3,
+        name: "Name Meaning & Origin Finder",
+        item: canonical,
+      },
+    ],
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: faqs.map((f) => ({
+      "@type": "Question",
+      name: f.q,
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: f.a,
+      },
+    })),
+  },
+];
 ---
 
-<BaseLayout title={title} description={description} canonical={canonical}>
+<BaseLayout title={title} description={description} canonical={canonical} jsonLd={jsonLd}>
   <SiteHeader client:idle />
 
-  <main class="container py-12 max-w-3xl">
+  <main class="container py-12 max-w-4xl">
+    <!-- Breadcrumbs -->
     <Breadcrumbs
       className="mb-6"
       items={[
         { label: "Home", href: "/" },
         { label: "Tools", href: "/tools" },
-        { label: "Name Meaning Lookup" },
+        { label: "Name Meaning & Origin Finder" },
       ]}
     />
 
-    <h1 class="font-display text-4xl md:text-5xl font-bold mb-4 text-foreground">Name Meaning Lookup</h1>
-    <p class="text-muted-foreground mb-8 leading-relaxed">
-      Discover the linguistic origin, historical meaning, and cultural etymology behind recorded first names.
-    </p>
+    <!-- Header Section -->
+    <header class="mb-8">
+      <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary/10 text-primary font-semibold uppercase tracking-wider text-[11px] mb-3">
+        <BookOpen class="h-3.5 w-3.5" /> Etymology &amp; Cultural Roots
+      </span>
+      <h1 class="font-display text-3xl md:text-5xl font-bold text-foreground leading-tight tracking-tight">
+        Name Meaning &amp; Origin Finder
+      </h1>
+      <p class="text-base md:text-lg text-muted-foreground mt-3 leading-relaxed">
+        Discover the ancient roots, linguistic history, and literal translations behind recorded first names and surnames. Look up what any name means, trace its language family, and explore its demographic story.
+      </p>
+    </header>
 
-    <!-- Interactive Island -->
-    <MeaningLookupIsland client:load />
+    <!-- 1. Interactive Tool Container (Above the Fold) -->
+    <section class="my-8">
+      <MeaningLookupIsland client:load />
+    </section>
+
+    <!-- 2. Quick Answer Block (AEO / Snippet Ready) -->
+    <section class="my-10 rounded-2xl border-l-4 border-primary bg-primary/5 p-6 shadow-sm">
+      <h2 class="text-xs font-bold uppercase tracking-wider text-primary mb-1">
+        Quick Answer: What Is Name Etymology?
+      </h2>
+      <p class="text-sm md:text-base text-foreground leading-relaxed">
+        <strong>Name etymology</strong> is the study of a name's linguistic origin, root words, and historical evolution. While a name's <em>meaning</em> describes its literal translation or symbolic definition, its <em>origin</em> identifies the culture and language tradition (such as Greek, Hebrew, Latin, or Celtic) where it first originated.
+      </p>
+    </section>
 
     <AdSlot />
 
+    <!-- 3. Name Origin vs Name Meaning -->
+    <section class="my-12 space-y-6">
+      <h2 class="font-display text-2xl md:text-3xl font-bold text-foreground">
+        Name Origin vs. Name Meaning: Understanding the Difference
+      </h2>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div class="p-6 rounded-2xl border border-border bg-card shadow-xs space-y-2">
+          <div class="flex items-center gap-2 font-bold text-foreground text-base">
+            <Globe2 class="h-4 w-4 text-primary" />
+            <span>1. Linguistic Origin (Where It Came From)</span>
+          </div>
+          <p class="text-xs text-muted-foreground leading-relaxed">
+            The origin identifies the language family, culture, and geographic cradle where the name was first constructed. For example, <em>Liam</em> originated as an Irish short form of Germanic <em>William</em>, while <em>Sophia</em> originated in classical Greek.
+          </p>
+        </div>
+
+        <div class="p-6 rounded-2xl border border-border bg-card shadow-xs space-y-2">
+          <div class="flex items-center gap-2 font-bold text-foreground text-base">
+            <BookOpen class="h-4 w-4 text-primary" />
+            <span>2. Semantic Meaning (What It Signifies)</span>
+          </div>
+          <p class="text-xs text-muted-foreground leading-relaxed">
+            The meaning reflects the literal translation or symbolic virtues embodied by the root words. For instance, <em>Luca</em> derives from the Latin root <em>lux</em> meaning "light," while <em>Ezra</em> is derived from the Hebrew word for "help."
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. Surname Origins Classification -->
+    <section class="my-12 space-y-6">
+      <h2 class="font-display text-2xl md:text-3xl font-bold text-foreground">
+        How Surname Origins Are Categorized
+      </h2>
+      <p class="text-sm text-muted-foreground leading-relaxed">
+        Unlike given first names, which often reflect aspirational virtues or cultural symbols, family surnames typically evolved in medieval societies to identify individuals by lineage, trade, or location:
+      </p>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div class="p-5 rounded-2xl border border-border bg-card shadow-xs space-y-2">
+          <span class="text-xs font-bold text-primary uppercase tracking-wider block">Patronymic</span>
+          <h3 class="font-bold text-foreground text-sm">Lineage &amp; Ancestor</h3>
+          <p class="text-xs text-muted-foreground leading-relaxed">
+            Derived from a parent's name (e.g. <em>Johnson</em> = son of John; <em>Rodriguez</em> = son of Rodrigo).
+          </p>
+        </div>
+
+        <div class="p-5 rounded-2xl border border-border bg-card shadow-xs space-y-2">
+          <span class="text-xs font-bold text-primary uppercase tracking-wider block">Occupational</span>
+          <h3 class="font-bold text-foreground text-sm">Trade &amp; Profession</h3>
+          <p class="text-xs text-muted-foreground leading-relaxed">
+            Named after historical professions (e.g. <em>Smith</em> = blacksmith; <em>Miller</em> = mill operator; <em>Taylor</em> = cloth cutter).
+          </p>
+        </div>
+
+        <div class="p-5 rounded-2xl border border-border bg-card shadow-xs space-y-2">
+          <span class="text-xs font-bold text-primary uppercase tracking-wider block">Topographic</span>
+          <h3 class="font-bold text-foreground text-sm">Landscape &amp; Estate</h3>
+          <p class="text-xs text-muted-foreground leading-relaxed">
+            Reflecting geographic features where the family lived (e.g. <em>Hill</em>, <em>Moore</em>, <em>Torres</em> = near towers).
+          </p>
+        </div>
+
+        <div class="p-5 rounded-2xl border border-border bg-card shadow-xs space-y-2">
+          <span class="text-xs font-bold text-primary uppercase tracking-wider block">Descriptive</span>
+          <h3 class="font-bold text-foreground text-sm">Physical Traits</h3>
+          <p class="text-xs text-muted-foreground leading-relaxed">
+            Based on personal characteristics (e.g. <em>Brown</em> = hair or complexion; <em>Young</em> = the younger sibling).
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. Featured Name Etymologies Table -->
+    <section class="my-12 space-y-6">
+      <h2 class="font-display text-2xl md:text-3xl font-bold text-foreground">
+        Featured Name Etymology Profiles
+      </h2>
+
+      <div class="overflow-x-auto rounded-2xl border border-border">
+        <table class="w-full text-left text-xs border-collapse">
+          <thead>
+            <tr class="border-b border-border bg-secondary/50">
+              <th class="p-3.5 font-bold text-foreground">Name</th>
+              <th class="p-3.5 font-bold text-foreground">Linguistic Origin</th>
+              <th class="p-3.5 font-bold text-foreground">Recorded Meaning</th>
+              <th class="p-3.5 font-bold text-foreground">Demographic Profile</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-border/60 bg-card">
+            <tr>
+              <td class="p-3.5 font-bold text-foreground">Liam</td>
+              <td class="p-3.5 text-muted-foreground">Irish / Germanic</td>
+              <td class="p-3.5 text-muted-foreground font-medium">Resolute protector, strong-willed warrior</td>
+              <td class="p-3.5"><a href="/name/Liam" class="text-primary font-semibold hover:underline">View Liam →</a></td>
+            </tr>
+            <tr>
+              <td class="p-3.5 font-bold text-foreground">Sophia</td>
+              <td class="p-3.5 text-muted-foreground">Greek</td>
+              <td class="p-3.5 text-muted-foreground font-medium">Wisdom, insight, divine knowledge</td>
+              <td class="p-3.5"><a href="/name/Sophia" class="text-primary font-semibold hover:underline">View Sophia →</a></td>
+            </tr>
+            <tr>
+              <td class="p-3.5 font-bold text-foreground">Oliver</td>
+              <td class="p-3.5 text-muted-foreground">Old French / Latin</td>
+              <td class="p-3.5 text-muted-foreground font-medium">Olive tree / peaceful cultivator</td>
+              <td class="p-3.5"><a href="/name/Oliver" class="text-primary font-semibold hover:underline">View Oliver →</a></td>
+            </tr>
+            <tr>
+              <td class="p-3.5 font-bold text-foreground">Emma</td>
+              <td class="p-3.5 text-muted-foreground">Germanic</td>
+              <td class="p-3.5 text-muted-foreground font-medium">Universal, whole, all-embracing</td>
+              <td class="p-3.5"><a href="/name/Emma" class="text-primary font-semibold hover:underline">View Emma →</a></td>
+            </tr>
+            <tr>
+              <td class="p-3.5 font-bold text-foreground">Ezra</td>
+              <td class="p-3.5 text-muted-foreground">Hebrew</td>
+              <td class="p-3.5 text-muted-foreground font-medium">Helper, protector, steadfast guide</td>
+              <td class="p-3.5"><a href="/name/Ezra" class="text-primary font-semibold hover:underline">View Ezra →</a></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- 6. Demographic Tools Ecosystem -->
+    <section class="my-12 space-y-6">
+      <div class="flex items-center justify-between">
+        <h2 class="font-display text-2xl md:text-3xl font-bold text-foreground">
+          Continue Your Name Research Journey
+        </h2>
+        <a href="/tools" class="text-xs font-semibold text-primary hover:underline flex items-center gap-1">
+          All Tools <ArrowRight class="h-3.5 w-3.5" />
+        </a>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        <a
+          href="/tools/popularity-checker"
+          class="p-5 rounded-2xl border border-border bg-card hover:border-primary/40 hover:shadow-md transition-all group"
+        >
+          <div class="flex items-center gap-2 font-bold text-foreground group-hover:text-primary transition-colors text-base mb-1.5">
+            <BarChart3 class="h-4 w-4 text-primary" />
+            <span>Popularity Checker</span>
+          </div>
+          <p class="text-xs text-muted-foreground leading-relaxed">
+            See living U.S. bearer counts, frequency ratios, and national popularity ranks for any name.
+          </p>
+        </a>
+
+        <a
+          href="/tools/trend-visualizer"
+          class="p-5 rounded-2xl border border-border bg-card hover:border-primary/40 hover:shadow-md transition-all group"
+        >
+          <div class="flex items-center gap-2 font-bold text-foreground group-hover:text-primary transition-colors text-base mb-1.5">
+            <TrendingUp class="h-4 w-4 text-primary" />
+            <span>Trend Visualizer</span>
+          </div>
+          <p class="text-xs text-muted-foreground leading-relaxed">
+            Plot 140 years of annual newborn birth records to see when a name peaked and where it is heading.
+          </p>
+        </a>
+
+        <a
+          href="/tools/name-comparison"
+          class="p-5 rounded-2xl border border-border bg-card hover:border-primary/40 hover:shadow-md transition-all group"
+        >
+          <div class="flex items-center gap-2 font-bold text-foreground group-hover:text-primary transition-colors text-base mb-1.5">
+            <ArrowRightLeft class="h-4 w-4 text-primary" />
+            <span>Name Comparison</span>
+          </div>
+          <p class="text-xs text-muted-foreground leading-relaxed">
+            Compare two names head-to-head on living population, annual trajectory, and popularity tiers.
+          </p>
+        </a>
+      </div>
+    </section>
+
+    <!-- 7. Common Questions (FAQ Section) -->
+    <section class="my-12 space-y-6">
+      <div class="flex items-center gap-2">
+        <HelpCircle class="h-5 w-5 text-primary" />
+        <h2 class="font-display text-2xl md:text-3xl font-bold text-foreground">
+          Frequently Asked Questions About Name Meanings
+        </h2>
+      </div>
+
+      <div class="space-y-4">
+        {faqs.map((f) => (
+          <div class="p-6 rounded-2xl border border-border bg-card shadow-xs">
+            <h3 class="font-semibold text-foreground text-base mb-2">{f.q}</h3>
+            <p class="text-sm text-muted-foreground leading-relaxed">{f.a}</p>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <!-- 8. Contextual Demographic CTA -->
     <ToolCTA
-      headline="Explore Name Popularity Trends"
-      subhead="View how popularity has evolved decade-by-decade with our free Popularity Checker."
+      headline="Explore Your Complete Demographic Profile"
+      subhead="Discover how many living people share your exact first, last, or full name in the United States."
     />
 
     <RelatedPosts currentSlug="meaning" tags={["meaning", "etymology", "tools"]} count={6} />
