@@ -80,10 +80,14 @@ if (counts.critical > 0) {
   reportMd += `- ✅ No immediate developer actions required. Site is healthy and optimal.\n`;
 }
 
-fs.writeFileSync(path.join(root, "DAILY_SITE_HEALTH.md"), reportMd, "utf8");
-fs.writeFileSync(path.join(root, "HEALTH_REPORT_LATEST.md"), reportMd, "utf8");
+const reportDir = path.join(root, "reports/generated");
+if (!fs.existsSync(reportDir)) {
+  fs.mkdirSync(reportDir, { recursive: true });
+}
+fs.writeFileSync(path.join(reportDir, "DAILY_SITE_HEALTH.md"), reportMd, "utf8");
+fs.writeFileSync(path.join(reportDir, "HEALTH_REPORT_LATEST.md"), reportMd, "utf8");
 
-console.log(`\nGenerated DAILY_SITE_HEALTH.md and HEALTH_REPORT_LATEST.md`);
+console.log(`\nGenerated reports/generated/DAILY_SITE_HEALTH.md and reports/generated/HEALTH_REPORT_LATEST.md`);
 
 if (counts.critical > 0) {
   console.error("\n❌ CRITICAL ISSUES DETECTED. Blocking build/deployment.");
