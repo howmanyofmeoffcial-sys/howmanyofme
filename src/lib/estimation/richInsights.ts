@@ -132,8 +132,43 @@ export function getHistoricalTrend(record?: NameRecord | null): HistoricalTrendI
   };
 }
 
+const MAJOR_CITY_BY_STATE: Record<string, string[]> = {
+  California: ["Los Angeles", "San Diego", "San Jose", "San Francisco"],
+  Texas: ["Houston", "San Antonio", "Dallas", "Austin"],
+  Florida: ["Miami", "Tampa", "Orlando", "Jacksonville"],
+  "New York": ["New York City", "Buffalo", "Rochester", "Albany"],
+  Pennsylvania: ["Philadelphia", "Pittsburgh", "Allentown"],
+  Illinois: ["Chicago", "Aurora", "Naperville"],
+  Ohio: ["Columbus", "Cleveland", "Cincinnati"],
+  Georgia: ["Atlanta", "Augusta", "Savannah"],
+  "North Carolina": ["Charlotte", "Raleigh", "Greensboro"],
+  Michigan: ["Detroit", "Grand Rapids", "Warren"],
+  Washington: ["Seattle", "Spokane", "Tacoma"],
+  Arizona: ["Phoenix", "Tucson", "Mesa"],
+  Massachusetts: ["Boston", "Worcester", "Springfield"],
+  Virginia: ["Virginia Beach", "Norfolk", "Richmond"],
+};
+
+export function getTopCities(topStates: GeographicDistributionInfo["topStates"]): GeographicDistributionInfo["topCities"] {
+  const cities: GeographicDistributionInfo["topCities"] = [];
+  const decay = [0.42, 0.24, 0.14]; // share of that state's bearers attributed to its top cities
+
+  for (const st of topStates.slice(0, 3)) {
+    const names = MAJOR_CITY_BY_STATE[st.state] ?? [`${st.state} Metro`];
+    names.slice(0, 2).forEach((city, i) => {
+      cities.push({
+        city,
+        state: st.state,
+        estimatedBearers: Math.max(1, Math.round(st.estimatedBearers * (decay[i] ?? 0.1))),
+      });
+    });
+  }
+
+  return cities.sort((a, b) => b.estimatedBearers - a.estimatedBearers).slice(0, 5);
+}
+
 /**
- * 4. Geographic Distribution (Top States)
+ * 4. Geographic Distribution (Top States & Top Cities)
  */
 export function getGeographicDistribution(
   record?: NameRecord | null,
@@ -156,7 +191,9 @@ export function getGeographicDistribution(
     percentage: Math.round(weight * 100),
   }));
 
-  return { topStates };
+  const topCities = getTopCities(topStates);
+
+  return { topStates, topCities };
 }
 
 /**

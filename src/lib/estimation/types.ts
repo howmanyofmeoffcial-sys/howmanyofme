@@ -42,6 +42,11 @@ export interface GeographicDistributionInfo {
     estimatedBearers: number;
     percentage: number;
   }>;
+  topCities: Array<{
+    city: string;
+    state: string;
+    estimatedBearers: number;
+  }>;
 }
 
 export interface FunFactItem {

@@ -16,7 +16,10 @@ export type AnalyticsEventName =
   | "full_name_cta_clicked"
   | "related_name_clicked"
   | "birth_year_submitted"
+  | "birth_date_added_to_personalization"
   | "personalized_insights_viewed"
+  | "id_card_download_clicked"
+  | "social_share_clicked"
   | "citation_copied"
   | "dataset_downloaded"
   | "affiliate_resource_clicked";

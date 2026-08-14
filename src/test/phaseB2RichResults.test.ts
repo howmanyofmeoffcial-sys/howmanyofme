@@ -91,4 +91,33 @@ describe("Phase B2: Rich Inline Name Results & Personalization Tests", () => {
     expect(calculatePersonalizedInsights("David", 2099)).toBeNull();
     expect(calculatePersonalizedInsights("David", NaN)).toBeNull();
   });
+
+  // 7. Top Cities Derivation
+  it("derives top cities without exceeding state bearer counts", () => {
+    const res = resolveNameSearch({ firstName: "James" });
+    const topCities = res.richInsights?.geography?.topCities;
+    const topStates = res.richInsights?.geography?.topStates;
+
+    expect(topCities).toBeDefined();
+    expect(topCities!.length).toBeLessThanOrEqual(5);
+    expect(topCities!.length).toBeGreaterThan(0);
+
+    for (const city of topCities!) {
+      const parentState = topStates?.find((s) => s.state === city.state);
+      if (parentState) {
+        expect(city.estimatedBearers).toBeLessThanOrEqual(parentState.estimatedBearers);
+      }
+    }
+  });
+
+  // 8. Full Birthday Personalization with Western Zodiac
+  it("generates Western Zodiac when month and day are provided", () => {
+    const insight = calculatePersonalizedInsights("Emma", 2002, 7, 24);
+    expect(insight).not.toBeNull();
+    expect(insight?.westernZodiac).toBeDefined();
+    expect(insight?.westernZodiac?.sign).toBe("Leo");
+    expect(insight?.westernZodiac?.symbol).toBe("♌");
+    expect(insight?.generation).toBe("Gen Z");
+    expect(insight?.chineseZodiac).toBe("Horse");
+  });
 });

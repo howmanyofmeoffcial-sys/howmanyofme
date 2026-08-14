@@ -111,7 +111,7 @@ export default function NameSearchHero() {
             </div>
           </div>
 
-          {/* RIGHT — Product-style search card & Inline Results */}
+          {/* RIGHT — Product-style search card */}
           <div className="relative">
             <div className="absolute -inset-1 bg-gradient-to-r from-accent/40 via-primary-foreground/30 to-accent/40 rounded-2xl blur-lg opacity-60" />
             <div className="relative bg-card rounded-2xl shadow-2xl p-6 md:p-8 border border-border/50 space-y-6">
@@ -130,32 +130,34 @@ export default function NameSearchHero() {
                 isLoading={isLoading}
                 onSubmit={handleSearchSubmit}
               />
-
-              {/* Inline Result Container */}
-              {result && (
-                <div ref={resultRef} className="pt-2 border-t border-border/60">
-                  <NameEstimateCard result={result} onReset={handleReset} />
-                </div>
-              )}
             </div>
           </div>
         </div>
 
-        {/* Stats strip */}
-        <div className="grid grid-cols-3 gap-4 max-w-2xl mx-auto mt-12 pt-8 border-t border-primary-foreground/15">
-          <div className="text-center">
-            <div className="text-2xl md:text-3xl font-bold text-primary-foreground">145 Yrs</div>
-            <div className="text-xs md:text-sm text-primary-foreground/70">SSA birth records</div>
+        {/* FULL-WIDTH INLINE RESULT CONTAINER (Centered below search grid) */}
+        {result && (
+          <div ref={resultRef} className="mt-10 md:mt-14 max-w-4xl mx-auto animate-in fade-in slide-in-from-top-4 duration-300">
+            <NameEstimateCard result={result} onReset={handleReset} />
           </div>
-          <div className="text-center">
-            <div className="text-2xl md:text-3xl font-bold text-primary-foreground">330M+</div>
-            <div className="text-xs md:text-sm text-primary-foreground/70">Population baseline</div>
+        )}
+
+        {/* Stats strip (Visible when no result is rendered) */}
+        {!result && (
+          <div className="grid grid-cols-3 gap-4 max-w-2xl mx-auto mt-12 pt-8 border-t border-primary-foreground/15">
+            <div className="text-center">
+              <div className="text-2xl md:text-3xl font-bold text-primary-foreground">145 Yrs</div>
+              <div className="text-xs md:text-sm text-primary-foreground/70">SSA birth records</div>
+            </div>
+            <div className="text-center">
+              <div className="text-2xl md:text-3xl font-bold text-primary-foreground">330M+</div>
+              <div className="text-xs md:text-sm text-primary-foreground/70">Population baseline</div>
+            </div>
+            <div className="text-center">
+              <div className="text-2xl md:text-3xl font-bold text-primary-foreground">&lt; 1s</div>
+              <div className="text-xs md:text-sm text-primary-foreground/70">Instant inline result</div>
+            </div>
           </div>
-          <div className="text-center">
-            <div className="text-2xl md:text-3xl font-bold text-primary-foreground">&lt; 1s</div>
-            <div className="text-xs md:text-sm text-primary-foreground/70">Instant inline result</div>
-          </div>
-        </div>
+        )}
       </div>
     </section>
   );

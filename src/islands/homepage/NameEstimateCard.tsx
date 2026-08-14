@@ -5,20 +5,33 @@ import {
   ArrowRight,
   RotateCcw,
   Sparkles,
-  TrendingUp,
   MapPin,
   Users,
   Compass,
   Calendar,
   Gift,
 } from "lucide-react";
-import type { NameEstimateResult } from "../../lib/estimation/types";
+import type { NameEstimateResult, DecadeHistoryPoint } from "../../lib/estimation/types";
 import { trackEvent } from "../../lib/analytics/events";
 import { calculatePersonalizedInsights, type PersonalizedBirthYearInsight } from "../../lib/estimation/personalization";
+import NameHistoryChart, { type TimelinePoint } from "../NameHistoryChart";
+import { ShareIdCardButton } from "./ShareIdCardButton";
 
 interface NameEstimateCardProps {
   result: NameEstimateResult;
   onReset: () => void;
+}
+
+function mapDecadeHistoryToTimeline(history: DecadeHistoryPoint[]): TimelinePoint[] {
+  return history.map((pt) => {
+    const year = parseInt(pt.decade.replace(/\D/g, ""), 10) || 1900;
+    return {
+      year,
+      births: pt.count,
+      male: 0,
+      female: 0,
+    };
+  });
 }
 
 export const NameEstimateCard: React.FC<NameEstimateCardProps> = ({ result, onReset }) => {
@@ -27,6 +40,7 @@ export const NameEstimateCard: React.FC<NameEstimateCardProps> = ({ result, onRe
 
   // Personalization state
   const [birthYearInput, setBirthYearInput] = useState("");
+  const [birthDateInput, setBirthDateInput] = useState("");
   const [personalizedInsight, setPersonalizedInsight] = useState<PersonalizedBirthYearInsight | null>(null);
   const [personalizeError, setPersonalizeError] = useState<string | null>(null);
 
@@ -56,7 +70,22 @@ export const NameEstimateCard: React.FC<NameEstimateCardProps> = ({ result, onRe
     }
 
     setPersonalizeError(null);
-    const insight = calculatePersonalizedInsights(result.firstName, year);
+
+    let mm: number | undefined = undefined;
+    let dd: number | undefined = undefined;
+
+    if (birthDateInput.trim()) {
+      const match = birthDateInput.match(/^\d{4}-(\d{2})-(\d{2})$/);
+      if (match) {
+        mm = Number(match[1]);
+        dd = Number(match[2]);
+        trackEvent("birth_date_added_to_personalization", {
+          birth_month: mm,
+        });
+      }
+    }
+
+    const insight = calculatePersonalizedInsights(result.firstName, year, mm, dd);
     setPersonalizedInsight(insight);
 
     trackEvent("birth_year_submitted", {
@@ -96,6 +125,21 @@ export const NameEstimateCard: React.FC<NameEstimateCardProps> = ({ result, onRe
       aria-live="polite"
       className="relative rounded-2xl border border-border/80 bg-card p-6 md:p-8 shadow-xl shadow-primary/5 transition-all animate-in fade-in slide-in-from-top-4 duration-300 space-y-6"
     >
+      {/* 0. Gradient Summary Banner (Competitor-Parity Style) */}
+      <div className="rounded-2xl bg-gradient-to-r from-primary to-indigo-600 p-4 md:p-5 text-white text-sm md:text-base font-medium text-center shadow-lg leading-relaxed">
+        {result.displayName} is{" "}
+        {rich?.rarity.level === "Very Rare" || rich?.rarity.level === "Rare"
+          ? "a distinctive, rare name that stands out nationwide"
+          : "a familiar name found across the United States"}
+        .{" "}
+        {result.estimatedPeople
+          ? `About ${result.estimatedPeople.toLocaleString()} ${
+              result.estimatedPeople === 1 ? "person shares" : "people share"
+            } this exact name`
+          : `Roughly ${result.displayEstimate} people share this exact name`}
+        {rich?.rarity.oneInX ? `, making it roughly 1 in every ${rich.rarity.oneInX.toLocaleString()} Americans.` : "."}
+      </div>
+
       {/* 1. Top Header: Badge & Status */}
       <div className="flex flex-wrap items-center justify-between gap-3 border-b border-border/60 pb-5">
         <div>
@@ -165,6 +209,23 @@ export const NameEstimateCard: React.FC<NameEstimateCardProps> = ({ result, onRe
         <div className="rounded-xl border border-border bg-secondary/30 p-3.5 text-center">
           <span className="text-xs text-muted-foreground block mb-1">Confidence</span>
           <div className="text-base font-bold text-foreground capitalize">{result.confidence || "Moderate"}</div>
+        </div>
+      </div>
+
+      {/* 3b. Rarity Badge Card */}
+      <div className="flex justify-center my-2">
+        <div
+          className={`rounded-2xl px-8 py-5 text-center text-white shadow-md w-full max-w-md ${
+            rich?.rarity.level === "Very Rare"
+              ? "bg-gradient-to-br from-zinc-800 to-zinc-950 border border-zinc-700"
+              : rich?.rarity.level === "Rare"
+              ? "bg-gradient-to-br from-slate-700 to-slate-900 border border-slate-600"
+              : "bg-gradient-to-br from-indigo-600 to-purple-700 border border-indigo-500/30"
+          }`}
+        >
+          <span className="text-2xl block mb-1">⭐</span>
+          <div className="font-display text-lg font-bold">{rich?.rarity.level ?? "Distinctive"} Name Tier</div>
+          <p className="text-xs text-white/80 mt-1 max-w-sm mx-auto leading-relaxed">{rich?.rarity.description}</p>
         </div>
       </div>
 
@@ -250,58 +311,56 @@ export const NameEstimateCard: React.FC<NameEstimateCardProps> = ({ result, onRe
         </div>
       )}
 
-      {/* 6. Historical Popularity Decade Trajectory (If Supported) */}
+      {/* 6. Historical Popularity Line Chart (Recharts) */}
       {rich?.history && rich.history.history.length > 0 && (
-        <div className="rounded-xl border border-border/70 bg-background/60 p-4">
-          <div className="flex items-center justify-between mb-3">
-            <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground flex items-center gap-1.5">
-              <TrendingUp className="h-3.5 w-3.5 text-primary" />
-              Historical Popularity by Decade (1880–2024)
-            </span>
-            <span className="text-xs font-medium text-foreground">
-              Peak: {rich.history.peakYear} (~{rich.history.peakCount.toLocaleString()} births)
-            </span>
-          </div>
-
-          {/* Simple Accessible CSS Bar Representation */}
-          <div className="flex items-end gap-1.5 sm:gap-2 h-24 pt-4 pb-2 border-b border-border/40">
-            {rich.history.history.map((pt, idx) => {
-              const maxCount = Math.max(...rich.history!.history.map((h) => h.count), 1);
-              const heightPct = Math.max(8, Math.round((pt.count / maxCount) * 100));
-              return (
-                <div key={idx} className="flex-1 flex flex-col items-center h-full justify-end group">
-                  <div
-                    style={{ height: `${heightPct}%` }}
-                    className="w-full rounded-t bg-primary/70 group-hover:bg-primary transition-all duration-200"
-                    title={`${pt.decade}: ~${pt.count.toLocaleString()} births`}
-                  />
-                  <span className="text-[9px] text-muted-foreground mt-1 truncate max-w-[28px]">{pt.decade.slice(0, 4)}</span>
-                </div>
-              );
-            })}
-          </div>
-
-          <p className="text-xs text-muted-foreground mt-2">{rich.history.trendDescription}</p>
-        </div>
+        <NameHistoryChart
+          name={result.displayName}
+          history={mapDecadeHistoryToTimeline(rich.history.history)}
+          peakYear={rich.history.peakYear}
+          peakBirths={rich.history.peakCount}
+        />
       )}
 
       {/* 7. Geographic Distribution (Top 5 States) */}
       {rich?.geography && (
-        <div className="rounded-xl border border-border/70 bg-background/60 p-4">
-          <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground flex items-center gap-1.5 mb-3">
-            <MapPin className="h-3.5 w-3.5 text-primary" />
-            Estimated Top States by Living Bearer Count
-          </span>
+        <div className="rounded-xl border border-border/70 bg-background/60 p-4 space-y-4">
+          <div>
+            <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground flex items-center gap-1.5 mb-3">
+              <MapPin className="h-3.5 w-3.5 text-primary" />
+              Estimated Top States by Living Bearer Count
+            </span>
 
-          <div className="grid grid-cols-2 sm:grid-cols-5 gap-2">
-            {rich.geography.topStates.map((st, idx) => (
-              <div key={idx} className="p-2.5 rounded-lg border border-border/60 bg-secondary/20 text-center">
-                <span className="text-xs font-bold text-foreground block truncate">{st.state}</span>
-                <span className="text-xs text-muted-foreground block">~{st.estimatedBearers.toLocaleString()}</span>
-                <span className="text-[10px] text-primary font-medium block">~{st.percentage}% of U.S.</span>
-              </div>
-            ))}
+            <div className="grid grid-cols-2 sm:grid-cols-5 gap-2">
+              {rich.geography.topStates.map((st, idx) => (
+                <div key={idx} className="p-2.5 rounded-lg border border-border/60 bg-secondary/20 text-center">
+                  <span className="text-xs font-bold text-foreground block truncate">{st.state}</span>
+                  <span className="text-xs text-muted-foreground block">~{st.estimatedBearers.toLocaleString()}</span>
+                  <span className="text-[10px] text-primary font-medium block">~{st.percentage}% of U.S.</span>
+                </div>
+              ))}
+            </div>
           </div>
+
+          {/* 7b. Top Cities with That Name */}
+          {rich.geography.topCities && rich.geography.topCities.length > 0 && (
+            <div className="pt-2 border-t border-border/50">
+              <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground block mb-2">
+                Top Cities with That Name (Estimated Concentration)
+              </span>
+              <ul className="divide-y divide-border/50">
+                {rich.geography.topCities.map((c, idx) => (
+                  <li key={idx} className="flex items-center justify-between py-2 text-sm">
+                    <span className="text-foreground font-medium">
+                      {c.city}, <span className="text-muted-foreground font-normal">{c.state}</span>
+                    </span>
+                    <span className="text-muted-foreground text-xs font-mono">
+                      ~{c.estimatedBearers.toLocaleString()} people
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
         </div>
       )}
 
@@ -348,18 +407,30 @@ export const NameEstimateCard: React.FC<NameEstimateCardProps> = ({ result, onRe
               type="number"
               min="1900"
               max={new Date().getFullYear()}
-              placeholder="Enter your birth year (e.g. 1998, 2002)..."
+              placeholder="Birth Year (e.g. 1998, 2002)..."
               value={birthYearInput}
               onChange={(e) => {
                 setBirthYearInput(e.target.value);
                 if (personalizeError) setPersonalizeError(null);
               }}
+              required
               className="w-full h-11 rounded-xl border border-input bg-card pl-10 pr-4 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-primary/30"
             />
           </div>
+
+          <div className="relative flex-1">
+            <input
+              type="date"
+              value={birthDateInput}
+              onChange={(e) => setBirthDateInput(e.target.value)}
+              aria-label="Birthday (optional for Western Zodiac)"
+              className="w-full h-11 rounded-xl border border-input bg-card px-4 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-primary/30"
+            />
+          </div>
+
           <button
             type="submit"
-            className="h-11 px-5 rounded-xl bg-primary text-primary-foreground font-semibold text-sm hover:bg-primary/90 transition-colors shadow-sm"
+            className="h-11 px-5 rounded-xl bg-primary text-primary-foreground font-semibold text-sm hover:bg-primary/90 transition-colors shadow-sm shrink-0"
           >
             Reveal Insights
           </button>
@@ -368,33 +439,50 @@ export const NameEstimateCard: React.FC<NameEstimateCardProps> = ({ result, onRe
         {personalizeError && <p className="text-xs text-destructive font-medium">{personalizeError}</p>}
 
         {personalizedInsight && (
-          <div className="pt-2 animate-in fade-in slide-in-from-top-2 duration-300">
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 p-4 rounded-xl border border-border bg-card">
-              <div>
-                <span className="text-xs text-muted-foreground block">Generation</span>
-                <span className="text-base font-bold text-foreground">{personalizedInsight.generation}</span>
-                <p className="text-[11px] text-muted-foreground mt-0.5">{personalizedInsight.generationDescription}</p>
-              </div>
-
-              <div>
-                <span className="text-xs text-muted-foreground block">Chinese Zodiac</span>
-                <span className="text-base font-bold text-foreground flex items-center gap-1">
-                  <span>{personalizedInsight.chineseZodiacEmoji}</span>
-                  <span>Year of the {personalizedInsight.chineseZodiac}</span>
+          <div className="space-y-3 pt-2 animate-in fade-in slide-in-from-top-2 duration-300">
+            {/* 3-Card Grid */}
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+              <div className="rounded-xl border border-rose-500/20 bg-rose-500/5 p-4">
+                <span className="text-[10px] font-bold uppercase tracking-wider text-rose-600 dark:text-rose-400">
+                  Chinese Zodiac
                 </span>
+                <div className="text-base font-bold text-foreground mt-1">
+                  {personalizedInsight.chineseZodiacEmoji} Year of the {personalizedInsight.chineseZodiac}
+                </div>
                 <p className="text-[11px] text-muted-foreground mt-0.5">Calculated by lunar annual cycle.</p>
               </div>
 
-              <div>
-                <span className="text-xs text-muted-foreground block">Birth-Year Popularity</span>
-                <span className="text-base font-bold text-foreground">
-                  {personalizedInsight.namePopularityInYear?.birthCountEstimate
-                    ? `~${personalizedInsight.namePopularityInYear.birthCountEstimate.toLocaleString()} births/yr`
-                    : "Historical Era Recorded"}
+              <div className="rounded-xl border border-violet-500/20 bg-violet-500/5 p-4">
+                <span className="text-[10px] font-bold uppercase tracking-wider text-violet-600 dark:text-violet-400">
+                  Western Zodiac
                 </span>
-                <p className="text-[11px] text-muted-foreground mt-0.5">{personalizedInsight.historicalEraContext}</p>
+                {personalizedInsight.westernZodiac ? (
+                  <div className="text-base font-bold text-foreground mt-1">
+                    {personalizedInsight.westernZodiac.symbol} {personalizedInsight.westernZodiac.sign}
+                  </div>
+                ) : (
+                  <p className="text-xs text-muted-foreground mt-1">Select full birthdate above to reveal sign.</p>
+                )}
+              </div>
+
+              <div className="rounded-xl border border-sky-500/20 bg-sky-500/5 p-4">
+                <span className="text-[10px] font-bold uppercase tracking-wider text-sky-600 dark:text-sky-400">
+                  Generational Era
+                </span>
+                <div className="text-base font-bold text-foreground mt-1">{personalizedInsight.generation}</div>
+                <p className="text-[11px] text-muted-foreground mt-0.5">{personalizedInsight.generationDescription}</p>
               </div>
             </div>
+
+            {/* Gradient Popularity Match Banner */}
+            {personalizedInsight.historicalEraContext && (
+              <div className="rounded-2xl bg-gradient-to-r from-primary to-indigo-600 p-4 md:p-5 text-white text-sm shadow-md">
+                <p className="font-bold text-base mb-1">
+                  Birth Year Popularity Match: {personalizedInsight.birthYear}
+                </p>
+                <p className="text-white/90 leading-relaxed">{personalizedInsight.historicalEraContext}</p>
+              </div>
+            )}
           </div>
         )}
       </div>
@@ -420,7 +508,10 @@ export const NameEstimateCard: React.FC<NameEstimateCardProps> = ({ result, onRe
         </div>
       )}
 
-      {/* 11. Disclaimers & Limitations */}
+      {/* 11. Share & Download Name ID Card */}
+      <ShareIdCardButton result={result} />
+
+      {/* 12. Disclaimers & Limitations */}
       {result.warnings && result.warnings.length > 0 && (
         <div className="rounded-xl bg-muted/40 p-3.5 text-xs text-muted-foreground border border-border/40 space-y-1">
           {result.warnings.map((w, idx) => (
@@ -431,7 +522,7 @@ export const NameEstimateCard: React.FC<NameEstimateCardProps> = ({ result, onRe
         </div>
       )}
 
-      {/* 12. Actions Bar: Check Another Name & Detailed Profile */}
+      {/* 13. Actions Bar: Check Another Name & Detailed Profile */}
       <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 pt-3 border-t border-border/60">
         <button
           type="button"
