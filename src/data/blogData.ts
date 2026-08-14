@@ -1041,8 +1041,20 @@ export const blogArticles: BlogArticle[] = [
   },
 
 ];
+import { blogExpansions } from "./blogExpansions";
+
 export function getBlogArticle(slug: string): BlogArticle | undefined {
-  return blogArticles.find(a => a.slug === slug);
+  const article = blogArticles.find((a) => a.slug === slug);
+  if (!article) return undefined;
+
+  const expansion = blogExpansions[slug];
+  if (!expansion) return article;
+
+  return {
+    ...article,
+    content: [...article.content, ...(expansion.content || [])],
+    faqs: expansion.faqs && expansion.faqs.length > 0 ? expansion.faqs : article.faqs,
+  };
 }
 
 export function getBlogArticlesByCategory(category: BlogArticle["category"]): BlogArticle[] {

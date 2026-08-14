@@ -7,12 +7,13 @@ import AdSlot from '../../components/AdSlot.astro';
 import ToolCTA from '../../components/ToolCTA.astro';
 import RelatedPosts from '../../components/RelatedPosts.astro';
 import { blogArticles, getBlogArticle, blogCategories } from '../../data/blogData';
-import { Clock, ArrowLeft, ArrowRight } from 'lucide-react';
+import { renderBlogContent } from '../../lib/blog/renderBlogContent';
+import { Clock, ArrowRight, HelpCircle } from 'lucide-react';
 
 export async function getStaticPaths() {
   return blogArticles.map((article) => ({
     params: { slug: article.slug },
-    props: { article },
+    props: { article: getBlogArticle(article.slug) || article },
   }));
 }
 
@@ -29,7 +30,7 @@ if (!article) {
   return Astro.redirect('/404');
 }
 
-const catLabel = blogCategories.find((c) => c.id === article.category)?.label || '';
+const catLabel = blogCategories.find((c) => c.id === article.category)?.label || 'Trends & Insights';
 const idx = blogArticles.findIndex((a) => a.slug === article.slug);
 const prev = idx > 0 ? blogArticles[idx - 1] : null;
 const next = idx < blogArticles.length - 1 ? blogArticles[idx + 1] : null;
@@ -38,6 +39,8 @@ const title = `${article.title} | HowManyOfMe`;
 const description = article.description;
 const canonical = `https://howmanyofme.co/blog/${article.slug}`;
 
+const renderedHtml = renderBlogContent(article);
+
 const jsonLd = [
   {
     "@context": "https://schema.org",
@@ -45,7 +48,7 @@ const jsonLd = [
     headline: article.title,
     description: article.description,
     datePublished: article.date,
-    author: { "@type": "Person", name: "Ziven Borceg", url: "https://medium.com/@zivenborceg" },
+    author: { "@type": "Person", name: "HowManyOfMe Research Team", url: "https://howmanyofme.co/about" },
     publisher: { "@type": "Organization", name: "HowManyOfMe", url: "https://howmanyofme.co" },
   },
   ...(article.faqs && article.faqs.length > 0
@@ -80,30 +83,33 @@ const jsonLd = [
     <article>
       <header class="mb-8">
         <div class="flex items-center gap-3 text-xs text-muted-foreground mb-3">
-          <span class="px-2.5 py-1 rounded-full bg-primary/10 text-primary font-semibold uppercase tracking-wider">
+          <span class="px-2.5 py-1 rounded-full bg-primary/10 text-primary font-semibold uppercase tracking-wider text-[10px]">
             {catLabel}
           </span>
           <span>{article.date}</span>
           <span>•</span>
           <span class="flex items-center gap-1">
-            <Clock className="h-3 w-3" /> {article.readTime}
+            <Clock className="h-3 w-3" /> {article.readTime} min read
           </span>
         </div>
-        <h1 class="font-display text-3xl md:text-5xl font-bold text-foreground leading-tight">
+        <h1 class="font-display text-3xl md:text-5xl font-bold text-foreground leading-tight tracking-tight">
           {article.title}
         </h1>
       </header>
 
-      <div class="prose-content my-8" set:html={article.content} />
+      <div id="top" class="prose-content my-8 space-y-2" set:html={renderedHtml} />
 
       {article.faqs && article.faqs.length > 0 && (
-        <section class="my-10">
-          <h2 class="font-display text-2xl font-bold mb-4 text-foreground">Frequently Asked Questions</h2>
-          <div class="space-y-3">
+        <section class="my-12 pt-8 border-t border-border">
+          <div class="flex items-center gap-2 mb-6">
+            <HelpCircle className="h-5 w-5 text-primary" />
+            <h2 class="font-display text-2xl font-bold text-foreground">Frequently Asked Questions</h2>
+          </div>
+          <div class="space-y-4">
             {article.faqs.map((f) => (
-              <div class="p-5 rounded-xl border border-border bg-card">
-                <h3 class="font-semibold text-foreground mb-1">{f.q}</h3>
-                <p class="text-sm text-muted-foreground">{f.a}</p>
+              <div class="p-5 rounded-2xl border border-border bg-card shadow-xs">
+                <h3 class="font-semibold text-foreground mb-1.5 text-base">{f.q}</h3>
+                <p class="text-sm text-muted-foreground leading-relaxed">{f.a}</p>
               </div>
             ))}
           </div>
@@ -141,7 +147,7 @@ const jsonLd = [
       subhead="Enter your first name to see how many people share it worldwide."
     />
 
-    <RelatedPosts currentSlug={article.slug} tags={article.tags || ['baby names', 'trends']} count={6} />
+    <RelatedPosts currentSlug={article.slug} tags={['baby names', 'trends']} count={6} />
   </main>
 
   <SiteFooter />
