@@ -1,65 +1,65 @@
-import { useState } from "react";
-import { Search, Sparkles, Zap, Globe, ShieldCheck, ArrowRight } from "lucide-react";
-import { searchNames } from "../data/nameData";
-import { validateSingleName } from "../lib/nameValidation";
-
+import React, { useState, useRef } from "react";
+import { Sparkles, Zap, Globe, ShieldCheck } from "lucide-react";
+import { NameCheckerForm, type SearchFormData } from "./homepage/NameCheckerForm";
+import { NameEstimateCard } from "./homepage/NameEstimateCard";
+import { resolveNameSearch } from "../lib/estimation/resolveNameSearch";
+import type { NameEstimateResult } from "../lib/estimation/types";
 import { trackEvent } from "../lib/analytics/events";
 
 export default function NameSearchHero() {
-  const [firstName, setFirstName] = useState("");
-  const [suggestions, setSuggestions] = useState<string[]>([]);
-  const [focused, setFocused] = useState(false);
-  const [shake, setShake] = useState(false);
-  const [touched, setTouched] = useState(false);
-  const [errorMessage, setErrorMessage] = useState("");
+  const [result, setResult] = useState<NameEstimateResult | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const resultRef = useRef<HTMLDivElement | null>(null);
+  const inputRef = useRef<HTMLInputElement | null>(null);
 
-  const validation = validateSingleName(firstName);
-  const isInvalid = touched && firstName.length > 0 && !validation.ok;
+  const handleSearchSubmit = (data: SearchFormData) => {
+    setIsLoading(true);
 
-  const triggerShake = () => {
-    setShake(true);
-    window.setTimeout(() => setShake(false), 450);
-  };
+    const isFullName = data.searchMode === "full_name" || (Boolean(data.lastName) && data.lastName.trim().length > 0);
 
-  const handleFirstNameChange = (val: string) => {
-    if (/\s/.test(val)) {
-      setErrorMessage("Please enter first or last name only");
-      triggerShake();
-      val = val.replace(/\s+/g, "");
-    } else {
-      setErrorMessage("");
+    trackEvent(isFullName ? "full_name_search_submitted" : "name_search_submitted", {
+      search_mode: isFullName ? "full_name" : "first_name",
+      source_page_type: "homepage",
+    });
+
+    // Resolve query through estimation engine
+    const estimate = resolveNameSearch({
+      firstName: data.firstName,
+      lastName: data.lastName,
+    });
+
+    setResult(estimate);
+    setIsLoading(false);
+
+    trackEvent("name_result_viewed", {
+      result_mode: estimate.mode,
+      search_mode: isFullName ? "full_name" : "first_name",
+      source_page_type: "homepage",
+    });
+
+    if (estimate.mode === "verified") {
+      trackEvent("verified_result_viewed", { source_page_type: "homepage" });
+    } else if (estimate.mode === "modelled") {
+      trackEvent("modelled_result_viewed", { source_page_type: "homepage" });
     }
-    const cleaned = val.replace(/[^A-Za-z]/g, "").slice(0, 20);
-    if (cleaned !== val) triggerShake();
-    setFirstName(cleaned);
-    if (cleaned.length >= 2) setSuggestions(searchNames(cleaned));
-    else setSuggestions([]);
+
+    // Smooth scroll result into view if supported
+    setTimeout(() => {
+      if (resultRef.current && typeof resultRef.current.scrollIntoView === "function" && typeof window !== "undefined") {
+        const prefersReducedMotion = window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches;
+        resultRef.current.scrollIntoView({
+          behavior: prefersReducedMotion ? "auto" : "smooth",
+          block: "nearest",
+        });
+      }
+    }, 50);
   };
 
-  const handleSearch = (e: React.FormEvent) => {
-    e.preventDefault();
-    setTouched(true);
-    if (!validation.ok) {
-      triggerShake();
-      setErrorMessage((validation as { ok: false; reason: string }).reason);
-      trackEvent("name_search_submitted", { search_mode: "first_name", result_found: false });
-      return;
-    }
-    trackEvent("name_search_submitted", { search_mode: "first_name", result_found: true });
-    window.location.href = `/name/${encodeURIComponent(validation.value)}`;
-    setSuggestions([]);
-  };
-
-  const tryExample = (name: string) => {
-    trackEvent("related_name_clicked", { source_page_type: "homepage" });
-    window.location.href = `/name/${encodeURIComponent(name)}`;
-  };
-
-  const selectSuggestion = (name: string) => {
-    trackEvent("name_search_submitted", { search_mode: "first_name", result_found: true });
-    setFirstName(name);
-    setSuggestions([]);
-    window.location.href = `/name/${encodeURIComponent(name)}`;
+  const handleReset = () => {
+    setResult(null);
+    setTimeout(() => {
+      inputRef.current?.focus();
+    }, 50);
   };
 
   return (
@@ -77,16 +77,16 @@ export default function NameSearchHero() {
         }}
       />
       {/* Soft glow accents */}
-      <div className="absolute -top-24 -left-24 h-96 w-96 rounded-full bg-primary-foreground/10 blur-3xl" />
-      <div className="absolute -bottom-24 -right-24 h-96 w-96 rounded-full bg-accent/20 blur-3xl" />
+      <div className="absolute -top-24 -left-24 h-96 w-96 rounded-full bg-primary-foreground/10 blur-3xl pointer-events-none" />
+      <div className="absolute -bottom-24 -right-24 h-96 w-96 rounded-full bg-accent/20 blur-3xl pointer-events-none" />
 
       <div className="container relative z-10">
-        <div className="grid lg:grid-cols-2 gap-10 lg:gap-16 items-center">
+        <div className="grid lg:grid-cols-2 gap-10 lg:gap-16 items-start">
           {/* LEFT — Headline + copy */}
-          <div className="text-center lg:text-left">
+          <div className="text-center lg:text-left pt-2">
             <div className="inline-flex items-center gap-2 bg-primary-foreground/10 backdrop-blur-sm rounded-full px-4 py-1.5 text-primary-foreground/90 text-sm font-medium border border-primary-foreground/20 mb-6">
               <Sparkles className="h-3.5 w-3.5" />
-              Instant results · 100M+ names · 80+ countries
+              Instant demographic results · Official SSA & Census data
             </div>
 
             <h1 className="font-display text-4xl md:text-5xl lg:text-6xl font-bold text-primary-foreground mb-5 leading-[1.1]">
@@ -99,119 +99,49 @@ export default function NameSearchHero() {
             </h1>
 
             <p className="text-lg text-primary-foreground/85 max-w-xl mx-auto lg:mx-0 mb-6">
-              Are you 1 in a million — or 1 of millions? Check your name instantly against 100M+ global records and see popularity, rarity, and origin in seconds.
+              Check your first name or full name instantly. Get evidence-backed demographic counts, national rankings, and living population estimates in seconds.
             </p>
 
             {/* Trust signals */}
             <div className="flex flex-wrap justify-center lg:justify-start gap-x-5 gap-y-2 text-primary-foreground/80 text-sm">
               <span className="inline-flex items-center gap-1.5">
-                <Zap className="h-4 w-4" /> Instant results
+                <Zap className="h-4 w-4" /> Instant inline results
               </span>
               <span className="inline-flex items-center gap-1.5">
-                <Globe className="h-4 w-4" /> 80+ countries
+                <Globe className="h-4 w-4" /> SSA & U.S. Census models
               </span>
               <span className="inline-flex items-center gap-1.5">
-                <ShieldCheck className="h-4 w-4" /> No signup
+                <ShieldCheck className="h-4 w-4" /> 100% Free · No signup
               </span>
             </div>
           </div>
 
-          {/* RIGHT — Product-style search card */}
+          {/* RIGHT — Product-style search card & Inline Results */}
           <div className="relative">
             <div className="absolute -inset-1 bg-gradient-to-r from-accent/40 via-primary-foreground/30 to-accent/40 rounded-2xl blur-lg opacity-60" />
-            <div className="relative bg-card rounded-2xl shadow-2xl p-6 md:p-8 border border-border/50">
-              <div className="flex items-center gap-2 mb-5">
-                <div className="h-9 w-9 rounded-lg bg-primary/10 flex items-center justify-center">
-                  <Search className="h-4 w-4 text-primary" />
-                </div>
-                <div>
-                  <h2 className="font-display font-bold text-lg leading-tight text-card-foreground">Check your name</h2>
-                  <p className="text-xs text-muted-foreground">Free · Results in under 1 second</p>
-                </div>
-              </div>
-
-              <form onSubmit={handleSearch} className="space-y-3" noValidate>
-                <div className="relative">
-                  <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground pointer-events-none" />
-                  <input
-                    type="text"
-                    placeholder="Enter a single name (e.g., Rahul)"
-                    value={firstName}
-                    onChange={(e) => handleFirstNameChange(e.target.value)}
-                    onFocus={() => setFocused(true)}
-                    onBlur={() => {
-                      setTouched(true);
-                      setTimeout(() => setFocused(false), 150);
-                    }}
-                    aria-label="Enter a single first or last name"
-                    aria-invalid={isInvalid}
-                    aria-describedby={isInvalid ? "hero-name-error" : undefined}
-                    maxLength={20}
-                    className={`w-full h-14 rounded-xl border-2 bg-background pl-11 pr-4 text-foreground text-base placeholder:text-muted-foreground/70 focus:outline-none transition-all ${
-                      isInvalid
-                        ? "border-destructive ring-4 ring-destructive/20"
-                        : focused
-                          ? "border-primary ring-4 ring-primary/15"
-                          : "border-border hover:border-primary/40"
-                    } ${shake ? "animate-[shake_0.4s_ease-in-out]" : ""}`}
-                  />
-                  {suggestions.length > 0 && (
-                    <div className="absolute top-full left-0 right-0 mt-1.5 bg-popover border border-border rounded-xl shadow-xl z-20 max-h-56 overflow-y-auto">
-                      {suggestions.map((s) => (
-                        <button
-                          key={s}
-                          type="button"
-                          onClick={() => selectSuggestion(s)}
-                          className="w-full text-left px-4 py-2.5 text-sm hover:bg-secondary transition-colors text-foreground first:rounded-t-xl last:rounded-b-xl"
-                        >
-                          {s}
-                        </button>
-                      ))}
-                    </div>
-                  )}
-                </div>
-                {(isInvalid || errorMessage) && (
-                  <p id="hero-name-error" role="alert" className="text-xs text-destructive -mt-1">
-                    {errorMessage || (validation as { ok: false; reason: string }).reason}
-                  </p>
-                )}
-
-                <button
-                  type="submit"
-                  disabled={!validation.ok}
-                  className="group relative w-full h-14 rounded-xl font-semibold text-base text-primary-foreground shadow-lg shadow-primary/30 hover:shadow-xl hover:shadow-primary/40 hover:-translate-y-0.5 transition-all flex items-center justify-center gap-2 overflow-hidden disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:translate-y-0"
-                  style={{
-                    background:
-                      "linear-gradient(135deg, hsl(var(--primary)), hsl(280 60% 55%))",
-                  }}
-                >
-                  <span className="relative z-10 inline-flex items-center gap-2">
-                    Check Now
-                    <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
-                  </span>
-                </button>
-
-                <p className="text-center text-xs text-muted-foreground pt-1">
-                  🔒 Your name is never stored
+            <div className="relative bg-card rounded-2xl shadow-2xl p-6 md:p-8 border border-border/50 space-y-6">
+              <div>
+                <h2 className="font-display font-bold text-xl leading-tight text-card-foreground">
+                  Check name demographics
+                </h2>
+                <p className="text-xs text-muted-foreground mt-0.5">
+                  Enter your first name or full name to check living population estimates
                 </p>
-              </form>
-
-              {/* Example chips */}
-              <div className="mt-5 pt-5 border-t border-border">
-                <p className="text-xs text-muted-foreground mb-2.5">Popular searches:</p>
-                <div className="flex flex-wrap gap-1.5">
-                  {["James", "Mary", "Olivia", "Liam", "Muhammad", "Sophia"].map((n) => (
-                    <button
-                      key={n}
-                      type="button"
-                      onClick={() => tryExample(n)}
-                      className="px-3 py-1 rounded-full bg-secondary hover:bg-primary hover:text-primary-foreground text-xs font-medium border border-border transition-colors text-foreground"
-                    >
-                      {n}
-                    </button>
-                  ))}
-                </div>
               </div>
+
+              {/* Form Component */}
+              <NameCheckerForm
+                inputRef={inputRef}
+                isLoading={isLoading}
+                onSubmit={handleSearchSubmit}
+              />
+
+              {/* Inline Result Container */}
+              {result && (
+                <div ref={resultRef} className="pt-2 border-t border-border/60">
+                  <NameEstimateCard result={result} onReset={handleReset} />
+                </div>
+              )}
             </div>
           </div>
         </div>
@@ -219,16 +149,16 @@ export default function NameSearchHero() {
         {/* Stats strip */}
         <div className="grid grid-cols-3 gap-4 max-w-2xl mx-auto mt-12 pt-8 border-t border-primary-foreground/15">
           <div className="text-center">
-            <div className="text-2xl md:text-3xl font-bold text-primary-foreground">100M+</div>
-            <div className="text-xs md:text-sm text-primary-foreground/70">Names indexed</div>
+            <div className="text-2xl md:text-3xl font-bold text-primary-foreground">145 Yrs</div>
+            <div className="text-xs md:text-sm text-primary-foreground/70">SSA birth records</div>
           </div>
           <div className="text-center">
-            <div className="text-2xl md:text-3xl font-bold text-primary-foreground">80+</div>
-            <div className="text-xs md:text-sm text-primary-foreground/70">Countries</div>
+            <div className="text-2xl md:text-3xl font-bold text-primary-foreground">330M+</div>
+            <div className="text-xs md:text-sm text-primary-foreground/70">Population baseline</div>
           </div>
           <div className="text-center">
-            <div className="text-2xl md:text-3xl font-bold text-primary-foreground">±5%</div>
-            <div className="text-xs md:text-sm text-primary-foreground/70">Accuracy</div>
+            <div className="text-2xl md:text-3xl font-bold text-primary-foreground">&lt; 1s</div>
+            <div className="text-xs md:text-sm text-primary-foreground/70">Instant inline result</div>
           </div>
         </div>
       </div>

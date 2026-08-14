@@ -6,6 +6,12 @@ declare global {
 
 export type AnalyticsEventName =
   | "name_search_submitted"
+  | "name_result_viewed"
+  | "full_name_search_submitted"
+  | "modelled_result_viewed"
+  | "verified_result_viewed"
+  | "detailed_profile_clicked"
+  | "search_again_clicked"
   | "second_search_clicked"
   | "full_name_cta_clicked"
   | "related_name_clicked"
@@ -16,6 +22,7 @@ export type AnalyticsEventName =
 export interface AnalyticsEventPayload {
   search_mode?: "first_name" | "full_name";
   result_found?: boolean;
+  result_mode?: "verified" | "modelled" | "insufficient" | "invalid";
   source_page_type?: "first_name" | "full_name" | "tool" | "homepage" | "research";
   source_name_rank_tier?: "top100" | "top500" | "other";
   position_index?: number;
