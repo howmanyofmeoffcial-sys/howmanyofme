@@ -7,16 +7,126 @@ import AdSlot from '../../components/AdSlot.astro';
 import ToolCTA from '../../components/ToolCTA.astro';
 import RelatedPosts from '../../components/RelatedPosts.astro';
 import UsernameGeneratorIsland from '../../islands/tools/UsernameGeneratorIsland';
+import manifest from '../../data/metadata/manifest.json';
+import {
+  Sparkles,
+  HelpCircle,
+  TrendingUp,
+  BarChart3,
+  Users,
+  ShieldCheck,
+  CheckCircle2,
+  AlertTriangle,
+  ArrowRight,
+  Database,
+  ArrowRightLeft,
+  BookOpen,
+  Shuffle,
+  Instagram,
+  Gamepad2,
+  Video,
+  Hash,
+  Lock,
+  Smartphone,
+} from 'lucide-react';
 
-const title = "Username Generator — Creative Social & Gaming Handles";
-const description = "Generate unique, styled usernames, gamertags, and social media handles based on any first name.";
+const title = "Username Generator: Creative Ideas for Instagram, TikTok & Gaming";
+const description = "Generate username ideas from your name, nickname, or niche. Choose styles for Instagram, TikTok, gaming, and social media, then copy handles in seconds.";
 const canonical = "https://howmanyofme.co/tools/username-generator";
+
+const faqs = [
+  {
+    q: "How does the Username Generator work?",
+    a: "Enter a name, nickname, hobby, or keyword (or click 'Random Word'), select your target platform (Instagram, TikTok, Gaming, or General), choose a style mode, and generate 10 clean, tailored username suggestions ready to copy.",
+  },
+  {
+    q: "Are the generated usernames guaranteed to be available?",
+    a: "No. The tool generates creative ideas based on proven aesthetic and naming patterns. Because platform availability changes constantly as new accounts are created, you should verify your favorite handle directly in the target app before committing.",
+  },
+  {
+    q: "How do I choose a good Instagram username?",
+    a: "Keep your Instagram handle short, easy to spell, and connected to your niche or identity. Avoid long strings of numbers, and use clean separators like dots or underscores only when necessary.",
+  },
+  {
+    q: "What makes a strong gaming username or gamertag?",
+    a: "Great gaming handles are punchy, memorable, and easy for teammates to say in voice chat. Dynamic keywords, action verbs, and concise cyberpunk motifs work best.",
+  },
+  {
+    q: "Can I generate completely random usernames without entering a keyword?",
+    a: "Yes. Simply click the 'Random Word' button or leave the input empty to generate fresh handles derived from curated aesthetic and evocative root words.",
+  },
+  {
+    q: "What is the difference between a username and a display name?",
+    a: "A username (or @handle) is the unique technical identifier for your account across platform databases and URLs. A display name is the visible name shown on your profile that can often be changed freely without affecting your handle.",
+  },
+  {
+    q: "Should I include numbers or special characters in my username?",
+    a: "If your preferred handle is taken, adding a subtle two-digit number or clean underscore is common. However, avoiding unnecessary numbers makes your username easier to share by word-of-mouth.",
+  },
+  {
+    q: "How should I protect my privacy when creating a username?",
+    a: "Avoid embedding personal identifiers in public usernames, such as your full birth date (e.g. 'alex1994'), street name, school, or phone numbers.",
+  },
+];
+
+const jsonLd = [
+  {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    name: title,
+    description: description,
+    url: canonical,
+    inLanguage: "en-US",
+    publisher: {
+      "@type": "Organization",
+      name: "HowManyOfMe",
+      url: "https://howmanyofme.co",
+    },
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: "Home",
+        item: "https://howmanyofme.co",
+      },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: "Tools",
+        item: "https://howmanyofme.co/tools",
+      },
+      {
+        "@type": "ListItem",
+        position: 3,
+        name: "Username Generator",
+        item: canonical,
+      },
+    ],
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: faqs.map((f) => ({
+      "@type": "Question",
+      name: f.q,
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: f.a,
+      },
+    })),
+  },
+];
 ---
 
-<BaseLayout title={title} description={description} canonical={canonical}>
+<BaseLayout title={title} description={description} canonical={canonical} jsonLd={jsonLd}>
   <SiteHeader client:idle />
 
-  <main class="container py-12 max-w-3xl">
+  <main class="container py-12 max-w-4xl">
+    <!-- Breadcrumbs -->
     <Breadcrumbs
       className="mb-6"
       items={[
@@ -26,19 +136,234 @@ const canonical = "https://howmanyofme.co/tools/username-generator";
       ]}
     />
 
-    <h1 class="font-display text-4xl md:text-5xl font-bold mb-4 text-foreground">Username Generator</h1>
-    <p class="text-muted-foreground mb-8 leading-relaxed">
-      Turn any name into 8 creative, styled username variants with numbers, suffixes, reversals, and clean separators.
-    </p>
+    <!-- Header Section -->
+    <header class="mb-8">
+      <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary/10 text-primary font-semibold uppercase tracking-wider text-[11px] mb-3">
+        <Hash class="h-3.5 w-3.5" /> Handle Maker &amp; Social Ideas
+      </span>
+      <h1 class="font-display text-3xl md:text-5xl font-bold text-foreground leading-tight tracking-tight">
+        Username Generator
+      </h1>
+      <p class="text-base md:text-lg text-muted-foreground mt-3 leading-relaxed">
+        Need a fresh handle for social media, streaming, gaming, or a new online profile? Enter your name, nickname, or niche keyword to generate clean username ideas tailored for Instagram, TikTok, Discord, and gaming.
+      </p>
+    </header>
 
-    <!-- Interactive Island -->
-    <UsernameGeneratorIsland client:load />
+    <!-- 1. Interactive Tool Container (Above the Fold) -->
+    <section class="my-8">
+      <UsernameGeneratorIsland client:load />
+    </section>
+
+    <!-- 2. Quick Answer Block (AEO / Snippet Ready) -->
+    <section class="my-10 rounded-2xl border-l-4 border-primary bg-primary/5 p-6 shadow-sm">
+      <h2 class="text-xs font-bold uppercase tracking-wider text-primary mb-1">
+        Quick Answer: What Makes a Great Username?
+      </h2>
+      <p class="text-sm md:text-base text-foreground leading-relaxed">
+        A strong username is <strong>easy to spell, memorable, and pronounceable</strong>. The best handles balance your personal name or niche with clean modifiers (like <em>daily</em>, <em>studio</em>, or <em>creates</em>), avoid unnecessary strings of random numbers, and fit comfortably within the culture of your target platform.
+      </p>
+    </section>
 
     <AdSlot />
 
+    <!-- 3. Platform Ideas Sections -->
+    <section class="my-12 space-y-8">
+      <h2 class="font-display text-2xl md:text-3xl font-bold text-foreground">
+        Username Ideas by Platform &amp; Style
+      </h2>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <!-- Instagram -->
+        <div class="p-6 rounded-2xl border border-border bg-card shadow-xs space-y-3">
+          <div class="flex items-center gap-2 text-pink-600 dark:text-pink-400 font-bold text-base">
+            <Instagram class="h-4 w-4" />
+            <span>Instagram Username Ideas</span>
+          </div>
+          <p class="text-xs text-muted-foreground leading-relaxed">
+            Instagram handles thrive on clean aesthetics, minimal punctuation, and creative branding:
+          </p>
+          <ul class="text-xs text-muted-foreground space-y-1.5 pt-1">
+            <li>• <strong>Creator:</strong> <em>@maya.creates</em>, <em>@alexshoots</em></li>
+            <li>• <strong>Aesthetic:</strong> <em>@softframe</em>, <em>@velvetnotes</em></li>
+            <li>• <strong>Studio:</strong> <em>@jordanstudio</em>, <em>@purefocus</em></li>
+          </ul>
+        </div>
+
+        <!-- TikTok -->
+        <div class="p-6 rounded-2xl border border-border bg-card shadow-xs space-y-3">
+          <div class="flex items-center gap-2 text-foreground font-bold text-base">
+            <Video class="h-4 w-4 text-primary" />
+            <span>TikTok Username Ideas</span>
+          </div>
+          <p class="text-xs text-muted-foreground leading-relaxed">
+            TikTok handles benefit from punchy, friendly phrasing that sounds natural in video intros:
+          </p>
+          <ul class="text-xs text-muted-foreground space-y-1.5 pt-1">
+            <li>• <strong>Catchy:</strong> <em>@heyitsalex</em>, <em>@mayavids</em></li>
+            <li>• <strong>Lifestyle:</strong> <em>@dailyjordan</em>, <em>@alexclips</em></li>
+            <li>• <strong>Vibe:</strong> <em>@purealex</em>, <em>@mayatok</em></li>
+          </ul>
+        </div>
+
+        <!-- Gaming -->
+        <div class="p-6 rounded-2xl border border-border bg-card shadow-xs space-y-3">
+          <div class="flex items-center gap-2 text-blue-600 dark:text-blue-400 font-bold text-base">
+            <Gamepad2 class="h-4 w-4" />
+            <span>Gaming &amp; Gamertags</span>
+          </div>
+          <p class="text-xs text-muted-foreground leading-relaxed">
+            Gamertags, Discord IDs, and streaming handles require punchy, tactical cadence:
+          </p>
+          <ul class="text-xs text-muted-foreground space-y-1.5 pt-1">
+            <li>• <strong>Competitive:</strong> <em>@ShadowForge</em>, <em>@PixelRush</em></li>
+            <li>• <strong>Cyber:</strong> <em>@ViperByte</em>, <em>@NovaDrift</em></li>
+            <li>• <strong>Streamer:</strong> <em>@FrostEcho</em>, <em>@AtlasPulse</em></li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. What Makes a Good Username (Principles Checklist) -->
+    <section class="my-12 space-y-6">
+      <h2 class="font-display text-2xl md:text-3xl font-bold text-foreground">
+        How to Choose the Best Username: 6 Core Principles
+      </h2>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div class="p-5 rounded-2xl border border-border bg-card shadow-xs space-y-2">
+          <div class="flex items-center gap-2 font-bold text-foreground text-sm">
+            <CheckCircle2 class="h-4 w-4 text-primary" />
+            <span>1. Keep It Simple to Spell</span>
+          </div>
+          <p class="text-xs text-muted-foreground leading-relaxed">
+            If you tell someone your handle in conversation, they should be able to type it without asking how to spell it twice.
+          </p>
+        </div>
+
+        <div class="p-5 rounded-2xl border border-border bg-card shadow-xs space-y-2">
+          <div class="flex items-center gap-2 font-bold text-foreground text-sm">
+            <CheckCircle2 class="h-4 w-4 text-primary" />
+            <span>2. Minimize Random Numbers</span>
+          </div>
+          <p class="text-xs text-muted-foreground leading-relaxed">
+            Handles like <em>@alex_studio</em> look far more established and professional than strings like <em>@alex98742</em>.
+          </p>
+        </div>
+
+        <div class="p-5 rounded-2xl border border-border bg-card shadow-xs space-y-2">
+          <div class="flex items-center gap-2 font-bold text-foreground text-sm">
+            <CheckCircle2 class="h-4 w-4 text-primary" />
+            <span>3. Aim for Cross-Platform Consistency</span>
+          </div>
+          <p class="text-xs text-muted-foreground leading-relaxed">
+            Securing the same handle across Instagram, TikTok, YouTube, and X makes it effortless for your audience to find you everywhere.
+          </p>
+        </div>
+
+        <div class="p-5 rounded-2xl border border-border bg-card shadow-xs space-y-2">
+          <div class="flex items-center gap-2 font-bold text-foreground text-sm">
+            <Lock class="h-4 w-4 text-primary" />
+            <span>4. Protect Personal Privacy</span>
+          </div>
+          <p class="text-xs text-muted-foreground leading-relaxed">
+            Avoid putting sensitive personal information (like your full birth year, home city, or phone digits) inside public handles.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. Username vs Display Name -->
+    <section class="my-12 space-y-4">
+      <h2 class="font-display text-2xl md:text-3xl font-bold text-foreground">
+        Username vs. Display Name: Understanding the Difference
+      </h2>
+      <div class="p-6 rounded-2xl border border-border/80 bg-secondary/30 space-y-3 text-sm text-muted-foreground leading-relaxed">
+        <p>
+          When setting up social accounts, it is helpful to distinguish between your handle and your profile name:
+        </p>
+        <ul class="list-disc list-outside pl-5 space-y-1.5">
+          <li><strong>Username (@handle):</strong> The unique database key that forms your profile URL (e.g. <code>instagram.com/maya.creates</code>). It must be completely distinct from all other accounts on that platform.</li>
+          <li><strong>Display Name:</strong> The human-readable title shown prominently on your profile (e.g. "Maya Lin | Photography"). It does not have to be unique and can include spaces, capital letters, and emojis.</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- 6. Demographic Tools Ecosystem -->
+    <section class="my-12 space-y-6">
+      <div class="flex items-center justify-between">
+        <h2 class="font-display text-2xl md:text-3xl font-bold text-foreground">
+          Explore More Naming &amp; Demographic Tools
+        </h2>
+        <a href="/tools" class="text-xs font-semibold text-primary hover:underline flex items-center gap-1">
+          View All Tools <ArrowRight class="h-3.5 w-3.5" />
+        </a>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        <a
+          href="/tools/random-name"
+          class="p-5 rounded-2xl border border-border bg-card hover:border-primary/40 hover:shadow-md transition-all group"
+        >
+          <div class="flex items-center gap-2 font-bold text-foreground group-hover:text-primary transition-colors text-base mb-1.5">
+            <Shuffle class="h-4 w-4 text-primary" />
+            <span>Random Name Generator</span>
+          </div>
+          <p class="text-xs text-muted-foreground leading-relaxed">
+            Need a real first name or surname before building a handle? Sample official registries.
+          </p>
+        </a>
+
+        <a
+          href="/tools/unique-name-generator"
+          class="p-5 rounded-2xl border border-border bg-card hover:border-primary/40 hover:shadow-md transition-all group"
+        >
+          <div class="flex items-center gap-2 font-bold text-foreground group-hover:text-primary transition-colors text-base mb-1.5">
+            <Sparkles class="h-4 w-4 text-primary" />
+            <span>Unique Name Generator</span>
+          </div>
+          <p class="text-xs text-muted-foreground leading-relaxed">
+            Discover rare, distinctive real names filtered by demographic population thresholds.
+          </p>
+        </a>
+
+        <a
+          href="/tools/popularity-checker"
+          class="p-5 rounded-2xl border border-border bg-card hover:border-primary/40 hover:shadow-md transition-all group"
+        >
+          <div class="flex items-center gap-2 font-bold text-foreground group-hover:text-primary transition-colors text-base mb-1.5">
+            <BarChart3 class="h-4 w-4 text-primary" />
+            <span>Popularity Checker</span>
+          </div>
+          <p class="text-xs text-muted-foreground leading-relaxed">
+            Using your real name for a handle? See how many living Americans share that exact name.
+          </p>
+        </a>
+      </div>
+    </section>
+
+    <!-- 7. Common Questions (FAQ Section) -->
+    <section class="my-12 space-y-6">
+      <div class="flex items-center gap-2">
+        <HelpCircle class="h-5 w-5 text-primary" />
+        <h2 class="font-display text-2xl md:text-3xl font-bold text-foreground">
+          Frequently Asked Questions About Usernames
+        </h2>
+      </div>
+
+      <div class="space-y-4">
+        {faqs.map((f) => (
+          <div class="p-6 rounded-2xl border border-border bg-card shadow-xs">
+            <h3 class="font-semibold text-foreground text-base mb-2">{f.q}</h3>
+            <p class="text-sm text-muted-foreground leading-relaxed">{f.a}</p>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <!-- 8. Contextual Demographic CTA -->
     <ToolCTA
-      headline="Check How Many People Share Your Name"
-      subhead="Discover living bearer counts and national popularity rankings."
+      headline="Using Your Real Name in Your Handle?"
+      subhead="Find out how many people in the United States share your exact first or full name."
     />
 
     <RelatedPosts currentSlug="username-generator" tags={["tools", "generator"]} count={6} />
