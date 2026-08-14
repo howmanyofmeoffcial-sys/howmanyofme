@@ -18,7 +18,7 @@ export default function SiteHeader() {
     { to: "/", label: "Home" },
     { to: "/names/a", label: "Browse Names" },
     { to: "/tools", label: "Tools" },
-    { to: "/blog", label: "Blog" },
+    { to: "/methodology", label: "Methodology" },
     { to: "/about", label: "About" },
   ];
 

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Search, Sparkles, ArrowRight, Loader2, User, Users } from "lucide-react";
+import { Search, ArrowRight, Loader2, User, Users } from "lucide-react";
 import { validateName } from "../../lib/names/validateName";
 
 export interface SearchFormData {

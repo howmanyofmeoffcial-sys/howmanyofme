@@ -99,6 +99,7 @@ export function resolveFullName(rawFirst: string, rawLast: string): NameEstimate
           isIndexed: true,
         },
         lastName: {
+          name: normLast,
           surname: normLast,
           censusCount: canonicalEntity.surnameCount,
           censusRank: canonicalEntity.surnameRank,
@@ -150,6 +151,7 @@ export function resolveFullName(rawFirst: string, rawLast: string): NameEstimate
         isIndexed: isFirstIndexed,
       },
       lastName: {
+        name: normLast,
         surname: normLast,
         censusCount: surnameCount,
         censusRank: surnameEntity?.rank || null,

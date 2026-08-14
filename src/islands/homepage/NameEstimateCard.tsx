@@ -1,5 +1,5 @@
 import React from "react";
-import { CheckCircle2, Info, ArrowRight, RotateCcw, ShieldCheck, Sparkles, ExternalLink } from "lucide-react";
+import { CheckCircle2, Info, ArrowRight, RotateCcw } from "lucide-react";
 import type { NameEstimateResult } from "../../lib/estimation/types";
 import { trackEvent } from "../../lib/analytics/events";
 
@@ -10,7 +10,6 @@ interface NameEstimateCardProps {
 
 export const NameEstimateCard: React.FC<NameEstimateCardProps> = ({ result, onReset }) => {
   const isVerified = result.mode === "verified";
-  const isModelled = result.mode === "modelled";
   const isInvalid = result.mode === "invalid";
 
   const handleProfileClick = () => {

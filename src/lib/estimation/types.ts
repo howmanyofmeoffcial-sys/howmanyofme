@@ -21,6 +21,7 @@ export interface SupportingNameData {
 
 export interface SupportingSurnameData {
   surname: string;
+  name?: string;
   censusCount: number;
   censusRank?: number | null;
   prop100k?: number | null;
