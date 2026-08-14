@@ -7,16 +7,122 @@ import AdSlot from '../../components/AdSlot.astro';
 import ToolCTA from '../../components/ToolCTA.astro';
 import RelatedPosts from '../../components/RelatedPosts.astro';
 import TrendVisualizerIsland from '../../islands/tools/TrendVisualizerIsland';
+import manifest from '../../data/metadata/manifest.json';
+import {
+  Sparkles,
+  HelpCircle,
+  TrendingUp,
+  BarChart3,
+  Users,
+  ShieldCheck,
+  CheckCircle2,
+  AlertTriangle,
+  ArrowRight,
+  Database,
+  ArrowRightLeft,
+  BookOpen,
+  Globe,
+  Calendar,
+  Layers,
+} from 'lucide-react';
 
-const title = "Baby Name Trend Visualizer — Time-Series Popularity Charts";
-const description = "Visualize and compare popularity curves for up to 4 names simultaneously across 140+ years of demographic data.";
+const title = "Name Popularity Over Time: Track Historical Trends Across 140+ Years";
+const description = "See how any name's popularity has changed over time. Explore historical U.S. Social Security birth records from 1880 to 2024 to track peak eras, decade curves, and rising trends.";
 const canonical = "https://howmanyofme.co/tools/trend-visualizer";
+
+const faqs = [
+  {
+    q: "What does name popularity over time mean?",
+    a: "Name popularity over time measures how frequently parents chose a specific given name for newborn babies in each calendar year. By tracking annual Social Security Administration records from 1880 through 2024, historical charts reveal whether a name is rising, declining, reviving, or maintaining long-term stability.",
+  },
+  {
+    q: "Does a name popularity chart show how many people currently have the name?",
+    a: "No. A popularity chart displays annual newborn birth registrations per year or decade. While it shows when a name was most widely given to babies, it does not directly reflect the living population across all living age groups. For living bearer estimates, use our Name Popularity Checker.",
+  },
+  {
+    q: "What was my name's peak popularity year?",
+    a: "A name's peak year is the single calendar year with the highest recorded number of annual birth registrations in official federal archives. For example, Linda peaked in 1948 with over 99,000 annual births, while Emma reached a modern peak in 2003 with approximately 22,700 births.",
+  },
+  {
+    q: "Why do some names experience a 100-year revival?",
+    a: "In demographic history, names often follow an approximately 100-year generational cycle. As names associated with great-grandparents fade from living memory, subsequent generations of parents rediscover them as fresh, timeless vintage choices (e.g. Oliver, Hazel, Theodore, and Eleanor).",
+  },
+  {
+    q: "Can I compare multiple names on one chart?",
+    a: "Yes. Our Trend Visualizer allows you to plot up to 4 names simultaneously on an interactive 140-year multi-decade time-series line chart to compare crossover eras, peak magnitudes, and recent trajectories.",
+  },
+  {
+    q: "Why might a name have missing years or gaps in the historical chart?",
+    a: "The Social Security Administration suppresses any name given to fewer than 5 babies of a given sex in a single calendar year to protect personal privacy. Extremely rare or recent international names may have fewer recorded historical data points.",
+  },
+  {
+    q: "Can I see historical name popularity for the UK?",
+    a: "Our visualizer is calibrated to official United States Social Security birth cohorts. In the United Kingdom, annual birth records are published separately by the Office for National Statistics (ONS) for England & Wales, NRS for Scotland, and NISRA for Northern Ireland.",
+  },
+  {
+    q: "Why does spelling matter in historical popularity trends?",
+    a: "Federal demographic records track exact character sequences recorded on birth certificates. Alternate spellings like 'Sara' and 'Sarah' or 'Aidan' and 'Aiden' are tabulated as separate statistical entries with distinct historical peaks.",
+  },
+];
+
+const jsonLd = [
+  {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    name: title,
+    description: description,
+    url: canonical,
+    inLanguage: "en-US",
+    publisher: {
+      "@type": "Organization",
+      name: "HowManyOfMe",
+      url: "https://howmanyofme.co",
+    },
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: "Home",
+        item: "https://howmanyofme.co",
+      },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: "Tools",
+        item: "https://howmanyofme.co/tools",
+      },
+      {
+        "@type": "ListItem",
+        position: 3,
+        name: "Trend Visualizer",
+        item: canonical,
+      },
+    ],
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: faqs.map((f) => ({
+      "@type": "Question",
+      name: f.q,
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: f.a,
+      },
+    })),
+  },
+];
 ---
 
-<BaseLayout title={title} description={description} canonical={canonical}>
+<BaseLayout title={title} description={description} canonical={canonical} jsonLd={jsonLd}>
   <SiteHeader client:idle />
 
   <main class="container py-12 max-w-4xl">
+    <!-- Breadcrumbs -->
     <Breadcrumbs
       className="mb-6"
       items={[
@@ -26,19 +132,369 @@ const canonical = "https://howmanyofme.co/tools/trend-visualizer";
       ]}
     />
 
-    <h1 class="font-display text-4xl md:text-5xl font-bold mb-4 text-foreground">Baby Name Trend Visualizer</h1>
-    <p class="text-muted-foreground mb-8 leading-relaxed">
-      Compare historical popularity trajectories for up to 4 names across nine decades of recorded birth data (1940s–2020s).
-    </p>
+    <!-- Header Section -->
+    <header class="mb-8">
+      <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary/10 text-primary font-semibold uppercase tracking-wider text-[11px] mb-3">
+        <TrendingUp class="h-3.5 w-3.5" /> Historical Name Trend Visualizer
+      </span>
+      <h1 class="font-display text-3xl md:text-5xl font-bold text-foreground leading-tight tracking-tight">
+        Name Popularity Over Time
+      </h1>
+      <p class="text-base md:text-lg text-muted-foreground mt-3 leading-relaxed">
+        Explore how any name's popularity has evolved across 140+ years of American history. Enter up to 4 names to chart multi-decade birth registration curves, identify historical peak eras, and discover rising or falling naming trends.
+      </p>
+    </header>
 
-    <!-- Interactive Island -->
-    <TrendVisualizerIsland client:load />
+    <!-- 1. Interactive Tool Container (Above the Fold) -->
+    <section class="my-8">
+      <TrendVisualizerIsland client:load />
+    </section>
+
+    <!-- 2. Quick Answer Block (AEO / Snippet Ready) -->
+    <section class="my-10 rounded-2xl border-l-4 border-primary bg-primary/5 p-6 shadow-sm">
+      <h2 class="text-xs font-bold uppercase tracking-wider text-primary mb-1">
+        Quick Answer: What Does a Name Popularity Chart Show?
+      </h2>
+      <p class="text-sm md:text-base text-foreground leading-relaxed">
+        A name popularity chart tracks the number of registered newborn births associated with a given name in each calendar year. In the United States, official records from the <strong>Social Security Administration (1880–2024)</strong> allow us to visualize whether a name is an <em>enduring classic</em>, a <em>vintage revival</em>, a <em>mid-century spike</em>, or a <em>fast modern climber</em>.
+      </p>
+    </section>
 
     <AdSlot />
 
+    <!-- 3. How to Read a Name Popularity Chart (The 4 Curve Types) -->
+    <section class="my-12 space-y-6">
+      <h2 class="font-display text-2xl md:text-3xl font-bold text-foreground">
+        How to Read a Name Popularity Chart: The 4 Major Historical Curves
+      </h2>
+      <p class="text-sm md:text-base text-muted-foreground leading-relaxed">
+        Over 14 consecutive decades of federal record-keeping, American baby names follow four primary historical trajectories:
+      </p>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 my-6">
+        <div class="p-5 rounded-2xl border border-border bg-card shadow-xs">
+          <div class="flex items-center gap-2 text-primary font-bold text-base mb-1.5">
+            <BarChart3 class="h-4 w-4" />
+            <span>1. The Enduring Classic Plateau</span>
+          </div>
+          <p class="text-xs text-muted-foreground leading-relaxed">
+            Names that remain steadily in the Top 50 across more than a century (e.g. <em>William, Elizabeth, Thomas, James</em>). Their curves form a sustained plateau across generations.
+          </p>
+        </div>
+
+        <div class="p-5 rounded-2xl border border-border bg-card shadow-xs">
+          <div class="flex items-center gap-2 text-primary font-bold text-base mb-1.5">
+            <Sparkles class="h-4 w-4" />
+            <span>2. The 100-Year Vintage Revival</span>
+          </div>
+          <p class="text-xs text-muted-foreground leading-relaxed">
+            Names popular in the 1890s–1920s that declined for 60 years and are now top choices for modern parents (e.g. <em>Oliver, Hazel, Theodore, Emma</em>). Their curves form a classic "U-shape".
+          </p>
+        </div>
+
+        <div class="p-5 rounded-2xl border border-border bg-card shadow-xs">
+          <div class="flex items-center gap-2 text-primary font-bold text-base mb-1.5">
+            <TrendingUp class="h-4 w-4" />
+            <span>3. The Mid-Century Bubble</span>
+          </div>
+          <p class="text-xs text-muted-foreground leading-relaxed">
+            Names that surged dramatically during the post-war baby boom (1940s–1970s) before fading sharply (e.g. <em>Linda, Gary, Deborah, Donna</em>). Their curves form a steep pyramid.
+          </p>
+        </div>
+
+        <div class="p-5 rounded-2xl border border-border bg-card shadow-xs">
+          <div class="flex items-center gap-2 text-primary font-bold text-base mb-1.5">
+            <Layers class="h-4 w-4" />
+            <span>4. The Fast Modern Climber</span>
+          </div>
+          <p class="text-xs text-muted-foreground leading-relaxed">
+            Contemporary names that climbed hundreds of rank positions in under a decade due to media exposure, nature themes, or phonetic trends (e.g. <em>Nova, Kai, Harper, Luna</em>).
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. Baby Name Popularity vs Living Bearer Count -->
+    <section class="my-12 space-y-6">
+      <h2 class="font-display text-2xl md:text-3xl font-bold text-foreground">
+        Baby Name Popularity vs. Total Living Bearer Count
+      </h2>
+      <p class="text-sm md:text-base text-muted-foreground leading-relaxed">
+        One of the most essential distinctions in demographic research is separating <strong>newborn annual popularity</strong> from <strong>cumulative living bearer population</strong>:
+      </p>
+
+      <div class="overflow-x-auto rounded-2xl border border-border bg-card shadow-xs my-4">
+        <table class="w-full text-left text-sm border-collapse">
+          <thead class="bg-secondary/70 text-xs font-semibold text-foreground uppercase tracking-wider border-b border-border">
+            <tr>
+              <th scope="col" class="p-3.5">Dimension</th>
+              <th scope="col" class="p-3.5">Baby Name Trend Visualizer</th>
+              <th scope="col" class="p-3.5">Name Popularity Checker</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-border/60">
+            <tr class="hover:bg-secondary/20 transition-colors">
+              <th scope="row" class="p-3.5 font-semibold text-foreground">Core Question</th>
+              <td class="p-3.5">How has the name's popularity changed across birth years?</td>
+              <td class="p-3.5">How many living people of all ages have this name today?</td>
+            </tr>
+            <tr class="hover:bg-secondary/20 transition-colors">
+              <th scope="row" class="p-3.5 font-semibold text-foreground">Data Source</th>
+              <td class="p-3.5">SSA Annual Birth Registrations (1880–2024).</td>
+              <td class="p-3.5">SSA Births + CDC Life Tables + Census Surnames.</td>
+            </tr>
+            <tr class="hover:bg-secondary/20 transition-colors">
+              <th scope="row" class="p-3.5 font-semibold text-foreground">Primary Visual</th>
+              <td class="p-3.5">Multi-decade time-series line chart.</td>
+              <td class="p-3.5">Demographic estimate card &amp; rarity badge.</td>
+            </tr>
+            <tr class="hover:bg-secondary/20 transition-colors">
+              <th scope="row" class="p-3.5 font-semibold text-foreground">Best For</th>
+              <td class="p-3.5">Parents picking baby names, historians, novelists.</td>
+              <td class="p-3.5">Curious individuals checking their own living name frequency.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- 5. Worked Trend Case Studies (3 Real Examples) -->
+    <section class="my-12 space-y-6">
+      <h2 class="font-display text-2xl md:text-3xl font-bold text-foreground">
+        Historical Case Studies: 3 Real Name Trajectories
+      </h2>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <!-- Case 1: William -->
+        <div class="p-6 rounded-2xl border border-border bg-card shadow-xs space-y-3">
+          <span class="text-xs font-bold uppercase tracking-wider text-blue-600 dark:text-blue-400 block">
+            Enduring Classic
+          </span>
+          <h3 class="font-display text-xl font-bold text-foreground">William</h3>
+          <ul class="text-xs text-muted-foreground space-y-1.5">
+            <li>• <strong>Historical Consistency:</strong> Top 20 for 140+ consecutive years</li>
+            <li>• <strong>Peak Era:</strong> 1950s (~60,000 births/year)</li>
+            <li>• <strong>Current Trajectory:</strong> Stable high rank among modern boys</li>
+          </ul>
+          <p class="text-xs text-muted-foreground leading-relaxed pt-2 border-t border-border/50">
+            <strong>Key Insight:</strong> William demonstrates multi-generational stability with minimal cultural fluctuation across over a century.
+          </p>
+        </div>
+
+        <!-- Case 2: Oliver -->
+        <div class="p-6 rounded-2xl border border-border bg-card shadow-xs space-y-3">
+          <span class="text-xs font-bold uppercase tracking-wider text-emerald-600 dark:text-emerald-400 block">
+            Vintage Revival
+          </span>
+          <h3 class="font-display text-xl font-bold text-foreground">Oliver</h3>
+          <ul class="text-xs text-muted-foreground space-y-1.5">
+            <li>• <strong>1890s Standing:</strong> Moderately popular classic</li>
+            <li>• <strong>1970s Lull:</strong> Dropped below Top 300</li>
+            <li>• <strong>2020s Resurgence:</strong> Climbed to Top 3 national ranking</li>
+          </ul>
+          <p class="text-xs text-muted-foreground leading-relaxed pt-2 border-t border-border/50">
+            <strong>Key Insight:</strong> Oliver exemplifies the 100-year rule, rebounding from a mid-century decline to become a modern favorite.
+          </p>
+        </div>
+
+        <!-- Case 3: Linda -->
+        <div class="p-6 rounded-2xl border border-border bg-card shadow-xs space-y-3">
+          <span class="text-xs font-bold uppercase tracking-wider text-amber-600 dark:text-amber-400 block">
+            Mid-Century Peak
+          </span>
+          <h3 class="font-display text-xl font-bold text-foreground">Linda</h3>
+          <ul class="text-xs text-muted-foreground space-y-1.5">
+            <li>• <strong>1948 Peak:</strong> #1 name with ~99,600 annual births</li>
+            <li>• <strong>Baby Boomer Cohort:</strong> Over 1.4M living bearers</li>
+            <li>• <strong>Current Standing:</strong> Rare among modern newborns (< rank 800)</li>
+          </ul>
+          <p class="text-xs text-muted-foreground leading-relaxed pt-2 border-t border-border/50">
+            <strong>Key Insight:</strong> Linda was one of the single most explosive baby name spikes in American history, concentrated in the 1940s–1950s.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 6. Popularity by Decade Table -->
+    <section class="my-12 space-y-4">
+      <h2 class="font-display text-2xl md:text-3xl font-bold text-foreground">
+        American Naming Trends by Decade (1880–2024)
+      </h2>
+      <p class="text-sm md:text-base text-muted-foreground leading-relaxed">
+        A historical overview of major naming movements across modern American demographic history:
+      </p>
+
+      <div class="overflow-x-auto rounded-2xl border border-border bg-card shadow-xs my-4">
+        <table class="w-full text-left text-sm border-collapse">
+          <thead class="bg-secondary/70 text-xs font-semibold text-foreground uppercase tracking-wider border-b border-border">
+            <tr>
+              <th scope="col" class="p-3.5">Decade</th>
+              <th scope="col" class="p-3.5">Dominant Naming Style</th>
+              <th scope="col" class="p-3.5">Leading Examples</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-border/60 text-xs text-muted-foreground">
+            <tr class="hover:bg-secondary/20 transition-colors">
+              <th scope="row" class="p-3.5 font-semibold text-foreground">1880s–1910s</th>
+              <td class="p-3.5">Traditional Biblical, Victorian, and Royal heirlooms.</td>
+              <td class="p-3.5"><em>John, William, Mary, Anna, George, Florence</em></td>
+            </tr>
+            <tr class="hover:bg-secondary/20 transition-colors">
+              <th scope="row" class="p-3.5 font-semibold text-foreground">1920s–1940s</th>
+              <td class="p-3.5">Early 20th-century classics and post-war boom names.</td>
+              <td class="p-3.5"><em>Robert, James, Patricia, Barbara, Linda, Richard</em></td>
+            </tr>
+            <tr class="hover:bg-secondary/20 transition-colors">
+              <th scope="row" class="p-3.5 font-semibold text-foreground">1950s–1970s</th>
+              <td class="p-3.5">Mid-century modern shift toward two-syllable casual names.</td>
+              <td class="p-3.5"><em>Michael, David, Jennifer, Lisa, Brian, Jeffrey</em></td>
+            </tr>
+            <tr class="hover:bg-secondary/20 transition-colors">
+              <th scope="row" class="p-3.5 font-semibold text-foreground">1980s–1990s</th>
+              <td class="p-3.5">Millennial favorites with prominent vowel endings.</td>
+              <td class="p-3.5"><em>Jessica, Ashley, Christopher, Matthew, Amanda, Joshua</em></td>
+            </tr>
+            <tr class="hover:bg-secondary/20 transition-colors">
+              <th scope="row" class="p-3.5 font-semibold text-foreground">2000s–2010s</th>
+              <td class="p-3.5">Surname adaptations and vintage sound revivals.</td>
+              <td class="p-3.5"><em>Jacob, Ethan, Emma, Madison, Mason, Sophia</em></td>
+            </tr>
+            <tr class="hover:bg-secondary/20 transition-colors">
+              <th scope="row" class="p-3.5 font-semibold text-foreground">2020s–Present</th>
+              <td class="p-3.5">Soft-consonant revivals, nature themes, and global names.</td>
+              <td class="p-3.5"><em>Olivia, Liam, Noah, Oliver, Charlotte, Luna</em></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- 7. Can I See Name Popularity in the UK? -->
+    <section class="my-12 space-y-4">
+      <div class="flex items-center gap-2">
+        <Globe class="h-5 w-5 text-primary" />
+        <h2 class="font-display text-2xl md:text-3xl font-bold text-foreground">
+          Can I See Historical Name Popularity in the UK?
+        </h2>
+      </div>
+      <div class="p-6 rounded-2xl border border-border/80 bg-secondary/30 space-y-3 text-sm text-muted-foreground leading-relaxed">
+        <p>
+          If you are researching British name trends, it is important to know how UK demographic archives differ from U.S. records:
+        </p>
+        <ul class="list-disc list-outside pl-5 space-y-1.5">
+          <li><strong>Office for National Statistics (ONS):</strong> Publishes annual baby name tables for <strong>England &amp; Wales</strong> dating back to 1904.</li>
+          <li><strong>Scotland &amp; Northern Ireland:</strong> Managed separately by the <strong>National Records of Scotland (NRS)</strong> and <strong>NISRA</strong>.</li>
+          <li><strong>Current Visualizer Scope:</strong> Our interactive chart plots official U.S. Social Security Administration cohorts. While British and American naming trends frequently overlap (e.g. <em>Oliver</em> and <em>Olivia</em> leading in both nations), exact birth totals represent distinct populations.</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- 8. Demographic Tools Ecosystem -->
+    <section class="my-12 space-y-6">
+      <div class="flex items-center justify-between">
+        <h2 class="font-display text-2xl md:text-3xl font-bold text-foreground">
+          Explore More Demographic Name Tools
+        </h2>
+        <a href="/tools" class="text-xs font-semibold text-primary hover:underline flex items-center gap-1">
+          View All Tools <ArrowRight class="h-3.5 w-3.5" />
+        </a>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        <a
+          href="/tools/popularity-checker"
+          class="p-5 rounded-2xl border border-border bg-card hover:border-primary/40 hover:shadow-md transition-all group"
+        >
+          <div class="flex items-center gap-2 font-bold text-foreground group-hover:text-primary transition-colors text-base mb-1.5">
+            <BarChart3 class="h-4 w-4 text-primary" />
+            <span>Popularity Checker</span>
+          </div>
+          <p class="text-xs text-muted-foreground leading-relaxed">
+            Check your name's living population frequency, rarity tier, and demographic breakdown.
+          </p>
+        </a>
+
+        <a
+          href="/tools/name-comparison"
+          class="p-5 rounded-2xl border border-border bg-card hover:border-primary/40 hover:shadow-md transition-all group"
+        >
+          <div class="flex items-center gap-2 font-bold text-foreground group-hover:text-primary transition-colors text-base mb-1.5">
+            <ArrowRightLeft class="h-4 w-4 text-primary" />
+            <span>Name Comparison Tool</span>
+          </div>
+          <p class="text-xs text-muted-foreground leading-relaxed">
+            Compare two names head-to-head on living count, peak decade, and historical trajectory.
+          </p>
+        </a>
+
+        <a
+          href="/tools/popularity-guide"
+          class="p-5 rounded-2xl border border-border bg-card hover:border-primary/40 hover:shadow-md transition-all group"
+        >
+          <div class="flex items-center gap-2 font-bold text-foreground group-hover:text-primary transition-colors text-base mb-1.5">
+            <BookOpen class="h-4 w-4 text-primary" />
+            <span>Popularity Guide</span>
+          </div>
+          <p class="text-xs text-muted-foreground leading-relaxed">
+            Learn how to interpret rankings, frequency ratios, and actuarial cohort survival rates.
+          </p>
+        </a>
+      </div>
+    </section>
+
+    <!-- 9. Federal Data Snapshot -->
+    <section class="my-12 rounded-2xl border border-primary/20 bg-primary/5 p-6 shadow-xs space-y-4">
+      <div class="flex items-center justify-between border-b border-primary/15 pb-3">
+        <div class="flex items-center gap-2">
+          <Database class="h-4 w-4 text-primary" />
+          <h3 class="font-display text-lg font-bold text-foreground">Federal Data Snapshot</h3>
+        </div>
+        <span class="text-xs text-muted-foreground">Release: {manifest.datasetVersion}</span>
+      </div>
+
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs">
+        <div class="p-3 rounded-xl bg-card border border-border">
+          <span class="text-muted-foreground block">Geographic Scope</span>
+          <strong class="text-foreground text-sm font-bold">United States</strong>
+        </div>
+        <div class="p-3 rounded-xl bg-card border border-border">
+          <span class="text-muted-foreground block">First-Name Archive</span>
+          <strong class="text-foreground text-sm font-bold">SSA 1880–2024</strong>
+        </div>
+        <div class="p-3 rounded-xl bg-card border border-border">
+          <span class="text-muted-foreground block">Time Coverage</span>
+          <strong class="text-foreground text-sm font-bold">145 Years</strong>
+        </div>
+        <div class="p-3 rounded-xl bg-card border border-border">
+          <span class="text-muted-foreground block">Metric</span>
+          <strong class="text-foreground text-sm font-bold">Recorded Births / Decade</strong>
+        </div>
+      </div>
+    </section>
+
+    <!-- 10. Common Questions (FAQ Section) -->
+    <section class="my-12 space-y-6">
+      <div class="flex items-center gap-2">
+        <HelpCircle class="h-5 w-5 text-primary" />
+        <h2 class="font-display text-2xl md:text-3xl font-bold text-foreground">
+          Frequently Asked Questions About Name Popularity Over Time
+        </h2>
+      </div>
+
+      <div class="space-y-4">
+        {faqs.map((f) => (
+          <div class="p-6 rounded-2xl border border-border bg-card shadow-xs">
+            <h3 class="font-semibold text-foreground text-base mb-2">{f.q}</h3>
+            <p class="text-sm text-muted-foreground leading-relaxed">{f.a}</p>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <!-- 11. Final CTA -->
     <ToolCTA
-      headline="Explore Unique Names"
-      subhead="Discover rare and modern alternatives with our Unique Baby Name Generator."
+      headline="Explore More Historical Name Curves"
+      subhead="Enter any name above to generate multi-decade time-series charts across 1880–2024."
     />
 
     <RelatedPosts currentSlug="trend-visualizer" tags={["trends", "charts", "tools"]} count={6} />
