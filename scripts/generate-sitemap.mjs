@@ -55,6 +55,23 @@ allNames.forEach((n) => push(`/similar-names/${n.toLowerCase()}`, "0.6", "monthl
 allFullNames.forEach((fn) => push(`/people/${fn.slug}`, "0.6", "monthly"));
 blogSlugs.forEach((s) => push(`/blog/${s}`, "0.7", "monthly"));
 
+// Phase 17 Programmatic Verticals (Surnames & Comparisons)
+const surnamesFile = path.join(root, "src/data/generated/canonical-surnames.json");
+if (fs.existsSync(surnamesFile)) {
+  push(`/last-names`, "0.8", "weekly");
+  const surnames = JSON.parse(fs.readFileSync(surnamesFile, "utf8"));
+  surnames.forEach((s) => push(`/last-name/${s.slug}`, "0.7", "monthly"));
+}
+
+const comparisonSlugs = [
+  "liam-vs-noah", "emma-vs-olivia", "james-vs-william", "sophia-vs-isabella",
+  "lucas-vs-oliver", "mia-vs-charlotte", "benjamin-vs-henry", "grace-vs-harper",
+  "elijah-vs-mateo", "alexander-vs-daniel", "michael-vs-david", "mary-vs-patricia",
+  "robert-vs-john", "jennifer-vs-linda", "ethan-vs-logan", "evelyn-vs-abigail",
+  "jacob-vs-mason", "ava-vs-ella", "jack-vs-leo", "harper-vs-emily"
+];
+comparisonSlugs.forEach((slug) => push(`/name-comparison/${slug}`, "0.7", "monthly"));
+
 // De-dupe
 const seen = new Set();
 const unique = urls.filter((u) => (seen.has(u.loc) ? false : seen.add(u.loc)));

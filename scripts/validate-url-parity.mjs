@@ -57,6 +57,24 @@ for (const p of pillars) {
 for (const s of blogSlugs) {
   expectedRoutes.add(`/blog/${s}`);
 }
+const surnamesFile = path.join(root, "src/data/generated/canonical-surnames.json");
+if (fs.existsSync(surnamesFile)) {
+  expectedRoutes.add("/last-names");
+  const surnames = JSON.parse(fs.readFileSync(surnamesFile, "utf8"));
+  for (const s of surnames) {
+    expectedRoutes.add(`/last-name/${s.slug}`);
+  }
+}
+const comparisonSlugs = [
+  "liam-vs-noah", "emma-vs-olivia", "james-vs-william", "sophia-vs-isabella",
+  "lucas-vs-oliver", "mia-vs-charlotte", "benjamin-vs-henry", "grace-vs-harper",
+  "elijah-vs-mateo", "alexander-vs-daniel", "michael-vs-david", "mary-vs-patricia",
+  "robert-vs-john", "jennifer-vs-linda", "ethan-vs-logan", "evelyn-vs-abigail",
+  "jacob-vs-mason", "ava-vs-ella", "jack-vs-leo", "harper-vs-emily"
+];
+for (const c of comparisonSlugs) {
+  expectedRoutes.add(`/name-comparison/${c}`);
+}
 
 // 2. Gather actual generated routes in dist/
 function getAllHtmlFiles(dir, fileList = []) {

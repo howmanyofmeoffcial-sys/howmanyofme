@@ -1,0 +1,1002 @@
+[
+  {
+    "name": "Smith",
+    "slug": "smith",
+    "rank": 1,
+    "count": 2442977,
+    "prop100k": 828.16,
+    "origin": "English / Anglo-Saxon (Occupational: Metalsmith)",
+    "censusYear": "2010/2020",
+    "source": "U.S. Census Bureau Frequently Occurring Surnames",
+    "sampleFirstNames": [
+      "James",
+      "Mary",
+      "John",
+      "Patricia",
+      "Robert",
+      "Jennifer",
+      "Michael",
+      "Linda"
+    ]
+  },
+  {
+    "name": "Johnson",
+    "slug": "johnson",
+    "rank": 2,
+    "count": 1932812,
+    "prop100k": 655.24,
+    "origin": "English / Scandinavian (Patronymic: Son of John)",
+    "censusYear": "2010/2020",
+    "source": "U.S. Census Bureau Frequently Occurring Surnames",
+    "sampleFirstNames": [
+      "James",
+      "Mary",
+      "John",
+      "Patricia",
+      "Robert",
+      "Jennifer",
+      "Michael",
+      "Linda"
+    ]
+  },
+  {
+    "name": "Williams",
+    "slug": "williams",
+    "rank": 3,
+    "count": 1625252,
+    "prop100k": 550.97,
+    "origin": "Welsh / English (Patronymic: Son of William)",
+    "censusYear": "2010/2020",
+    "source": "U.S. Census Bureau Frequently Occurring Surnames",
+    "sampleFirstNames": [
+      "James",
+      "Mary",
+      "John",
+      "Patricia",
+      "Robert",
+      "Jennifer",
+      "Michael",
+      "Linda"
+    ]
+  },
+  {
+    "name": "Brown",
+    "slug": "brown",
+    "rank": 4,
+    "count": 1437026,
+    "prop100k": 487.16,
+    "origin": "English / Scottish (Descriptive: Brown hair or complexion)",
+    "censusYear": "2010/2020",
+    "source": "U.S. Census Bureau Frequently Occurring Surnames",
+    "sampleFirstNames": [
+      "James",
+      "Mary",
+      "John",
+      "Patricia",
+      "Robert",
+      "Jennifer",
+      "Michael",
+      "Linda"
+    ]
+  },
+  {
+    "name": "Jones",
+    "slug": "jones",
+    "rank": 5,
+    "count": 1425470,
+    "prop100k": 483.24,
+    "origin": "Welsh / English (Patronymic: Son of John/Johan)",
+    "censusYear": "2010/2020",
+    "source": "U.S. Census Bureau Frequently Occurring Surnames",
+    "sampleFirstNames": [
+      "James",
+      "Mary",
+      "John",
+      "Patricia",
+      "Robert",
+      "Jennifer",
+      "Michael",
+      "Linda"
+    ]
+  },
+  {
+    "name": "Garcia",
+    "slug": "garcia",
+    "rank": 6,
+    "count": 1166120,
+    "prop100k": 395.32,
+    "origin": "Spanish / Basque (Patronymic / Topographic: Bear or Young)",
+    "censusYear": "2010/2020",
+    "source": "U.S. Census Bureau Frequently Occurring Surnames",
+    "sampleFirstNames": [
+      "James",
+      "Mary",
+      "John",
+      "Patricia",
+      "Robert",
+      "Jennifer",
+      "Michael",
+      "Linda"
+    ]
+  },
+  {
+    "name": "Miller",
+    "slug": "miller",
+    "rank": 7,
+    "count": 1161437,
+    "prop100k": 393.73,
+    "origin": "English / German (Occupational: One who operates a mill)",
+    "censusYear": "2010/2020",
+    "source": "U.S. Census Bureau Frequently Occurring Surnames",
+    "sampleFirstNames": [
+      "James",
+      "Mary",
+      "John",
+      "Patricia",
+      "Robert",
+      "Jennifer",
+      "Michael",
+      "Linda"
+    ]
+  },
+  {
+    "name": "Davis",
+    "slug": "davis",
+    "rank": 8,
+    "count": 1116357,
+    "prop100k": 378.45,
+    "origin": "Welsh / English (Patronymic: Son of David)",
+    "censusYear": "2010/2020",
+    "source": "U.S. Census Bureau Frequently Occurring Surnames",
+    "sampleFirstNames": [
+      "James",
+      "Mary",
+      "John",
+      "Patricia",
+      "Robert",
+      "Jennifer",
+      "Michael",
+      "Linda"
+    ]
+  },
+  {
+    "name": "Rodriguez",
+    "slug": "rodriguez",
+    "rank": 9,
+    "count": 1094924,
+    "prop100k": 371.19,
+    "origin": "Spanish (Patronymic: Son of Rodrigo)",
+    "censusYear": "2010/2020",
+    "source": "U.S. Census Bureau Frequently Occurring Surnames",
+    "sampleFirstNames": [
+      "James",
+      "Mary",
+      "John",
+      "Patricia",
+      "Robert",
+      "Jennifer",
+      "Michael",
+      "Linda"
+    ]
+  },
+  {
+    "name": "Martinez",
+    "slug": "martinez",
+    "rank": 10,
+    "count": 1060159,
+    "prop100k": 359.41,
+    "origin": "Spanish (Patronymic: Son of Martin)",
+    "censusYear": "2010/2020",
+    "source": "U.S. Census Bureau Frequently Occurring Surnames",
+    "sampleFirstNames": [
+      "James",
+      "Mary",
+      "John",
+      "Patricia",
+      "Robert",
+      "Jennifer",
+      "Michael",
+      "Linda"
+    ]
+  },
+  {
+    "name": "Hernandez",
+    "slug": "hernandez",
+    "rank": 11,
+    "count": 1043281,
+    "prop100k": 353.68,
+    "origin": "Spanish (Patronymic: Son of Hernando/Fernando)",
+    "censusYear": "2010/2020",
+    "source": "U.S. Census Bureau Frequently Occurring Surnames",
+    "sampleFirstNames": [
+      "James",
+      "Mary",
+      "John",
+      "Patricia",
+      "Robert",
+      "Jennifer",
+      "Michael",
+      "Linda"
+    ]
+  },
+  {
+    "name": "Lopez",
+    "slug": "lopez",
+    "rank": 12,
+    "count": 874523,
+    "prop100k": 296.47,
+    "origin": "Spanish (Patronymic: Son of Lope - Wolf)",
+    "censusYear": "2010/2020",
+    "source": "U.S. Census Bureau Frequently Occurring Surnames",
+    "sampleFirstNames": [
+      "James",
+      "Mary",
+      "John",
+      "Patricia",
+      "Robert",
+      "Jennifer",
+      "Michael",
+      "Linda"
+    ]
+  },
+  {
+    "name": "Gonzalez",
+    "slug": "gonzalez",
+    "rank": 13,
+    "count": 841025,
+    "prop100k": 285.11,
+    "origin": "Spanish (Patronymic: Son of Gonzalo)",
+    "censusYear": "2010/2020",
+    "source": "U.S. Census Bureau Frequently Occurring Surnames",
+    "sampleFirstNames": [
+      "James",
+      "Mary",
+      "John",
+      "Patricia",
+      "Robert",
+      "Jennifer",
+      "Michael",
+      "Linda"
+    ]
+  },
+  {
+    "name": "Wilson",
+    "slug": "wilson",
+    "rank": 14,
+    "count": 801882,
+    "prop100k": 271.84,
+    "origin": "English / Scottish (Patronymic: Son of Will)",
+    "censusYear": "2010/2020",
+    "source": "U.S. Census Bureau Frequently Occurring Surnames",
+    "sampleFirstNames": [
+      "James",
+      "Mary",
+      "John",
+      "Patricia",
+      "Robert",
+      "Jennifer",
+      "Michael",
+      "Linda"
+    ]
+  },
+  {
+    "name": "Anderson",
+    "slug": "anderson",
+    "rank": 15,
+    "count": 784404,
+    "prop100k": 265.92,
+    "origin": "Scandinavian / Scottish (Patronymic: Son of Andrew)",
+    "censusYear": "2010/2020",
+    "source": "U.S. Census Bureau Frequently Occurring Surnames",
+    "sampleFirstNames": [
+      "James",
+      "Mary",
+      "John",
+      "Patricia",
+      "Robert",
+      "Jennifer",
+      "Michael",
+      "Linda"
+    ]
+  },
+  {
+    "name": "Thomas",
+    "slug": "thomas",
+    "rank": 16,
+    "count": 756142,
+    "prop100k": 256.34,
+    "origin": "Welsh / English (Patronymic: From the Aramaic 'Twin')",
+    "censusYear": "2010/2020",
+    "source": "U.S. Census Bureau Frequently Occurring Surnames",
+    "sampleFirstNames": [
+      "James",
+      "Mary",
+      "John",
+      "Patricia",
+      "Robert",
+      "Jennifer",
+      "Michael",
+      "Linda"
+    ]
+  },
+  {
+    "name": "Taylor",
+    "slug": "taylor",
+    "rank": 17,
+    "count": 751209,
+    "prop100k": 254.66,
+    "origin": "English / French (Occupational: Tailor / Cutter of cloth)",
+    "censusYear": "2010/2020",
+    "source": "U.S. Census Bureau Frequently Occurring Surnames",
+    "sampleFirstNames": [
+      "James",
+      "Mary",
+      "John",
+      "Patricia",
+      "Robert",
+      "Jennifer",
+      "Michael",
+      "Linda"
+    ]
+  },
+  {
+    "name": "Moore",
+    "slug": "moore",
+    "rank": 18,
+    "count": 724374,
+    "prop100k": 245.57,
+    "origin": "English / Irish (Topographic: Living near a moor)",
+    "censusYear": "2010/2020",
+    "source": "U.S. Census Bureau Frequently Occurring Surnames",
+    "sampleFirstNames": [
+      "James",
+      "Mary",
+      "John",
+      "Patricia",
+      "Robert",
+      "Jennifer",
+      "Michael",
+      "Linda"
+    ]
+  },
+  {
+    "name": "Jackson",
+    "slug": "jackson",
+    "rank": 19,
+    "count": 708099,
+    "prop100k": 240.05,
+    "origin": "English / Scottish (Patronymic: Son of Jack)",
+    "censusYear": "2010/2020",
+    "source": "U.S. Census Bureau Frequently Occurring Surnames",
+    "sampleFirstNames": [
+      "James",
+      "Mary",
+      "John",
+      "Patricia",
+      "Robert",
+      "Jennifer",
+      "Michael",
+      "Linda"
+    ]
+  },
+  {
+    "name": "Martin",
+    "slug": "martin",
+    "rank": 20,
+    "count": 702625,
+    "prop100k": 238.19,
+    "origin": "French / English (From the Roman god Mars / Warlike)",
+    "censusYear": "2010/2020",
+    "source": "U.S. Census Bureau Frequently Occurring Surnames",
+    "sampleFirstNames": [
+      "James",
+      "Mary",
+      "John",
+      "Patricia",
+      "Robert",
+      "Jennifer",
+      "Michael",
+      "Linda"
+    ]
+  },
+  {
+    "name": "Lee",
+    "slug": "lee",
+    "rank": 21,
+    "count": 693023,
+    "prop100k": 234.94,
+    "origin": "English / Asian (Topographic: Clearing or Meadow / Chinese Plum)",
+    "censusYear": "2010/2020",
+    "source": "U.S. Census Bureau Frequently Occurring Surnames",
+    "sampleFirstNames": [
+      "James",
+      "Mary",
+      "John",
+      "Patricia",
+      "Robert",
+      "Jennifer",
+      "Michael",
+      "Linda"
+    ]
+  },
+  {
+    "name": "Perez",
+    "slug": "perez",
+    "rank": 22,
+    "count": 681645,
+    "prop100k": 231.08,
+    "origin": "Spanish (Patronymic: Son of Pedro / Rock)",
+    "censusYear": "2010/2020",
+    "source": "U.S. Census Bureau Frequently Occurring Surnames",
+    "sampleFirstNames": [
+      "James",
+      "Mary",
+      "John",
+      "Patricia",
+      "Robert",
+      "Jennifer",
+      "Michael",
+      "Linda"
+    ]
+  },
+  {
+    "name": "Thompson",
+    "slug": "thompson",
+    "rank": 23,
+    "count": 664644,
+    "prop100k": 225.32,
+    "origin": "English / Scottish (Patronymic: Son of Tom)",
+    "censusYear": "2010/2020",
+    "source": "U.S. Census Bureau Frequently Occurring Surnames",
+    "sampleFirstNames": [
+      "James",
+      "Mary",
+      "John",
+      "Patricia",
+      "Robert",
+      "Jennifer",
+      "Michael",
+      "Linda"
+    ]
+  },
+  {
+    "name": "White",
+    "slug": "white",
+    "rank": 24,
+    "count": 660491,
+    "prop100k": 223.91,
+    "origin": "English / Scottish (Descriptive: Fair hair or pale skin)",
+    "censusYear": "2010/2020",
+    "source": "U.S. Census Bureau Frequently Occurring Surnames",
+    "sampleFirstNames": [
+      "James",
+      "Mary",
+      "John",
+      "Patricia",
+      "Robert",
+      "Jennifer",
+      "Michael",
+      "Linda"
+    ]
+  },
+  {
+    "name": "Harris",
+    "slug": "harris",
+    "rank": 25,
+    "count": 624252,
+    "prop100k": 211.63,
+    "origin": "English / Welsh (Patronymic: Son of Harry)",
+    "censusYear": "2010/2020",
+    "source": "U.S. Census Bureau Frequently Occurring Surnames",
+    "sampleFirstNames": [
+      "James",
+      "Mary",
+      "John",
+      "Patricia",
+      "Robert",
+      "Jennifer",
+      "Michael",
+      "Linda"
+    ]
+  },
+  {
+    "name": "Sanchez",
+    "slug": "sanchez",
+    "rank": 26,
+    "count": 612752,
+    "prop100k": 207.73,
+    "origin": "Spanish (Patronymic: Son of Sancho / Sanctified)",
+    "censusYear": "2010/2020",
+    "source": "U.S. Census Bureau Frequently Occurring Surnames",
+    "sampleFirstNames": [
+      "James",
+      "Mary",
+      "John",
+      "Patricia",
+      "Robert",
+      "Jennifer",
+      "Michael",
+      "Linda"
+    ]
+  },
+  {
+    "name": "Clark",
+    "slug": "clark",
+    "rank": 27,
+    "count": 562679,
+    "prop100k": 190.75,
+    "origin": "English / Scottish (Occupational: Scribe, cleric or clerk)",
+    "censusYear": "2010/2020",
+    "source": "U.S. Census Bureau Frequently Occurring Surnames",
+    "sampleFirstNames": [
+      "James",
+      "Mary",
+      "John",
+      "Patricia",
+      "Robert",
+      "Jennifer",
+      "Michael",
+      "Linda"
+    ]
+  },
+  {
+    "name": "Ramirez",
+    "slug": "ramirez",
+    "rank": 28,
+    "count": 557423,
+    "prop100k": 188.97,
+    "origin": "Spanish (Patronymic: Son of Ramiro / Great Judge)",
+    "censusYear": "2010/2020",
+    "source": "U.S. Census Bureau Frequently Occurring Surnames",
+    "sampleFirstNames": [
+      "James",
+      "Mary",
+      "John",
+      "Patricia",
+      "Robert",
+      "Jennifer",
+      "Michael",
+      "Linda"
+    ]
+  },
+  {
+    "name": "Lewis",
+    "slug": "lewis",
+    "rank": 29,
+    "count": 531781,
+    "prop100k": 180.28,
+    "origin": "Welsh / English (Norman French Louis / Renowned warrior)",
+    "censusYear": "2010/2020",
+    "source": "U.S. Census Bureau Frequently Occurring Surnames",
+    "sampleFirstNames": [
+      "James",
+      "Mary",
+      "John",
+      "Patricia",
+      "Robert",
+      "Jennifer",
+      "Michael",
+      "Linda"
+    ]
+  },
+  {
+    "name": "Robinson",
+    "slug": "robinson",
+    "rank": 30,
+    "count": 529821,
+    "prop100k": 179.61,
+    "origin": "English / Scottish (Patronymic: Son of Robin)",
+    "censusYear": "2010/2020",
+    "source": "U.S. Census Bureau Frequently Occurring Surnames",
+    "sampleFirstNames": [
+      "James",
+      "Mary",
+      "John",
+      "Patricia",
+      "Robert",
+      "Jennifer",
+      "Michael",
+      "Linda"
+    ]
+  },
+  {
+    "name": "Walker",
+    "slug": "walker",
+    "rank": 31,
+    "count": 523129,
+    "prop100k": 177.34,
+    "origin": "English / Scottish (Occupational: Fuller of cloth)",
+    "censusYear": "2010/2020",
+    "source": "U.S. Census Bureau Frequently Occurring Surnames",
+    "sampleFirstNames": [
+      "James",
+      "Mary",
+      "John",
+      "Patricia",
+      "Robert",
+      "Jennifer",
+      "Michael",
+      "Linda"
+    ]
+  },
+  {
+    "name": "Young",
+    "slug": "young",
+    "rank": 32,
+    "count": 484447,
+    "prop100k": 164.23,
+    "origin": "English / Scottish (Descriptive: The younger of two people)",
+    "censusYear": "2010/2020",
+    "source": "U.S. Census Bureau Frequently Occurring Surnames",
+    "sampleFirstNames": [
+      "James",
+      "Mary",
+      "John",
+      "Patricia",
+      "Robert",
+      "Jennifer",
+      "Michael",
+      "Linda"
+    ]
+  },
+  {
+    "name": "Allen",
+    "slug": "allen",
+    "rank": 33,
+    "count": 482607,
+    "prop100k": 163.61,
+    "origin": "Celtic / Scottish (Handsome or Little Rock)",
+    "censusYear": "2010/2020",
+    "source": "U.S. Census Bureau Frequently Occurring Surnames",
+    "sampleFirstNames": [
+      "James",
+      "Mary",
+      "John",
+      "Patricia",
+      "Robert",
+      "Jennifer",
+      "Michael",
+      "Linda"
+    ]
+  },
+  {
+    "name": "King",
+    "slug": "king",
+    "rank": 34,
+    "count": 465422,
+    "prop100k": 157.78,
+    "origin": "English / Scottish (Status name or actor playing a king)",
+    "censusYear": "2010/2020",
+    "source": "U.S. Census Bureau Frequently Occurring Surnames",
+    "sampleFirstNames": [
+      "James",
+      "Mary",
+      "John",
+      "Patricia",
+      "Robert",
+      "Jennifer",
+      "Michael",
+      "Linda"
+    ]
+  },
+  {
+    "name": "Wright",
+    "slug": "wright",
+    "rank": 35,
+    "count": 458980,
+    "prop100k": 155.6,
+    "origin": "English (Occupational: Craftsman or Woodworker)",
+    "censusYear": "2010/2020",
+    "source": "U.S. Census Bureau Frequently Occurring Surnames",
+    "sampleFirstNames": [
+      "James",
+      "Mary",
+      "John",
+      "Patricia",
+      "Robert",
+      "Jennifer",
+      "Michael",
+      "Linda"
+    ]
+  },
+  {
+    "name": "Scott",
+    "slug": "scott",
+    "rank": 36,
+    "count": 439530,
+    "prop100k": 149,
+    "origin": "English / Scottish (Ethnic name: Person from Scotland)",
+    "censusYear": "2010/2020",
+    "source": "U.S. Census Bureau Frequently Occurring Surnames",
+    "sampleFirstNames": [
+      "James",
+      "Mary",
+      "John",
+      "Patricia",
+      "Robert",
+      "Jennifer",
+      "Michael",
+      "Linda"
+    ]
+  },
+  {
+    "name": "Torres",
+    "slug": "torres",
+    "rank": 37,
+    "count": 437813,
+    "prop100k": 148.42,
+    "origin": "Spanish / Portuguese (Topographic: Living near towers)",
+    "censusYear": "2010/2020",
+    "source": "U.S. Census Bureau Frequently Occurring Surnames",
+    "sampleFirstNames": [
+      "James",
+      "Mary",
+      "John",
+      "Patricia",
+      "Robert",
+      "Jennifer",
+      "Michael",
+      "Linda"
+    ]
+  },
+  {
+    "name": "Nguyen",
+    "slug": "nguyen",
+    "rank": 38,
+    "count": 437645,
+    "prop100k": 148.36,
+    "origin": "Vietnamese (Royal dynasty / Musical instrument)",
+    "censusYear": "2010/2020",
+    "source": "U.S. Census Bureau Frequently Occurring Surnames",
+    "sampleFirstNames": [
+      "James",
+      "Mary",
+      "John",
+      "Patricia",
+      "Robert",
+      "Jennifer",
+      "Michael",
+      "Linda"
+    ]
+  },
+  {
+    "name": "Hill",
+    "slug": "hill",
+    "rank": 39,
+    "count": 434427,
+    "prop100k": 147.27,
+    "origin": "English (Topographic: Person who lived near a hill)",
+    "censusYear": "2010/2020",
+    "source": "U.S. Census Bureau Frequently Occurring Surnames",
+    "sampleFirstNames": [
+      "James",
+      "Mary",
+      "John",
+      "Patricia",
+      "Robert",
+      "Jennifer",
+      "Michael",
+      "Linda"
+    ]
+  },
+  {
+    "name": "Flores",
+    "slug": "flores",
+    "rank": 40,
+    "count": 433969,
+    "prop100k": 147.12,
+    "origin": "Spanish (Patronymic: Son of Floro / Blooming)",
+    "censusYear": "2010/2020",
+    "source": "U.S. Census Bureau Frequently Occurring Surnames",
+    "sampleFirstNames": [
+      "James",
+      "Mary",
+      "John",
+      "Patricia",
+      "Robert",
+      "Jennifer",
+      "Michael",
+      "Linda"
+    ]
+  },
+  {
+    "name": "Green",
+    "slug": "green",
+    "rank": 41,
+    "count": 430182,
+    "prop100k": 145.83,
+    "origin": "English (Topographic: Living near the village green)",
+    "censusYear": "2010/2020",
+    "source": "U.S. Census Bureau Frequently Occurring Surnames",
+    "sampleFirstNames": [
+      "James",
+      "Mary",
+      "John",
+      "Patricia",
+      "Robert",
+      "Jennifer",
+      "Michael",
+      "Linda"
+    ]
+  },
+  {
+    "name": "Adams",
+    "slug": "adams",
+    "rank": 42,
+    "count": 427843,
+    "prop100k": 145.04,
+    "origin": "English / Hebrew (Patronymic: Son of Adam / Earth)",
+    "censusYear": "2010/2020",
+    "source": "U.S. Census Bureau Frequently Occurring Surnames",
+    "sampleFirstNames": [
+      "James",
+      "Mary",
+      "John",
+      "Patricia",
+      "Robert",
+      "Jennifer",
+      "Michael",
+      "Linda"
+    ]
+  },
+  {
+    "name": "Nelson",
+    "slug": "nelson",
+    "rank": 43,
+    "count": 424958,
+    "prop100k": 144.06,
+    "origin": "Scandinavian / English (Patronymic: Son of Nell/Neil)",
+    "censusYear": "2010/2020",
+    "source": "U.S. Census Bureau Frequently Occurring Surnames",
+    "sampleFirstNames": [
+      "James",
+      "Mary",
+      "John",
+      "Patricia",
+      "Robert",
+      "Jennifer",
+      "Michael",
+      "Linda"
+    ]
+  },
+  {
+    "name": "Baker",
+    "slug": "baker",
+    "rank": 44,
+    "count": 419586,
+    "prop100k": 142.24,
+    "origin": "English (Occupational: Baker of bread)",
+    "censusYear": "2010/2020",
+    "source": "U.S. Census Bureau Frequently Occurring Surnames",
+    "sampleFirstNames": [
+      "James",
+      "Mary",
+      "John",
+      "Patricia",
+      "Robert",
+      "Jennifer",
+      "Michael",
+      "Linda"
+    ]
+  },
+  {
+    "name": "Hall",
+    "slug": "hall",
+    "rank": 45,
+    "count": 416551,
+    "prop100k": 141.21,
+    "origin": "English / Scottish (Topographic / Occupational: Manor hall)",
+    "censusYear": "2010/2020",
+    "source": "U.S. Census Bureau Frequently Occurring Surnames",
+    "sampleFirstNames": [
+      "James",
+      "Mary",
+      "John",
+      "Patricia",
+      "Robert",
+      "Jennifer",
+      "Michael",
+      "Linda"
+    ]
+  },
+  {
+    "name": "Rivera",
+    "slug": "rivera",
+    "rank": 46,
+    "count": 391114,
+    "prop100k": 132.59,
+    "origin": "Spanish (Topographic: Person living by a riverbank)",
+    "censusYear": "2010/2020",
+    "source": "U.S. Census Bureau Frequently Occurring Surnames",
+    "sampleFirstNames": [
+      "James",
+      "Mary",
+      "John",
+      "Patricia",
+      "Robert",
+      "Jennifer",
+      "Michael",
+      "Linda"
+    ]
+  },
+  {
+    "name": "Campbell",
+    "slug": "campbell",
+    "rank": 47,
+    "count": 386157,
+    "prop100k": 130.91,
+    "origin": "Scottish / Gaelic (Descriptive: Crooked mouth / Wry mouth)",
+    "censusYear": "2010/2020",
+    "source": "U.S. Census Bureau Frequently Occurring Surnames",
+    "sampleFirstNames": [
+      "James",
+      "Mary",
+      "John",
+      "Patricia",
+      "Robert",
+      "Jennifer",
+      "Michael",
+      "Linda"
+    ]
+  },
+  {
+    "name": "Mitchell",
+    "slug": "mitchell",
+    "rank": 48,
+    "count": 384486,
+    "prop100k": 130.34,
+    "origin": "English / Scottish (Medieval form of Michael)",
+    "censusYear": "2010/2020",
+    "source": "U.S. Census Bureau Frequently Occurring Surnames",
+    "sampleFirstNames": [
+      "James",
+      "Mary",
+      "John",
+      "Patricia",
+      "Robert",
+      "Jennifer",
+      "Michael",
+      "Linda"
+    ]
+  },
+  {
+    "name": "Carter",
+    "slug": "carter",
+    "rank": 49,
+    "count": 376986,
+    "prop100k": 127.8,
+    "origin": "English / Irish (Occupational: One who transports goods by cart)",
+    "censusYear": "2010/2020",
+    "source": "U.S. Census Bureau Frequently Occurring Surnames",
+    "sampleFirstNames": [
+      "James",
+      "Mary",
+      "John",
+      "Patricia",
+      "Robert",
+      "Jennifer",
+      "Michael",
+      "Linda"
+    ]
+  },
+  {
+    "name": "Roberts",
+    "slug": "roberts",
+    "rank": 50,
+    "count": 376377,
+    "prop100k": 127.59,
+    "origin": "Welsh / English (Patronymic: Son of Robert)",
+    "censusYear": "2010/2020",
+    "source": "U.S. Census Bureau Frequently Occurring Surnames",
+    "sampleFirstNames": [
+      "James",
+      "Mary",
+      "John",
+      "Patricia",
+      "Robert",
+      "Jennifer",
+      "Michael",
+      "Linda"
+    ]
+  }
+]

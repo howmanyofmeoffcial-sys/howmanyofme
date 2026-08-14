@@ -85,6 +85,7 @@ for (const file of htmlFiles) {
           "/methodology",
           "/data",
           "/research/name-popularity-by-decade",
+          "/last-names",
           "/tools",
           "/blog",
         ].includes(href);

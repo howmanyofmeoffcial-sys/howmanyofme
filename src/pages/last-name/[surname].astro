@@ -1,0 +1,187 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import SiteHeader from '../../islands/SiteHeader';
+import SiteFooter from '../../components/SiteFooter.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import AdSlot from '../../components/AdSlot.astro';
+import ToolCTA from '../../components/ToolCTA.astro';
+import SourceBox from '../../components/SourceBox.astro';
+import { getAllSurnames, getSurname, getRelatedSurnames } from '../../lib/surnames/data';
+import { getSurnameAbsoluteUrl, getSurnameUrl } from '../../lib/surnames/url';
+import { getRelatedFullNames } from '../../lib/fullNames/data';
+import { getFullNameUrl } from '../../lib/fullNames/url';
+import { formatNumber } from '../../data/nameData';
+
+export async function getStaticPaths() {
+  const surnames = getAllSurnames();
+
+  return surnames.map((record) => ({
+    params: { surname: record.slug },
+    props: { record },
+  }));
+}
+
+const { surname: rawSurname } = Astro.params;
+const { record: propsRecord } = Astro.props;
+
+const data = propsRecord || getSurname(rawSurname || '');
+
+if (!data) {
+  return Astro.redirect('/404');
+}
+
+const popularFullNames = getRelatedFullNames('', data.name, 8);
+const relatedSurnames = getRelatedSurnames(data.name, 6);
+const title = `How Many People Have the Last Name ${data.name}? Rank, Origin & Statistics`;
+const description = `There are approximately ${formatNumber(data.count)} people with the last name ${data.name} in the U.S. (rank #${formatNumber(data.rank)}). Explore official Decennial Census counts and common full name pairings.`;
+const canonical = getSurnameAbsoluteUrl(data.name);
+
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'WebPage',
+    name: title,
+    description: description,
+    url: canonical,
+    about: {
+      '@type': 'Thing',
+      name: data.name,
+      description: `Official demographic statistics, national rank #${formatNumber(data.rank)}, and Census frequency for the surname ${data.name}.`,
+    },
+  },
+];
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  canonical={canonical}
+  jsonLd={jsonLd}
+>
+  <SiteHeader client:idle />
+
+  <main class="container py-8 md:py-12 max-w-4xl">
+    <Breadcrumbs
+      className="mb-6"
+      items={[
+        { label: "Home", href: "/" },
+        { label: "Last Names", href: "/last-names" },
+        { label: data.name },
+      ]}
+    />
+
+    <!-- Header & Hero Answer -->
+    <header class="mb-8">
+      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-primary/10 text-primary mb-3">
+        🏛️ U.S. Census Surname Profile
+      </div>
+      <h1 class="font-display text-3xl sm:text-4xl md:text-5xl font-bold mb-4 text-foreground tracking-tight">
+        How Many People Have the Last Name {data.name}?
+      </h1>
+      
+      <!-- Primary Immediate Answer Box -->
+      <div class="p-6 md:p-8 rounded-2xl border-2 border-primary/20 bg-gradient-to-br from-primary/5 via-card to-accent/5 shadow-sm">
+        <div class="text-xs uppercase tracking-wider font-semibold text-muted-foreground mb-1">
+          Official Demographic Finding
+        </div>
+        <p class="text-2xl sm:text-3xl md:text-4xl font-bold text-foreground mb-3">
+          ~{formatNumber(data.count)} People
+        </p>
+        <p class="text-base md:text-lg text-muted-foreground leading-relaxed">
+          In official U.S. Decennial Census returns, <strong class="text-foreground">{data.name}</strong> ranks as the <strong class="text-foreground">#{formatNumber(data.rank)}</strong> most common surname nationwide, representing approximately <strong class="text-foreground">{data.prop100k}</strong> people per 100,000 Americans.
+        </p>
+      </div>
+    </header>
+
+    <!-- Key Statistics Grid -->
+    <section class="mb-10">
+      <h2 class="font-display text-xl font-bold mb-4 text-foreground">Surname Snapshot</h2>
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+        <div class="p-4 rounded-xl border border-border bg-card">
+          <div class="text-xs text-muted-foreground font-semibold uppercase">National Rank</div>
+          <div class="text-2xl font-bold text-primary mt-1">#{formatNumber(data.rank)}</div>
+        </div>
+        <div class="p-4 rounded-xl border border-border bg-card">
+          <div class="text-xs text-muted-foreground font-semibold uppercase">Total Bearers</div>
+          <div class="text-2xl font-bold text-foreground mt-1">~{formatNumber(data.count)}</div>
+        </div>
+        <div class="p-4 rounded-xl border border-border bg-card">
+          <div class="text-xs text-muted-foreground font-semibold uppercase">Frequency / 100k</div>
+          <div class="text-2xl font-bold text-foreground mt-1">{data.prop100k}</div>
+        </div>
+        <div class="p-4 rounded-xl border border-border bg-card">
+          <div class="text-xs text-muted-foreground font-semibold uppercase">Etymology / Origin</div>
+          <div class="text-sm font-semibold text-foreground mt-1 leading-tight">{data.origin}</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Non-Intrusive Mid-Content Ad Slot -->
+    <AdSlot format="rectangle" className="my-8" />
+
+    <!-- Popular Full Name Combinations with this Surname -->
+    {popularFullNames.length > 0 && (
+      <section class="mb-10">
+        <h2 class="font-display text-xl font-bold mb-4 text-foreground">
+          Popular Full Name Combinations with "{data.name}"
+        </h2>
+        <p class="text-sm text-muted-foreground mb-4">
+          Explore estimated population counts for verified full names ending with {data.name}:
+        </p>
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+          {popularFullNames.map((fn) => (
+            <a
+              href={`/people/${fn.slug}`}
+              class="p-3 rounded-xl border border-border bg-card hover:bg-secondary/60 transition text-center group"
+            >
+              <span class="block font-bold text-foreground group-hover:text-primary transition">
+                {fn.displayName}
+              </span>
+              <span class="text-[11px] text-muted-foreground">~{formatNumber(fn.estimatedPeople)} people &rarr;</span>
+            </a>
+          ))}
+        </div>
+      </section>
+    )}
+
+    <!-- Related Popular Surnames -->
+    <section class="mb-10">
+      <h2 class="font-display text-xl font-bold mb-4 text-foreground">Explore Other Common Surnames</h2>
+      <div class="flex flex-wrap gap-2">
+        {relatedSurnames.map((rel) => (
+          <a
+            href={getSurnameUrl(rel.name)}
+            class="px-3.5 py-2 rounded-xl border border-border bg-secondary/50 hover:bg-secondary text-sm font-medium text-foreground transition"
+          >
+            {rel.name} (Rank #{rel.rank})
+          </a>
+        ))}
+      </div>
+    </section>
+
+    <!-- Source & Provenance -->
+    <section class="mb-10">
+      <SourceBox
+        title="U.S. Census Surname Data Provenance"
+        sources={[
+          {
+            name: "Frequently Occurring Surnames in the United States",
+            organization: "U.S. Census Bureau Population Division",
+            coverage: "Decennial Census returns with 100+ occurrences",
+            url: "https://www.census.gov/topics/population/genealogy/data/2010_surnames.html",
+          },
+        ]}
+      />
+    </section>
+
+    <!-- Footer Tool CTA -->
+    <section class="mt-8">
+      <ToolCTA
+        headline={`Check Any Given Name or Full Name with ${data.name}`}
+        subhead="Instant calculations powered by official U.S. demographic registries."
+      />
+    </section>
+  </main>
+
+  <SiteFooter />
+</BaseLayout>

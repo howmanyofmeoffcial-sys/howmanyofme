@@ -1,0 +1,187 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import SiteHeader from '../../islands/SiteHeader';
+import SiteFooter from '../../components/SiteFooter.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import AdSlot from '../../components/AdSlot.astro';
+import ToolCTA from '../../components/ToolCTA.astro';
+import SourceBox from '../../components/SourceBox.astro';
+import { getAllComparisonPairs, getComparisonDetails } from '../../lib/comparisons/data';
+import { getNameUrl } from '../../lib/seo/canonicalUrl';
+import { formatNumber } from '../../data/nameData';
+
+export async function getStaticPaths() {
+  const pairs = getAllComparisonPairs();
+
+  return pairs.map((pair) => ({
+    params: { comparison: pair.slug },
+    props: { pair },
+  }));
+}
+
+const { comparison: rawSlug } = Astro.params;
+const details = getComparisonDetails(rawSlug || '');
+
+if (!details) {
+  return Astro.redirect('/tools/name-comparison');
+}
+
+const { pair, profileA, profileB } = details;
+const title = `${profileA.name} vs ${profileB.name}: Popularity & Living Statistics Comparison`;
+const description = `Compare ${profileA.name} vs ${profileB.name} in U.S. demographic data: all-time ranks (#${formatNumber(profileA.rank)} vs #${formatNumber(profileB.rank)}), living populations (~${formatNumber(profileA.stats.estimatedLivingPeople)} vs ~${formatNumber(profileB.stats.estimatedLivingPeople)}), and peak birth years.`;
+const canonical = `https://howmanyofme.co/name-comparison/${pair.slug}`;
+
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'WebPage',
+    name: title,
+    description: description,
+    url: canonical,
+  },
+];
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  canonical={canonical}
+  jsonLd={jsonLd}
+>
+  <SiteHeader client:idle />
+
+  <main class="container py-8 md:py-12 max-w-4xl">
+    <Breadcrumbs
+      className="mb-6"
+      items={[
+        { label: "Home", href: "/" },
+        { label: "Tools", href: "/tools" },
+        { label: "Name Comparison", href: "/tools/name-comparison" },
+        { label: `${profileA.name} vs ${profileB.name}` },
+      ]}
+    />
+
+    <header class="mb-8">
+      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-primary/10 text-primary mb-3">
+        ⚖️ Head-to-Head Demographic Comparison
+      </div>
+      <h1 class="font-display text-3xl sm:text-4xl md:text-5xl font-bold mb-4 text-foreground tracking-tight">
+        {profileA.name} vs {profileB.name}
+      </h1>
+      <p class="text-base sm:text-lg text-muted-foreground leading-relaxed">
+        Direct statistical comparison between <strong class="text-foreground">{profileA.name}</strong> and <strong class="text-foreground">{profileB.name}</strong> based on official U.S. Social Security Administration (1880–2024) records and Decennial Census data.
+      </p>
+    </header>
+
+    <!-- Side-by-Side Head-to-Head Comparison Table -->
+    <section class="mb-10 overflow-hidden rounded-2xl border border-border bg-card shadow-sm">
+      <div class="p-4 md:p-6 bg-secondary/30 border-b border-border flex items-center justify-between">
+        <h2 class="font-display text-xl font-bold text-foreground">Statistical Scorecard</h2>
+        <span class="text-xs text-muted-foreground font-medium">SSA 1880–2024 Series</span>
+      </div>
+      <div class="overflow-x-auto">
+        <table class="w-full text-sm text-left">
+          <thead class="bg-muted/30 text-xs uppercase font-semibold text-muted-foreground border-b border-border">
+            <tr>
+              <th class="p-4">Metric</th>
+              <th class="p-4 text-center font-bold text-foreground text-base bg-primary/5">{profileA.name}</th>
+              <th class="p-4 text-center font-bold text-foreground text-base bg-accent/5">{profileB.name}</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-border">
+            <tr>
+              <td class="p-4 font-semibold text-foreground">National All-Time Rank</td>
+              <td class="p-4 text-center font-bold text-primary bg-primary/5">#{formatNumber(profileA.rank)}</td>
+              <td class="p-4 text-center font-bold text-primary bg-accent/5">#{formatNumber(profileB.rank)}</td>
+            </tr>
+            <tr>
+              <td class="p-4 font-semibold text-foreground">Estimated Living Population</td>
+              <td class="p-4 text-center font-bold text-foreground bg-primary/5">~{formatNumber(profileA.stats.estimatedLivingPeople)}</td>
+              <td class="p-4 text-center font-bold text-foreground bg-accent/5">~{formatNumber(profileB.stats.estimatedLivingPeople)}</td>
+            </tr>
+            <tr>
+              <td class="p-4 font-semibold text-foreground">Total SSA Historical Births</td>
+              <td class="p-4 text-center text-muted-foreground bg-primary/5">{formatNumber(profileA.stats.totalHistoricalBirths)}</td>
+              <td class="p-4 text-center text-muted-foreground bg-accent/5">{formatNumber(profileB.stats.totalHistoricalBirths)}</td>
+            </tr>
+            <tr>
+              <td class="p-4 font-semibold text-foreground">Peak Popularity Year</td>
+              <td class="p-4 text-center text-foreground font-medium bg-primary/5">{profileA.stats.peakYear} ({formatNumber(profileA.stats.peakBirths || 0)} births)</td>
+              <td class="p-4 text-center text-foreground font-medium bg-accent/5">{profileB.stats.peakYear} ({formatNumber(profileB.stats.peakBirths || 0)} births)</td>
+            </tr>
+            <tr>
+              <td class="p-4 font-semibold text-foreground">Estimated Average Age</td>
+              <td class="p-4 text-center text-muted-foreground bg-primary/5">{profileA.stats.estimatedAverageAge} years</td>
+              <td class="p-4 text-center text-muted-foreground bg-accent/5">{profileB.stats.estimatedAverageAge} years</td>
+            </tr>
+            {profileA.stats.censusCount && profileB.stats.censusCount && (
+              <tr>
+                <td class="p-4 font-semibold text-foreground">2020 Decennial Census Count</td>
+                <td class="p-4 text-center text-muted-foreground bg-primary/5">{formatNumber(profileA.stats.censusCount)}</td>
+                <td class="p-4 text-center text-muted-foreground bg-accent/5">{formatNumber(profileB.stats.censusCount)}</td>
+              </tr>
+            )}
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Detailed Qualitative Breakdown -->
+    <section class="mb-10 space-y-4">
+      <h2 class="font-display text-2xl font-bold text-foreground">Key Differences &amp; Trajectory</h2>
+      <div class="p-6 rounded-2xl border border-border bg-card space-y-3 text-sm md:text-base leading-relaxed text-muted-foreground">
+        <p>
+          While <strong class="text-foreground">{profileA.name}</strong> peaked in <strong class="text-foreground">{profileA.stats.peakYear}</strong>, <strong class="text-foreground">{profileB.name}</strong> reached its registered zenith in <strong class="text-foreground">{profileB.stats.peakYear}</strong>. Currently, {profileA.rank < profileB.rank ? profileA.name : profileB.name} holds the higher cumulative historical ranking in United States vital statistics records.
+        </p>
+        <div class="flex flex-wrap gap-3 pt-2">
+          <a
+            href={getNameUrl(profileA.name)}
+            class="px-4 py-2 rounded-xl bg-primary text-primary-foreground font-semibold text-xs hover:bg-primary/90 transition shadow-sm"
+          >
+            Explore Complete {profileA.name} Profile &rarr;
+          </a>
+          <a
+            href={getNameUrl(profileB.name)}
+            class="px-4 py-2 rounded-xl bg-secondary hover:bg-secondary/80 text-foreground border border-border font-semibold text-xs transition shadow-sm"
+          >
+            Explore Complete {profileB.name} Profile &rarr;
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Zero-CLS Ad Slot -->
+    <AdSlot format="rectangle" className="my-8" />
+
+    <!-- Source Box -->
+    <section class="mb-10">
+      <SourceBox
+        title="Comparison Data Provenance"
+        sources={[
+          {
+            name: "Social Security Administration Baby Names (1880–2024)",
+            organization: "U.S. Social Security Administration",
+            coverage: "145-year continuous birth registry records",
+            url: "https://www.ssa.gov/oact/babynames/",
+          },
+          {
+            name: "Actuarial Life Tables (Cohort Survival Probabilities)",
+            organization: "National Center for Health Statistics (CDC)",
+            coverage: "Life expectancy and mortality models",
+            url: "https://www.cdc.gov/nchs/life-tables.htm",
+          },
+        ]}
+      />
+    </section>
+
+    <!-- Footer Tool CTA -->
+    <section class="mt-8">
+      <ToolCTA
+        headline="Compare Any Other Two Names"
+        subhead="Search our database of official Social Security &amp; Census records instantly."
+      />
+    </section>
+  </main>
+
+  <SiteFooter />
+</BaseLayout>

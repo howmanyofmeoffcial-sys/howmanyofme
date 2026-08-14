@@ -1,0 +1,95 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import SiteHeader from '../../islands/SiteHeader';
+import SiteFooter from '../../components/SiteFooter.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import ToolCTA from '../../components/ToolCTA.astro';
+import { getAllSurnames } from '../../lib/surnames/data';
+import { getSurnameUrl } from '../../lib/surnames/url';
+import { formatNumber } from '../../data/nameData';
+
+const surnames = getAllSurnames();
+const title = "Most Common Last Names in the United States | Census Surname Directory";
+const description = "Explore official U.S. Census Bureau statistics for the most frequently occurring American surnames, including national ranks, total counts, and frequencies.";
+const canonical = "https://howmanyofme.co/last-names";
+
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'CollectionPage',
+    name: title,
+    description: description,
+    url: canonical,
+  },
+];
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  canonical={canonical}
+  jsonLd={jsonLd}
+>
+  <SiteHeader client:idle />
+
+  <main class="container py-8 md:py-12 max-w-5xl">
+    <Breadcrumbs
+      className="mb-6"
+      items={[
+        { label: "Home", href: "/" },
+        { label: "Surname Directory" },
+      ]}
+    />
+
+    <header class="mb-10 text-center max-w-3xl mx-auto">
+      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-primary/10 text-primary mb-3">
+        📚 Census Surname Hub
+      </div>
+      <h1 class="font-display text-3xl sm:text-4xl md:text-5xl font-bold mb-4 text-foreground tracking-tight">
+        Most Common Last Names in the U.S.
+      </h1>
+      <p class="text-base sm:text-lg text-muted-foreground leading-relaxed">
+        Official frequency tabulations and national rankings derived from U.S. Decennial Census returns. Select any surname to view full demographic profiles and common full name pairings.
+      </p>
+    </header>
+
+    <!-- Surname Directory Grid -->
+    <section class="mb-14">
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        {surnames.map((s) => (
+          <a
+            href={getSurnameUrl(s.name)}
+            class="p-4 rounded-2xl border border-border bg-card hover:bg-secondary/40 hover:border-primary/40 transition group flex items-center justify-between shadow-sm"
+          >
+            <div>
+              <div class="flex items-center gap-2 mb-1">
+                <span class="px-2 py-0.5 rounded text-[11px] font-bold bg-primary/10 text-primary">
+                  #{s.rank}
+                </span>
+                <strong class="text-base text-foreground group-hover:text-primary transition">
+                  {s.name}
+                </strong>
+              </div>
+              <span class="text-xs text-muted-foreground">
+                ~{formatNumber(s.count)} people · {s.prop100k} / 100k
+              </span>
+            </div>
+            <span class="text-muted-foreground group-hover:text-primary transition font-bold text-sm">
+              &rarr;
+            </span>
+          </a>
+        ))}
+      </div>
+    </section>
+
+    <!-- Tool CTA -->
+    <section class="mt-8">
+      <ToolCTA
+        headline="Looking for a Specific Given Name or Full Name?"
+        subhead="Search our database of over 100M official demographic records instantly."
+      />
+    </section>
+  </main>
+
+  <SiteFooter />
+</BaseLayout>
