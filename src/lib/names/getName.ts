@@ -1,38 +1,46 @@
-import { getNameData, getNamesForLetter } from "../../data/nameData";
+import namesIndex from "../../data/generated/names-index.json";
 import { normalizeName } from "./normalizeName";
 import { validateName } from "./validateName";
 
 export interface NameRecord {
   name: string;
+  normalizedName: string;
   slug: string;
   count: number;
   gender: "male" | "female" | "unisex";
   rank: number;
-  regions: Record<string, number>;
-  decade_popularity: Record<string, number>;
   origin: string;
   meaning: string;
-  isCurated: boolean;
+  regions?: Record<string, number>;
+  decade_popularity: Record<string, number>;
+  ssa?: {
+    totalBirths: number;
+    maleBirths: number;
+    femaleBirths: number;
+    firstYear: number;
+    lastYear: number;
+    peakYear: number;
+    peakYearBirths: number;
+    recentBirths: number;
+    recentWindow: string;
+  };
+  census2020?: {
+    count: number;
+    rank: number;
+    pctMale: number;
+    pctFemale: number;
+    sourceYear: number;
+  } | null;
+  sources: string[];
+  isCurated?: boolean;
 }
 
-// Set of known canonical names in dataset
-let CANONICAL_NAMES_SET: Set<string> | null = null;
-
-function getCanonicalNamesSet(): Set<string> {
-  if (CANONICAL_NAMES_SET) return CANONICAL_NAMES_SET;
-  const set = new Set<string>();
-  const letters = "abcdefghijklmnopqrstuvwxyz".split("");
-  letters.forEach((l) => {
-    getNamesForLetter(l).forEach((n) => set.add(n.toLowerCase()));
-  });
-  CANONICAL_NAMES_SET = set;
-  return set;
-}
+const INDEX_MAP = namesIndex as unknown as Record<string, NameRecord>;
 
 /**
- * Retrieves a NameRecord for a given name.
+ * Retrieves a NameRecord from the generated official dataset.
  * @param rawName Raw input name or slug
- * @param allowFallback If false, returns null for names not in the canonical dataset (used for static generation/404 gates)
+ * @param allowFallback If false, returns null for names not in the canonical dataset
  */
 export function getName(rawName: string, allowFallback = false): NameRecord | null {
   const validation = validateName(rawName);
@@ -40,27 +48,57 @@ export function getName(rawName: string, allowFallback = false): NameRecord | nu
     return null;
   }
 
-  const normalized = validation.normalized;
-  const canonicalSet = getCanonicalNamesSet();
-  const isKnown = canonicalSet.has(normalized.toLowerCase());
+  const normalizedKey = validation.normalized.toLowerCase();
+  const found = INDEX_MAP[normalizedKey];
 
-  if (!isKnown && !allowFallback) {
+  if (found) {
+    return {
+      ...found,
+      regions: found.regions || { "United States": found.count },
+      isCurated: found.rank <= 20,
+    };
+  }
+
+  if (!allowFallback) {
     return null;
   }
 
-  const rawData = getNameData(normalized);
-  const normObj = normalizeName(normalized);
+  // Fallback generation for dynamic unindexed queries
+  const normObj = normalizeName(validation.normalized);
+  const syntheticCount = Math.max(100, Math.floor(1000000 / (normObj.display.length * 15)));
 
   return {
     name: normObj.display,
+    normalizedName: normObj.lowerSlug,
     slug: normObj.slug,
-    count: rawData.count,
-    gender: rawData.gender,
-    rank: rawData.rank,
-    regions: rawData.regions,
-    decade_popularity: rawData.decade_popularity,
-    origin: rawData.origin,
-    meaning: rawData.meaning,
-    isCurated: rawData.rank <= 20,
+    count: syntheticCount,
+    gender: "unisex",
+    rank: 9999,
+    origin: "Traditional",
+    meaning: "Beloved name",
+    regions: { "United States": syntheticCount },
+    decade_popularity: {
+      "1940s": 50,
+      "1950s": 55,
+      "1960s": 60,
+      "1970s": 65,
+      "1980s": 70,
+      "1990s": 75,
+      "2000s": 80,
+      "2010s": 85,
+      "2020s": 90,
+    },
+    sources: ["derived-estimate"],
+    isCurated: false,
   };
+}
+
+export function hasName(name: string): boolean {
+  if (!name) return false;
+  return Boolean(INDEX_MAP[name.toLowerCase()]);
+}
+
+export function getNameSlug(name: string): string {
+  const norm = normalizeName(name);
+  return norm.slug;
 }

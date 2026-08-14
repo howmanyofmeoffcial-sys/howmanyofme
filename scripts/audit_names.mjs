@@ -5,62 +5,27 @@ import { fileURLToPath } from "node:url";
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const root = path.resolve(__dirname, "..");
 
-const nameDataContent = fs.readFileSync(path.join(root, "src/data/nameData.ts"), "utf8");
+const namesFile = path.join(root, "src/data/generated/canonical-names.json");
+const canonicalNames = JSON.parse(fs.readFileSync(namesFile, "utf8"));
 
-// Parse COMMON_PREFIXES
-const prefixesMatch = nameDataContent.match(/const COMMON_PREFIXES: Record<string, string\[\]> = \{([\s\S]*?)\n\};/);
-const prefixCode = prefixesMatch[1];
-const letterBlocks = [...prefixCode.matchAll(/([A-Z]):\s*\[([\s\S]*?)\]/g)];
+console.log("=== CANONICAL NAME DATASET AUDIT ===");
+console.log("Total canonical records:", canonicalNames.length);
 
-const extendedByLetter = {};
-let totalExtendedEntries = 0;
-const allExtended = [];
-
-for (const match of letterBlocks) {
-  const letter = match[1];
-  const names = [...match[2].matchAll(/"([A-Za-z]+)"/g)].map((m) => m[1]);
-  extendedByLetter[letter] = names;
-  totalExtendedEntries += names.length;
-  allExtended.push(...names);
-}
-
-// Extract POPULAR_NAMES keys
-const popMatches = [...nameDataContent.matchAll(/^\s{2}"([A-Za-z]+)":\s*\{/gm)];
-const popularNames = popMatches.map((m) => m[1]);
-
-console.log("Total entries in EXTENDED_NAMES lists across A-Z:", totalExtendedEntries);
-console.log("Unique names in EXTENDED_NAMES:", new Set(allExtended).size);
-console.log("Total entries in POPULAR_NAMES:", popularNames.length);
-
-const combinedAll = [...popularNames, ...allExtended];
 const uniqueNormalized = new Set();
-const lowercaseMap = new Map();
-const duplicatesInLists = [];
 const invalid = [];
 
-for (const n of combinedAll) {
-  const norm = n.trim();
-  const lower = norm.toLowerCase();
-  if (lowercaseMap.has(lower) && lowercaseMap.get(lower) !== norm) {
-    duplicatesInLists.push({ original: lowercaseMap.get(lower), duplicate: norm });
-  }
-  lowercaseMap.set(lower, norm);
-
-  if (norm.length < 2 || !/^[A-Za-z]+$/.test(norm)) {
-    invalid.push(norm);
+for (const rec of canonicalNames) {
+  const norm = rec.name.toLowerCase();
+  if (uniqueNormalized.has(norm)) {
+    console.error(`[!] Duplicate canonical entry detected: ${rec.name}`);
   }
   uniqueNormalized.add(norm);
+
+  if (rec.name.length < 2 || !/^[A-Za-z]+$/.test(rec.name)) {
+    invalid.push(rec.name);
+  }
 }
 
-const popNameSet = new Set(popularNames);
-const extendedNameSet = new Set(allExtended);
-const overlap = [...popNameSet].filter((n) => extendedNameSet.has(n));
-
-console.log("Total unique canonical names:", uniqueNormalized.size);
-console.log("Popular names:", popularNames.length);
-console.log("Popular names present in extended list:", overlap.length);
-console.log("Popular names NOT present in extended list:", popularNames.filter((n) => !extendedNameSet.has(n)));
+console.log("Unique normalized names:", uniqueNormalized.size);
 console.log("Invalid names count:", invalid.length);
-console.log("Letters covered:", Object.keys(extendedByLetter).length);
-
 console.log("Dataset integrity check complete.");

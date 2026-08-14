@@ -6,12 +6,11 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const root = path.resolve(__dirname, "..");
 const distDir = path.join(root, "dist");
 
-// 1. Gather all canonical names from nameData.ts
-const nameDataContent = fs.readFileSync(path.join(root, "src/data/nameData.ts"), "utf8");
-const prefixMatch = nameDataContent.match(/const COMMON_PREFIXES: Record<string, string\[\]> = \{([\s\S]*?)\n\};/);
-const names = Array.from(
-  new Set([...prefixMatch[1].matchAll(/"([A-Za-z]+)"/g)].map((m) => m[1]))
+// 1. Gather all canonical names from generated dataset
+const canonicalNames = JSON.parse(
+  fs.readFileSync(path.join(root, "src/data/generated/canonical-names.json"), "utf8")
 );
+const names = canonicalNames.map((n) => n.name);
 
 const letters = "abcdefghijklmnopqrstuvwxyz".split("");
 

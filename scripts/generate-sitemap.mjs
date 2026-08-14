@@ -15,18 +15,10 @@ const today = new Date().toISOString().slice(0, 10);
 const blogSrc = fs.readFileSync(path.join(root, "src/data/blogData.ts"), "utf8");
 const blogSlugs = [...blogSrc.matchAll(/slug:\s*"([a-z0-9-]+)"/g)].map((m) => m[1]);
 
-// Popular names — pull from the POPULAR_NAMES map
-const nameSrc = fs.readFileSync(path.join(root, "src/data/nameData.ts"), "utf8");
-const popularNames = [...nameSrc.matchAll(/^\s{2}"([A-Za-z]+)":\s*\{/gm)].map((m) => m[1]);
-
-// Extended names list from COMMON_PREFIXES
-const prefixMatch = nameSrc.match(/const COMMON_PREFIXES: Record<string, string\[\]> = \{([\s\S]*?)\n\};/);
-const prefixCode = prefixMatch ? prefixMatch[1] : "";
-const extendedBlocks = [...prefixCode.matchAll(/"([A-Za-z]+)"/g)].map((m) => m[1]);
-
-const allNames = Array.from(new Set([...popularNames, ...extendedBlocks])).filter(
-  (n) => n.length > 1 && /^[A-Za-z]+$/.test(n),
-).sort();
+const canonicalNames = JSON.parse(
+  fs.readFileSync(path.join(root, "src/data/generated/canonical-names.json"), "utf8")
+);
+const allNames = canonicalNames.map((n) => n.name).sort();
 
 // Alphabet
 const alphabet = "abcdefghijklmnopqrstuvwxyz".split("");

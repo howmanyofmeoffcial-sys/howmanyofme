@@ -6,12 +6,10 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const root = path.resolve(__dirname, "..");
 const distDir = path.join(root, "dist");
 
-// Read name data
-const nameDataContent = fs.readFileSync(path.join(root, "src/data/nameData.ts"), "utf8");
-const prefixMatch = nameDataContent.match(/const COMMON_PREFIXES: Record<string, string\[\]> = \{([\s\S]*?)\n\};/);
-const names = new Set(
-  [...prefixMatch[1].matchAll(/"([A-Za-z]+)"/g)].map((m) => m[1].toLowerCase())
+const canonicalNames = JSON.parse(
+  fs.readFileSync(path.join(root, "src/data/generated/canonical-names.json"), "utf8")
 );
+const names = new Set(canonicalNames.map((n) => n.name.toLowerCase()));
 
 console.log("=== HTTP STATUS & SOFT-404 SIMULATION ===");
 

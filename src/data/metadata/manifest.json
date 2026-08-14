@@ -1,0 +1,26 @@
+{
+  "dataVersion": "2026.08.14",
+  "generatedAt": "2026-08-14T12:13:24.741Z",
+  "processingVersion": "1.0.0",
+  "sources": {
+    "ssa": {
+      "sourceId": "ssa-popular-names",
+      "provider": "Social Security Administration",
+      "datasetVersion": "1880-2024",
+      "coverageYears": "1880-2024",
+      "latestAvailableYear": 2024
+    },
+    "census": {
+      "sourceId": "census-2020-first-names",
+      "provider": "U.S. Census Bureau",
+      "datasetVersion": "2020",
+      "coverageYear": 2020
+    }
+  },
+  "stats": {
+    "uniqueNamesCount": 583,
+    "historicalCoverageYears": "1880-2024",
+    "censusMatchedNamesCount": 583,
+    "indexableCandidatesCount": 583
+  }
+}

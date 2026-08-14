@@ -9,7 +9,11 @@
     "preview": "astro preview",
     "test": "vitest run",
     "test:watch": "vitest",
-    "check": "astro check"
+    "check": "astro check",
+    "data:update": "node scripts/data/pipeline.mjs",
+    "data:build": "node scripts/data/generate-app-data.mjs",
+    "data:validate": "node scripts/data/validate-names.mjs",
+    "data:report": "node scripts/data/report.mjs"
   },
   "dependencies": {
     "@astrojs/react": "^6.0.2",

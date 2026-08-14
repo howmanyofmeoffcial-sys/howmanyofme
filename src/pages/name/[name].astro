@@ -38,7 +38,7 @@ if (!data) {
   return Astro.redirect('/404');
 }
 
-const decades = Object.entries(data.decade_popularity);
+const decades = Object.entries(data.decade_popularity || {});
 const linkGraph = getNameLinkGraph(data);
 const insights = getNameInsights(data);
 
@@ -194,7 +194,7 @@ const firstLetter = data.name.charAt(0).toUpperCase();
         {insights.geographicText} Frequency varies across international jurisdictions based on cultural adoption and migration patterns:
       </p>
       <div class="space-y-3 my-6">
-        {Object.entries(data.regions).sort((a, b) => b[1] - a[1]).map(([region, count]) => {
+        {Object.entries(data.regions || { "United States": data.count }).sort((a, b) => b[1] - a[1]).map(([region, count]) => {
           const pct = Math.round((count / data.count) * 100);
           return (
             <div>

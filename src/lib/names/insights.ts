@@ -108,12 +108,14 @@ export function getNameInsights(record: NameRecord): NameInsights {
   // Etymology
   const etymologyText = `The name ${name} originates from the ${origin} linguistic tradition, historically meaning "${meaning}."`;
 
+  const usCount = (record.regions && record.regions["United States"]) || record.count;
+
   // Facts list
   const factsList = [
-    `🌍 If everyone named ${name} formed a dedicated city, its population would be ~${formatNumber(count)} residents.`,
-    `🎲 The probability that a randomly chosen person globally is named ${name} is approximately ${( (count / 8_000_000_000) * 100 ).toFixed(4)}%.`,
-    `📅 Peak historical generation for ${name} was born during the ${peakDecade[0]}.`,
-    `🇺🇸 Estimated U.S. living bearers: ~${formatNumber(record.regions["United States"] || Math.round(count * 0.5))}.`,
+    `🏛️ Total U.S. recorded SSA births (1880–2024): ~${formatNumber(record.ssa?.totalBirths || count)} registrations.`,
+    `📊 Historical national popularity rank: #${formatNumber(rank)} out of all tracked canonical names.`,
+    `📅 Peak historical generation for ${name} was born during ${record.ssa?.peakYear ? record.ssa.peakYear : `the ${peakDecade[0]}`}.`,
+    `🇺🇸 U.S. demographic frequency: ~${formatNumber(usCount)} recorded births & census observations.`,
   ];
 
   return {
