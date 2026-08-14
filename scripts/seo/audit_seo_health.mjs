@@ -31,8 +31,8 @@ let warnings = 0;
 
 for (const file of htmlFiles) {
   const rel = path.relative(distDir, file);
-  // Skip Google Site Verification token files
-  if (rel.startsWith("google") && rel.endsWith(".html")) {
+  // Skip Google Site Verification token files and noindex embed widgets
+  if ((rel.startsWith("google") && rel.endsWith(".html")) || rel.startsWith("embed/")) {
     continue;
   }
   const content = fs.readFileSync(file, "utf8");

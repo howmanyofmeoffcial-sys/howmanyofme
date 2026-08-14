@@ -1,0 +1,176 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import SiteHeader from '../../islands/SiteHeader';
+import SiteFooter from '../../components/SiteFooter.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import CitationBlock from '../../components/CitationBlock.astro';
+import SourceBox from '../../components/SourceBox.astro';
+import ToolCTA from '../../components/ToolCTA.astro';
+import { CANONICAL_RESEARCH_FINDINGS } from '../../lib/research/findings';
+import manifest from '../../data/metadata/manifest.json';
+
+const title = "Open Demographic Name Data & Research Downloads | HowManyOfMe.co";
+const description = "Download processed U.S. first-name, surname, and decade popularity datasets derived from official Social Security Administration (1880–2024) and Census records.";
+const canonical = "https://howmanyofme.co/data";
+
+const jsonLd = [
+  {
+    "@context": "https://schema.org",
+    "@type": "Dataset",
+    name: "HowManyOfMe U.S. Historical Given Names & Surnames Dataset",
+    description: description,
+    url: canonical,
+    creator: {
+      "@type": "Organization",
+      name: "HowManyOfMe.co",
+      url: "https://howmanyofme.co",
+    },
+    temporalCoverage: "1880/2024",
+    spatialCoverage: "United States",
+    distribution: [
+      {
+        "@type": "DataDownload",
+        encodingFormat: "application/json",
+        contentUrl: "https://howmanyofme.co/data/us-names-top500-summary.json",
+      },
+      {
+        "@type": "DataDownload",
+        encodingFormat: "text/csv",
+        contentUrl: "https://howmanyofme.co/data/us-historical-names-decade-summary.csv",
+      },
+    ],
+    license: "https://creativecommons.org/licenses/by/4.0/",
+  },
+];
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  canonical={canonical}
+  jsonLd={jsonLd}
+>
+  <SiteHeader client:idle />
+
+  <main class="container py-10 md:py-12">
+    <Breadcrumbs
+      className="mb-6"
+      items={[
+        { label: "Home", href: "/" },
+        { label: "Open Data Portal" },
+      ]}
+    />
+
+    <div class="max-w-4xl mb-12">
+      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-primary/10 text-primary mb-3">
+        🏛️ Open Data &amp; Research Assets
+      </div>
+      <h1 class="font-display text-3xl sm:text-4xl md:text-5xl font-bold mb-4 text-foreground tracking-tight">
+        Open Demographic Data &amp; Research Downloads
+      </h1>
+      <p class="text-lg md:text-xl text-muted-foreground leading-relaxed">
+        We process and harmonize public records from the U.S. Social Security Administration and the U.S. Census Bureau to produce reproducible demographic research datasets for journalists, researchers, and educators.
+      </p>
+    </div>
+
+    <!-- 1. Downloadable Datasets Grid -->
+    <section class="mb-14">
+      <h2 class="font-display text-2xl font-bold mb-6 text-foreground">
+        Available Downloadable Datasets
+      </h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div class="p-6 rounded-2xl border border-border bg-card shadow-sm flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between gap-2 mb-2">
+              <span class="px-2.5 py-0.5 rounded text-xs font-bold bg-secondary text-foreground uppercase">JSON Format</span>
+              <span class="text-xs text-muted-foreground">Version {manifest.dataVersion}</span>
+            </div>
+            <h3 class="font-display text-xl font-bold text-foreground mb-2">
+              Top 500 U.S. First Names Demographic Summary
+            </h3>
+            <p class="text-sm text-muted-foreground leading-relaxed mb-6">
+              Complete structured dataset of the top 500 American first names, including all-time SSA birth counts (1880–2024), actuarial living population estimates, estimated average ages, and 2020 Decennial Census ranks.
+            </p>
+          </div>
+          <div>
+            <a
+              href="/data/us-names-top500-summary.json"
+              download
+              class="inline-flex items-center justify-center w-full px-4 py-2.5 rounded-xl bg-primary text-primary-foreground text-sm font-semibold hover:bg-primary/90 transition shadow-sm"
+            >
+              Download JSON Dataset (Top 500)
+            </a>
+          </div>
+        </div>
+
+        <div class="p-6 rounded-2xl border border-border bg-card shadow-sm flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between gap-2 mb-2">
+              <span class="px-2.5 py-0.5 rounded text-xs font-bold bg-secondary text-foreground uppercase">CSV Format</span>
+              <span class="text-xs text-muted-foreground">Decades 1940s–2020s</span>
+            </div>
+            <h3 class="font-display text-xl font-bold text-foreground mb-2">
+              Historical Decade Popularity Index (1940s–2020s)
+            </h3>
+            <p class="text-sm text-muted-foreground leading-relaxed mb-6">
+              Flat tabular spreadsheet containing normalized decade popularity indices (0–100 score) across 9 historical decades for 250 prominent American names. Ready for spreadsheet analysis in Excel, Google Sheets, or R/Python.
+            </p>
+          </div>
+          <div>
+            <a
+              href="/data/us-historical-names-decade-summary.csv"
+              download
+              class="inline-flex items-center justify-center w-full px-4 py-2.5 rounded-xl bg-secondary hover:bg-secondary/80 text-foreground border border-border text-sm font-semibold transition shadow-sm"
+            >
+              Download CSV Spreadsheet (Decades)
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. Verified Research Findings & One-Click Citations -->
+    <section class="mb-14">
+      <div class="mb-6">
+        <h2 class="font-display text-2xl font-bold text-foreground mb-2">
+          Key Verified Demographic Findings
+        </h2>
+        <p class="text-sm text-muted-foreground">
+          Journalists and researchers may cite these verified findings with one click:
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        {CANONICAL_RESEARCH_FINDINGS.map((finding) => (
+          <CitationBlock
+            headline={finding.headline}
+            statistic={finding.finding}
+            source={finding.source}
+            coverageYear={finding.coveragePeriod}
+            citationText={finding.citationText}
+            canonicalUrl="https://howmanyofme.co/data"
+          />
+        ))}
+      </div>
+    </section>
+
+    <!-- 3. Source Provenance & Data License -->
+    <section class="mb-14">
+      <SourceBox
+        title="Public Domain Licensing &amp; Usage Terms"
+        dataVersion={manifest.dataVersion}
+        methodologyVersion="1.0.0"
+      />
+    </section>
+
+    <!-- Footer Tool CTA -->
+    <section class="mt-12">
+      <ToolCTA
+        headline="Explore the Live Interactive Name Database"
+        subhead="Search our database of official Social Security &amp; Census records instantly."
+      />
+    </section>
+  </main>
+
+  <SiteFooter />
+</BaseLayout>

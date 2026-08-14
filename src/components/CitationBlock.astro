@@ -1,0 +1,60 @@
+---
+import CopyCitationButton from '../islands/CopyCitationButton';
+
+interface Props {
+  headline?: string;
+  statistic: string;
+  source: string;
+  coverageYear?: string;
+  methodologyUrl?: string;
+  citationText: string;
+  canonicalUrl?: string;
+  className?: string;
+}
+
+const {
+  headline,
+  statistic,
+  source,
+  coverageYear = "1880–2024",
+  methodologyUrl = "/methodology",
+  citationText,
+  canonicalUrl,
+  className = "",
+} = Astro.props;
+---
+
+<div class={`p-5 md:p-6 rounded-2xl border border-border bg-card shadow-sm ${className}`}>
+  <div class="flex flex-wrap items-center justify-between gap-3 mb-3">
+    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold uppercase tracking-wider bg-primary/10 text-primary border border-primary/20">
+      📊 Citable Statistic
+    </span>
+    <CopyCitationButton
+      client:idle
+      citationText={citationText}
+      url={canonicalUrl}
+      title={headline || statistic}
+    />
+  </div>
+
+  {headline && (
+    <h4 class="font-display text-base md:text-lg font-bold text-foreground mb-2">
+      {headline}
+    </h4>
+  )}
+
+  <p class="text-sm md:text-base font-medium text-foreground leading-relaxed mb-4">
+    "{statistic}"
+  </p>
+
+  <div class="pt-3 border-t border-border flex flex-wrap items-center justify-between gap-2 text-xs text-muted-foreground">
+    <div>
+      <strong>Source:</strong> {source} ({coverageYear})
+    </div>
+    {methodologyUrl && (
+      <a href={methodologyUrl} class="text-primary hover:underline font-semibold">
+        View Methodology &rarr;
+      </a>
+    )}
+  </div>
+</div>

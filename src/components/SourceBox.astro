@@ -1,0 +1,72 @@
+---
+interface Props {
+  title?: string;
+  sources?: Array<{
+    name: string;
+    organization: string;
+    coverage: string;
+    url?: string;
+  }>;
+  methodologyVersion?: string;
+  dataVersion?: string;
+  className?: string;
+}
+
+const {
+  title = "Official Data Sources & Provenance",
+  sources = [
+    {
+      name: "Social Security Baby Names (1880–2024)",
+      organization: "U.S. Social Security Administration",
+      coverage: "1880–2024 U.S. Births (min. 5 registrations/year)",
+      url: "https://www.ssa.gov/oact/babynames/",
+    },
+    {
+      name: "2020 Decennial Census First Names",
+      organization: "U.S. Census Bureau",
+      coverage: "53,615 distinct first names (100+ occurrences)",
+      url: "https://www.census.gov/topics/population/genealogy/data/2020_names.html",
+    },
+    {
+      name: "Decennial Census Frequently Occurring Surnames",
+      organization: "U.S. Census Bureau",
+      coverage: "All surnames occurring 100+ times in census returns",
+      url: "https://www.census.gov/topics/population/genealogy/data/2010_surnames.html",
+    },
+  ],
+  methodologyVersion = "1.0.0",
+  dataVersion = "2026.08.14",
+  className = "",
+} = Astro.props;
+---
+
+<div class={`p-6 rounded-2xl border border-border bg-secondary/30 text-sm leading-relaxed ${className}`}>
+  <h3 class="font-display text-lg font-bold text-foreground mb-3">{title}</h3>
+  <div class="space-y-3 mb-4">
+    {sources.map((s) => (
+      <div class="p-3 rounded-xl bg-card border border-border/80 text-xs">
+        <div class="flex items-center justify-between gap-2 mb-1">
+          <strong class="text-foreground text-sm">{s.name}</strong>
+          {s.url && (
+            <a
+              href={s.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="text-primary hover:underline font-medium inline-flex items-center gap-1"
+            >
+              Official Link &nearr;
+            </a>
+          )}
+        </div>
+        <div class="text-muted-foreground">{s.organization} · {s.coverage}</div>
+      </div>
+    ))}
+  </div>
+  <div class="pt-3 border-t border-border flex flex-wrap justify-between gap-2 text-xs text-muted-foreground">
+    <span><strong>Data Pipeline Version:</strong> {dataVersion}</span>
+    <span><strong>Methodology Version:</strong> {methodologyVersion}</span>
+    <a href="/methodology" class="text-primary hover:underline font-semibold">
+      Read full methodology &rarr;
+    </a>
+  </div>
+</div>

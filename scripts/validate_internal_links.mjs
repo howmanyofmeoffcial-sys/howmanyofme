@@ -69,8 +69,10 @@ for (const file of htmlFiles) {
       // Check validity: exists in dist/ or is a known Vite route
       // Known routes during migration: /tools/..., /blog/..., /similar-names/..., /about, /privacy, etc.
       const existsInDist = generatedRoutes.has(href);
+      const isStaticAsset = fs.existsSync(path.join(distDir, href)) || fs.existsSync(path.join(root, "public", href));
       const isKnownRoute =
         existsInDist ||
+        isStaticAsset ||
         href.startsWith("/tools/") ||
         href.startsWith("/blog/") ||
         href.startsWith("/similar-names") ||
@@ -81,6 +83,8 @@ for (const file of htmlFiles) {
           "/disclaimer",
           "/contact",
           "/methodology",
+          "/data",
+          "/research/name-popularity-by-decade",
           "/tools",
           "/blog",
         ].includes(href);

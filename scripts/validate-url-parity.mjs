@@ -29,7 +29,7 @@ const tools = [
   "meaning",
 ];
 
-const pillars = ["about", "methodology", "contact", "privacy", "terms", "disclaimer", "tools", "blog", "similar-names"];
+const pillars = ["about", "methodology", "data", "research/name-popularity-by-decade", "contact", "privacy", "terms", "disclaimer", "tools", "blog", "similar-names"];
 
 // Build expected core SEO routes
 const expectedRoutes = new Set();
@@ -79,7 +79,7 @@ const canonicalMismatches = [];
 
 for (const file of htmlFiles) {
   const rel = path.relative(distDir, file);
-  if (rel.includes("googlebe8b9a62790246a0.html") || rel === "404.html" || rel.includes("404/index.html")) continue;
+  if (rel.includes("googlebe8b9a62790246a0.html") || rel === "404.html" || rel.includes("404/index.html") || rel.startsWith("embed/")) continue;
   let routePath = "/" + rel.replace(/\/index\.html$/, "").replace(/\.html$/, "");
   if (routePath === "/index") routePath = "/";
   actualRoutes.add(routePath);

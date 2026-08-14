@@ -1,0 +1,146 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import SiteHeader from '../../islands/SiteHeader';
+import SiteFooter from '../../components/SiteFooter.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import CitationBlock from '../../components/CitationBlock.astro';
+import SourceBox from '../../components/SourceBox.astro';
+import ToolCTA from '../../components/ToolCTA.astro';
+import { getNameUrl } from '../../lib/seo/canonicalUrl';
+
+const title = "How First-Name Popularity Changed Across U.S. Birth Decades (1880–2024) | Research Report";
+const description = "Comprehensive demographic analysis of 145 years of U.S. naming trends, analyzing the evolution from classic dominance (James, Mary) to modern naming diversity.";
+const canonical = "https://howmanyofme.co/research/name-popularity-by-decade";
+
+const jsonLd = [
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    headline: "How First-Name Popularity Changed Across U.S. Birth Decades (1880–2024)",
+    description: description,
+    url: canonical,
+    datePublished: "2026-08-14",
+    dateModified: "2026-08-14",
+    author: {
+      "@type": "Organization",
+      name: "HowManyOfMe Research Team",
+      url: "https://howmanyofme.co/about",
+    },
+    publisher: {
+      "@type": "Organization",
+      name: "HowManyOfMe.co",
+      url: "https://howmanyofme.co",
+    },
+    mainEntityOfPage: canonical,
+  },
+];
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  canonical={canonical}
+  jsonLd={jsonLd}
+>
+  <SiteHeader client:idle />
+
+  <main class="container py-10 md:py-12 max-w-5xl">
+    <Breadcrumbs
+      className="mb-6"
+      items={[
+        { label: "Home", href: "/" },
+        { label: "Open Data", href: "/data" },
+        { label: "Decades Research Report" },
+      ]}
+    />
+
+    <article class="space-y-10">
+      <!-- Report Header -->
+      <header class="space-y-4 border-b border-border pb-8">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-primary/10 text-primary">
+          📈 Demographic Research Report
+        </div>
+        <h1 class="font-display text-3xl sm:text-4xl md:text-5xl font-bold text-foreground tracking-tight">
+          How First-Name Popularity Changed Across U.S. Birth Decades (1880–2024)
+        </h1>
+        <p class="text-lg md:text-xl text-muted-foreground leading-relaxed">
+          An empirical analysis of 145 consecutive birth cohorts from the Social Security Administration, documenting the transition from concentrated classic naming to modern demographic dispersion.
+        </p>
+        <div class="flex flex-wrap items-center gap-4 text-xs text-muted-foreground pt-2">
+          <span><strong>Published:</strong> August 14, 2026</span>
+          <span><strong>Data Window:</strong> 1880–2024 (145 Years)</span>
+          <span><strong>Author:</strong> HowManyOfMe Demographic Research Group</span>
+        </div>
+      </header>
+
+      <!-- Executive Summary -->
+      <section class="p-6 md:p-8 rounded-2xl border border-border bg-card shadow-sm space-y-4">
+        <h2 class="font-display text-2xl font-bold text-foreground">Executive Summary</h2>
+        <p class="text-base text-muted-foreground leading-relaxed">
+          Across the 1880–2024 historical window, naming patterns in the United States underwent profound structural transformations. In the late 19th and early 20th centuries, a small cohort of traditional given names dominated newborn registrations (with <a href={getNameUrl('Mary')} class="text-primary font-semibold hover:underline">Mary</a> and <a href={getNameUrl('James')} class="text-primary font-semibold hover:underline">James</a> accounting for over 5% of all newborn births).
+        </p>
+        <p class="text-base text-muted-foreground leading-relaxed">
+          By 2024, name diversity expanded exponentially: the #1 male and female names today represent less than 1% of total annual births, reflecting greater cultural variety, global naming influences, and individualization.
+        </p>
+      </section>
+
+      <!-- Citable Statistic Callout -->
+      <CitationBlock
+        headline="Key Finding: Name Concentration Has Declined by Over 70%"
+        statistic="In 1880, the top 10 male and female names accounted for over 35% of all American newborns. By 2024, the top 10 accounted for under 8% of births."
+        source="U.S. Social Security Administration (SSA 1880–2024)"
+        coverageYear="1880–2024"
+        citationText="HowManyOfMe.co (2026). Decennial Shifts in American Given Name Concentration (1880–2024). HowManyOfMe Research."
+        canonicalUrl={canonical}
+      />
+
+      <!-- Detailed Eras Breakdown -->
+      <section class="space-y-6">
+        <h2 class="font-display text-2xl font-bold text-foreground">1. The Classic Era (1880–1930)</h2>
+        <p class="text-muted-foreground leading-relaxed">
+          During the industrial expansion of the late 19th and early 20th centuries, English, biblical, and Germanic classics held near-monopoly status. Names such as <a href={getNameUrl('John')} class="text-primary font-semibold hover:underline">John</a>, <a href={getNameUrl('William')} class="text-primary font-semibold hover:underline">William</a>, <a href={getNameUrl('Robert')} class="text-primary font-semibold hover:underline">Robert</a>, and <a href={getNameUrl('Helen')} class="text-primary font-semibold hover:underline">Helen</a> maintained high multi-decade rankings.
+        </p>
+
+        <h2 class="font-display text-2xl font-bold text-foreground">2. The Mid-Century Wave (1940–1970)</h2>
+        <p class="text-muted-foreground leading-relaxed">
+          The post-WWII baby boom saw the historic peak of names like <a href={getNameUrl('David')} class="text-primary font-semibold hover:underline">David</a> (peaking in 1955 with 85,933 births), <a href={getNameUrl('Michael')} class="text-primary font-semibold hover:underline">Michael</a> (holding #1 for over 40 years), and <a href={getNameUrl('Linda')} class="text-primary font-semibold hover:underline">Linda</a>.
+        </p>
+
+        <h2 class="font-display text-2xl font-bold text-foreground">3. The Modern Era &amp; Diversity Wave (1980–2024)</h2>
+        <p class="text-muted-foreground leading-relaxed">
+          The 21st century witnessed the rise of vowel-rich names (<a href={getNameUrl('Emma')} class="text-primary font-semibold hover:underline">Emma</a>, <a href={getNameUrl('Olivia')} class="text-primary font-semibold hover:underline">Olivia</a>, <a href={getNameUrl('Liam')} class="text-primary font-semibold hover:underline">Liam</a>, <a href={getNameUrl('Noah')} class="text-primary font-semibold hover:underline">Noah</a>) and gender-neutral choices, along with a drastic shortening of popularity cycles.
+        </p>
+      </section>
+
+      <!-- Source & Data Download Box -->
+      <section class="space-y-4">
+        <SourceBox
+          title="Data Sourcing &amp; Reproducibility"
+          dataVersion="2026.08.14"
+          methodologyVersion="1.0.0"
+        />
+
+        <div class="p-4 rounded-xl border border-border bg-card flex flex-wrap items-center justify-between gap-4 text-xs">
+          <span class="text-muted-foreground">Download the underlying spreadsheet for your own research:</span>
+          <a
+            href="/data/us-historical-names-decade-summary.csv"
+            download
+            class="px-3 py-1.5 rounded-lg bg-primary text-primary-foreground font-semibold hover:bg-primary/90 transition shadow-sm"
+          >
+            Download CSV Data Table &darr;
+          </a>
+        </div>
+      </section>
+
+      <!-- Footer CTA -->
+      <section class="pt-6">
+        <ToolCTA
+          headline="Check the Historical Popularity of Any Name"
+          subhead="Search our database of official Social Security &amp; Census records instantly."
+        />
+      </section>
+    </article>
+  </main>
+
+  <SiteFooter />
+</BaseLayout>
