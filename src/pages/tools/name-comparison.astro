@@ -7,16 +7,115 @@ import AdSlot from '../../components/AdSlot.astro';
 import ToolCTA from '../../components/ToolCTA.astro';
 import RelatedPosts from '../../components/RelatedPosts.astro';
 import NameComparisonIsland from '../../islands/tools/NameComparisonIsland';
+import manifest from '../../data/metadata/manifest.json';
+import {
+  Sparkles,
+  HelpCircle,
+  TrendingUp,
+  BarChart3,
+  Users,
+  ShieldCheck,
+  CheckCircle2,
+  AlertTriangle,
+  ArrowRight,
+  Database,
+  ArrowRightLeft,
+  BookOpen,
+} from 'lucide-react';
 
-const title = "Name Comparison Tool — Compare Name Popularity Side by Side";
-const description = "Compare two names side-by-side: popularity trends, living bearer counts, historical peak decades, and regional distributions.";
+const title = "Compare Two Names: Popularity, Rarity & Historical Trends";
+const description = "Compare two names side by side to see which is more common, how their popularity has changed over time, and which name is rarer in available U.S. demographic data.";
 const canonical = "https://howmanyofme.co/tools/name-comparison";
+
+const faqs = [
+  {
+    q: "How do I compare two names?",
+    a: "Enter the first name into Name A and the second name into Name B, then click 'Compare Names'. The tool instantly evaluates official U.S. Social Security Administration birth cohorts and Census data to display living population estimates, historical peak decades, recent 10-year trends, and rarity tiers side by side.",
+  },
+  {
+    q: "Which metric determines which name is more popular?",
+    a: "Popularity can be evaluated in two ways: living bearer count (the total number of people of all ages alive today who share the name) or annual newborn ranking (how fashionable the name was among babies born in the most recent year). Our comparison displays both measurements clearly.",
+  },
+  {
+    q: "Can I compare first names, surnames, or full names?",
+    a: "Yes. The resolver supports single first names (e.g. 'Emma' vs 'Olivia'), surnames, and full two-part name combinations. When full names are entered, the engine evaluates both the first name and surname demographic signals.",
+  },
+  {
+    q: "Can I compare names from different cultures or Unicode spellings?",
+    a: "Yes. You can compare international and accented names (such as 'José' vs 'Maria', or 'Rahul' vs 'Arjun'). If a name is indexed in federal records, source-backed data is shown; if unindexed, a clearly labelled modelled estimate is provided.",
+  },
+  {
+    q: "Why might one name have more living bearers but a lower newborn rank?",
+    a: "Classic multi-generational names like James or William accumulated millions of bearers across 14 decades of steady popularity. In contrast, modern climbing names like Liam or Nova may rank higher among newborns today while having a smaller total adult population.",
+  },
+  {
+    q: "Does this tool measure personality or relationship compatibility?",
+    a: "No. This tool is strictly a demographic and statistical comparison engine based on recorded U.S. government datasets. It does not calculate astrological compatibility, numerology, or personality traits.",
+  },
+  {
+    q: "Why do some online comparison tools show conflicting winners?",
+    a: "Discrepancies usually occur because other websites simply total raw historical births without adjusting for actuarial life expectancy, combine multiple spelling variants inconsistently, or reference outdated census baselines.",
+  },
+];
+
+const jsonLd = [
+  {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    name: title,
+    description: description,
+    url: canonical,
+    inLanguage: "en-US",
+    publisher: {
+      "@type": "Organization",
+      name: "HowManyOfMe",
+      url: "https://howmanyofme.co",
+    },
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: "Home",
+        item: "https://howmanyofme.co",
+      },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: "Tools",
+        item: "https://howmanyofme.co/tools",
+      },
+      {
+        "@type": "ListItem",
+        position: 3,
+        name: "Name Comparison",
+        item: canonical,
+      },
+    ],
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: faqs.map((f) => ({
+      "@type": "Question",
+      name: f.q,
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: f.a,
+      },
+    })),
+  },
+];
 ---
 
-<BaseLayout title={title} description={description} canonical={canonical}>
+<BaseLayout title={title} description={description} canonical={canonical} jsonLd={jsonLd}>
   <SiteHeader client:idle />
 
-  <main class="container py-12 max-w-3xl">
+  <main class="container py-12 max-w-4xl">
+    <!-- Breadcrumbs -->
     <Breadcrumbs
       className="mb-6"
       items={[
@@ -26,19 +125,309 @@ const canonical = "https://howmanyofme.co/tools/name-comparison";
       ]}
     />
 
-    <h1 class="font-display text-4xl md:text-5xl font-bold mb-4 text-foreground">Name Popularity Comparison</h1>
-    <p class="text-muted-foreground mb-8 leading-relaxed">
-      Compare two names side by side to see which is more common today, their historical peak periods, and meaning origins.
-    </p>
+    <!-- Header Section -->
+    <header class="mb-8">
+      <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary/10 text-primary font-semibold uppercase tracking-wider text-[11px] mb-3">
+        <ArrowRightLeft class="h-3.5 w-3.5" /> Interactive Comparison Tool
+      </span>
+      <h1 class="font-display text-3xl md:text-5xl font-bold text-foreground leading-tight tracking-tight">
+        Compare Two Names: Which Is More Popular?
+      </h1>
+      <p class="text-base md:text-lg text-muted-foreground mt-3 leading-relaxed">
+        Not sure which of two names is more common? Put them side by side to compare estimated living bearer counts, historical peak decades, recent 10-year trajectories, and demographic rarity tiers using official U.S. data.
+      </p>
+    </header>
 
-    <!-- Interactive Island -->
-    <NameComparisonIsland client:load />
+    <!-- 1. Interactive Tool Container (Above the Fold) -->
+    <section class="my-8">
+      <NameComparisonIsland client:load />
+    </section>
+
+    <!-- 2. Quick Answer Block (AEO / Snippet Ready) -->
+    <section class="my-10 rounded-2xl border-l-4 border-primary bg-primary/5 p-6 shadow-sm">
+      <h2 class="text-xs font-bold uppercase tracking-wider text-primary mb-1">
+        Quick Answer: How Name Comparison Works Best
+      </h2>
+      <p class="text-sm md:text-base text-foreground leading-relaxed">
+        Name comparisons are most accurate when both names are evaluated across the exact same geographic scope (United States), official source registries (Social Security Administration 1880–2024 cohorts), and demographic metric (cumulative living population vs. single-year newborn rankings).
+      </p>
+    </section>
 
     <AdSlot />
 
+    <!-- 3. What to Look at in a Name Comparison -->
+    <section class="my-12 space-y-6">
+      <h2 class="font-display text-2xl md:text-3xl font-bold text-foreground">
+        What Should You Look At When Comparing Two Names?
+      </h2>
+      <p class="text-sm md:text-base text-muted-foreground leading-relaxed">
+        Evaluating which name is "more popular" depends on the specific demographic question you want to answer. We break down comparisons across four primary dimensions:
+      </p>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 my-6">
+        <div class="p-5 rounded-2xl border border-border bg-card shadow-xs">
+          <div class="flex items-center gap-2 text-primary font-bold text-base mb-1.5">
+            <Users class="h-4 w-4" />
+            <span>1. Living Bearer Population</span>
+          </div>
+          <p class="text-xs text-muted-foreground leading-relaxed">
+            The total estimated number of living Americans of all ages sharing the name. Reflects how frequently you will encounter the name in everyday life.
+          </p>
+        </div>
+
+        <div class="p-5 rounded-2xl border border-border bg-card shadow-xs">
+          <div class="flex items-center gap-2 text-primary font-bold text-base mb-1.5">
+            <BarChart3 class="h-4 w-4" />
+            <span>2. Historical Peak Era &amp; Size</span>
+          </div>
+          <p class="text-xs text-muted-foreground leading-relaxed">
+            The decade when each name reached its highest annual birth count. Helps determine whether a name is an enduring classic, a mid-century wave, or a modern newcomer.
+          </p>
+        </div>
+
+        <div class="p-5 rounded-2xl border border-border bg-card shadow-xs">
+          <div class="flex items-center gap-2 text-primary font-bold text-base mb-1.5">
+            <TrendingUp class="h-4 w-4" />
+            <span>3. Recent 10-Year Trajectory</span>
+          </div>
+          <p class="text-xs text-muted-foreground leading-relaxed">
+            Whether the name is currently <em>Rising</em>, <em>Declining</em>, or <em>Stable</em> among newborns. Critical for parents seeking upcoming vs. fading trends.
+          </p>
+        </div>
+
+        <div class="p-5 rounded-2xl border border-border bg-card shadow-xs">
+          <div class="flex items-center gap-2 text-primary font-bold text-base mb-1.5">
+            <ShieldCheck class="h-4 w-4" />
+            <span>4. Demographic Rarity Tier</span>
+          </div>
+          <p class="text-xs text-muted-foreground leading-relaxed">
+            Objective population frequency brackets ranging from <em>Very Common</em> (500k+) down to <em>Very Rare</em> (&lt;2k).
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. Worked Case Studies -->
+    <section class="my-12 space-y-6">
+      <h2 class="font-display text-2xl md:text-3xl font-bold text-foreground">
+        Real-World Case Studies: Comparing Familiar Names
+      </h2>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <!-- Case Study 1: Emma vs Olivia -->
+        <div class="p-6 rounded-2xl border border-border bg-card shadow-xs space-y-3">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-bold uppercase tracking-wider text-primary">
+              Modern Newborn Top Matchup
+            </span>
+            <span class="px-2 py-0.5 rounded text-[10px] bg-secondary font-bold text-foreground">Top 5</span>
+          </div>
+          <h3 class="font-display text-xl font-bold text-foreground">Emma vs. Olivia</h3>
+          <ul class="text-xs text-muted-foreground space-y-1.5">
+            <li>• <strong>Emma:</strong> Peaked in 2003 (~22,700 births/yr) • ~650,000 living</li>
+            <li>• <strong>Olivia:</strong> Peaked in 2021 (~17,800 births/yr) • ~580,000 living</li>
+            <li>• <strong>Trajectory:</strong> Olivia overtook Emma in recent annual newborn rank</li>
+          </ul>
+          <p class="text-xs text-muted-foreground leading-relaxed pt-2 border-t border-border/50">
+            <strong>Key Takeaway:</strong> While Emma accumulated more total living bearers due to an earlier 2000s surge, Olivia currently leads among newborns born in the 2020s.
+          </p>
+        </div>
+
+        <!-- Case Study 2: James vs Liam -->
+        <div class="p-6 rounded-2xl border border-border bg-card shadow-xs space-y-3">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-bold uppercase tracking-wider text-emerald-600 dark:text-emerald-400">
+              Enduring Classic vs. Modern Leader
+            </span>
+            <span class="px-2 py-0.5 rounded text-[10px] bg-secondary font-bold text-foreground">Classic Match</span>
+          </div>
+          <h3 class="font-display text-xl font-bold text-foreground">James vs. Liam</h3>
+          <ul class="text-xs text-muted-foreground space-y-1.5">
+            <li>• <strong>James:</strong> ~3,200,000 living bearers • 140+ years in Top 10</li>
+            <li>• <strong>Liam:</strong> ~420,000 living bearers • #1 for newborns in recent years</li>
+            <li>• <strong>Ratio:</strong> James has ~7.6× more living bearers in the U.S.</li>
+          </ul>
+          <p class="text-xs text-muted-foreground leading-relaxed pt-2 border-t border-border/50">
+            <strong>Key Takeaway:</strong> Liam is more popular for babies born today, but James represents a vastly larger living demographic across all age generations.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. Why Other Websites Show Conflicting Numbers -->
+    <section class="my-12 space-y-4">
+      <h2 class="font-display text-2xl md:text-3xl font-bold text-foreground">
+        Why Can Two Comparison Tools Show Conflicting Results?
+      </h2>
+      <p class="text-sm md:text-base text-muted-foreground leading-relaxed">
+        If you compare two names across different online platforms, you may encounter conflicting conclusions. Common reasons include:
+      </p>
+
+      <ul class="list-disc list-outside pl-6 space-y-2.5 text-sm md:text-base text-muted-foreground leading-relaxed">
+        <li>
+          <strong class="text-foreground">Cumulative Births vs. Living People:</strong> Adding up all birth certificates since 1880 without adjusting for life expectancy creates massive historical distortion.
+        </li>
+        <li>
+          <strong class="text-foreground">Inconsistent Baseline Years:</strong> Comparing a 2010 census figure for Name A against a 2024 Social Security cohort for Name B creates an invalid mismatch.
+        </li>
+        <li>
+          <strong class="text-foreground">Spelling Merges:</strong> Some tools silently combine alternate spellings (e.g. <em>Aiden, Aidan, Ayden</em>) for one name while measuring exact spelling for the other.
+        </li>
+      </ul>
+    </section>
+
+    <!-- 6. What This Tool Does Not Tell You -->
+    <section class="my-12 space-y-4">
+      <h2 class="font-display text-2xl md:text-3xl font-bold text-foreground">
+        What This Comparison Doesn't Tell You
+      </h2>
+      <div class="p-6 rounded-2xl border border-border/80 bg-secondary/30 space-y-3 text-sm text-muted-foreground leading-relaxed">
+        <p>
+          To ensure clarity and trust, here is what our comparison tool does not measure:
+        </p>
+        <ul class="list-disc list-outside pl-5 space-y-1.5">
+          <li><strong>No "better or worse" judgments:</strong> Higher statistical popularity does not mean a name is inherently superior, more beautiful, or more dignified.</li>
+          <li><strong>Not relationship compatibility:</strong> This tool measures demographic frequencies, not personal compatibility, astrology, or numerology.</li>
+          <li><strong>U.S. demographic scope:</strong> Frequencies reflect official United States federal registries, which may differ from global distributions.</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- 7. Why Compare Two Names? (Use Cases) -->
+    <section class="my-12 space-y-6">
+      <h2 class="font-display text-2xl md:text-3xl font-bold text-foreground">
+        Practical Use Cases for Name Comparison
+      </h2>
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        <div class="p-5 rounded-2xl border border-border bg-card shadow-xs">
+          <h3 class="font-bold text-foreground text-sm mb-1">Baby Name Selection</h3>
+          <p class="text-xs text-muted-foreground leading-relaxed">
+            Parents narrowing down a shortlist to balance familiarity with distinctive rarity.
+          </p>
+        </div>
+
+        <div class="p-5 rounded-2xl border border-border bg-card shadow-xs">
+          <h3 class="font-bold text-foreground text-sm mb-1">Writers &amp; Storytellers</h3>
+          <p class="text-xs text-muted-foreground leading-relaxed">
+            Selecting historically authentic character names matched to specific eras and generational cohorts.
+          </p>
+        </div>
+
+        <div class="p-5 rounded-2xl border border-border bg-card shadow-xs">
+          <h3 class="font-bold text-foreground text-sm mb-1">Genealogy &amp; Curiosity</h3>
+          <p class="text-xs text-muted-foreground leading-relaxed">
+            Comparing family names or settling friendly debates about which friend has a rarer name.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 8. Demographic Tools Ecosystem -->
+    <section class="my-12 space-y-6">
+      <div class="flex items-center justify-between">
+        <h2 class="font-display text-2xl md:text-3xl font-bold text-foreground">
+          Explore More Demographic Name Tools
+        </h2>
+        <a href="/tools" class="text-xs font-semibold text-primary hover:underline flex items-center gap-1">
+          View All Tools <ArrowRight class="h-3.5 w-3.5" />
+        </a>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        <a
+          href="/tools/popularity-checker"
+          class="p-5 rounded-2xl border border-border bg-card hover:border-primary/40 hover:shadow-md transition-all group"
+        >
+          <div class="flex items-center gap-2 font-bold text-foreground group-hover:text-primary transition-colors text-base mb-1.5">
+            <BarChart3 class="h-4 w-4 text-primary" />
+            <span>Popularity Checker</span>
+          </div>
+          <p class="text-xs text-muted-foreground leading-relaxed">
+            Look up a single first, last, or full name to view comprehensive living demographics.
+          </p>
+        </a>
+
+        <a
+          href="/tools/trend-visualizer"
+          class="p-5 rounded-2xl border border-border bg-card hover:border-primary/40 hover:shadow-md transition-all group"
+        >
+          <div class="flex items-center gap-2 font-bold text-foreground group-hover:text-primary transition-colors text-base mb-1.5">
+            <TrendingUp class="h-4 w-4 text-primary" />
+            <span>Trend Visualizer</span>
+          </div>
+          <p class="text-xs text-muted-foreground leading-relaxed">
+            Plot and compare time-series popularity curves for up to 4 names simultaneously across 1880–2024.
+          </p>
+        </a>
+
+        <a
+          href="/tools/popularity-guide"
+          class="p-5 rounded-2xl border border-border bg-card hover:border-primary/40 hover:shadow-md transition-all group"
+        >
+          <div class="flex items-center gap-2 font-bold text-foreground group-hover:text-primary transition-colors text-base mb-1.5">
+            <BookOpen class="h-4 w-4 text-primary" />
+            <span>Popularity Guide</span>
+          </div>
+          <p class="text-xs text-muted-foreground leading-relaxed">
+            Learn how to interpret rankings, frequency ratios, and actuarial cohort survival rates.
+          </p>
+        </a>
+      </div>
+    </section>
+
+    <!-- 9. Federal Data Snapshot -->
+    <section class="my-12 rounded-2xl border border-primary/20 bg-primary/5 p-6 shadow-xs space-y-4">
+      <div class="flex items-center justify-between border-b border-primary/15 pb-3">
+        <div class="flex items-center gap-2">
+          <Database class="h-4 w-4 text-primary" />
+          <h3 class="font-display text-lg font-bold text-foreground">Federal Data Snapshot</h3>
+        </div>
+        <span class="text-xs text-muted-foreground">Release: {manifest.datasetVersion}</span>
+      </div>
+
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs">
+        <div class="p-3 rounded-xl bg-card border border-border">
+          <span class="text-muted-foreground block">Geographic Scope</span>
+          <strong class="text-foreground text-sm font-bold">United States</strong>
+        </div>
+        <div class="p-3 rounded-xl bg-card border border-border">
+          <span class="text-muted-foreground block">First-Name Records</span>
+          <strong class="text-foreground text-sm font-bold">SSA 1880–2024</strong>
+        </div>
+        <div class="p-3 rounded-xl bg-card border border-border">
+          <span class="text-muted-foreground block">Surname Tabulations</span>
+          <strong class="text-foreground text-sm font-bold">U.S. Census Bureau</strong>
+        </div>
+        <div class="p-3 rounded-xl bg-card border border-border">
+          <span class="text-muted-foreground block">Mortality Calibration</span>
+          <strong class="text-foreground text-sm font-bold">CDC Life Tables</strong>
+        </div>
+      </div>
+    </section>
+
+    <!-- 10. Common Questions (FAQ Section) -->
+    <section class="my-12 space-y-6">
+      <div class="flex items-center gap-2">
+        <HelpCircle class="h-5 w-5 text-primary" />
+        <h2 class="font-display text-2xl md:text-3xl font-bold text-foreground">
+          Frequently Asked Questions About Name Comparison
+        </h2>
+      </div>
+
+      <div class="space-y-4">
+        {faqs.map((f) => (
+          <div class="p-6 rounded-2xl border border-border bg-card shadow-xs">
+            <h3 class="font-semibold text-foreground text-base mb-2">{f.q}</h3>
+            <p class="text-sm text-muted-foreground leading-relaxed">{f.a}</p>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <!-- 11. Final CTA -->
     <ToolCTA
-      headline="Visualize Multiple Names on One Chart"
-      subhead="Use the Baby Name Trend Visualizer to plot up to 4 names on an interactive time-series chart."
+      headline="Ready to Compare Another Name Pair?"
+      subhead="Enter two names above to see instant living demographic estimates and historical trajectories."
     />
 
     <RelatedPosts currentSlug="name-comparison" tags={["comparison", "tools", "popularity"]} count={6} />

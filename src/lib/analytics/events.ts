@@ -22,7 +22,9 @@ export type AnalyticsEventName =
   | "social_share_clicked"
   | "citation_copied"
   | "dataset_downloaded"
-  | "affiliate_resource_clicked";
+  | "affiliate_resource_clicked"
+  | "comparison_completed"
+  | "swap_names_clicked";
 
 export interface AnalyticsEventPayload {
   search_mode?: "first_name" | "full_name";
