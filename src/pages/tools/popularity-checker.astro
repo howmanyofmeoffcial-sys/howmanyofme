@@ -7,22 +7,120 @@ import AdSlot from '../../components/AdSlot.astro';
 import ToolCTA from '../../components/ToolCTA.astro';
 import RelatedPosts from '../../components/RelatedPosts.astro';
 import PopularityCheckerIsland from '../../islands/tools/PopularityCheckerIsland';
+import manifest from '../../data/metadata/manifest.json';
+import {
+  Sparkles,
+  HelpCircle,
+  TrendingUp,
+  BarChart3,
+  Users,
+  ShieldCheck,
+  CheckCircle2,
+  AlertTriangle,
+  ArrowRight,
+  Database,
+  Compass,
+  Layers,
+  BookOpen,
+} from 'lucide-react';
 
-const title = "Name Popularity Checker — Free Name Ranking & Demographic Trends";
-const description = "Check how common your first name or full name is in the United States. View living bearer counts, popularity rankings, and historical trends.";
+const title = "How Many People Have Your Name? Name Popularity Checker";
+const description = "Wonder how many people share your name? Check a first name, last name, or full name to explore U.S. name popularity, rarity, historical trends, and demographic estimates.";
 const canonical = "https://howmanyofme.co/tools/popularity-checker";
 
 const faqs = [
-  { q: "How is the Name Popularity score computed?", a: "For indexed names, counts derive from official U.S. Social Security Administration cohort records (1880–2024) adjusted by actuarial survival models. For unindexed names, we display clearly labelled statistical estimates." },
-  { q: "Can I check full names or surnames?", a: "Yes. You can enter a first name, surname, or full name combination to see instant demographic breakdowns." },
-  { q: "Is the Name Popularity Checker free?", a: "Yes, 100% free with unlimited lookups and zero signup requirements." },
+  {
+    q: "How many people have my name in the United States?",
+    a: "The number of people sharing your name depends on whether it is a first name, last name, or full name combination. For indexed given names, counts range from over 3.2 million (for enduring classics like James) down to under 2,000 living bearers for rare names. You can check any name above to view its estimated living bearer count.",
+  },
+  {
+    q: "How does the Name Popularity Checker calculate living bearers?",
+    a: "For indexed first names, the tool applies CDC National Center for Health Statistics period life table survival rates to official Social Security Administration (SSA) birth cohort records from 1880 through 2024. For surnames, it references decennial U.S. Census tabulations. Full-name frequencies are calculated using joint demographic independence.",
+  },
+  {
+    q: "Is the popularity result an exact live count of every living person?",
+    a: "No. The U.S. government does not maintain a real-time public census tracking living citizens by name daily. Our results represent evidence-based statistical estimates derived deterministically from official federal birth registries and census tabulations.",
+  },
+  {
+    q: "Can I check full names or last names in this tool?",
+    a: "Yes. You can enter a single given name (e.g., 'James'), a surname (e.g., 'Smith'), or a full two-part name (e.g., 'David Smith'). When a full name is entered, the engine evaluates both the first name and surname signals to compute an estimated national population.",
+  },
+  {
+    q: "What is the difference between name rank and name count?",
+    a: "Name rank measures relative position among newborns born in a single specific year (for example, Liam ranking #1 in 2024). Name count represents the estimated total number of people of all ages currently alive in the United States who share that name.",
+  },
+  {
+    q: "Why do different name websites show conflicting numbers?",
+    a: "Most discrepancies occur because other websites confuse cumulative historical births with living people, mix U.S. data with international estimates, combine alternate spellings without disclosure, or use outdated baseline years. HowManyOfMe explicitly separates living demographic estimates from historical birth records.",
+  },
+  {
+    q: "Why might a name be missing from primary federal datasets?",
+    a: "The Social Security Administration suppresses any name given to fewer than 5 babies in a given year and sex to protect personal privacy. If a name has fewer annual registrations or is of recent international origin, our engine provides a clearly labelled statistical estimate rather than fabricating missing data.",
+  },
+  {
+    q: "How do you define the rarity tiers (Very Common vs. Rare)?",
+    a: "We classify living population estimates into 5 demographic tiers: Very Common (500,000+ living bearers), Common (100,000–499,999), Uncommon (20,000–99,999), Rare (2,000–19,999), and Very Rare (fewer than 2,000 living bearers).",
+  },
+];
+
+const jsonLd = [
+  {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    name: title,
+    description: description,
+    url: canonical,
+    inLanguage: "en-US",
+    publisher: {
+      "@type": "Organization",
+      name: "HowManyOfMe",
+      url: "https://howmanyofme.co",
+    },
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: "Home",
+        item: "https://howmanyofme.co",
+      },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: "Tools",
+        item: "https://howmanyofme.co/tools",
+      },
+      {
+        "@type": "ListItem",
+        position: 3,
+        name: "Popularity Checker",
+        item: canonical,
+      },
+    ],
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: faqs.map((f) => ({
+      "@type": "Question",
+      name: f.q,
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: f.a,
+      },
+    })),
+  },
 ];
 ---
 
-<BaseLayout title={title} description={description} canonical={canonical}>
+<BaseLayout title={title} description={description} canonical={canonical} jsonLd={jsonLd}>
   <SiteHeader client:idle />
 
-  <main class="container py-12 max-w-3xl">
+  <main class="container py-12 max-w-4xl">
+    <!-- Breadcrumb -->
     <Breadcrumbs
       className="mb-6"
       items={[
@@ -32,32 +130,504 @@ const faqs = [
       ]}
     />
 
-    <h1 class="font-display text-4xl md:text-5xl font-bold mb-4 text-foreground">Name Popularity Checker</h1>
-    <p class="text-muted-foreground mb-8 leading-relaxed">
-      Check how common or rare any first name is today. Instantly compute living bearer counts, ranking percentiles, and decade-by-decade trends.
-    </p>
+    <!-- Header Section -->
+    <header class="mb-8">
+      <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary/10 text-primary font-semibold uppercase tracking-wider text-[11px] mb-3">
+        <Sparkles class="h-3.5 w-3.5" /> Interactive Demographic Tool
+      </span>
+      <h1 class="font-display text-3xl md:text-5xl font-bold text-foreground leading-tight tracking-tight">
+        How Many People Have Your Name?
+      </h1>
+      <p class="text-base md:text-lg text-muted-foreground mt-3 leading-relaxed">
+        Curious how common your name is across the United States? Enter any first name, last name, or full name below to explore estimated living bearer counts, historical peak eras, rarity classifications, and demographic trends.
+      </p>
+    </header>
 
-    <!-- Interactive Island -->
-    <PopularityCheckerIsland client:load />
+    <!-- 1. Interactive Tool Container (Above the Fold) -->
+    <section class="my-8">
+      <PopularityCheckerIsland client:load />
+    </section>
+
+    <!-- 2. Quick Answer Block (AEO / Snippet Ready) -->
+    <section class="my-10 rounded-2xl border-l-4 border-primary bg-primary/5 p-6 shadow-sm">
+      <h2 class="text-xs font-bold uppercase tracking-wider text-primary mb-1">
+        Quick Answer: How Name Popularity Is Measured
+      </h2>
+      <p class="text-sm md:text-base text-foreground leading-relaxed">
+        There is no real-time government registry that counts living Americans by name daily. Instead, modern demographic platforms combine <strong>145 years of official Social Security Administration birth records (1880–2024)</strong>, <strong>actuarial survival life tables from the CDC</strong>, and <strong>U.S. Census Bureau surname tabulations</strong> to calculate how many living people share a given first, last, or full name today.
+      </p>
+    </section>
 
     <AdSlot />
 
-    <!-- FAQ Section -->
-    <section class="my-12">
-      <h2 class="font-display text-2xl font-bold mb-4 text-foreground">Frequently Asked Questions</h2>
-      <div class="space-y-3">
+    <!-- 3. What Does Your Result Mean? -->
+    <section class="my-12 space-y-6">
+      <h2 class="font-display text-2xl md:text-3xl font-bold text-foreground">
+        What Does Your Name Popularity Result Mean?
+      </h2>
+      <p class="text-sm md:text-base text-muted-foreground leading-relaxed">
+        When you look up a name, the result reflects a combination of historical records and demographic modeling. Understanding the distinction between these measurements helps you interpret what the numbers actually represent.
+      </p>
+
+      <!-- Metric Comparison Table -->
+      <div class="overflow-x-auto rounded-2xl border border-border bg-card shadow-xs my-6">
+        <table class="w-full text-left text-sm border-collapse">
+          <thead class="bg-secondary/70 text-xs font-semibold text-foreground uppercase tracking-wider border-b border-border">
+            <tr>
+              <th scope="col" class="p-3.5">Metric</th>
+              <th scope="col" class="p-3.5">What It Measures</th>
+              <th scope="col" class="p-3.5">What It Tells You</th>
+              <th scope="col" class="p-3.5">What It Does NOT Tell You</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-border/60">
+            <tr class="hover:bg-secondary/20 transition-colors">
+              <th scope="row" class="p-3.5 font-semibold text-foreground">Estimated Living Bearers</th>
+              <td class="p-3.5">Living population sharing the name across all age cohorts.</td>
+              <td class="p-3.5">Real-world demographic scale in the U.S. today.</td>
+              <td class="p-3.5">Individual contact information or exact census enumeration.</td>
+            </tr>
+            <tr class="hover:bg-secondary/20 transition-colors">
+              <th scope="row" class="p-3.5 font-semibold text-foreground">National Rank</th>
+              <td class="p-3.5">Relative standing among newborn births in a specific year.</td>
+              <td class="p-3.5">How fashionable the name was for babies in that era.</td>
+              <td class="p-3.5">The total number of adults who currently carry the name.</td>
+            </tr>
+            <tr class="hover:bg-secondary/20 transition-colors">
+              <th scope="row" class="p-3.5 font-semibold text-foreground">Rarity Classification</th>
+              <td class="p-3.5">Demographic bracket from Very Common (500k+) to Very Rare (&lt;2k).</td>
+              <td class="p-3.5">How likely you are to encounter someone with that name.</td>
+              <td class="p-3.5">Subjective value, beauty, or cultural worth.</td>
+            </tr>
+            <tr class="hover:bg-secondary/20 transition-colors">
+              <th scope="row" class="p-3.5 font-semibold text-foreground">Historical Peak Era</th>
+              <td class="p-3.5">The decade with the highest annual birth registration count.</td>
+              <td class="p-3.5">When the name was at its peak cultural popularity.</td>
+              <td class="p-3.5">That everyone with that name was born in that decade.</td>
+            </tr>
+            <tr class="hover:bg-secondary/20 transition-colors">
+              <th scope="row" class="p-3.5 font-semibold text-foreground">Sex / Gender Split</th>
+              <td class="p-3.5">Proportion of male vs. female births in SSA records.</td>
+              <td class="p-3.5">Historical registration split in official certificates.</td>
+              <td class="p-3.5">Gender identity of individual bearers today.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- 4. Source-Backed Data vs Statistical Estimates -->
+    <section class="my-12 space-y-4">
+      <h2 class="font-display text-2xl md:text-3xl font-bold text-foreground">
+        Source-Backed Data vs. Statistical Estimates
+      </h2>
+      <p class="text-sm md:text-base text-muted-foreground leading-relaxed">
+        HowManyOfMe operates with full methodological transparency. Every result is classified into one of three distinct confidence tiers:
+      </p>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 my-6">
+        <div class="p-5 rounded-2xl border border-emerald-500/20 bg-emerald-500/5 shadow-xs">
+          <div class="flex items-center gap-2 text-emerald-700 dark:text-emerald-400 font-bold text-sm mb-2">
+            <CheckCircle2 class="h-4 w-4" />
+            <span>Source-Backed</span>
+          </div>
+          <p class="text-xs text-muted-foreground leading-relaxed">
+            Directly derived from official public records (SSA 1880–2024 or U.S. Census Bureau surname tabulations). High statistical certainty.
+          </p>
+        </div>
+
+        <div class="p-5 rounded-2xl border border-blue-500/20 bg-blue-500/5 shadow-xs">
+          <div class="flex items-center gap-2 text-blue-700 dark:text-blue-400 font-bold text-sm mb-2">
+            <BarChart3 class="h-4 w-4" />
+            <span>Derived (Actuarial)</span>
+          </div>
+          <p class="text-xs text-muted-foreground leading-relaxed">
+            Calculated by applying CDC cohort-component life table survival rates to multi-decade birth registries or joint full-name probability formulas.
+          </p>
+        </div>
+
+        <div class="p-5 rounded-2xl border border-amber-500/20 bg-amber-500/5 shadow-xs">
+          <div class="flex items-center gap-2 text-amber-700 dark:text-amber-400 font-bold text-sm mb-2">
+            <AlertTriangle class="h-4 w-4" />
+            <span>Modelled Estimate</span>
+          </div>
+          <p class="text-xs text-muted-foreground leading-relaxed">
+            Generated for rare or unindexed names using national frequency brackets. Clearly labelled without fabricated graphs or gender splits.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. Name Rank vs Name Count -->
+    <section class="my-12 space-y-4">
+      <h2 class="font-display text-2xl md:text-3xl font-bold text-foreground">
+        Name Rank vs. Name Count: What's the Difference?
+      </h2>
+      <p class="text-sm md:text-base text-muted-foreground leading-relaxed">
+        One of the most common misconceptions in baby name statistics is confusing <strong>newborn annual rank</strong> with <strong>living bearer count</strong>:
+      </p>
+
+      <ul class="list-disc list-outside pl-6 space-y-2 text-sm md:text-base text-muted-foreground leading-relaxed">
+        <li>
+          <strong class="text-foreground">Annual Newborn Rank:</strong> Measures how many babies were given a name in a single calendar year. For example, <em>Liam</em> has ranked #1 among boys born recently with ~20,000 annual births.
+        </li>
+        <li>
+          <strong class="text-foreground">Living Bearer Count:</strong> Reflects cumulative births across 90+ living generations adjusted for mortality. While Liam is #1 for newborns, classic names like <em>James</em> and <em>Michael</em> have over 3 million living bearers across all age brackets.
+        </li>
+      </ul>
+    </section>
+
+    <!-- 6. How Rare Is Your Name? (5 Tiers) -->
+    <section class="my-12 space-y-6">
+      <h2 class="font-display text-2xl md:text-3xl font-bold text-foreground">
+        How Rare Is Your Name? (The 5 Demographic Tiers)
+      </h2>
+      <p class="text-sm md:text-base text-muted-foreground leading-relaxed">
+        We classify names into five objective living bearer population brackets based on official U.S. demographic distribution data:
+      </p>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 my-6">
+        <div class="p-5 rounded-2xl border border-border bg-card shadow-xs">
+          <span class="text-xs font-bold uppercase tracking-wider text-indigo-600 dark:text-indigo-400 block mb-1">
+            Tier 1: 500,000+ Living
+          </span>
+          <h3 class="font-display text-lg font-bold text-foreground">Very Common</h3>
+          <p class="text-xs text-muted-foreground mt-2 leading-relaxed">
+            Roughly 1 in every 10 to 600 Americans. Shared by millions across multiple generations. Examples: <em>James, Mary, Robert, John, Michael</em>.
+          </p>
+        </div>
+
+        <div class="p-5 rounded-2xl border border-border bg-card shadow-xs">
+          <span class="text-xs font-bold uppercase tracking-wider text-blue-600 dark:text-blue-400 block mb-1">
+            Tier 2: 100k – 499k Living
+          </span>
+          <h3 class="font-display text-lg font-bold text-foreground">Common</h3>
+          <p class="text-xs text-muted-foreground mt-2 leading-relaxed">
+            Roughly 1 in every 700 to 3,300 Americans. Highly familiar in schools and workplaces. Examples: <em>Alexander, Sarah, Brandon, Ethan</em>.
+          </p>
+        </div>
+
+        <div class="p-5 rounded-2xl border border-border bg-card shadow-xs">
+          <span class="text-xs font-bold uppercase tracking-wider text-teal-600 dark:text-teal-400 block mb-1">
+            Tier 3: 20k – 99k Living
+          </span>
+          <h3 class="font-display text-lg font-bold text-foreground">Uncommon</h3>
+          <p class="text-xs text-muted-foreground mt-2 leading-relaxed">
+            Roughly 1 in every 3,400 to 16,000 Americans. Well-recognized but rarely shared by multiple classmates. Examples: <em>Gideon, Fiona, Silas, Malcolm</em>.
+          </p>
+        </div>
+
+        <div class="p-5 rounded-2xl border border-border bg-card shadow-xs">
+          <span class="text-xs font-bold uppercase tracking-wider text-amber-600 dark:text-amber-400 block mb-1">
+            Tier 4: 2k – 19.9k Living
+          </span>
+          <h3 class="font-display text-lg font-bold text-foreground">Rare</h3>
+          <p class="text-xs text-muted-foreground mt-2 leading-relaxed">
+            Roughly 1 in every 17,000 to 160,000 Americans. Distinctive and memorable in any community. Examples: <em>Lysander, Cosima, Zephyr, Elowen</em>.
+          </p>
+        </div>
+
+        <div class="p-5 rounded-2xl border border-border bg-card shadow-xs sm:col-span-2 lg:col-span-2">
+          <span class="text-xs font-bold uppercase tracking-wider text-purple-600 dark:text-purple-400 block mb-1">
+            Tier 5: Under 2,000 Living
+          </span>
+          <h3 class="font-display text-lg font-bold text-foreground">Very Rare</h3>
+          <p class="text-xs text-muted-foreground mt-2 leading-relaxed">
+            Fewer than 1 in every 170,000 Americans. Highly unique, including historic heritage names, rare surname adaptations, and emerging global names. Examples: <em>Thalassa, Peregrine, Callidora</em>.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 7. Worked Examples -->
+    <section class="my-12 space-y-6">
+      <h2 class="font-display text-2xl md:text-3xl font-bold text-foreground">
+        Worked Examples: How Real Name Results Operate
+      </h2>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <!-- Example 1: James -->
+        <div class="p-6 rounded-2xl border border-border bg-card shadow-xs space-y-3">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-bold uppercase tracking-wider text-emerald-600 dark:text-emerald-400">
+              Source-Backed Example
+            </span>
+            <span class="px-2 py-0.5 rounded text-[10px] bg-secondary font-bold text-foreground">Tier 1</span>
+          </div>
+          <h3 class="font-display text-xl font-bold text-foreground">Name: James</h3>
+          <ul class="text-xs text-muted-foreground space-y-1.5">
+            <li>• <strong>Estimated Living Bearers:</strong> ~3,200,000 Americans</li>
+            <li>• <strong>National Ratio:</strong> 1 in ~105 people</li>
+            <li>• <strong>Historical Peak:</strong> 1940s–1950s (~86,000 births/year)</li>
+            <li>• <strong>Data Sources:</strong> SSA 1880–2024 + CDC Period Life Tables</li>
+          </ul>
+          <p class="text-xs text-muted-foreground leading-relaxed pt-2 border-t border-border/50">
+            <strong>Key Insight:</strong> Although James ranks around #4 for newborns today, its steady popularity across 14 consecutive decades makes it one of the largest living name cohorts in American history.
+          </p>
+        </div>
+
+        <!-- Example 2: Rahul -->
+        <div class="p-6 rounded-2xl border border-border bg-card shadow-xs space-y-3">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-bold uppercase tracking-wider text-amber-600 dark:text-amber-400">
+              Modelled Estimate Example
+            </span>
+            <span class="px-2 py-0.5 rounded text-[10px] bg-secondary font-bold text-foreground">Tier 3</span>
+          </div>
+          <h3 class="font-display text-xl font-bold text-foreground">Name: Rahul</h3>
+          <ul class="text-xs text-muted-foreground space-y-1.5">
+            <li>• <strong>Estimated Living Bearers:</strong> ~50,000 Americans</li>
+            <li>• <strong>Confidence:</strong> Modelled Estimate</li>
+            <li>• <strong>Gender / History:</strong> Null (Zero fabricated charts)</li>
+            <li>• <strong>Method:</strong> U.S. demographic distribution brackets</li>
+          </ul>
+          <p class="text-xs text-muted-foreground leading-relaxed pt-2 border-t border-border/50">
+            <strong>Key Insight:</strong> For unindexed or emerging international names, HowManyOfMe displays a transparent population bracket without generating fake historical birth timelines or unverified sex percentages.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 8. How Name Popularity Changes Over Time -->
+    <section class="my-12 space-y-4">
+      <h2 class="font-display text-2xl md:text-3xl font-bold text-foreground">
+        How Name Popularity Changes Over Time
+      </h2>
+      <p class="text-sm md:text-base text-muted-foreground leading-relaxed">
+        American naming history reveals distinct generational trajectories:
+      </p>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 my-6">
+        <div class="p-5 rounded-2xl border border-border bg-card shadow-xs">
+          <h3 class="font-bold text-foreground text-base mb-1">1. The Enduring Classic</h3>
+          <p class="text-xs text-muted-foreground leading-relaxed">
+            Names that remain in the top 50 across more than a century (e.g., <em>William, Elizabeth, Thomas</em>). They accumulate millions of living bearers across all age groups.
+          </p>
+        </div>
+
+        <div class="p-5 rounded-2xl border border-border bg-card shadow-xs">
+          <h3 class="font-bold text-foreground text-base mb-1">2. The Mid-Century Wave</h3>
+          <p class="text-xs text-muted-foreground leading-relaxed">
+            Names that surged dramatically between 1940 and 1970 (e.g., <em>Linda, Gary, Deborah</em>). Highly common among baby boomers, but rare among modern newborns.
+          </p>
+        </div>
+
+        <div class="p-5 rounded-2xl border border-border bg-card shadow-xs">
+          <h3 class="font-bold text-foreground text-base mb-1">3. The 100-Year Vintage Revival</h3>
+          <p class="text-xs text-muted-foreground leading-relaxed">
+            Names popular in the 1890s–1920s that faded for 60 years and are now resurging with Gen Z and Millennial parents (e.g., <em>Oliver, Hazel, Theodore, Emma</em>).
+          </p>
+        </div>
+
+        <div class="p-5 rounded-2xl border border-border bg-card shadow-xs">
+          <h3 class="font-bold text-foreground text-base mb-1">4. The Fast Modern Climber</h3>
+          <p class="text-xs text-muted-foreground leading-relaxed">
+            Contemporary names that climbed hundreds of rank positions in under a decade due to cultural trends, minimalism, or media influence (e.g., <em>Nova, Kai, Harper</em>).
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 9. Why Two Name Checkers Show Different Numbers -->
+    <section class="my-12 space-y-4">
+      <h2 class="font-display text-2xl md:text-3xl font-bold text-foreground">
+        Why Can Two Name Checkers Show Different Numbers?
+      </h2>
+      <p class="text-sm md:text-base text-muted-foreground leading-relaxed">
+        If you search your name on different online tools, you will often find conflicting figures. The key reasons include:
+      </p>
+
+      <ul class="list-disc list-outside pl-6 space-y-2.5 text-sm md:text-base text-muted-foreground leading-relaxed">
+        <li>
+          <strong class="text-foreground">Living People vs. Total Historical Registrations:</strong> Some sites simply sum all birth certificates registered since 1880 without accounting for mortality, inflating counts for older names by millions.
+        </li>
+        <li>
+          <strong class="text-foreground">Geographic Scope:</strong> U.S.-specific data (from the SSA and Census Bureau) produces different frequencies than global or worldwide estimations.
+        </li>
+        <li>
+          <strong class="text-foreground">Spelling Normalization:</strong> Combining variants (e.g., <em>Sara</em> and <em>Sarah</em>) vs. evaluating exact character sequences produces vastly different bearer counts.
+        </li>
+        <li>
+          <strong class="text-foreground">Data Baseline Years:</strong> Tools referencing only the 2000 Census will diverge significantly from platforms updated with 2024 Social Security cohorts.
+        </li>
+      </ul>
+    </section>
+
+    <!-- 10. Current Data Limitations -->
+    <section class="my-12 space-y-4">
+      <h2 class="font-display text-2xl md:text-3xl font-bold text-foreground">
+        What This Checker Cannot Tell You
+      </h2>
+      <div class="p-6 rounded-2xl border border-border/80 bg-secondary/30 space-y-3 text-sm text-muted-foreground leading-relaxed">
+        <p>
+          To maintain E-E-A-T standards and user trust, we explicitly state our boundaries:
+        </p>
+        <ul class="list-disc list-outside pl-5 space-y-1.5">
+          <li><strong>Not a live individual directory:</strong> We do not track individual citizens, residential addresses, or private phone numbers.</li>
+          <li><strong>SSA 5-baby privacy threshold:</strong> Names with fewer than 5 annual occurrences in official records are suppressed by federal agencies for privacy.</li>
+          <li><strong>Statistical modeling:</strong> Full-name living bearer estimates represent mathematical joint probabilities rather than exhaustive nationwide name-by-name censuses.</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- 11. 4-Step Workflow -->
+    <section class="my-12 space-y-6">
+      <h2 class="font-display text-2xl md:text-3xl font-bold text-foreground">
+        How to Check How Many People Have Your Name
+      </h2>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div class="p-5 rounded-2xl border border-border bg-card shadow-xs">
+          <span class="h-8 w-8 rounded-full bg-primary/10 text-primary font-bold flex items-center justify-center text-sm mb-3">
+            1
+          </span>
+          <h3 class="font-bold text-foreground text-sm mb-1">Enter Name</h3>
+          <p class="text-xs text-muted-foreground leading-relaxed">
+            Type your first name, surname, or full name into the search box above.
+          </p>
+        </div>
+
+        <div class="p-5 rounded-2xl border border-border bg-card shadow-xs">
+          <span class="h-8 w-8 rounded-full bg-primary/10 text-primary font-bold flex items-center justify-center text-sm mb-3">
+            2
+          </span>
+          <h3 class="font-bold text-foreground text-sm mb-1">Click Check Name</h3>
+          <p class="text-xs text-muted-foreground leading-relaxed">
+            Our resolver evaluates federal birth cohorts and census surname registries.
+          </p>
+        </div>
+
+        <div class="p-5 rounded-2xl border border-border bg-card shadow-xs">
+          <span class="h-8 w-8 rounded-full bg-primary/10 text-primary font-bold flex items-center justify-center text-sm mb-3">
+            3
+          </span>
+          <h3 class="font-bold text-foreground text-sm mb-1">Review Estimate</h3>
+          <p class="text-xs text-muted-foreground leading-relaxed">
+            Explore living bearer population, national ratio, confidence tier, and rarity.
+          </p>
+        </div>
+
+        <div class="p-5 rounded-2xl border border-border bg-card shadow-xs">
+          <span class="h-8 w-8 rounded-full bg-primary/10 text-primary font-bold flex items-center justify-center text-sm mb-3">
+            4
+          </span>
+          <h3 class="font-bold text-foreground text-sm mb-1">Explore Insights</h3>
+          <p class="text-xs text-muted-foreground leading-relaxed">
+            View 145-year line charts, top cities, zodiac era insights, and ID cards.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 12. Related Name Tools Ecosystem -->
+    <section class="my-12 space-y-6">
+      <div class="flex items-center justify-between">
+        <h2 class="font-display text-2xl md:text-3xl font-bold text-foreground">
+          Explore More Demographic Name Tools
+        </h2>
+        <a href="/tools" class="text-xs font-semibold text-primary hover:underline flex items-center gap-1">
+          View All Tools <ArrowRight class="h-3.5 w-3.5" />
+        </a>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        <a
+          href="/tools/name-comparison"
+          class="p-5 rounded-2xl border border-border bg-card hover:border-primary/40 hover:shadow-md transition-all group"
+        >
+          <div class="flex items-center gap-2 font-bold text-foreground group-hover:text-primary transition-colors text-base mb-1.5">
+            <BarChart3 class="h-4 w-4 text-primary" />
+            <span>Name Comparison Tool</span>
+          </div>
+          <p class="text-xs text-muted-foreground leading-relaxed">
+            Compare two names head-to-head on popularity, living count, and historical trajectory.
+          </p>
+        </a>
+
+        <a
+          href="/tools/trend-visualizer"
+          class="p-5 rounded-2xl border border-border bg-card hover:border-primary/40 hover:shadow-md transition-all group"
+        >
+          <div class="flex items-center gap-2 font-bold text-foreground group-hover:text-primary transition-colors text-base mb-1.5">
+            <TrendingUp class="h-4 w-4 text-primary" />
+            <span>Trend Visualizer</span>
+          </div>
+          <p class="text-xs text-muted-foreground leading-relaxed">
+            Chart multi-decade popularity curves for up to 4 names simultaneously across 1880–2024.
+          </p>
+        </a>
+
+        <a
+          href="/tools/popularity-guide"
+          class="p-5 rounded-2xl border border-border bg-card hover:border-primary/40 hover:shadow-md transition-all group"
+        >
+          <div class="flex items-center gap-2 font-bold text-foreground group-hover:text-primary transition-colors text-base mb-1.5">
+            <BookOpen class="h-4 w-4 text-primary" />
+            <span>Popularity Guide</span>
+          </div>
+          <p class="text-xs text-muted-foreground leading-relaxed">
+            Comprehensive educational guide to understanding ranks, frequency ratios, and cohorts.
+          </p>
+        </a>
+      </div>
+    </section>
+
+    <!-- 13. Data Snapshot & Methodology Summary -->
+    <section class="my-12 rounded-2xl border border-primary/20 bg-primary/5 p-6 shadow-xs space-y-4">
+      <div class="flex items-center justify-between border-b border-primary/15 pb-3">
+        <div class="flex items-center gap-2">
+          <Database class="h-4 w-4 text-primary" />
+          <h3 class="font-display text-lg font-bold text-foreground">Federal Data Snapshot</h3>
+        </div>
+        <span class="text-xs text-muted-foreground">Release: {manifest.datasetVersion}</span>
+      </div>
+
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs">
+        <div class="p-3 rounded-xl bg-card border border-border">
+          <span class="text-muted-foreground block">Geographic Scope</span>
+          <strong class="text-foreground text-sm font-bold">United States</strong>
+        </div>
+        <div class="p-3 rounded-xl bg-card border border-border">
+          <span class="text-muted-foreground block">First-Name Archive</span>
+          <strong class="text-foreground text-sm font-bold">SSA 1880–2024</strong>
+        </div>
+        <div class="p-3 rounded-xl bg-card border border-border">
+          <span class="text-muted-foreground block">Surname Tabulations</span>
+          <strong class="text-foreground text-sm font-bold">U.S. Census Bureau</strong>
+        </div>
+        <div class="p-3 rounded-xl bg-card border border-border">
+          <span class="text-muted-foreground block">Actuarial Calibration</span>
+          <strong class="text-foreground text-sm font-bold">CDC Life Tables</strong>
+        </div>
+      </div>
+
+      <p class="text-xs text-muted-foreground">
+        For complete technical formulas and mathematical proofs, read our formal <a href="/methodology" class="text-primary underline hover:text-primary/80">Data Methodology &amp; Statistical Sources</a> documentation.
+      </p>
+    </section>
+
+    <!-- 14. Common Questions (FAQ Section) -->
+    <section class="my-12 space-y-6">
+      <div class="flex items-center gap-2">
+        <HelpCircle class="h-5 w-5 text-primary" />
+        <h2 class="font-display text-2xl md:text-3xl font-bold text-foreground">
+          Common Questions About Name Popularity
+        </h2>
+      </div>
+
+      <div class="space-y-4">
         {faqs.map((f) => (
-          <div class="p-5 rounded-xl border border-border bg-card">
-            <h3 class="font-semibold text-foreground mb-1">{f.q}</h3>
-            <p class="text-sm text-muted-foreground">{f.a}</p>
+          <div class="p-6 rounded-2xl border border-border bg-card shadow-xs">
+            <h3 class="font-semibold text-foreground text-base mb-2">{f.q}</h3>
+            <p class="text-sm text-muted-foreground leading-relaxed">{f.a}</p>
           </div>
         ))}
       </div>
     </section>
 
+    <!-- 15. Final CTA -->
     <ToolCTA
-      headline="Compare Two Names"
-      subhead="Want to see which of two names is more popular? Try our head-to-head comparison tool."
+      headline="Explore Your Name Demographics"
+      subhead="Enter your first name, last name, or full name to check living population estimates today."
     />
 
     <RelatedPosts currentSlug="popularity-checker" tags={["popularity", "tools", "trends"]} count={6} />
