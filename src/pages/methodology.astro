@@ -9,48 +9,167 @@ import ToolCTA from '../components/ToolCTA.astro';
 const title = "Data Methodology & Statistical Sources — HowManyOfMe";
 const description = "Learn how HowManyOfMe calculates living name bearer estimates using actuarial cohort survival models, SSA archives, and U.S. Census data.";
 const canonical = "https://howmanyofme.co/methodology";
+
+const jsonLd = [
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    headline: "Data Methodology & Statistical Sources",
+    description: description,
+    url: canonical,
+    datePublished: "2026-02-15",
+    dateModified: "2026-08-14",
+    author: {
+      "@type": "Organization",
+      name: "HowManyOfMe Research Team",
+      url: "https://howmanyofme.co/about",
+    },
+    publisher: {
+      "@type": "Organization",
+      name: "HowManyOfMe",
+      url: "https://howmanyofme.co",
+    },
+    mainEntityOfPage: canonical,
+  },
+];
 ---
 
-<BaseLayout title={title} description={description} canonical={canonical}>
+<BaseLayout title={title} description={description} canonical={canonical} jsonLd={jsonLd}>
   <SiteHeader client:idle />
 
-  <main class="container py-12 max-w-3xl">
+  <main class="container py-10 md:py-16 max-w-4xl">
     <Breadcrumbs className="mb-6" items={[{ label: "Home", href: "/" }, { label: "Methodology" }]} />
 
-    <h1 class="font-display text-4xl md:text-5xl font-bold mb-4 text-foreground">Data Methodology &amp; Sources</h1>
-    <p class="text-lg text-muted-foreground mb-8 leading-relaxed">
-      How we transform historical birth registries and census tabulations into transparent, evidence-based demographic estimates.
-    </p>
+    <article class="space-y-10">
+      <!-- Header -->
+      <header class="space-y-4 border-b border-border pb-8">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-primary/10 text-primary">
+          ⚙️ Technical Specification
+        </div>
+        <h1 class="font-display text-3xl sm:text-4xl md:text-5xl font-bold text-foreground tracking-tight leading-tight">
+          Data Methodology &amp; Demographic Calculation Pipeline
+        </h1>
+        <p class="text-lg md:text-xl text-muted-foreground leading-relaxed">
+          How HowManyOfMe transforms 145 years of federal birth registries and decennial census tabulations into transparent living bearer estimates.
+        </p>
+        <div class="flex flex-wrap items-center gap-4 text-xs text-muted-foreground pt-2">
+          <span><strong>Version:</strong> 2026.08.14</span>
+          <span>•</span>
+          <span><strong>Baseline Population:</strong> 334.9M (U.S. Census 2024 Benchmark)</span>
+          <span>•</span>
+          <span><strong>Review Cycle:</strong> Annual SSA Release</span>
+        </div>
+      </header>
 
-    <div class="prose-content">
-      <h2>1. The Cohort-Survival Model</h2>
-      <p>
-        Most baby name websites only show annual newborn ranks. HowManyOfMe answers a fundamentally different question: <em>How many living people have this name today?</em>
-      </p>
-      <p>
-        To compute this, we apply cohort-component demographic analysis. For every birth year from 1880 through 2024, we apply actuarial life tables from the U.S. Social Security Administration and CDC to calculate the surviving proportion of each historical birth cohort.
-      </p>
+      <!-- Quick Answer Callout -->
+      <section class="p-6 md:p-8 rounded-2xl border border-primary/30 bg-primary/5 shadow-sm space-y-3">
+        <div class="text-xs font-bold uppercase tracking-wider text-primary">Methodology Summary</div>
+        <p class="text-base md:text-lg text-foreground font-medium leading-relaxed">
+          Unlike websites that only sum newborn counts, HowManyOfMe calculates <strong>living bearer estimates</strong> by applying CDC actuarial cohort-survival probabilities to annual Social Security birth records from 1880 through 2024. Surnames are derived from U.S. Census Bureau decennial tabulations, and full names are modeled via joint statistical independence.
+        </p>
+      </section>
 
-      <h2>2. Primary Government Data Sources</h2>
-      <ul>
-        <li><strong>U.S. Social Security Administration (SSA):</strong> Complete national given-name birth registration records from 1880 through 2024 (minimum 5 occurrences per sex/year).</li>
-        <li><strong>U.S. Census Bureau (2020 Decennial Census):</strong> First-name tabulations covering 53,615 distinct given names observed in census returns.</li>
-        <li><strong>U.S. Census Bureau Frequently Occurring Surnames:</strong> Decennial census surname frequencies covering all surnames with 100 or more observations.</li>
-        <li><strong>CDC National Center for Health Statistics:</strong> Actuarial cohort survival tables.</li>
-      </ul>
+      <!-- Section 1: Actuarial Model -->
+      <section class="space-y-4">
+        <h2 class="font-display text-2xl md:text-3xl font-bold text-foreground">1. The Actuarial Cohort-Survival Model</h2>
+        <p class="text-muted-foreground leading-relaxed">
+          Raw historical birth counts answer: <em>"How many babies were given this name in past years?"</em> They do not answer: <em>"How many people have this name today?"</em>
+        </p>
+        <p class="text-muted-foreground leading-relaxed">
+          For a name popular in the 1900s (e.g. <em>Mildred</em> or <em>Clarence</em>), summing birth records without adjusting for natural mortality overstates the living population by hundreds of thousands. To resolve this, our engine applies cohort-component survival modeling:
+        </p>
 
-      <h2>3. Full-Name &amp; Modelled Estimation</h2>
-      <p>
-        For full names, joint demographic probability is computed by combining first-name living counts with Census surname probabilities under statistical independence. For uncommon names outside primary Social Security records, our engine provides clearly labelled statistical estimates based on national frequency distribution brackets without fabricating arbitrary rankings.
-      </p>
-    </div>
+        <div class="p-5 rounded-xl border border-border bg-card font-mono text-sm text-foreground overflow-x-auto">
+          Estimated Living Bearers = ∑ (Births in Year Y × Survival Probability for Age [2024 - Y])
+        </div>
 
-    <DataSources className="my-8" />
+        <p class="text-sm text-muted-foreground leading-relaxed">
+          Survival probabilities p(age) are calibrated using Period Life Tables from the Centers for Disease Control and Prevention (CDC) National Center for Health Statistics and Social Security Administration actuarial studies.
+        </p>
+      </section>
 
-    <ToolCTA
-      headline="Explore Name Statistics"
-      subhead="Try our methodology on any name and explore decade curves and living estimates."
-    />
+      <!-- Section 2: Data Sources Table -->
+      <section class="space-y-4">
+        <h2 class="font-display text-2xl md:text-3xl font-bold text-foreground">2. Primary Federal Data Sources</h2>
+        
+        <div class="overflow-x-auto border border-border rounded-xl">
+          <table class="w-full text-left text-sm">
+            <caption class="sr-only">Federal Data Sources Used by HowManyOfMe</caption>
+            <thead class="bg-secondary/60 text-foreground border-b border-border">
+              <tr>
+                <th scope="col" class="p-3.5 font-bold">Data Source</th>
+                <th scope="col" class="p-3.5 font-bold">Coverage Window</th>
+                <th scope="col" class="p-3.5 font-bold">Records &amp; Scope</th>
+                <th scope="col" class="p-3.5 font-bold">Role in Calculation</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-border text-muted-foreground">
+              <tr>
+                <th scope="row" class="p-3.5 font-semibold text-foreground">Social Security Administration (SSA)</th>
+                <td class="p-3.5">1880–2024 (Annual)</td>
+                <td class="p-3.5">All U.S. birth registrations with ≥ 5 occurrences per sex/year.</td>
+                <td class="p-3.5">Given-name historical volume, annual ranks, and sex distribution.</td>
+              </tr>
+              <tr>
+                <th scope="row" class="p-3.5 font-semibold text-foreground">U.S. Census Bureau Surnames</th>
+                <td class="p-3.5">Decennial Census (2010/2020)</td>
+                <td class="p-3.5">162,253 distinct surnames with ≥ 100 occurrences.</td>
+                <td class="p-3.5">Surname frequency, national rank, and demographic proportion per 100k.</td>
+              </tr>
+              <tr>
+                <th scope="row" class="p-3.5 font-semibold text-foreground">U.S. Census Bureau Given Names</th>
+                <td class="p-3.5">2020 Decennial Tabulations</td>
+                <td class="p-3.5">53,615 distinct first names.</td>
+                <td class="p-3.5">Direct living-population benchmark cross-validation.</td>
+              </tr>
+              <tr>
+                <th scope="row" class="p-3.5 font-semibold text-foreground">CDC National Life Tables</th>
+                <td class="p-3.5">Actuarial Survival Tables</td>
+                <td class="p-3.5">Complete cohort survival probabilities by single year of age.</td>
+                <td class="p-3.5">Weighting factor to compute living population from historical births.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- Section 3: Full-Name Modeling -->
+      <section class="space-y-4">
+        <h2 class="font-display text-2xl md:text-3xl font-bold text-foreground">3. Full-Name Combination Modeling</h2>
+        <p class="text-muted-foreground leading-relaxed">
+          Because no single federal agency publishes a complete real-time public directory of all 335+ million full names, exact first-and-last-name combinations are computed using joint statistical independence:
+        </p>
+
+        <div class="p-5 rounded-xl border border-border bg-card font-mono text-sm text-foreground overflow-x-auto">
+          Joint Estimate = (First Name Living Count × Surname Census Count) / 334,900,000
+        </div>
+
+        <p class="text-sm text-muted-foreground leading-relaxed">
+          This joint independence assumption is statistically robust for common, culturally independent names. However, because some given names and surnames correlate within specific heritage groups (e.g. Hispanic, Italian, or Scandinavian communities), results are explicitly labelled as <strong>Statistical Estimates</strong>.
+        </p>
+      </section>
+
+      <!-- Section 4: Data Limitations -->
+      <section class="space-y-4">
+        <h2 class="font-display text-2xl md:text-3xl font-bold text-foreground">4. What These Numbers Don't Tell You (Limitations)</h2>
+        <div class="p-6 rounded-2xl border border-border bg-card space-y-3">
+          <ul class="space-y-2 text-sm text-muted-foreground list-disc pl-5">
+            <li><strong>The 5-Baby Reporting Floor:</strong> Names given to fewer than 5 infants of a single sex in a calendar year are suppressed by the SSA for privacy.</li>
+            <li><strong>Immigrant Cohorts:</strong> Individuals who immigrated to the United States as adults are captured in Census data but not in SSA newborn birth registries.</li>
+            <li><strong>Spelling Specificity:</strong> The SSA tracks exact character strings. Variants such as <em>Catherine</em>, <em>Kathryn</em>, and <em>Katherine</em> are evaluated separately.</li>
+            <li><strong>No PII or Individual Tracking:</strong> Our engine produces aggregate demographic estimates; it does not track, store, or identify living individuals.</li>
+          </ul>
+        </div>
+      </section>
+
+      <DataSources className="my-8" />
+
+      <!-- CTA -->
+      <ToolCTA
+        headline="Explore the Demographic Engine"
+        subhead="Search our database of official Social Security &amp; Census records instantly."
+      />
+    </article>
   </main>
 
   <SiteFooter />

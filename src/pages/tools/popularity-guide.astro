@@ -6,22 +6,79 @@ import Breadcrumbs from '../../components/Breadcrumbs.astro';
 import AdSlot from '../../components/AdSlot.astro';
 import ToolCTA from '../../components/ToolCTA.astro';
 import RelatedPosts from '../../components/RelatedPosts.astro';
+import { getNameUrl } from '../../lib/seo/canonicalUrl';
 
-const title = "How to Use the Name Popularity Checker — Guide & Interpretations | HowManyOfMe";
-const description = "Learn how to read decade popularity curves, interpret rarity ratings, and evaluate demographic name statistics.";
+const title = "How to Read Name Popularity Data: Ranks, Trends & Rarity | HowManyOfMe";
+const description = "Learn how to interpret baby name popularity rankings, historical decade trajectories, living bearer estimates, and rarity classifications using real U.S. data.";
 const canonical = "https://howmanyofme.co/tools/popularity-guide";
 
 const faqs = [
-  { q: "What does the 0-100 popularity index mean?", a: "The popularity index normalizes birth frequency so 100 represents peak nationwide saturation for that name during that specific decade." },
-  { q: "How are living bearer counts calculated?", a: "By applying cohort-survival actuarial curves to annual birth registries from 1880 to the present." },
-  { q: "What is considered a rare name?", a: "Any name given to fewer than 1 in 10,000 babies per year, or with fewer than 5,000 living bearers nationwide." },
+  {
+    q: "What is the difference between a name's rank and its frequency?",
+    a: "Rank is a relative ordinal position (e.g. #1 vs #500) comparing a name against all other recorded names in that dataset and year. Frequency is the absolute count of recorded births or living bearers (e.g. 18,000 births). Rank tells you relative popularity, but frequency tells you actual demographic scale.",
+  },
+  {
+    q: "Why is a name's historical birth total different from its living bearer count?",
+    a: "Historical birth totals record every baby given that name across past decades (e.g. SSA records from 1880 to 2024). Living bearer counts apply actuarial life table survival models to those historical cohorts to estimate how many individuals with that name are alive today in the United States.",
+  },
+  {
+    q: "What classifies a name as 'Rare' or 'Very Rare' on HowManyOfMe?",
+    a: "Under our demographic classification system, a name is categorized as Rare if it has between 2,000 and 19,999 living U.S. bearers (roughly 1 in 17,000 to 1 in 165,000 Americans), and Very Rare if it has fewer than 2,000 living bearers nationwide.",
+  },
+  {
+    q: "Why do two different name websites show different statistics for the same name?",
+    a: "Websites often use different source registries (e.g. annual newborn SSA registrations vs decennial Census tabulations vs global user polls), different historical time windows, or distinct spelling aggregation rules. Some display total historical births while others calculate living population estimates.",
+  },
+  {
+    q: "How does the Social Security Administration's 5-baby reporting threshold affect name data?",
+    a: "To protect individual privacy, the U.S. Social Security Administration only publishes given names with at least 5 registrations for a single sex in a calendar year. Names with 1 to 4 annual births are suppressed from public files, which is why rare names may appear in some years and not others.",
+  },
+  {
+    q: "Can a name be historically popular but rare today?",
+    a: "Yes. Names like Linda, Gary, and Mildred reached massive nationwide peaks in the 1940s and 1950s but have very low registration volumes among newborns today. They remain common in older demographics but are rare in contemporary kindergarten classrooms.",
+  },
+];
+
+const jsonLd = [
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    headline: "How to Read Name Popularity Data: Ranks, Trends & Rarity",
+    description: description,
+    url: canonical,
+    datePublished: "2026-02-15",
+    dateModified: "2026-08-14",
+    author: {
+      "@type": "Organization",
+      name: "HowManyOfMe Research Team",
+      url: "https://howmanyofme.co/about",
+    },
+    publisher: {
+      "@type": "Organization",
+      name: "HowManyOfMe",
+      url: "https://howmanyofme.co",
+    },
+    mainEntityOfPage: canonical,
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: faqs.map((f) => ({
+      "@type": "Question",
+      name: f.q,
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: f.a,
+      },
+    })),
+  },
 ];
 ---
 
-<BaseLayout title={title} description={description} canonical={canonical}>
+<BaseLayout title={title} description={description} canonical={canonical} jsonLd={jsonLd}>
   <SiteHeader client:idle />
 
-  <main class="container py-12 max-w-3xl">
+  <main class="container py-10 md:py-16 max-w-4xl">
     <Breadcrumbs
       className="mb-6"
       items={[
@@ -31,53 +88,367 @@ const faqs = [
       ]}
     />
 
-    <h1 class="font-display text-4xl md:text-5xl font-bold mb-4 text-foreground">
-      How to Use the Name Popularity Tools
-    </h1>
-    <p class="text-lg text-muted-foreground mb-8 leading-relaxed">
-      A step-by-step guide to interpreting demographic name data, historical popularity trends, and rarity tiers.
-    </p>
+    <article class="space-y-10">
+      <!-- Header -->
+      <header class="space-y-4 border-b border-border pb-8">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-primary/10 text-primary">
+          📖 Educational Reference Guide
+        </div>
+        <h1 class="font-display text-3xl sm:text-4xl md:text-5xl font-bold text-foreground tracking-tight leading-tight">
+          How to Read Name Popularity Data: Ranks, Trends, and Living Bearer Estimates
+        </h1>
+        <p class="text-lg md:text-xl text-muted-foreground leading-relaxed">
+          A transparent, evidence-based guide to interpreting demographic name statistics, historical decade trajectories, and rarity classifications in the United States.
+        </p>
+        <div class="flex flex-wrap items-center gap-4 text-xs text-muted-foreground pt-2">
+          <span><strong>Author:</strong> HowManyOfMe Demographic Editorial Team</span>
+          <span>•</span>
+          <span><strong>Data Sources:</strong> SSA (1880–2024) &amp; U.S. Census Bureau</span>
+          <span>•</span>
+          <span><strong>Updated:</strong> August 2026</span>
+        </div>
+      </header>
 
-    <div class="prose-content my-8">
-      <h2>1. Understanding the Metrics</h2>
-      <ul>
-        <li><strong>Living Bearers:</strong> The estimated number of living people with this first name today.</li>
-        <li><strong>Global / National Rank:</strong> Where the name sits relative to all recorded names in the demographic registry.</li>
-        <li><strong>1-in-X Frequency:</strong> The probability of meeting someone with this name in the general population.</li>
-      </ul>
+      <!-- Quick Answer Callout -->
+      <section class="p-6 md:p-8 rounded-2xl border border-primary/30 bg-primary/5 shadow-sm space-y-3">
+        <div class="text-xs font-bold uppercase tracking-wider text-primary">Quick Answer</div>
+        <p class="text-base md:text-lg text-foreground font-medium leading-relaxed">
+          A name’s popularity measures how frequently it occurs in recorded demographic datasets. <strong>Rank</strong> indicates where a name sits relative to other names in a specific birth year, while <strong>Frequency</strong> reflects the raw count of individuals. A name can have millions of historical records (like <a href={getNameUrl('Linda')} class="text-primary font-semibold hover:underline">Linda</a>) while being uncommon among newborns today.
+        </p>
+      </section>
 
-      <h2>2. Reading the Decade Trend Curves</h2>
-      <p>
-        Names follow distinct lifecycle shapes: classic steady (e.g. <em>James</em>, <em>Elizabeth</em>), mid-century peak (e.g. <em>Gary</em>, <em>Linda</em>), vintage revival (e.g. <em>Hazel</em>, <em>Theodore</em>), and modern spike (e.g. <em>Liam</em>, <em>Luna</em>).
-      </p>
+      <!-- Introduction -->
+      <section class="space-y-4 text-muted-foreground leading-relaxed">
+        <p>
+          Whether you are evaluating a baby name, researching demographic shifts, or discovering how many people share your exact name, public name statistics can often be confusing. Most online resources conflate annual newborn registrations with total living population, leading to misleading assumptions about how common a name truly is.
+        </p>
+        <p>
+          This guide provides an objective breakdown of how name statistics work, how to interpret multi-decade trajectories, how rarity is classified, and how to spot common analytical errors.
+        </p>
+      </section>
 
-      <h2>3. Choosing the Right Name</h2>
-      <p>
-        Whether picking a baby name, researching a pen name, or exploring your own family history, direct comparison of decade trends ensures you understand a name's historical trajectory.
-      </p>
-    </div>
+      <!-- Table of Contents -->
+      <nav class="p-6 rounded-2xl border border-border bg-card space-y-3" aria-label="Table of Contents">
+        <h2 class="font-display text-lg font-bold text-foreground">On This Page</h2>
+        <ul class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-sm text-primary font-medium">
+          <li><a href="#what-is-popularity" class="hover:underline">1. What Name Popularity Really Means</a></li>
+          <li><a href="#core-metrics" class="hover:underline">2. The Core Demographic Metrics</a></li>
+          <li><a href="#source-vs-modelled" class="hover:underline">3. Source-Backed vs. Modelled Estimates</a></li>
+          <li><a href="#reading-charts" class="hover:underline">4. How to Read a Decade Trajectory</a></li>
+          <li><a href="#case-studies" class="hover:underline">5. Real Historical Case Studies</a></li>
+          <li><a href="#rarity-tiers" class="hover:underline">6. Understanding Rarity Tiers</a></li>
+          <li><a href="#why-sites-differ" class="hover:underline">7. Why Two Websites Show Different Numbers</a></li>
+          <li><a href="#common-mistakes" class="hover:underline">8. Common Misconceptions to Avoid</a></li>
+          <li><a href="#faqs" class="hover:underline">9. Frequently Asked Questions</a></li>
+        </ul>
+      </nav>
 
-    <AdSlot />
+      <AdSlot />
 
-    <!-- FAQ Section -->
-    <section class="my-12">
-      <h2 class="font-display text-2xl font-bold mb-4 text-foreground">Frequently Asked Questions</h2>
-      <div class="space-y-3">
-        {faqs.map((f) => (
-          <div class="p-5 rounded-xl border border-border bg-card">
-            <h3 class="font-semibold text-foreground mb-1">{f.q}</h3>
-            <p class="text-sm text-muted-foreground">{f.a}</p>
+      <!-- Section 1: What Popularity Means -->
+      <section id="what-is-popularity" class="space-y-4">
+        <h2 class="font-display text-2xl md:text-3xl font-bold text-foreground">1. What Does Name Popularity Actually Mean?</h2>
+        <p class="text-muted-foreground leading-relaxed">
+          In official U.S. government statistics, "name popularity" is not a subjective metric or a measure of social prestige. It is an empirical count derived from two primary sources:
+        </p>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
+          <div class="p-5 rounded-xl border border-border bg-card space-y-2">
+            <h3 class="font-semibold text-foreground">Annual Newborn Registrations</h3>
+            <p class="text-sm text-muted-foreground">
+              Recorded by the <strong>Social Security Administration (SSA)</strong> since 1880 for infants born in the U.S. who receive Social Security cards. This measures annual cohort popularity at birth.
+            </p>
           </div>
-        ))}
-      </div>
-    </section>
+          <div class="p-5 rounded-xl border border-border bg-card space-y-2">
+            <h3 class="font-semibold text-foreground">Total Living Population</h3>
+            <p class="text-sm text-muted-foreground">
+              Tabulated by the <strong>U.S. Census Bureau</strong> and actuarial demographic models that calculate surviving individuals of all ages across the entire 335+ million American population today.
+            </p>
+          </div>
+        </div>
+      </section>
 
-    <ToolCTA
-      headline="Try the Popularity Checker Now"
-      subhead="Put this guide into practice by checking any first name in our database."
-    />
+      <!-- Section 2: Core Metrics Table -->
+      <section id="core-metrics" class="space-y-4">
+        <h2 class="font-display text-2xl md:text-3xl font-bold text-foreground">2. The Core Demographic Metrics Explained</h2>
+        <p class="text-muted-foreground leading-relaxed">
+          When reviewing name data, distinguishing between different metrics ensures you draw accurate conclusions:
+        </p>
 
-    <RelatedPosts currentSlug="popularity-guide" tags={["guide", "popularity", "tools"]} count={6} />
+        <div class="overflow-x-auto border border-border rounded-xl">
+          <table class="w-full text-left text-sm">
+            <caption class="sr-only">Core Demographic Name Metrics and Their Definitions</caption>
+            <thead class="bg-secondary/60 text-foreground border-b border-border">
+              <tr>
+                <th scope="col" class="p-3.5 font-bold">Metric</th>
+                <th scope="col" class="p-3.5 font-bold">What It Measures</th>
+                <th scope="col" class="p-3.5 font-bold">What It Tells You</th>
+                <th scope="col" class="p-3.5 font-bold">What It Does NOT Tell You</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-border text-muted-foreground">
+              <tr>
+                <th scope="row" class="p-3.5 font-semibold text-foreground">Annual Birth Count</th>
+                <td class="p-3.5">Total infants registered with that name in a single calendar year.</td>
+                <td class="p-3.5">Newborn popularity during that specific year.</td>
+                <td class="p-3.5">How many living people of all ages hold the name today.</td>
+              </tr>
+              <tr>
+                <th scope="row" class="p-3.5 font-semibold text-foreground">National Rank</th>
+                <td class="p-3.5">Relative standing against all other recorded given names in that year.</td>
+                <td class="p-3.5">Whether the name was #1 or #500 relative to other options.</td>
+                <td class="p-3.5">Absolute bearer volume (a #1 name in 2024 has far fewer births than a #1 name in 1950).</td>
+              </tr>
+              <tr>
+                <th scope="row" class="p-3.5 font-semibold text-foreground">Living Bearer Estimate</th>
+                <td class="p-3.5">Surviving living bearers computed via CDC actuarial life tables.</td>
+                <td class="p-3.5">How common the name is across the entire modern U.S. population.</td>
+                <td class="p-3.5">An exact real-time registry of every individual.</td>
+              </tr>
+              <tr>
+                <th scope="row" class="p-3.5 font-semibold text-foreground">1-in-X Frequency</th>
+                <td class="p-3.5">Probability ratio: U.S. Population / Living Bearers.</td>
+                <td class="p-3.5">How likely you are to encounter someone with that name.</td>
+                <td class="p-3.5">Regional clusters in specific cities or states.</td>
+              </tr>
+              <tr>
+                <th scope="row" class="p-3.5 font-semibold text-foreground">Decade Trajectory</th>
+                <td class="p-3.5">Historical births grouped across 10-year census decades.</td>
+                <td class="p-3.5">Long-term cultural lifecycle (rising, peaking, or fading).</td>
+                <td class="p-3.5">Short-term single-year viral spikes.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- Section 3: Source-Backed vs Modelled -->
+      <section id="source-vs-modelled" class="space-y-4">
+        <h2 class="font-display text-2xl md:text-3xl font-bold text-foreground">3. Source-Backed Profiles vs. Modelled Estimates</h2>
+        <p class="text-muted-foreground leading-relaxed">
+          Not all name data has the same level of statistical documentation. On HowManyOfMe, we maintain a strict boundary between two result categories:
+        </p>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
+          <div class="p-5 rounded-xl border border-emerald-500/30 bg-emerald-500/5 space-y-2">
+            <span class="inline-block px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-800 dark:text-emerald-300 font-bold text-xs">
+              Source-Backed Profile
+            </span>
+            <p class="text-sm text-muted-foreground leading-relaxed">
+              Available for names indexed in official government releases (SSA 1880–2024 cohorts or U.S. Census 2020 tabulations). Calculations use direct recorded birth counts and official actuarial tables.
+            </p>
+          </div>
+
+          <div class="p-5 rounded-xl border border-amber-500/30 bg-amber-500/5 space-y-2">
+            <span class="inline-block px-2 py-0.5 rounded bg-amber-500/20 text-amber-800 dark:text-amber-300 font-bold text-xs">
+              Statistical Estimate
+            </span>
+            <p class="text-sm text-muted-foreground leading-relaxed">
+              Generated for valid unindexed names (e.g. international or unique names below the SSA 5-baby publication threshold). Values are derived from demographic frequency distribution tiers without fabricating artificial exact counts.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 4: Reading Charts & Trajectories -->
+      <section id="reading-charts" class="space-y-4">
+        <h2 class="font-display text-2xl md:text-3xl font-bold text-foreground">4. How to Read a Decade Popularity Trajectory</h2>
+        <p class="text-muted-foreground leading-relaxed">
+          A decade trajectory chart illustrates the volume of newborn births across consecutive 10-year historical periods from the 1880s through the 2020s. When analyzing a chart, look for three critical features:
+        </p>
+        <ul class="space-y-2 text-muted-foreground list-disc pl-5">
+          <li><strong>The Peak Era:</strong> The decade in which the highest volume of births occurred. This indicates the primary generational demographic for that name.</li>
+          <li><strong>Trajectory Slope:</strong> A steep rise followed by a steep drop indicates a trend-driven name (e.g. celebrity or media-driven), whereas a broad curve indicates a durable multi-generational classic.</li>
+          <li><strong>Modern Velocity:</strong> Comparing the 2010s and 2020s to earlier decades reveals whether the name is undergoing a modern revival, stabilizing, or transitioning into vintage rarity.</li>
+        </ul>
+      </section>
+
+      <!-- Section 5: Real Case Studies -->
+      <section id="case-studies" class="space-y-6">
+        <h2 class="font-display text-2xl md:text-3xl font-bold text-foreground">5. Real Historical Case Studies</h2>
+        <p class="text-muted-foreground leading-relaxed">
+          To understand how demographic patterns differ, consider these three distinct historical profiles from official SSA records:
+        </p>
+
+        <!-- Case 1 -->
+        <div class="p-6 rounded-xl border border-border bg-card space-y-3">
+          <div class="flex items-center justify-between">
+            <h3 class="font-display text-xl font-bold text-foreground">Case Study 1: The Enduring Classic — <a href={getNameUrl('James')} class="text-primary hover:underline">James</a></h3>
+            <span class="text-xs px-2.5 py-1 rounded-full bg-primary/10 text-primary font-semibold">Very Common</span>
+          </div>
+          <p class="text-sm text-muted-foreground leading-relaxed">
+            <strong>Historical Pattern:</strong> James has held a top-20 ranking in nearly every decade from 1880 to 2024, with over 5.2 million total recorded births. Because it has been consistently chosen across all 14 decades, living bearers span every age cohort from infants to centenarians.
+          </p>
+          <div class="p-3 rounded-lg bg-secondary/30 text-xs text-muted-foreground font-mono">
+            Key Insight: Consistent multi-generational usage produces a large living bearer population (~3.2M living) without sharp age concentration.
+          </div>
+        </div>
+
+        <!-- Case 2 -->
+        <div class="p-6 rounded-xl border border-border bg-card space-y-3">
+          <div class="flex items-center justify-between">
+            <h3 class="font-display text-xl font-bold text-foreground">Case Study 2: The Mid-Century Wave — <a href={getNameUrl('Linda')} class="text-primary hover:underline">Linda</a></h3>
+            <span class="text-xs px-2.5 py-1 rounded-full bg-secondary text-foreground font-semibold">Common</span>
+          </div>
+          <p class="text-sm text-muted-foreground leading-relaxed">
+            <strong>Historical Pattern:</strong> Linda experienced one of the sharpest naming booms in American history, peaking in 1948 with over 80,000 births in a single year (#1 nationally). Today, annual registrations have dropped below 400 births per year.
+          </p>
+          <div class="p-3 rounded-lg bg-secondary/30 text-xs text-muted-foreground font-mono">
+            Key Insight: A high total living bearer count (~1.1M living) does not mean a name is common in modern schools. The vast majority of bearers were born between 1945 and 1960.
+          </div>
+        </div>
+
+        <!-- Case 3 -->
+        <div class="p-6 rounded-xl border border-border bg-card space-y-3">
+          <div class="flex items-center justify-between">
+            <h3 class="font-display text-xl font-bold text-foreground">Case Study 3: The 21st-Century Ascender — <a href={getNameUrl('Liam')} class="text-primary hover:underline">Liam</a></h3>
+            <span class="text-xs px-2.5 py-1 rounded-full bg-emerald-500/10 text-emerald-800 dark:text-emerald-400 font-semibold">Common &amp; Rising</span>
+          </div>
+          <p class="text-sm text-muted-foreground leading-relaxed">
+            <strong>Historical Pattern:</strong> Virtually unindexed in U.S. records prior to 1980, Liam surged in the 2000s and captured the #1 national boy ranking in 2017. 
+          </p>
+          <div class="p-3 rounded-lg bg-secondary/30 text-xs text-muted-foreground font-mono">
+            Key Insight: Although Liam is currently the #1 newborn name, its total living bearer count (~350k living) is much smaller than historic names like James or Robert because its popularity spans only two decades.
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 6: Rarity Tiers -->
+      <section id="rarity-tiers" class="space-y-4">
+        <h2 class="font-display text-2xl md:text-3xl font-bold text-foreground">6. Understanding Rarity Classifications</h2>
+        <p class="text-muted-foreground leading-relaxed">
+          HowManyOfMe classifies name rarity based on estimated living bearer population thresholds across the United States:
+        </p>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 pt-2">
+          <div class="p-4 rounded-xl border border-border bg-card">
+            <span class="text-xs font-bold text-primary block mb-1">Very Common</span>
+            <div class="text-base font-bold text-foreground mb-1">500,000+ Bearers</div>
+            <p class="text-xs text-muted-foreground">National classics with enduring multi-decade usage (e.g. <em>James, Michael, Mary</em>).</p>
+          </div>
+
+          <div class="p-4 rounded-xl border border-border bg-card">
+            <span class="text-xs font-bold text-primary block mb-1">Common</span>
+            <div class="text-base font-bold text-foreground mb-1">100k – 499k Bearers</div>
+            <p class="text-xs text-muted-foreground">Widely recognized names with prominent generational presence (e.g. <em>Liam, Brian, Nicole</em>).</p>
+          </div>
+
+          <div class="p-4 rounded-xl border border-border bg-card">
+            <span class="text-xs font-bold text-primary block mb-1">Uncommon</span>
+            <div class="text-base font-bold text-foreground mb-1">20k – 99k Bearers</div>
+            <p class="text-xs text-muted-foreground">Distinctive names with moderate national recognition (e.g. <em>Damon, Serena, Preston</em>).</p>
+          </div>
+
+          <div class="p-4 rounded-xl border border-border bg-card">
+            <span class="text-xs font-bold text-primary block mb-1">Rare</span>
+            <div class="text-base font-bold text-foreground mb-1">2,000 – 19,999 Bearers</div>
+            <p class="text-xs text-muted-foreground">Fewer than 1 in 17,000 Americans; offers high individuality (e.g. <em>Alaric, Thalia</em>).</p>
+          </div>
+
+          <div class="p-4 rounded-xl border border-border bg-card sm:col-span-2 md:col-span-2">
+            <span class="text-xs font-bold text-primary block mb-1">Very Rare / Unique</span>
+            <div class="text-base font-bold text-foreground mb-1">&lt; 2,000 Bearers</div>
+            <p class="text-xs text-muted-foreground">Exceptionally distinctive names, international variations, and unique full-name combinations held by fewer than 1 in 165,000 Americans.</p>
+          </div>
+        </div>
+      </section>
+
+      <AdSlot />
+
+      <!-- Section 7: Why Sites Differ -->
+      <section id="why-sites-differ" class="space-y-4">
+        <h2 class="font-display text-2xl md:text-3xl font-bold text-foreground">7. Why Two Websites Can Show Different Numbers</h2>
+        <p class="text-muted-foreground leading-relaxed">
+          If you check the same name across multiple websites, you may encounter different figures. The discrepancies usually stem from four clear methodology differences:
+        </p>
+        <div class="space-y-3 text-sm text-muted-foreground">
+          <div class="p-4 rounded-xl border border-border bg-card">
+            <strong class="text-foreground block mb-1">1. Historical Birth Totals vs. Living Population</strong>
+            Many websites sum all SSA newborn records since 1880 without adjusting for mortality. For a name popular in 1900 (like <em>Mildred</em>), total historical births will vastly exceed the number of living bearers today.
+          </div>
+          <div class="p-4 rounded-xl border border-border bg-card">
+            <strong class="text-foreground block mb-1">2. Geographic Scope (U.S. vs. Global Estimates)</strong>
+            Some sites promise "global bearer counts" by multiplying English name frequencies across worldwide populations. Official government records only document their specific national jurisdictions.
+          </div>
+          <div class="p-4 rounded-xl border border-border bg-card">
+            <strong class="text-foreground block mb-1">3. Spelling Aggregation Rules</strong>
+            The SSA treats every spelling as a separate entry (e.g. <em>Sophia</em> vs <em>Sofia</em>, <em>Aiden</em> vs <em>Ayden</em>). Some databases combine alternate spellings into a single composite rank, while others track them separately.
+          </div>
+          <div class="p-4 rounded-xl border border-border bg-card">
+            <strong class="text-foreground block mb-1">4. Baseline Dataset Years</strong>
+            A site updated with 2024 SSA releases will reflect modern ascenders that appear lower or absent in older 2015-era databases.
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 8: Common Mistakes -->
+      <section id="common-mistakes" class="space-y-4">
+        <h2 class="font-display text-2xl md:text-3xl font-bold text-foreground">8. Common Misconceptions to Avoid</h2>
+        <div class="p-6 rounded-2xl border border-border bg-card space-y-3">
+          <ul class="space-y-2.5 text-sm text-muted-foreground">
+            <li class="flex items-start gap-2">
+              <span class="text-destructive font-bold">✕</span>
+              <span><strong>Assuming #1 means the majority:</strong> In 1950, the top 10 boy names accounted for over 28% of all births. In 2024, the top 10 account for under 8%. Today's #1 name is far less concentrated than in past generations.</span>
+            </li>
+            <li class="flex items-start gap-2">
+              <span class="text-destructive font-bold">✕</span>
+              <span><strong>Equating missing data with zero:</strong> If a name is missing from the SSA dataset, it simply means it received fewer than 5 registrations for a given sex in that calendar year.</span>
+            </li>
+            <li class="flex items-start gap-2">
+              <span class="text-destructive font-bold">✕</span>
+              <span><strong>Confusing rank with bearer volume:</strong> A name ranked #50 in 1955 had over 15,000 births. A name ranked #50 in 2024 has around 5,000 births. Always check raw frequency alongside rank.</span>
+            </li>
+            <li class="flex items-start gap-2">
+              <span class="text-destructive font-bold">✕</span>
+              <span><strong>Treating modelled estimates as census directories:</strong> Statistical models for unindexed names reflect demographic probability brackets, not individual directory lookups.</span>
+            </li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- Section 9: Step-by-Step Instructions -->
+      <section class="space-y-4">
+        <h2 class="font-display text-2xl md:text-3xl font-bold text-foreground">9. How to Use HowManyOfMe to Research Any Name</h2>
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 text-sm">
+          <div class="p-4 rounded-xl border border-border bg-card">
+            <span class="text-xs font-bold text-primary block mb-1">Step 1</span>
+            <div class="font-bold text-foreground mb-1">Enter Name &amp; Select Mode</div>
+            <p class="text-xs text-muted-foreground">Choose First Name or Full Name search on our homepage or popularity checker.</p>
+          </div>
+          <div class="p-4 rounded-xl border border-border bg-card">
+            <span class="text-xs font-bold text-primary block mb-1">Step 2</span>
+            <div class="font-bold text-foreground mb-1">Inspect Living Estimate</div>
+            <p class="text-xs text-muted-foreground">Review the prominent living bearer estimate, status badge, and confidence tier.</p>
+          </div>
+          <div class="p-4 rounded-xl border border-border bg-card">
+            <span class="text-xs font-bold text-primary block mb-1">Step 3</span>
+            <div class="font-bold text-foreground mb-1">Explore History &amp; Rarity</div>
+            <p class="text-xs text-muted-foreground">Examine decade birth distributions, sex breakdown, top states, and personalized insights.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 10: FAQs -->
+      <section id="faqs" class="space-y-6 pt-4 border-t border-border">
+        <h2 class="font-display text-2xl md:text-3xl font-bold text-foreground">Frequently Asked Questions</h2>
+        <div class="space-y-3">
+          {faqs.map((f) => (
+            <div class="p-5 rounded-xl border border-border bg-card space-y-1.5">
+              <h3 class="font-semibold text-foreground text-base">{f.q}</h3>
+              <p class="text-sm text-muted-foreground leading-relaxed">{f.a}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <!-- Contextual Tool CTA -->
+      <ToolCTA
+        headline="Ready to Check Your Name's Statistics?"
+        subhead="Search our database of official U.S. Social Security &amp; Census demographic records instantly."
+      />
+
+      <!-- Related Guides -->
+      <RelatedPosts currentSlug="popularity-guide" tags={["guides", "trends", "help"]} count={4} />
+    </article>
   </main>
 
   <SiteFooter />
