@@ -35,8 +35,8 @@ const idx = blogArticles.findIndex((a) => a.slug === article.slug);
 const prev = idx > 0 ? blogArticles[idx - 1] : null;
 const next = idx < blogArticles.length - 1 ? blogArticles[idx + 1] : null;
 
-const title = `${article.title} | HowManyOfMe`;
-const description = article.description;
+const title = article.seoTitle || article.title;
+const description = article.seoDescription || article.description;
 const canonical = `https://howmanyofme.co/blog/${article.slug}`;
 
 const renderedHtml = renderBlogContent(article);
