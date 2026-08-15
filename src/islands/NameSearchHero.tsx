@@ -84,9 +84,9 @@ export default function NameSearchHero() {
         <div className="grid lg:grid-cols-2 gap-10 lg:gap-16 items-start">
           {/* LEFT — Headline + copy */}
           <div className="text-center lg:text-left pt-2">
-            <div className="inline-flex items-center gap-2 bg-primary-foreground/10 backdrop-blur-sm rounded-full px-4 py-1.5 text-primary-foreground/90 text-sm font-medium border border-primary-foreground/20 mb-6">
-              <Sparkles className="h-3.5 w-3.5" />
-              Instant demographic results · Official SSA & Census data
+            <div className="inline-flex items-center gap-2 bg-primary-foreground/10 backdrop-blur-sm rounded-full px-3.5 sm:px-4 py-1.5 text-primary-foreground/90 text-xs sm:text-sm font-medium border border-primary-foreground/20 mb-6 max-w-full text-center">
+              <Sparkles className="h-3.5 w-3.5 shrink-0" />
+              <span className="break-words">Instant demographic results · Official SSA &amp; Census data</span>
             </div>
 
             <h1 className="font-display text-4xl md:text-5xl lg:text-6xl font-bold text-primary-foreground mb-5 leading-[1.1]">

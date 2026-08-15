@@ -264,14 +264,14 @@ export const NameCheckerForm: React.FC<NameCheckerFormProps> = ({
             setLastSuggestions([]);
             setErrorMessage("");
           }}
-          className={`flex-1 min-h-[48px] h-12 px-3 py-2 text-[15px] sm:text-[16px] font-semibold rounded-lg transition-all flex items-center justify-center gap-2 whitespace-nowrap ${
+          className={`flex-1 min-w-0 min-h-[48px] h-12 px-2 sm:px-3 py-2 text-[14px] sm:text-[16px] font-semibold rounded-lg transition-all flex items-center justify-center text-center gap-1.5 sm:gap-2 whitespace-nowrap ${
             searchMode === "first_name"
               ? "bg-card text-foreground shadow-sm shadow-black/5"
               : "text-muted-foreground hover:text-foreground"
           }`}
         >
           <User className="h-4 w-4 shrink-0" />
-          First Name
+          <span className="truncate">First Name</span>
         </button>
         <button
           type="button"
@@ -281,14 +281,15 @@ export const NameCheckerForm: React.FC<NameCheckerFormProps> = ({
             setLastSuggestions([]);
             setErrorMessage("");
           }}
-          className={`flex-1 min-h-[48px] h-12 px-3 py-2 text-[15px] sm:text-[16px] font-semibold rounded-lg transition-all flex items-center justify-center gap-2 whitespace-nowrap ${
+          className={`flex-1 min-w-0 min-h-[48px] h-12 px-2 sm:px-3 py-2 text-[14px] sm:text-[16px] font-semibold rounded-lg transition-all flex items-center justify-center text-center gap-1.5 sm:gap-2 whitespace-nowrap ${
             searchMode === "full_name"
               ? "bg-card text-foreground shadow-sm shadow-black/5"
               : "text-muted-foreground hover:text-foreground"
           }`}
         >
           <Users className="h-4 w-4 shrink-0" />
-          Full Name (First + Last)
+          <span className="sm:hidden truncate">Full Name</span>
+          <span className="hidden sm:inline truncate">Full Name (First + Last)</span>
         </button>
       </div>
 
