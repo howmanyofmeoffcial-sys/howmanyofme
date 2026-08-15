@@ -255,7 +255,7 @@ export const NameCheckerForm: React.FC<NameCheckerFormProps> = ({
   return (
     <form onSubmit={handleSubmit} className="space-y-4 text-left" noValidate>
       {/* Mode Switch Pills */}
-      <div className="flex items-center gap-1 rounded-xl bg-secondary/80 p-1 border border-border/50">
+      <div className="flex items-center gap-1.5 rounded-xl bg-secondary/80 p-1.5 border border-border/50">
         <button
           type="button"
           onClick={() => {
@@ -264,13 +264,13 @@ export const NameCheckerForm: React.FC<NameCheckerFormProps> = ({
             setLastSuggestions([]);
             setErrorMessage("");
           }}
-          className={`flex-1 flex items-center justify-center gap-1.5 py-2 text-xs font-semibold rounded-lg transition-all ${
+          className={`flex-1 min-h-[48px] h-12 px-3 py-2 text-[15px] sm:text-[16px] font-semibold rounded-lg transition-all flex items-center justify-center gap-2 whitespace-nowrap ${
             searchMode === "first_name"
               ? "bg-card text-foreground shadow-sm shadow-black/5"
               : "text-muted-foreground hover:text-foreground"
           }`}
         >
-          <User className="h-3.5 w-3.5" />
+          <User className="h-4 w-4 shrink-0" />
           First Name
         </button>
         <button
@@ -281,13 +281,13 @@ export const NameCheckerForm: React.FC<NameCheckerFormProps> = ({
             setLastSuggestions([]);
             setErrorMessage("");
           }}
-          className={`flex-1 flex items-center justify-center gap-1.5 py-2 text-xs font-semibold rounded-lg transition-all ${
+          className={`flex-1 min-h-[48px] h-12 px-3 py-2 text-[15px] sm:text-[16px] font-semibold rounded-lg transition-all flex items-center justify-center gap-2 whitespace-nowrap ${
             searchMode === "full_name"
               ? "bg-card text-foreground shadow-sm shadow-black/5"
               : "text-muted-foreground hover:text-foreground"
           }`}
         >
-          <Users className="h-3.5 w-3.5" />
+          <Users className="h-4 w-4 shrink-0" />
           Full Name (First + Last)
         </button>
       </div>
@@ -296,7 +296,7 @@ export const NameCheckerForm: React.FC<NameCheckerFormProps> = ({
       <div className={`space-y-3 ${shake ? "animate-[shake_0.4s_ease-in-out]" : ""}`}>
         {/* First Name Field */}
         <div className="relative">
-          <label htmlFor="first-name-input" className="block text-xs font-medium text-muted-foreground mb-1.5">
+          <label htmlFor="first-name-input" className="block text-[16px] font-medium text-foreground/90 mb-1.5">
             {searchMode === "full_name" ? "First Name" : "First Name (or Full Name)"}
           </label>
           <div className="relative">
@@ -323,7 +323,7 @@ export const NameCheckerForm: React.FC<NameCheckerFormProps> = ({
               aria-autocomplete="list"
               aria-controls="first-name-listbox"
               aria-invalid={Boolean(errorMessage)}
-              className="w-full h-13 rounded-xl border-2 border-border bg-background pl-11 pr-4 text-foreground text-base placeholder:text-muted-foreground/60 focus:outline-none focus:border-primary focus:ring-4 focus:ring-primary/15 transition-all"
+              className="w-full min-h-[48px] h-12 rounded-xl border-2 border-border bg-background pl-11 pr-4 text-foreground text-[17px] placeholder:text-muted-foreground/60 placeholder:text-[16px] focus:outline-none focus:border-primary focus:ring-4 focus:ring-primary/15 transition-all"
             />
           </div>
 
@@ -341,14 +341,14 @@ export const NameCheckerForm: React.FC<NameCheckerFormProps> = ({
                   aria-selected={highlightedFirstIndex === idx}
                   onMouseDown={() => handleSelectFirstSuggestion(item)}
                   onMouseEnter={() => setHighlightedFirstIndex(idx)}
-                  className={`px-3 py-2 text-sm rounded-lg cursor-pointer flex items-center justify-between transition-colors ${
+                  className={`min-h-[44px] px-3.5 py-2.5 sm:py-3 text-[16px] rounded-lg cursor-pointer flex items-center justify-between transition-colors ${
                     highlightedFirstIndex === idx
                       ? "bg-primary text-primary-foreground font-semibold"
                       : "text-foreground hover:bg-secondary"
                   }`}
                 >
                   <span>{item}</span>
-                  <span className="text-[11px] opacity-70">
+                  <span className="text-xs opacity-75">
                     {item.includes(" ") ? "Full Name" : "First Name"}
                   </span>
                 </li>
@@ -360,7 +360,7 @@ export const NameCheckerForm: React.FC<NameCheckerFormProps> = ({
         {/* Last Name Field (Full Name Mode) */}
         {searchMode === "full_name" && (
           <div className="relative animate-in fade-in duration-200">
-            <label htmlFor="last-name-input" className="block text-xs font-medium text-muted-foreground mb-1.5">
+            <label htmlFor="last-name-input" className="block text-[16px] font-medium text-foreground/90 mb-1.5">
               Last Name / Surname
             </label>
             <input
@@ -384,7 +384,7 @@ export const NameCheckerForm: React.FC<NameCheckerFormProps> = ({
               aria-autocomplete="list"
               aria-controls="last-name-listbox"
               aria-label="Last Name"
-              className="w-full h-13 rounded-xl border-2 border-border bg-background px-4 text-foreground text-base placeholder:text-muted-foreground/60 focus:outline-none focus:border-primary focus:ring-4 focus:ring-primary/15 transition-all"
+              className="w-full min-h-[48px] h-12 rounded-xl border-2 border-border bg-background px-4 text-foreground text-[17px] placeholder:text-muted-foreground/60 placeholder:text-[16px] focus:outline-none focus:border-primary focus:ring-4 focus:ring-primary/15 transition-all"
             />
 
             {/* Last Name Suggestions Dropdown */}
@@ -401,14 +401,14 @@ export const NameCheckerForm: React.FC<NameCheckerFormProps> = ({
                     aria-selected={highlightedLastIndex === idx}
                     onMouseDown={() => handleSelectLastSuggestion(item)}
                     onMouseEnter={() => setHighlightedLastIndex(idx)}
-                    className={`px-3 py-2 text-sm rounded-lg cursor-pointer flex items-center justify-between transition-colors ${
+                    className={`min-h-[44px] px-3.5 py-2.5 sm:py-3 text-[16px] rounded-lg cursor-pointer flex items-center justify-between transition-colors ${
                       highlightedLastIndex === idx
                         ? "bg-primary text-primary-foreground font-semibold"
                         : "text-foreground hover:bg-secondary"
                     }`}
                   >
                     <span>{item}</span>
-                    <span className="text-[11px] opacity-70">Surname</span>
+                    <span className="text-xs opacity-75">Surname</span>
                   </li>
                 ))}
               </ul>
@@ -428,7 +428,7 @@ export const NameCheckerForm: React.FC<NameCheckerFormProps> = ({
       <button
         type="submit"
         disabled={isLoading || !firstName.trim()}
-        className="group relative w-full h-13 rounded-xl font-semibold text-base text-primary-foreground shadow-lg shadow-primary/25 hover:shadow-xl hover:shadow-primary/35 hover:-translate-y-0.5 transition-all flex items-center justify-center gap-2 overflow-hidden disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:translate-y-0"
+        className="group relative w-full min-h-[48px] h-12 rounded-xl font-semibold text-[18px] sm:text-[19px] text-primary-foreground shadow-lg shadow-primary/25 hover:shadow-xl hover:shadow-primary/35 hover:-translate-y-0.5 transition-all flex items-center justify-center gap-2 overflow-hidden disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:translate-y-0"
         style={{
           background: "linear-gradient(135deg, hsl(var(--primary)), hsl(280 60% 55%))",
         }}
@@ -448,14 +448,14 @@ export const NameCheckerForm: React.FC<NameCheckerFormProps> = ({
 
       {/* Example Chips */}
       <div className="pt-2">
-        <p className="text-xs text-muted-foreground mb-2">Try an example search:</p>
-        <div className="flex flex-wrap gap-1.5">
+        <p className="block text-[16px] font-medium text-muted-foreground mb-2.5">Try an example search:</p>
+        <div className="flex flex-wrap gap-2">
           {["James", "Mary", "Olivia", "Liam", "David Smith", "Sophia Johnson"].map((n) => (
             <button
               key={n}
               type="button"
               onClick={() => handleSelectExample(n)}
-              className="px-2.5 py-1 rounded-lg bg-secondary hover:bg-primary hover:text-primary-foreground text-xs font-medium border border-border/70 transition-colors text-foreground"
+              className="min-h-[36px] px-3.5 py-2 rounded-lg bg-secondary hover:bg-primary hover:text-primary-foreground text-[15px] font-medium border border-border/70 transition-colors text-foreground inline-flex items-center justify-center"
             >
               {n}
             </button>

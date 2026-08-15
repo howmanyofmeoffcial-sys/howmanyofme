@@ -116,10 +116,10 @@ export default function NameSearchHero() {
             <div className="absolute -inset-1 bg-gradient-to-r from-accent/40 via-primary-foreground/30 to-accent/40 rounded-2xl blur-lg opacity-60" />
             <div className="relative bg-card rounded-2xl shadow-2xl p-6 md:p-8 border border-border/50 space-y-6">
               <div>
-                <h2 className="font-display font-bold text-xl leading-tight text-card-foreground">
+                <h2 className="font-display font-bold text-[23px] sm:text-[24px] md:text-[28px] leading-tight text-card-foreground">
                   Check name demographics
                 </h2>
-                <p className="text-xs text-muted-foreground mt-0.5">
+                <p className="text-[16px] md:text-[16.5px] text-muted-foreground mt-1 leading-normal">
                   Enter your first name or full name to check living population estimates
                 </p>
               </div>
