@@ -1,6 +1,11 @@
-import React, { useState } from "react";
-import { Search, ArrowRight, Loader2, User, Users } from "lucide-react";
+import React, { useState, useRef, useEffect } from "react";
+import { Search, ArrowRight, Loader2, User, Users, Check } from "lucide-react";
 import { validateName } from "../../lib/names/validateName";
+import {
+  searchFirstNameSuggestions,
+  searchSurnameSuggestions,
+  searchFullNameSuggestions,
+} from "../../lib/names/nameSearch";
 
 export interface SearchFormData {
   searchMode: "first_name" | "full_name";
@@ -31,24 +36,151 @@ export const NameCheckerForm: React.FC<NameCheckerFormProps> = ({
   const [errorMessage, setErrorMessage] = useState("");
   const [shake, setShake] = useState(false);
 
+  // Suggestion states
+  const [firstSuggestions, setFirstSuggestions] = useState<string[]>([]);
+  const [lastSuggestions, setLastSuggestions] = useState<string[]>([]);
+  const [highlightedFirstIndex, setHighlightedFirstIndex] = useState(-1);
+  const [highlightedLastIndex, setHighlightedLastIndex] = useState(-1);
+  const [isFirstFocused, setIsFirstFocused] = useState(false);
+  const [isLastFocused, setIsLastFocused] = useState(false);
+
+  const localFirstInputRef = useRef<HTMLInputElement | null>(null);
+  const activeFirstRef = inputRef || localFirstInputRef;
+
   const triggerShake = () => {
     setShake(true);
     setTimeout(() => setShake(false), 450);
   };
 
+  // Update suggestions on first name change
   const handleFirstChange = (val: string) => {
     setErrorMessage("");
-    // Do NOT strip valid Unicode characters
-    setFirstName(val.slice(0, 30));
+    const trimmed = val.slice(0, 30);
+    setFirstName(trimmed);
+    setHighlightedFirstIndex(-1);
+
+    if (searchMode === "first_name") {
+      if (trimmed.includes(" ")) {
+        // If user typed a space in first-name mode, search full-name combinations
+        const fulls = searchFullNameSuggestions(trimmed, 6);
+        setFirstSuggestions(fulls);
+      } else if (trimmed.trim().length >= 1) {
+        const matches = searchFirstNameSuggestions(trimmed, 6);
+        setFirstSuggestions(matches.map((m) => m.name));
+      } else {
+        setFirstSuggestions([]);
+      }
+    } else {
+      // Full Name mode - First Name input
+      if (trimmed.trim().length >= 1) {
+        const matches = searchFirstNameSuggestions(trimmed, 6);
+        setFirstSuggestions(matches.map((m) => m.name));
+      } else {
+        setFirstSuggestions([]);
+      }
+    }
   };
 
+  // Update suggestions on last name change
   const handleLastChange = (val: string) => {
     setErrorMessage("");
-    setLastName(val.slice(0, 30));
+    const trimmed = val.slice(0, 30);
+    setLastName(trimmed);
+    setHighlightedLastIndex(-1);
+
+    if (trimmed.trim().length >= 1) {
+      const matches = searchSurnameSuggestions(trimmed, 6);
+      setLastSuggestions(matches.map((m) => m.name));
+    } else {
+      setLastSuggestions([]);
+    }
+  };
+
+  const handleSelectFirstSuggestion = (suggestion: string) => {
+    if (searchMode === "first_name" && suggestion.includes(" ")) {
+      // User selected a full name
+      const [f, ...rest] = suggestion.split(" ");
+      const l = rest.join(" ");
+      setSearchMode("full_name");
+      setFirstName(f);
+      setLastName(l);
+      setFirstSuggestions([]);
+      setErrorMessage("");
+      onSubmit({
+        searchMode: "full_name",
+        firstName: f,
+        lastName: l,
+      });
+    } else {
+      setFirstName(suggestion);
+      setFirstSuggestions([]);
+      setErrorMessage("");
+      if (searchMode === "first_name") {
+        onSubmit({
+          searchMode: "first_name",
+          firstName: suggestion,
+          lastName: "",
+        });
+      }
+    }
+  };
+
+  const handleSelectLastSuggestion = (suggestion: string) => {
+    setLastName(suggestion);
+    setLastSuggestions([]);
+    setErrorMessage("");
+    if (firstName.trim()) {
+      onSubmit({
+        searchMode: "full_name",
+        firstName: firstName.trim(),
+        lastName: suggestion,
+      });
+    }
+  };
+
+  // Keyboard navigation for First Name
+  const handleFirstKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (firstSuggestions.length === 0) return;
+
+    if (e.key === "ArrowDown") {
+      e.preventDefault();
+      setHighlightedFirstIndex((prev) => (prev < firstSuggestions.length - 1 ? prev + 1 : 0));
+    } else if (e.key === "ArrowUp") {
+      e.preventDefault();
+      setHighlightedFirstIndex((prev) => (prev > 0 ? prev - 1 : firstSuggestions.length - 1));
+    } else if (e.key === "Enter" && highlightedFirstIndex >= 0) {
+      e.preventDefault();
+      handleSelectFirstSuggestion(firstSuggestions[highlightedFirstIndex]);
+    } else if (e.key === "Escape") {
+      setFirstSuggestions([]);
+      setHighlightedFirstIndex(-1);
+    }
+  };
+
+  // Keyboard navigation for Last Name
+  const handleLastKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (lastSuggestions.length === 0) return;
+
+    if (e.key === "ArrowDown") {
+      e.preventDefault();
+      setHighlightedLastIndex((prev) => (prev < lastSuggestions.length - 1 ? prev + 1 : 0));
+    } else if (e.key === "ArrowUp") {
+      e.preventDefault();
+      setHighlightedLastIndex((prev) => (prev > 0 ? prev - 1 : lastSuggestions.length - 1));
+    } else if (e.key === "Enter" && highlightedLastIndex >= 0) {
+      e.preventDefault();
+      handleSelectLastSuggestion(lastSuggestions[highlightedLastIndex]);
+    } else if (e.key === "Escape") {
+      setLastSuggestions([]);
+      setHighlightedLastIndex(-1);
+    }
   };
 
   const handleSubmit = (e?: React.FormEvent) => {
     if (e) e.preventDefault();
+
+    setFirstSuggestions([]);
+    setLastSuggestions([]);
 
     const trimmedFirst = firstName.trim();
     const trimmedLast = lastName.trim();
@@ -90,6 +222,8 @@ export const NameCheckerForm: React.FC<NameCheckerFormProps> = ({
   };
 
   const handleSelectExample = (nameExample: string) => {
+    setFirstSuggestions([]);
+    setLastSuggestions([]);
     if (nameExample.includes(" ")) {
       const [f, ...rest] = nameExample.split(" ");
       const l = rest.join(" ");
@@ -115,13 +249,21 @@ export const NameCheckerForm: React.FC<NameCheckerFormProps> = ({
     }
   };
 
+  const showFirstDropdown = isFirstFocused && firstSuggestions.length > 0;
+  const showLastDropdown = isLastFocused && lastSuggestions.length > 0;
+
   return (
     <form onSubmit={handleSubmit} className="space-y-4 text-left" noValidate>
       {/* Mode Switch Pills */}
       <div className="flex items-center gap-1 rounded-xl bg-secondary/80 p-1 border border-border/50">
         <button
           type="button"
-          onClick={() => setSearchMode("first_name")}
+          onClick={() => {
+            setSearchMode("first_name");
+            setFirstSuggestions([]);
+            setLastSuggestions([]);
+            setErrorMessage("");
+          }}
           className={`flex-1 flex items-center justify-center gap-1.5 py-2 text-xs font-semibold rounded-lg transition-all ${
             searchMode === "first_name"
               ? "bg-card text-foreground shadow-sm shadow-black/5"
@@ -133,7 +275,12 @@ export const NameCheckerForm: React.FC<NameCheckerFormProps> = ({
         </button>
         <button
           type="button"
-          onClick={() => setSearchMode("full_name")}
+          onClick={() => {
+            setSearchMode("full_name");
+            setFirstSuggestions([]);
+            setLastSuggestions([]);
+            setErrorMessage("");
+          }}
           className={`flex-1 flex items-center justify-center gap-1.5 py-2 text-xs font-semibold rounded-lg transition-all ${
             searchMode === "full_name"
               ? "bg-card text-foreground shadow-sm shadow-black/5"
@@ -147,7 +294,8 @@ export const NameCheckerForm: React.FC<NameCheckerFormProps> = ({
 
       {/* Input Fields */}
       <div className={`space-y-3 ${shake ? "animate-[shake_0.4s_ease-in-out]" : ""}`}>
-        <div>
+        {/* First Name Field */}
+        <div className="relative">
           <label htmlFor="first-name-input" className="block text-xs font-medium text-muted-foreground mb-1.5">
             {searchMode === "full_name" ? "First Name" : "First Name (or Full Name)"}
           </label>
@@ -155,21 +303,63 @@ export const NameCheckerForm: React.FC<NameCheckerFormProps> = ({
             <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground pointer-events-none" />
             <input
               id="first-name-input"
-              ref={inputRef}
+              ref={activeFirstRef}
               type="text"
               placeholder={searchMode === "full_name" ? "e.g. David, José, Rahul, Wei" : "e.g. David, Sophia, José, O'Connor"}
               value={firstName}
               onChange={(e) => handleFirstChange(e.target.value)}
+              onKeyDown={handleFirstKeyDown}
+              onFocus={() => {
+                setIsFirstFocused(true);
+                if (firstName.trim().length >= 1) handleFirstChange(firstName);
+              }}
+              onBlur={() => {
+                setTimeout(() => setIsFirstFocused(false), 200);
+              }}
               maxLength={30}
-              autoComplete="given-name"
+              autoComplete="off"
+              role="combobox"
+              aria-expanded={showFirstDropdown}
+              aria-autocomplete="list"
+              aria-controls="first-name-listbox"
               aria-invalid={Boolean(errorMessage)}
               className="w-full h-13 rounded-xl border-2 border-border bg-background pl-11 pr-4 text-foreground text-base placeholder:text-muted-foreground/60 focus:outline-none focus:border-primary focus:ring-4 focus:ring-primary/15 transition-all"
             />
           </div>
+
+          {/* First Name Suggestions Dropdown */}
+          {showFirstDropdown && (
+            <ul
+              id="first-name-listbox"
+              role="listbox"
+              className="absolute top-full left-0 right-0 mt-1.5 bg-card/95 backdrop-blur-md border border-border rounded-xl shadow-2xl z-30 max-h-60 overflow-y-auto p-1.5 space-y-1"
+            >
+              {firstSuggestions.map((item, idx) => (
+                <li
+                  key={item}
+                  role="option"
+                  aria-selected={highlightedFirstIndex === idx}
+                  onMouseDown={() => handleSelectFirstSuggestion(item)}
+                  onMouseEnter={() => setHighlightedFirstIndex(idx)}
+                  className={`px-3 py-2 text-sm rounded-lg cursor-pointer flex items-center justify-between transition-colors ${
+                    highlightedFirstIndex === idx
+                      ? "bg-primary text-primary-foreground font-semibold"
+                      : "text-foreground hover:bg-secondary"
+                  }`}
+                >
+                  <span>{item}</span>
+                  <span className="text-[11px] opacity-70">
+                    {item.includes(" ") ? "Full Name" : "First Name"}
+                  </span>
+                </li>
+              ))}
+            </ul>
+          )}
         </div>
 
+        {/* Last Name Field (Full Name Mode) */}
         {searchMode === "full_name" && (
-          <div className="animate-in fade-in duration-200">
+          <div className="relative animate-in fade-in duration-200">
             <label htmlFor="last-name-input" className="block text-xs font-medium text-muted-foreground mb-1.5">
               Last Name / Surname
             </label>
@@ -179,11 +369,50 @@ export const NameCheckerForm: React.FC<NameCheckerFormProps> = ({
               placeholder="e.g. Smith, Garcia, Sharma, O'Connor"
               value={lastName}
               onChange={(e) => handleLastChange(e.target.value)}
+              onKeyDown={handleLastKeyDown}
+              onFocus={() => {
+                setIsLastFocused(true);
+                if (lastName.trim().length >= 1) handleLastChange(lastName);
+              }}
+              onBlur={() => {
+                setTimeout(() => setIsLastFocused(false), 200);
+              }}
               maxLength={30}
-              autoComplete="family-name"
+              autoComplete="off"
+              role="combobox"
+              aria-expanded={showLastDropdown}
+              aria-autocomplete="list"
+              aria-controls="last-name-listbox"
               aria-label="Last Name"
               className="w-full h-13 rounded-xl border-2 border-border bg-background px-4 text-foreground text-base placeholder:text-muted-foreground/60 focus:outline-none focus:border-primary focus:ring-4 focus:ring-primary/15 transition-all"
             />
+
+            {/* Last Name Suggestions Dropdown */}
+            {showLastDropdown && (
+              <ul
+                id="last-name-listbox"
+                role="listbox"
+                className="absolute top-full left-0 right-0 mt-1.5 bg-card/95 backdrop-blur-md border border-border rounded-xl shadow-2xl z-30 max-h-60 overflow-y-auto p-1.5 space-y-1"
+              >
+                {lastSuggestions.map((item, idx) => (
+                  <li
+                    key={item}
+                    role="option"
+                    aria-selected={highlightedLastIndex === idx}
+                    onMouseDown={() => handleSelectLastSuggestion(item)}
+                    onMouseEnter={() => setHighlightedLastIndex(idx)}
+                    className={`px-3 py-2 text-sm rounded-lg cursor-pointer flex items-center justify-between transition-colors ${
+                      highlightedLastIndex === idx
+                        ? "bg-primary text-primary-foreground font-semibold"
+                        : "text-foreground hover:bg-secondary"
+                    }`}
+                  >
+                    <span>{item}</span>
+                    <span className="text-[11px] opacity-70">Surname</span>
+                  </li>
+                ))}
+              </ul>
+            )}
           </div>
         )}
       </div>

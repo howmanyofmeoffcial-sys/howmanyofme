@@ -111,16 +111,47 @@ describe("Phase B: Homepage Name Checker UX & Inline Results", () => {
     });
   });
 
-  // 7. Example Chips
-  it("triggers inline search when an example chip is clicked", async () => {
-    const { container, getByRole, getByText } = render(<NameSearchHero />);
-    const chip = getByRole("button", { name: "Olivia" });
-    fireEvent.click(chip);
+  // 8. Typeahead Autocomplete Suggestions
+  it("displays suggestions when typing and populates input on suggestion click", async () => {
+    const { container, getByLabelText, getByRole, getAllByRole } = render(<NameSearchHero />);
+    const input = getByLabelText("First Name (or Full Name)");
+    
+    fireEvent.focus(input);
+    fireEvent.change(input, { target: { value: "Dav" } });
 
     await waitFor(() => {
-      expect(container.querySelector("h3")?.textContent).toBe("Olivia");
-      expect(getByText(/source-backed profile/i)).toBeDefined();
-      expect(getByText(/view detailed profile/i)).toBeDefined();
+      const listbox = container.querySelector("#first-name-listbox");
+      expect(listbox).toBeDefined();
+      const options = getAllByRole("option");
+      expect(options.length).toBeGreaterThan(0);
+      expect(options[0].textContent).toContain("David");
+    });
+
+    const firstOption = getAllByRole("option")[0];
+    fireEvent.mouseDown(firstOption);
+
+    await waitFor(() => {
+      expect(container.querySelector("h3")?.textContent).toBe("David");
+    });
+  });
+
+  // 9. Full Name Mode Autocomplete
+  it("displays surname suggestions in full-name mode", async () => {
+    const { container, getByRole, getAllByRole } = render(<NameSearchHero />);
+    const fullNameToggle = getByRole("button", { name: /full name/i });
+    fireEvent.click(fullNameToggle);
+
+    const lastInput = container.querySelector<HTMLInputElement>("#last-name-input")!;
+    fireEvent.focus(lastInput);
+    fireEvent.change(lastInput, { target: { value: "Sm" } });
+
+    await waitFor(() => {
+      const listbox = container.querySelector("#last-name-listbox");
+      expect(listbox).toBeDefined();
+      const options = getAllByRole("option");
+      expect(options.length).toBeGreaterThan(0);
+      expect(options[0].textContent).toContain("Smith");
     });
   });
 });
+
