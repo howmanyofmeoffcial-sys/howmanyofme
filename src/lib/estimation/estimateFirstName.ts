@@ -4,10 +4,11 @@ import { validateName } from "../names/validateName";
 import type { NameEstimateResult } from "./types";
 import { getNameUrl } from "../seo/canonicalUrl";
 import { buildRichInsights } from "./richInsights";
+import { resolveFirstName } from "../name-resolver";
 
 /**
  * Deterministic helper to generate a consistent demographic tier for unindexed names.
- * Never uses length-inversion hacks. Maps characters deterministically into standard demographic frequency brackets.
+ * Maps characters deterministically into standard demographic frequency brackets.
  */
 function calculateDeterministicModelCount(normalizedName: string): number {
   let hash = 0;
@@ -43,10 +44,17 @@ export function estimateFirstName(rawName: string): NameEstimateResult {
       detailedProfileUrl: null,
       errorReason: validation.reason || "Invalid name provided",
       warnings: [validation.reason || "Input is not a valid name"],
+      sourceAvailability: {
+        censusFirstName: false,
+        ssaHistorical: false,
+        ssa2025: false,
+        censusSurname: false,
+      },
     };
   }
 
   const norm = normalizeName(validation.normalized);
+  const resolved = resolveFirstName(norm.display);
   const officialRecord = getNameRecord(norm.display);
 
   // 1. VERIFIED MODE (Canonical dataset match)
@@ -59,7 +67,7 @@ export function estimateFirstName(rawName: string): NameEstimateResult {
       mode: "verified",
       queryType: "first-name",
       firstName: officialRecord.name,
-      displayName: officialRecord.name,
+      displayName: norm.display || officialRecord.name,
       estimatedPeople: livingCount,
       displayEstimate: `~${livingCount.toLocaleString("en-US")}`,
       confidence: "high",
@@ -68,6 +76,8 @@ export function estimateFirstName(rawName: string): NameEstimateResult {
       methodology: "Social Security Administration 1880–2024 cohort records paired with CDC actuarial survival models.",
       userFacingLabel: "Source-backed profile",
       detailedProfileUrl: getNameUrl(officialRecord.name),
+      latestSsa: resolved.latestSsa,
+      sourceAvailability: resolved.availability,
       supportingData: {
         firstName: {
           name: officialRecord.name,
@@ -99,6 +109,8 @@ export function estimateFirstName(rawName: string): NameEstimateResult {
     methodology: "Statistical frequency estimation based on U.S. demographic distribution for unindexed names.",
     userFacingLabel: "Statistical estimate",
     detailedProfileUrl: null, // Critical: DO NOT generate unvetted SEO pages
+    latestSsa: resolved.latestSsa,
+    sourceAvailability: resolved.availability,
     supportingData: {
       firstName: {
         name: norm.display,

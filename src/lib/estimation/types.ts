@@ -111,6 +111,20 @@ export interface NameEstimateResult {
     lastName?: SupportingSurnameData;
   };
 
+  latestSsa?: {
+    year: number;
+    rank: number;
+    count: number;
+    sex: "M" | "F";
+  } | null;
+
+  sourceAvailability?: {
+    censusFirstName: boolean;
+    ssaHistorical: boolean;
+    ssa2025: boolean;
+    censusSurname: boolean;
+  };
+
   richInsights?: RichInsights;
 
   warnings?: string[];

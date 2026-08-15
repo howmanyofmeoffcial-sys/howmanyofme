@@ -10,6 +10,9 @@ import {
   Compass,
   Calendar,
   Gift,
+  Award,
+  Database,
+  TrendingUp,
 } from "lucide-react";
 import type { NameEstimateResult, DecadeHistoryPoint } from "../../lib/estimation/types";
 import { trackEvent } from "../../lib/analytics/events";
@@ -125,7 +128,7 @@ export const NameEstimateCard: React.FC<NameEstimateCardProps> = ({ result, onRe
       aria-live="polite"
       className="relative rounded-2xl border border-border/80 bg-card p-6 md:p-8 shadow-xl shadow-primary/5 transition-all animate-in fade-in slide-in-from-top-4 duration-300 space-y-6"
     >
-      {/* 0. Gradient Summary Banner (Competitor-Parity Style) */}
+      {/* 0. Gradient Summary Banner */}
       <div className="rounded-2xl bg-gradient-to-r from-primary to-indigo-600 p-4 md:p-5 text-white text-sm md:text-base font-medium text-center shadow-lg leading-relaxed">
         {result.displayName} is{" "}
         {rich?.rarity.level === "Very Rare" || rich?.rarity.level === "Rare"
@@ -187,6 +190,28 @@ export const NameEstimateCard: React.FC<NameEstimateCardProps> = ({ result, onRe
         </p>
       </div>
 
+      {/* 2b. Latest SSA 2025/2026 Popularity Section (When Available) */}
+      {result.latestSsa && (
+        <div className="rounded-xl border border-indigo-500/30 bg-indigo-500/5 p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+          <div className="flex items-center gap-2.5">
+            <div className="h-9 w-9 rounded-lg bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 flex items-center justify-center shrink-0">
+              <Award className="h-5 w-5" />
+            </div>
+            <div>
+              <span className="text-xs font-bold text-indigo-700 dark:text-indigo-300 uppercase tracking-wider block">
+                Official {result.latestSsa.year} SSA Popularity
+              </span>
+              <span className="text-sm font-medium text-foreground">
+                Ranked <strong className="text-indigo-600 dark:text-indigo-400 font-bold">#{result.latestSsa.rank}</strong> for {result.latestSsa.sex === "M" ? "Boys" : "Girls"} nationwide
+              </span>
+            </div>
+          </div>
+          <div className="text-xs text-muted-foreground bg-background/80 px-3 py-1.5 rounded-lg border border-border">
+            {result.latestSsa.count.toLocaleString()} registered births
+          </div>
+        </div>
+      )}
+
       {/* 3. Summary Stats Grid */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
         <div className="rounded-xl border border-border bg-secondary/30 p-3.5 text-center">
@@ -202,7 +227,7 @@ export const NameEstimateCard: React.FC<NameEstimateCardProps> = ({ result, onRe
         </div>
 
         <div className="rounded-xl border border-border bg-secondary/30 p-3.5 text-center">
-          <span className="text-xs text-muted-foreground block mb-1">Data Source</span>
+          <span className="text-xs text-muted-foreground block mb-1">Primary Source</span>
           <div className="text-base font-bold text-foreground">{isVerified ? "SSA & Census" : "Modelled"}</div>
         </div>
 
@@ -385,7 +410,33 @@ export const NameEstimateCard: React.FC<NameEstimateCardProps> = ({ result, onRe
         </div>
       )}
 
-      {/* 9. Personalized Birth-Year & Zodiac Insights (For Fun) */}
+      {/* 8b. Data Sources & Provenance Legend */}
+      <div className="rounded-xl border border-border bg-muted/20 p-4">
+        <span className="text-xs font-bold uppercase tracking-wider text-muted-foreground flex items-center gap-1.5 mb-2.5">
+          <Database className="h-3.5 w-3.5 text-primary" />
+          Data Sources &amp; Provenance Legend
+        </span>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
+          <div className="flex items-center gap-2 p-2 rounded-lg bg-background/60 border border-border/50">
+            <span className="h-2.5 w-2.5 rounded-full bg-emerald-500 shrink-0" />
+            <span><strong>Source-backed:</strong> Official SSA 1880–2024 records &amp; Census 2020</span>
+          </div>
+          <div className="flex items-center gap-2 p-2 rounded-lg bg-background/60 border border-border/50">
+            <span className="h-2.5 w-2.5 rounded-full bg-blue-500 shrink-0" />
+            <span><strong>Derived:</strong> Actuarial cohort life table survival modeling</span>
+          </div>
+          <div className="flex items-center gap-2 p-2 rounded-lg bg-background/60 border border-border/50">
+            <span className="h-2.5 w-2.5 rounded-full bg-amber-500 shrink-0" />
+            <span><strong>Estimated:</strong> National demographic distribution frequency model</span>
+          </div>
+          <div className="flex items-center gap-2 p-2 rounded-lg bg-background/60 border border-border/50">
+            <span className="h-2.5 w-2.5 rounded-full bg-zinc-400 shrink-0" />
+            <span><strong>Not Available:</strong> Unrecorded in primary federal census/SSA registry</span>
+          </div>
+        </div>
+      </div>
+
+      {/* 9. Personalized Birth-Year & Zodiac Insights */}
       <div className="rounded-2xl border border-primary/30 bg-primary/5 p-5 md:p-6 space-y-4">
         <div className="flex flex-wrap items-center justify-between gap-2 border-b border-primary/10 pb-3">
           <div>
@@ -440,7 +491,6 @@ export const NameEstimateCard: React.FC<NameEstimateCardProps> = ({ result, onRe
 
         {personalizedInsight && (
           <div className="space-y-3 pt-2 animate-in fade-in slide-in-from-top-2 duration-300">
-            {/* 3-Card Grid */}
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
               <div className="rounded-xl border border-rose-500/20 bg-rose-500/5 p-4">
                 <span className="text-[10px] font-bold uppercase tracking-wider text-rose-600 dark:text-rose-400">
@@ -474,7 +524,6 @@ export const NameEstimateCard: React.FC<NameEstimateCardProps> = ({ result, onRe
               </div>
             </div>
 
-            {/* Gradient Popularity Match Banner */}
             {personalizedInsight.historicalEraContext && (
               <div className="rounded-2xl bg-gradient-to-r from-primary to-indigo-600 p-4 md:p-5 text-white text-sm shadow-md">
                 <p className="font-bold text-base mb-1">
