@@ -33,4 +33,12 @@ for (const step of steps) {
   }
 }
 
+console.log("\n[STEP] Running Unit & Component Test Suite (vitest)...");
+try {
+  execSync("npx vitest run", { stdio: "inherit", cwd: path.resolve(__dirname, "../..") });
+} catch (err) {
+  console.error("\n[!] Test suite validation FAILED following data update");
+  process.exit(1);
+}
+
 console.log("\n>>> DATA PIPELINE EXECUTION COMPLETED SUCCESSFULLY <<<\n");
