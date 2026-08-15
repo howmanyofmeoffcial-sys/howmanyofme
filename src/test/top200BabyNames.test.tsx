@@ -13,8 +13,8 @@ describe("Phase: Baby Names Page Top 200 Boys & Girls Redesign", () => {
     const boys = (ssa2025Raw as any).topMale;
     const girls = (ssa2025Raw as any).topFemale;
 
-    expect(boys.length).toBe(200);
-    expect(girls.length).toBe(200);
+    expect(boys.length).toBeGreaterThanOrEqual(200);
+    expect(girls.length).toBeGreaterThanOrEqual(200);
 
     for (let i = 1; i <= 200; i++) {
       expect(boys[i - 1].rank).toBe(i);

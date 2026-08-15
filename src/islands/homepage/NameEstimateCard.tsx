@@ -12,7 +12,6 @@ import {
   Gift,
   Award,
   Database,
-  TrendingUp,
 } from "lucide-react";
 import type { NameEstimateResult, DecadeHistoryPoint } from "../../lib/estimation/types";
 import { trackEvent } from "../../lib/analytics/events";

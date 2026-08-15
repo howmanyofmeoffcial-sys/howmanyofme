@@ -1,5 +1,5 @@
-import React, { useState, useRef, useEffect } from "react";
-import { Search, ArrowRight, Loader2, User, Users, Check } from "lucide-react";
+import React, { useState, useRef } from "react";
+import { Search, ArrowRight, Loader2, User, Users } from "lucide-react";
 import { validateName } from "../../lib/names/validateName";
 import {
   searchFirstNameSuggestions,

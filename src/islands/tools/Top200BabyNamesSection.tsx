@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import ssa2025Raw from "../../data/raw/ssa/ssa_2025.json";
 import canonicalNamesList from "../../data/generated/canonical-names.json";
-import { DATA_FRESHNESS } from "../../lib/data-freshness";
 import { Sparkles, Trophy, Search, ChevronDown } from "lucide-react";
 
 interface NameEntry {
