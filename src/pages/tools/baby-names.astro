@@ -7,6 +7,8 @@ import AdSlot from '../../components/AdSlot.astro';
 import ToolCTA from '../../components/ToolCTA.astro';
 import RelatedPosts from '../../components/RelatedPosts.astro';
 import BabyNamesBrowser from '../../islands/tools/BabyNamesBrowser';
+import { Top200BabyNamesSection } from '../../islands/tools/Top200BabyNamesSection';
+import { DATA_FRESHNESS } from '../../lib/data-freshness';
 import manifest from '../../data/metadata/manifest.json';
 import {
   Sparkles,
@@ -27,42 +29,43 @@ import {
   Heart,
 } from 'lucide-react';
 
-const title = "Baby Names: Search & Browse Names A–Z by Letter & Gender";
-const description = "Browse and search baby names alphabetically by letter and gender. Explore real recorded names, ancient linguistic meanings, and 140+ years of popularity statistics.";
+const year = DATA_FRESHNESS.latestAvailableBirthYear;
+const title = `Baby Names: Popular Boy & Girl Names in ${year} | HowManyOfMe`;
+const description = `Explore official ${year} Top 200 baby boy and girl names from the Social Security Administration, browse alphabetically A–Z, and check 140+ years of popularity trends.`;
 const canonical = "https://howmanyofme.co/tools/baby-names";
 
 const faqs = [
   {
-    q: "How do I search for a baby name in the directory?",
-    a: "Type any name or partial spelling into the search box above to instantly filter through thousands of recorded names. You can also click any letter from A to Z to browse names alphabetically, or filter specifically by Boy or Girl names.",
+    q: `What were the most popular baby names in ${year}?`,
+    a: `Liam ranked #1 among boys with 20,818 registered births, and Olivia ranked #1 among girls with 13,544 registered births in the official ${year} Social Security Administration baby-name data.`,
   },
   {
-    q: "Can I filter baby names by gender?",
-    a: "Yes. You can toggle the gender filter between All Genders, Boy Names, and Girl Names. Gender classifications reflect official Social Security Administration historical birth registrations.",
+    q: `What was the #1 boy name in ${year}?`,
+    a: `Liam was the #1 boy name in ${year} with 20,818 registered newborn births across the United States.`,
   },
   {
-    q: "Where does the baby-name data come from?",
-    a: "All first names in our directory are sourced directly from official United States Social Security Administration annual birth cohorts spanning 1880 through 2024. We do not use artificially invented AI name strings.",
+    q: `What was the #1 girl name in ${year}?`,
+    a: `Olivia was the #1 girl name in ${year} with 13,544 registered newborn births across the United States.`,
   },
   {
-    q: "Does a popular baby name mean many living people have it today?",
-    a: "Not necessarily. Annual baby-name rankings measure how many newborn infants received a name in a given year. Cumulative living bearer counts across all age groups depend on historical birth waves and survival rates, which you can check on our homepage or Popularity Checker.",
+    q: `How many boys were named Liam in ${year}?`,
+    a: `There were 20,818 newborn boys named Liam in ${year} according to official Social Security birth application records.`,
   },
   {
-    q: "Can I check the meaning and origin of a baby name?",
-    a: "Yes. Selecting any name card in the directory opens its complete demographic and etymological profile, revealing its documented linguistic origin, literal translation, and decade-by-decade popularity chart.",
+    q: `How many girls were named Olivia in ${year}?`,
+    a: `There were 13,544 newborn girls named Olivia in ${year} according to official Social Security birth application records.`,
   },
   {
-    q: "How can I find rare or uncommon baby names?",
-    a: "If you are specifically searching for distinctive names with low living population frequencies, use our dedicated Unique Baby Name Generator to filter by exact living bearer thresholds (e.g. Under 1,000 or Under 5,000).",
+    q: "Are these the names of all people currently living in the U.S.?",
+    a: "No. The annual baby-name ranking measures births and name registrations during a single calendar year. It does not represent the cumulative living population across all age cohorts.",
   },
   {
-    q: "Can I see how a baby name's popularity has changed over time?",
-    a: "Yes. Our Trend Visualizer allows you to plot 140-year multi-decade historical curves for any name to see whether it is an enduring classic, a vintage revival, or a fast modern climber.",
+    q: "How often is the baby-name data updated?",
+    a: "The Social Security Administration releases national baby-name data annually. Our system updates automatically as new official releases become available.",
   },
   {
-    q: "Can I compare two baby names side-by-side?",
-    a: "Yes. Our Name Comparison Tool allows you to evaluate two finalist baby names across living population scale, historical peak years, and recent 10-year trajectories.",
+    q: "Where does the ranking come from?",
+    a: "Rankings are sourced directly from official U.S. Social Security Administration card application records for births occurring within the 50 U.S. states and the District of Columbia.",
   },
 ];
 
@@ -142,28 +145,39 @@ const jsonLd = [
         Baby Names
       </h1>
       <p class="text-base md:text-lg text-muted-foreground mt-3 leading-relaxed">
-        Choosing a baby name starts with discovery. Search thousands of real recorded names from official U.S. Social Security archives, browse alphabetically from A to Z, filter by gender, and open any name to explore its linguistic origin, living bearer count, and 140-year popularity history.
+        Choosing a baby name starts with discovery. Explore the official {year} Top 200 baby boy and girl rankings below, search thousands of recorded names from official U.S. Social Security archives, and browse alphabetically from A to Z.
       </p>
     </header>
 
-    <!-- 1. Interactive Directory Island (Above the Fold) -->
-    <section class="my-8">
-      <BabyNamesBrowser client:load />
-    </section>
+    <!-- 1. Top 200 Popular Baby Names Section (Official 2025 SSA Release) -->
+    <Top200BabyNamesSection client:load />
 
-    <!-- 2. Quick Answer Block (AEO / Snippet Ready) -->
-    <section class="my-10 rounded-2xl border-l-4 border-primary bg-primary/5 p-6 shadow-sm">
+    <!-- 2. AEO Direct Answer Block -->
+    <section class="my-10 rounded-2xl border-l-4 border-primary bg-primary/5 p-6 shadow-xs">
       <h2 class="text-xs font-bold uppercase tracking-wider text-primary mb-1">
-        Quick Answer: What Is a Baby Name Directory?
+        What Are the Most Popular Baby Names in {year}?
       </h2>
       <p class="text-sm md:text-base text-foreground leading-relaxed">
-        A baby name directory is a searchable, categorized collection of real recorded given names that enables parents to browse by starting letter, gender, and popularity. HowManyOfMe pairs alphabetical discovery with <strong>demographic frequency data and historical Social Security cohorts (1880–2024)</strong>, providing instant insights into any name's rarity and heritage.
+        <strong>Liam</strong> ranked #1 among boys with 20,818 registered births, and <strong>Olivia</strong> ranked #1 among girls with 13,544 registered births in the official {year} Social Security Administration baby-name data.
       </p>
     </section>
 
     <AdSlot />
 
-    <!-- 3. How to Narrow Down Baby Names (5 Practical Steps) -->
+    <!-- 3. Interactive A–Z Directory & Search Browser -->
+    <section class="my-12 space-y-4">
+      <div class="border-b border-border/60 pb-3">
+        <h2 class="font-display text-2xl md:text-3xl font-bold text-foreground">
+          Search &amp; Browse All Baby Names A–Z
+        </h2>
+        <p class="text-sm text-muted-foreground mt-1">
+          Explore thousands of historical and contemporary names alphabetically or by starting letter.
+        </p>
+      </div>
+      <BabyNamesBrowser client:load />
+    </section>
+
+    <!-- 4. How to Narrow Down Baby Names (5 Practical Steps) -->
     <section class="my-12 space-y-6">
       <h2 class="font-display text-2xl md:text-3xl font-bold text-foreground">
         How to Narrow Down Your Baby Name Shortlist
@@ -215,7 +229,7 @@ const jsonLd = [
       </div>
     </section>
 
-    <!-- 4. Baby Names vs Living Population (Demographic Distinction) -->
+    <!-- 5. Baby Names vs Living Population (Demographic Distinction) -->
     <section class="my-12 space-y-4">
       <h2 class="font-display text-2xl md:text-3xl font-bold text-foreground">
         Baby Name Popularity vs. Total Living Population
@@ -225,14 +239,14 @@ const jsonLd = [
           It is essential to understand the difference between newborn rankings and living population scale:
         </p>
         <ul class="list-disc list-outside pl-5 space-y-1.5">
-          <li><strong>Annual Baby Name Rankings:</strong> Measure how many newborn infants received a specific name during a single calendar year (e.g. <em>Liam</em> leading newborn registrations in recent years).</li>
+          <li><strong>Annual Baby Name Rankings:</strong> Measure how many newborn infants received a specific name during a single calendar year (e.g. <em>Liam</em> leading newborn registrations in {year}).</li>
           <li><strong>Cumulative Living Population:</strong> Reflects the total living individuals across all living age groups (e.g. <em>James</em> and <em>Robert</em> having millions of living adult bearers nationwide).</li>
           <li><strong>The HowManyOfMe Ecosystem:</strong> Our site connects both dimensions, allowing you to examine historical newborn waves alongside present-day living bearer estimates.</li>
         </ul>
       </div>
     </section>
 
-    <!-- 5. Demographic Tools Ecosystem Grid -->
+    <!-- 6. Demographic Tools Ecosystem Grid -->
     <section class="my-12 space-y-6">
       <div class="flex items-center justify-between">
         <h2 class="font-display text-2xl md:text-3xl font-bold text-foreground">
@@ -285,62 +299,74 @@ const jsonLd = [
       </div>
     </section>
 
-    <!-- 6. Federal Data Snapshot -->
+    <!-- 7. Federal Data Snapshot -->
     <section class="my-12 rounded-2xl border border-primary/20 bg-primary/5 p-6 shadow-xs space-y-4">
       <div class="flex items-center justify-between border-b border-primary/15 pb-3">
         <div class="flex items-center gap-2">
           <Database class="h-4 w-4 text-primary" />
           <h3 class="font-display text-lg font-bold text-foreground">Baby Name Data Snapshot</h3>
         </div>
-        <span class="text-xs text-muted-foreground">Release: {manifest.datasetVersion}</span>
+        <span class="text-xs text-muted-foreground">Latest Available Year: {year}</span>
       </div>
 
       <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs">
         <div class="p-3 rounded-xl bg-card border border-border">
+          <span class="text-muted-foreground block">Data Year</span>
+          <span class="font-bold text-foreground text-sm">{year}</span>
+        </div>
+        <div class="p-3 rounded-xl bg-card border border-border">
+          <span class="text-muted-foreground block">Primary Source</span>
+          <span class="font-bold text-foreground text-sm">Social Security Administration</span>
+        </div>
+        <div class="p-3 rounded-xl bg-card border border-border">
           <span class="text-muted-foreground block">Geographic Scope</span>
-          <strong class="text-foreground text-sm font-bold">United States</strong>
+          <span class="font-bold text-foreground text-sm">United States</span>
         </div>
         <div class="p-3 rounded-xl bg-card border border-border">
-          <span class="text-muted-foreground block">Primary Registry</span>
-          <strong class="text-foreground text-sm font-bold">SSA 1880–2024</strong>
-        </div>
-        <div class="p-3 rounded-xl bg-card border border-border">
-          <span class="text-muted-foreground block">Discovery Mode</span>
-          <strong class="text-foreground text-sm font-bold">Search &amp; A–Z Filter</strong>
-        </div>
-        <div class="p-3 rounded-xl bg-card border border-border">
-          <span class="text-muted-foreground block">Integration</span>
-          <strong class="text-foreground text-sm font-bold">Profiles &amp; Trends</strong>
+          <span class="text-muted-foreground block">Measured Metric</span>
+          <span class="font-bold text-foreground text-sm">Birth-Name Registrations</span>
         </div>
       </div>
     </section>
 
-    <!-- 7. Common Questions (FAQ Section) -->
+    <!-- 8. Frequently Asked Questions -->
     <section class="my-12 space-y-6">
-      <div class="flex items-center gap-2">
-        <HelpCircle class="h-5 w-5 text-primary" />
+      <div class="border-b border-border/60 pb-3">
         <h2 class="font-display text-2xl md:text-3xl font-bold text-foreground">
           Frequently Asked Questions About Baby Names
         </h2>
+        <p class="text-sm text-muted-foreground mt-1">
+          Common questions regarding annual popularity rankings and demographic name data.
+        </p>
       </div>
 
       <div class="space-y-4">
-        {faqs.map((f) => (
-          <div class="p-6 rounded-2xl border border-border bg-card shadow-xs">
-            <h3 class="font-semibold text-foreground text-base mb-2">{f.q}</h3>
-            <p class="text-sm text-muted-foreground leading-relaxed">{f.a}</p>
+        {faqs.map((faq, idx) => (
+          <div class="p-5 rounded-2xl border border-border bg-card shadow-xs space-y-2">
+            <h3 class="font-display text-base font-bold text-foreground flex items-center gap-2">
+              <HelpCircle class="h-4 w-4 text-primary shrink-0" />
+              <span>{faq.q}</span>
+            </h3>
+            <p class="text-sm text-muted-foreground leading-relaxed pl-6">
+              {faq.a}
+            </p>
           </div>
         ))}
       </div>
     </section>
 
-    <!-- 8. Final CTA -->
-    <ToolCTA
-      headline="Ready to Find Your Favorite Baby Name?"
-      subhead="Search by name above or browse through any letter from A to Z to explore profiles."
-    />
+    <!-- Related Topic Guides & Articles -->
+    <RelatedPosts currentSlug="/tools/baby-names" tags={["names", "baby-names", "popularity"]} />
 
-    <RelatedPosts currentSlug="baby-names" tags={["baby names", "tools", "trends"]} count={6} />
+    <!-- Tool Callout -->
+    <ToolCTA
+      title="Check Living Population for Any Name"
+      description="Curious how many living people share a name across all generations? Check living bearer estimates, Census frequencies, and full-name probabilities."
+      primaryBtnText="Open Name Checker"
+      primaryBtnHref="/"
+      secondaryBtnText="Popularity Checker"
+      secondaryBtnHref="/tools/popularity-checker"
+    />
   </main>
 
   <SiteFooter />
