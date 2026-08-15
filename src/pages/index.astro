@@ -310,7 +310,7 @@ const canonical = 'https://howmanyofme.co';
 
     <!-- Section 7: Related Name Tools -->
     <section class="space-y-6">
-      <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4 border-b border-border/60 pb-4">
+      <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4 border-b border-border/60 pb-6 md:pb-8">
         <div>
           <h2 class="font-display text-2xl md:text-3xl font-bold text-foreground">
             More Name Statistics Tools
@@ -324,78 +324,321 @@ const canonical = 'https://howmanyofme.co';
         </a>
       </div>
 
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <a href="/tools/popularity-checker" class="p-5 rounded-xl border border-border bg-card hover:border-primary/40 hover:shadow-md transition-all group block">
-          <div class="text-2xl mb-2">📈</div>
-          <h3 class="font-bold text-base mb-1 text-foreground group-hover:text-primary transition-colors">Popularity Checker</h3>
-          <p class="text-xs text-muted-foreground leading-relaxed">Check national rank and living bearer counts for any first name.</p>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 md:gap-6">
+        <!-- 1. Popularity Checker -->
+        <a
+          href="/tools/popularity-checker"
+          class="p-6 rounded-2xl border border-border border-t-2 border-t-emerald-500/80 bg-card hover:border-emerald-500/40 hover:shadow-lg hover:-translate-y-1 transition-all group flex flex-col justify-between"
+        >
+          <div class="space-y-3">
+            <div class="flex items-center justify-between">
+              <div class="h-10 w-10 rounded-xl bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20 flex items-center justify-center">
+                <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <line x1="18" y1="20" x2="18" y2="10"></line>
+                  <line x1="12" y1="20" x2="12" y2="4"></line>
+                  <line x1="6" y1="20" x2="6" y2="14"></line>
+                </svg>
+              </div>
+              <div class="flex items-end gap-1 h-5 px-2 py-0.5 rounded bg-emerald-500/5 border border-emerald-500/15" aria-hidden="true">
+                <div class="w-1.5 h-2 bg-emerald-500/40 rounded-xs"></div>
+                <div class="w-1.5 h-3.5 bg-emerald-500/60 rounded-xs"></div>
+                <div class="w-1.5 h-2.5 bg-emerald-500/50 rounded-xs"></div>
+                <div class="w-1.5 h-4.5 bg-emerald-500 rounded-xs"></div>
+              </div>
+            </div>
+            <div>
+              <h3 class="font-bold text-base text-foreground group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors">
+                Popularity Checker
+              </h3>
+              <p class="text-xs text-muted-foreground leading-relaxed mt-1.5">
+                Check national rank and living bearer counts for any first name.
+              </p>
+            </div>
+          </div>
+          <div class="pt-4 mt-2 border-t border-border/50 flex items-center text-xs font-semibold text-emerald-600 dark:text-emerald-400">
+            <span>Explore popularity</span>
+            <span class="ml-1 transition-transform group-hover:translate-x-0.5">→</span>
+          </div>
         </a>
 
-        <a href="/tools/name-comparison" class="p-5 rounded-xl border border-border bg-card hover:border-primary/40 hover:shadow-md transition-all group block">
-          <div class="text-2xl mb-2">⚖️</div>
-          <h3 class="font-bold text-base mb-1 text-foreground group-hover:text-primary transition-colors">Name Comparison</h3>
-          <p class="text-xs text-muted-foreground leading-relaxed">Compare two names side-by-side on popularity, rank, and historical trends.</p>
+        <!-- 2. Name Comparison -->
+        <a
+          href="/tools/name-comparison"
+          class="p-6 rounded-2xl border border-border border-t-2 border-t-blue-500/80 bg-card hover:border-blue-500/40 hover:shadow-lg hover:-translate-y-1 transition-all group flex flex-col justify-between"
+        >
+          <div class="space-y-3">
+            <div class="flex items-center justify-between">
+              <div class="h-10 w-10 rounded-xl bg-blue-500/10 text-blue-600 dark:text-blue-400 border border-blue-500/20 flex items-center justify-center">
+                <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M16 3h5v5"></path>
+                  <path d="M8 3H3v5"></path>
+                  <path d="M12 22v-8.3"></path>
+                  <path d="m21 3-7.5 7.5"></path>
+                  <path d="m3 3 7.5 7.5"></path>
+                </svg>
+              </div>
+              <div class="flex items-center gap-1.5 h-5 px-2 py-0.5 rounded bg-blue-500/5 border border-blue-500/15" aria-hidden="true">
+                <div class="w-2.5 h-2 bg-blue-500 rounded-xs"></div>
+                <span class="text-[9px] font-bold text-blue-600 dark:text-blue-400 font-mono">VS</span>
+                <div class="w-3.5 h-2 bg-indigo-500/60 rounded-xs"></div>
+              </div>
+            </div>
+            <div>
+              <h3 class="font-bold text-base text-foreground group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
+                Name Comparison
+              </h3>
+              <p class="text-xs text-muted-foreground leading-relaxed mt-1.5">
+                Compare two names side-by-side on popularity, rank, and historical trends.
+              </p>
+            </div>
+          </div>
+          <div class="pt-4 mt-2 border-t border-border/50 flex items-center text-xs font-semibold text-blue-600 dark:text-blue-400">
+            <span>Compare names</span>
+            <span class="ml-1 transition-transform group-hover:translate-x-0.5">→</span>
+          </div>
         </a>
 
-        <a href="/tools/trend-visualizer" class="p-5 rounded-xl border border-border bg-card hover:border-primary/40 hover:shadow-md transition-all group block">
-          <div class="text-2xl mb-2">📊</div>
-          <h3 class="font-bold text-base mb-1 text-foreground group-hover:text-primary transition-colors">Trend Visualizer</h3>
-          <p class="text-xs text-muted-foreground leading-relaxed">Explore 140+ years of historical baby name trajectories since 1880.</p>
+        <!-- 3. Trend Visualizer -->
+        <a
+          href="/tools/trend-visualizer"
+          class="p-6 rounded-2xl border border-border border-t-2 border-t-purple-500/80 bg-card hover:border-purple-500/40 hover:shadow-lg hover:-translate-y-1 transition-all group flex flex-col justify-between"
+        >
+          <div class="space-y-3">
+            <div class="flex items-center justify-between">
+              <div class="h-10 w-10 rounded-xl bg-purple-500/10 text-purple-600 dark:text-purple-400 border border-purple-500/20 flex items-center justify-center">
+                <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="m3 3 3 9 4-6 5 10 6-5"></path>
+                </svg>
+              </div>
+              <div class="flex items-center h-5 px-2 py-0.5 rounded bg-purple-500/5 border border-purple-500/15" aria-hidden="true">
+                <svg class="w-7 h-3 text-purple-500" viewBox="0 0 28 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M1 9 L7 10 L14 3 L21 6 L27 1"></path>
+                </svg>
+              </div>
+            </div>
+            <div>
+              <h3 class="font-bold text-base text-foreground group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors">
+                Trend Visualizer
+              </h3>
+              <p class="text-xs text-muted-foreground leading-relaxed mt-1.5">
+                Explore 140+ years of historical baby name trajectories since 1880.
+              </p>
+            </div>
+          </div>
+          <div class="pt-4 mt-2 border-t border-border/50 flex items-center text-xs font-semibold text-purple-600 dark:text-purple-400">
+            <span>View historical curves</span>
+            <span class="ml-1 transition-transform group-hover:translate-x-0.5">→</span>
+          </div>
         </a>
 
-        <a href="/tools/random-name" class="p-5 rounded-xl border border-border bg-card hover:border-primary/40 hover:shadow-md transition-all group block">
-          <div class="text-2xl mb-2">🎲</div>
-          <h3 class="font-bold text-base mb-1 text-foreground group-hover:text-primary transition-colors">Random Name Explorer</h3>
-          <p class="text-xs text-muted-foreground leading-relaxed">Discover real recorded names across historical popularity tiers.</p>
+        <!-- 4. Random Name Explorer -->
+        <a
+          href="/tools/random-name"
+          class="p-6 rounded-2xl border border-border border-t-2 border-t-amber-500/80 bg-card hover:border-amber-500/40 hover:shadow-lg hover:-translate-y-1 transition-all group flex flex-col justify-between"
+        >
+          <div class="space-y-3">
+            <div class="flex items-center justify-between">
+              <div class="h-10 w-10 rounded-xl bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/20 flex items-center justify-center">
+                <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <rect width="18" height="18" x="3" y="3" rx="2" ry="2"></rect>
+                  <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                  <circle cx="15.5" cy="8.5" r="1.5"></circle>
+                  <circle cx="12" cy="12" r="1.5"></circle>
+                  <circle cx="8.5" cy="15.5" r="1.5"></circle>
+                  <circle cx="15.5" cy="15.5" r="1.5"></circle>
+                </svg>
+              </div>
+              <div class="flex items-center gap-1 h-5 px-2 py-0.5 rounded bg-amber-500/5 border border-amber-500/15" aria-hidden="true">
+                <div class="w-1.5 h-1.5 rounded-full bg-amber-500"></div>
+                <div class="w-1.5 h-1.5 rounded-full bg-amber-500/50"></div>
+                <div class="w-1.5 h-1.5 rounded-full bg-amber-500/80"></div>
+              </div>
+            </div>
+            <div>
+              <h3 class="font-bold text-base text-foreground group-hover:text-amber-600 dark:group-hover:text-amber-400 transition-colors">
+                Random Name Explorer
+              </h3>
+              <p class="text-xs text-muted-foreground leading-relaxed mt-1.5">
+                Discover real recorded names across historical popularity tiers.
+              </p>
+            </div>
+          </div>
+          <div class="pt-4 mt-2 border-t border-border/50 flex items-center text-xs font-semibold text-amber-600 dark:text-amber-400">
+            <span>Discover names</span>
+            <span class="ml-1 transition-transform group-hover:translate-x-0.5">→</span>
+          </div>
         </a>
       </div>
     </section>
 
     <!-- Section 8: Data Sources & Why Results Can Differ (AEO-Friendly) -->
-    <section class="grid grid-cols-1 md:grid-cols-2 gap-6">
-      <div class="p-6 md:p-8 rounded-2xl border border-border bg-card space-y-4">
-        <h2 class="font-display text-xl md:text-2xl font-bold text-foreground">
-          Where the Data Comes From
-        </h2>
-        <p class="text-xs md:text-sm text-muted-foreground leading-relaxed">
-          HowManyOfMe uses official U.S. government public domain datasets:
-        </p>
-        <ul class="text-xs md:text-sm text-muted-foreground space-y-2.5 list-disc list-inside">
-          <li>
-            <strong class="text-foreground">Social Security Administration:</strong> Historical birth cohorts from 1880 through {manifest.sources.ssa.latestAvailableYear}.
-          </li>
-          <li>
-            <strong class="text-foreground">U.S. Census Bureau:</strong> 2020 Decennial Census first-names tabulations and Decennial surname frequencies.
-          </li>
-          <li>
-            <strong class="text-foreground">Actuarial Survival Tables:</strong> CDC & SSA cohort life tables for estimating living population.
-          </li>
-        </ul>
-        <div class="pt-2">
-          <a href="/methodology" class="text-xs font-semibold text-primary hover:underline">
-            Read full data methodology & transparency notes →
-          </a>
-        </div>
-      </div>
+    <section class="border-t border-border/60 pt-16 mt-4">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8">
+        <!-- Card 1: Where the Data Comes From -->
+        <div class="p-6 md:p-8 rounded-2xl border border-border bg-card shadow-xs space-y-6 flex flex-col justify-between">
+          <div class="space-y-4">
+            <div class="flex items-center gap-3">
+              <div class="h-9 w-9 rounded-xl bg-primary/10 text-primary border border-primary/20 flex items-center justify-center shrink-0">
+                <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <ellipse cx="12" cy="5" rx="9" ry="3"></ellipse>
+                  <path d="M3 5V19A9 3 0 0 0 21 19V5"></path>
+                  <path d="M3 12A9 3 0 0 0 21 12"></path>
+                </svg>
+              </div>
+              <h2 class="font-display text-xl md:text-2xl font-bold text-foreground">
+                Where the Data Comes From
+              </h2>
+            </div>
+            <p class="text-xs md:text-sm text-muted-foreground leading-relaxed">
+              HowManyOfMe uses official U.S. government public domain datasets:
+            </p>
 
-      <div class="p-6 md:p-8 rounded-2xl border border-border bg-card space-y-4">
-        <h2 class="font-display text-xl md:text-2xl font-bold text-foreground">
-          Why Results Can Differ
-        </h2>
-        <p class="text-xs md:text-sm text-muted-foreground leading-relaxed">
-          If you see different numbers on other name tools, here is why:
-        </p>
-        <ul class="text-xs md:text-sm text-muted-foreground space-y-2.5 list-disc list-inside">
-          <li>
-            <strong class="text-foreground">Births vs. Living People:</strong> Many sites only display total cumulative births without accounting for natural mortality over time.
-          </li>
-          <li>
-            <strong class="text-foreground">Single-Year vs. Cohort Models:</strong> Some tools only show recent annual baby name counts rather than the entire living age pyramid.
-          </li>
-          <li>
-            <strong class="text-foreground">Observed vs. Modelled Data:</strong> We clearly label when a name uses direct official records versus derived statistical estimates.
-          </li>
-        </ul>
+            <div class="space-y-4 pt-1">
+              <!-- Item 1: SSA -->
+              <div class="flex items-start gap-3">
+                <div class="h-6 w-6 rounded-lg bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 flex items-center justify-center shrink-0 mt-0.5">
+                  <svg class="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="20 6 9 17 4 12"></polyline>
+                  </svg>
+                </div>
+                <div class="space-y-1 flex-1">
+                  <div class="flex flex-wrap items-center gap-2">
+                    <strong class="text-xs sm:text-sm text-foreground">Social Security Administration</strong>
+                    <span class="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-700 dark:text-emerald-300 border border-emerald-500/20">
+                      1880 → {manifest.sources.ssa.latestAvailableYear}
+                    </span>
+                  </div>
+                  <p class="text-xs text-muted-foreground leading-relaxed">
+                    Historical birth cohorts from 1880 through {manifest.sources.ssa.latestAvailableYear} covering millions of annual card registrations.
+                  </p>
+                </div>
+              </div>
+
+              <!-- Item 2: Census -->
+              <div class="flex items-start gap-3">
+                <div class="h-6 w-6 rounded-lg bg-blue-500/10 text-blue-600 dark:text-blue-400 flex items-center justify-center shrink-0 mt-0.5">
+                  <svg class="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="9" cy="7" r="4"></circle>
+                    <path d="M22 21v-2a4 4 0 0 0-3-3.87"></path>
+                    <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                  </svg>
+                </div>
+                <div class="space-y-1 flex-1">
+                  <div class="flex flex-wrap items-center gap-2">
+                    <strong class="text-xs sm:text-sm text-foreground">U.S. Census Bureau</strong>
+                    <span class="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-blue-500/10 text-blue-700 dark:text-blue-300 border border-blue-500/20">
+                      Decennial Tabulation
+                    </span>
+                  </div>
+                  <p class="text-xs text-muted-foreground leading-relaxed">
+                    2020 Decennial Census first-names tabulations and Decennial surname frequencies.
+                  </p>
+                </div>
+              </div>
+
+              <!-- Item 3: Actuarial -->
+              <div class="flex items-start gap-3">
+                <div class="h-6 w-6 rounded-lg bg-purple-500/10 text-purple-600 dark:text-purple-400 flex items-center justify-center shrink-0 mt-0.5">
+                  <svg class="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                  </svg>
+                </div>
+                <div class="space-y-1 flex-1">
+                  <div class="flex flex-wrap items-center gap-2">
+                    <strong class="text-xs sm:text-sm text-foreground">Actuarial Survival Tables</strong>
+                    <span class="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-purple-500/10 text-purple-700 dark:text-purple-300 border border-purple-500/20">
+                      CDC &amp; SSA Curves
+                    </span>
+                  </div>
+                  <p class="text-xs text-muted-foreground leading-relaxed">
+                    CDC &amp; SSA cohort life tables for estimating living population across all generations.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="pt-4 border-t border-border/50">
+            <a href="/methodology" class="text-xs font-semibold text-primary hover:underline inline-flex items-center gap-1">
+              <span>Read full data methodology &amp; transparency notes</span>
+              <span>→</span>
+            </a>
+          </div>
+        </div>
+
+        <!-- Card 2: Why Results Can Differ -->
+        <div class="p-6 md:p-8 rounded-2xl border border-border bg-card shadow-xs space-y-6 flex flex-col justify-between">
+          <div class="space-y-4">
+            <div class="flex items-center gap-3">
+              <div class="h-9 w-9 rounded-xl bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/20 flex items-center justify-center shrink-0">
+                <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="12" cy="12" r="10"></circle>
+                  <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+                  <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                </svg>
+              </div>
+              <h2 class="font-display text-xl md:text-2xl font-bold text-foreground">
+                Why Results Can Differ
+              </h2>
+            </div>
+            <p class="text-xs md:text-sm text-muted-foreground leading-relaxed">
+              If you see different numbers on other name tools, here is why:
+            </p>
+
+            <div class="space-y-4 pt-1">
+              <!-- Item 1: Births vs Living -->
+              <div class="flex items-start gap-3">
+                <div class="h-6 w-6 rounded-lg bg-secondary text-muted-foreground flex items-center justify-center shrink-0 mt-0.5">
+                  <svg class="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="m18 8 4 4-4 4"></path>
+                    <path d="M2 12h20"></path>
+                    <path d="m6 16-4-4 4-4"></path>
+                  </svg>
+                </div>
+                <div class="space-y-1 flex-1">
+                  <strong class="text-xs sm:text-sm text-foreground block">Births vs. Living People</strong>
+                  <p class="text-xs text-muted-foreground leading-relaxed">
+                    Many sites only display total cumulative births without accounting for natural mortality over time.
+                  </p>
+                </div>
+              </div>
+
+              <!-- Item 2: Single-Year vs Cohort -->
+              <div class="flex items-start gap-3">
+                <div class="h-6 w-6 rounded-lg bg-secondary text-muted-foreground flex items-center justify-center shrink-0 mt-0.5">
+                  <svg class="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="12" y1="20" x2="12" y2="10"></line>
+                    <line x1="18" y1="20" x2="18" y2="4"></line>
+                    <line x1="6" y1="20" x2="6" y2="16"></line>
+                  </svg>
+                </div>
+                <div class="space-y-1 flex-1">
+                  <strong class="text-xs sm:text-sm text-foreground block">Single-Year vs. Cohort Models</strong>
+                  <p class="text-xs text-muted-foreground leading-relaxed">
+                    Some tools only show recent annual baby name counts rather than the entire living age pyramid.
+                  </p>
+                </div>
+              </div>
+
+              <!-- Item 3: Observed vs Modelled -->
+              <div class="flex items-start gap-3">
+                <div class="h-6 w-6 rounded-lg bg-secondary text-muted-foreground flex items-center justify-center shrink-0 mt-0.5">
+                  <svg class="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                    <path d="m9 12 2 2 4-4"></path>
+                  </svg>
+                </div>
+                <div class="space-y-1 flex-1">
+                  <strong class="text-xs sm:text-sm text-foreground block">Observed vs. Modelled Data</strong>
+                  <p class="text-xs text-muted-foreground leading-relaxed">
+                    We clearly label when a name uses direct official records versus derived statistical estimates.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </section>
 
