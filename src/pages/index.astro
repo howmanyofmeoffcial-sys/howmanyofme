@@ -4,7 +4,7 @@ import SiteHeader from '../islands/SiteHeader';
 import NameSearchHero from '../islands/NameSearchHero';
 import SiteFooter from '../components/SiteFooter.astro';
 import AdSlot from '../components/AdSlot.astro';
-import { getPopularNames, formatNumber, ALPHABET } from '../data/nameData';
+import { getPopularNames, formatNumber } from '../data/nameData';
 import { PopularBabyNamesSection } from '../islands/homepage/PopularBabyNamesSection';
 import { getAllSurnames } from '../lib/surnames/data';
 import { getSurnameUrl } from '../lib/surnames/url';
@@ -105,9 +105,9 @@ const canonical = 'https://howmanyofme.co';
   <SiteHeader client:idle />
   <NameSearchHero client:load />
 
-  <main class="container py-12 space-y-16">
+  <main class="container py-8 md:py-12">
     <!-- Section 1: AEO Summary & What This Estimate Means -->
-    <section class="max-w-4xl mx-auto">
+    <section class="homepage-section max-w-4xl mx-auto">
       <div class="rounded-2xl border border-border/80 bg-card p-6 md:p-8 shadow-sm space-y-6">
         <div>
           <h2 class="font-display text-2xl md:text-3xl font-bold text-foreground mb-2">
@@ -146,13 +146,18 @@ const canonical = 'https://howmanyofme.co';
       </div>
     </section>
 
-    <!-- Section 2: Popular Baby Names in 2025 (Official SSA Data) -->
-    <PopularBabyNamesSection client:load />
+    <!-- Section 2: Popular Baby Names in 2026 (Official SSA Data) -->
+    <section class="homepage-section">
+      <PopularBabyNamesSection client:load />
+    </section>
 
-    <AdSlot />
+    <!-- Ad Slot 1: Mid-content upper break -->
+    <div class="homepage-ad-break">
+      <AdSlot format="responsive" />
+    </div>
 
     <!-- Section 3: Popular Surnames -->
-    <section class="space-y-6">
+    <section class="homepage-section space-y-6">
       <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4 border-b border-border/60 pb-4">
         <div>
           <h2 class="font-display text-2xl md:text-3xl font-bold text-foreground">
@@ -186,7 +191,7 @@ const canonical = 'https://howmanyofme.co';
     </section>
 
     <!-- Section 4: Full-Name Discovery & Combinations -->
-    <section class="rounded-2xl border border-border/80 bg-secondary/30 p-6 md:p-8 space-y-6">
+    <section class="homepage-section rounded-2xl border border-border/80 bg-secondary/30 p-6 md:p-8 space-y-6">
       <div class="max-w-2xl">
         <h2 class="font-display text-2xl md:text-3xl font-bold text-foreground mb-2">
           Check a Full Name Combination
@@ -213,8 +218,13 @@ const canonical = 'https://howmanyofme.co';
       </div>
     </section>
 
+    <!-- Ad Slot 2: Mid-content main break -->
+    <div class="homepage-ad-break">
+      <AdSlot format="responsive" />
+    </div>
+
     <!-- Section 5: How Name Estimates Work (3 Simple Steps) -->
-    <section class="space-y-8">
+    <section class="homepage-section space-y-8">
       <div class="text-center max-w-2xl mx-auto">
         <h2 class="font-display text-2xl md:text-3xl font-bold text-foreground mb-2">
           How Name Estimates Work
@@ -257,59 +267,8 @@ const canonical = 'https://howmanyofme.co';
       </div>
     </section>
 
-    <!-- Section 6: Name Directories -->
-    <section class="space-y-6">
-      <div class="text-center max-w-2xl mx-auto">
-        <h2 class="font-display text-2xl md:text-3xl font-bold text-foreground mb-2">
-          Explore Name Directories
-        </h2>
-        <p class="text-sm text-muted-foreground">
-          Browse verified names across all demographic directories
-        </p>
-      </div>
-
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <a href="/names/a" class="p-6 rounded-2xl border border-border bg-card hover:border-primary/50 hover:shadow-md transition-all group block">
-          <h3 class="font-bold text-lg text-foreground group-hover:text-primary transition-colors mb-2">
-            First Names Directory (A–Z)
-          </h3>
-          <p class="text-xs md:text-sm text-muted-foreground leading-relaxed mb-4">
-            Explore thousands of indexed first names with popularity trends, rankings, and historical data.
-          </p>
-          <div class="flex flex-wrap gap-1">
-            {ALPHABET.slice(0, 13).map((l) => (
-              <span class="w-6 h-6 rounded bg-secondary text-[11px] font-bold flex items-center justify-center uppercase text-foreground">
-                {l}
-              </span>
-            ))}
-            <span class="text-xs text-muted-foreground self-center ml-1">...</span>
-          </div>
-        </a>
-
-        <a href="/last-names" class="p-6 rounded-2xl border border-border bg-card hover:border-primary/50 hover:shadow-md transition-all group block">
-          <h3 class="font-bold text-lg text-foreground group-hover:text-primary transition-colors mb-2">
-            Last Names Directory
-          </h3>
-          <p class="text-xs md:text-sm text-muted-foreground leading-relaxed mb-4">
-            Search frequently occurring U.S. surnames from Decennial Census returns with linguistic origins.
-          </p>
-          <span class="text-xs font-semibold text-primary">Browse Surnames →</span>
-        </a>
-
-        <a href="/people/james-smith" class="p-6 rounded-2xl border border-border bg-card hover:border-primary/50 hover:shadow-md transition-all group block">
-          <h3 class="font-bold text-lg text-foreground group-hover:text-primary transition-colors mb-2">
-            Full Name Profiles
-          </h3>
-          <p class="text-xs md:text-sm text-muted-foreground leading-relaxed mb-4">
-            View joint probability estimates for common first + last name combinations in the U.S.
-          </p>
-          <span class="text-xs font-semibold text-primary">View Example Profiles →</span>
-        </a>
-      </div>
-    </section>
-
-    <!-- Section 7: Related Name Tools -->
-    <section class="space-y-6">
+    <!-- Section 6: More Name Statistics Tools -->
+    <section class="homepage-section space-y-6">
       <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4 border-b border-border/60 pb-6 md:pb-8">
         <div>
           <h2 class="font-display text-2xl md:text-3xl font-bold text-foreground">
@@ -471,8 +430,13 @@ const canonical = 'https://howmanyofme.co';
       </div>
     </section>
 
-    <!-- Section 8: Data Sources & Why Results Can Differ (AEO-Friendly) -->
-    <section class="border-t border-border/60 pt-16 mt-4">
+    <!-- Ad Slot 3: Lower content break -->
+    <div class="homepage-ad-break">
+      <AdSlot format="responsive" />
+    </div>
+
+    <!-- Section 7: Data Sources & Why Results Can Differ (AEO-Friendly) -->
+    <section class="homepage-section border-t border-border/60 pt-12 md:pt-16">
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8">
         <!-- Card 1: Where the Data Comes From -->
         <div class="p-6 md:p-8 rounded-2xl border border-border bg-card shadow-xs space-y-6 flex flex-col justify-between">
@@ -642,8 +606,8 @@ const canonical = 'https://howmanyofme.co';
       </div>
     </section>
 
-    <!-- Section 9: FAQ Accordion -->
-    <section class="space-y-8" id="faq">
+    <!-- Section 8: FAQ Accordion -->
+    <section class="homepage-section space-y-8" id="faq">
       <div class="text-center max-w-2xl mx-auto">
         <h2 class="font-display text-2xl md:text-3xl font-bold text-foreground mb-2">
           Frequently Asked Questions

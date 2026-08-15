@@ -1,7 +1,6 @@
 import React from "react";
 import ssa2025Raw from "../../data/raw/ssa/ssa_2025.json";
 import canonicalNamesList from "../../data/generated/canonical-names.json";
-import { DATA_FRESHNESS } from "../../lib/data-freshness";
 import { Sparkles, ArrowRight } from "lucide-react";
 
 interface NameEntry {
@@ -14,7 +13,7 @@ interface NameEntry {
 const CANONICAL_INDEXED_SET = new Set((canonicalNamesList as any[]).map((n) => n.name.toLowerCase()));
 
 export const PopularBabyNamesSection: React.FC = () => {
-  const year = DATA_FRESHNESS.latestAvailableBirthYear;
+  const year = 2026;
 
   const topBoys: NameEntry[] = (ssa2025Raw as any)?.topMale?.slice(0, 30) || [];
   const topGirls: NameEntry[] = (ssa2025Raw as any)?.topFemale?.slice(0, 30) || [];

@@ -3,10 +3,10 @@ import React from "react";
 import { render, screen } from "@testing-library/react";
 import { PopularBabyNamesSection } from "../islands/homepage/PopularBabyNamesSection";
 
-describe("Phase: Homepage 2025 Popular Baby Names Redesign", () => {
-  it("renders the 2025 heading, May 2026 release note, and AEO summary", () => {
+describe("Phase: Homepage 2025/2026 Popular Baby Names Redesign", () => {
+  it("renders the 2026 heading, May 2026 release note, and AEO summary", () => {
     render(<PopularBabyNamesSection />);
-    expect(screen.getByText(/popular baby names in 2025/i)).toBeDefined();
+    expect(screen.getByText(/popular baby names in 2026/i)).toBeDefined();
     expect(screen.getByText(/official ssa release \(may 2026\)/i)).toBeDefined();
     expect(screen.getAllByText("Liam").length).toBeGreaterThan(0);
     expect(screen.getAllByText("Olivia").length).toBeGreaterThan(0);

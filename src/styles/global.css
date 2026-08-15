@@ -46,6 +46,11 @@
     --sidebar-accent-foreground: 240 5.9% 10%;
     --sidebar-border: 220 13% 91%;
     --sidebar-ring: 217.2 91.2% 59.8%;
+
+    --section-gap-sm: 2rem;
+    --section-gap-md: 3.5rem;
+    --section-gap-lg: 5rem;
+    --section-gap-xl: 6rem;
   }
 
   .dark {
@@ -127,6 +132,22 @@
     @apply border border-dashed border-border rounded-lg flex items-center justify-center text-muted-foreground text-sm my-8 bg-secondary/20;
     min-height: 250px;
     contain: layout style;
+  }
+
+  .homepage-section {
+    @apply my-12 md:my-16 lg:my-20;
+  }
+
+  .homepage-section--compact {
+    @apply my-8 md:my-10 lg:my-12;
+  }
+
+  .homepage-section--major {
+    @apply my-16 md:my-20 lg:my-24;
+  }
+
+  .homepage-ad-break {
+    @apply my-10 md:my-14 lg:my-16 w-full;
   }
 }
 
