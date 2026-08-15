@@ -6,7 +6,6 @@
  * and joint full-name probability calculations under statistical independence.
  */
 
-import { validateName } from "./names/validateName";
 import { normalizeName } from "./names/normalizeName";
 
 export type MetricType = "observed" | "derived" | "estimated" | "unavailable";
