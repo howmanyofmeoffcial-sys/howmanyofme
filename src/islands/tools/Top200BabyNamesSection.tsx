@@ -213,7 +213,7 @@ const GenderRankingBlock: React.FC<GenderRankingProps> = ({
 };
 
 export const Top200BabyNamesSection: React.FC = () => {
-  const year = DATA_FRESHNESS.latestAvailableBirthYear;
+  const year = 2026;
 
   const allBoys: NameEntry[] = (ssa2025Raw as any)?.topMale || [];
   const allGirls: NameEntry[] = (ssa2025Raw as any)?.topFemale || [];

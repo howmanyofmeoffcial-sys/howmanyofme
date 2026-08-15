@@ -22,10 +22,10 @@ describe("Phase: Baby Names Page Top 200 Boys & Girls Redesign", () => {
     }
   });
 
-  it("renders two clearly separate sections for Top 200 Boys and Top 200 Girls", () => {
+  it("renders two clearly separate sections for Top 200 Boys and Top 200 Girls in 2026", () => {
     render(<Top200BabyNamesSection />);
-    expect(screen.getByRole("heading", { level: 2, name: /top 200 boy names in 2025/i })).toBeDefined();
-    expect(screen.getByRole("heading", { level: 2, name: /top 200 girl names in 2025/i })).toBeDefined();
+    expect(screen.getByRole("heading", { level: 2, name: /top 200 boy names in 2026/i })).toBeDefined();
+    expect(screen.getByRole("heading", { level: 2, name: /top 200 girl names in 2026/i })).toBeDefined();
 
     // Check anchor links
     const boyAnchor = screen.getByRole("link", { name: /top 200 boy names/i });
@@ -48,7 +48,7 @@ describe("Phase: Baby Names Page Top 200 Boys & Girls Redesign", () => {
 
   it("filters names inside the boy ranking table via search input", () => {
     render(<Top200BabyNamesSection />);
-    const searchBoyInput = screen.getByPlaceholderText(/search boy names in the 2025 ranking/i);
+    const searchBoyInput = screen.getByPlaceholderText(/search boy names in the 2026 ranking/i);
     fireEvent.change(searchBoyInput, { target: { value: "Theodore" } });
 
     expect(screen.getAllByText("Theodore").length).toBeGreaterThan(0);
