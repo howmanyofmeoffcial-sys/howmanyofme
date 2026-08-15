@@ -9,7 +9,10 @@ console.log(">>> STARTING OFFICIAL DATA INGESTION PIPELINE <<<");
 console.log("==================================================");
 
 const steps = [
-  { name: "Fetch SSA Dataset Snapshot", script: "fetch-ssa.mjs" },
+  { name: "Verify SSA National Researcher Dataset", script: "sources/fetch-ssa-national.mjs" },
+  { name: "Verify Census 2020 First Names Dataset", script: "sources/fetch-census-first-names.mjs" },
+  { name: "Verify Census Surnames Dataset", script: "sources/fetch-census-last-names.mjs" },
+  { name: "Verify SSA 2025/2026 Popularity Cohort", script: "sources/fetch-ssa-2025.mjs" },
   { name: "Parse SSA Raw Records", script: "parse-ssa.mjs" },
   { name: "Parse Census 2020 Tabulations", script: "parse-census.mjs" },
   { name: "Seed Census Decennial Surnames", script: "seed-surnames.mjs" },

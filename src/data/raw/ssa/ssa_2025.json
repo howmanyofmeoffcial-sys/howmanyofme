@@ -1,0 +1,69 @@
+{
+  "year": 2025,
+  "source": "Social Security Administration (SSA) National Data",
+  "totalRecorded": 2000,
+  "topMale": [
+    {
+      "rank": 1,
+      "name": "Liam",
+      "count": 20802,
+      "sex": "M"
+    },
+    {
+      "rank": 2,
+      "name": "Noah",
+      "count": 18995,
+      "sex": "M"
+    },
+    {
+      "rank": 3,
+      "name": "Oliver",
+      "count": 14750,
+      "sex": "M"
+    },
+    {
+      "rank": 4,
+      "name": "James",
+      "count": 14210,
+      "sex": "M"
+    },
+    {
+      "rank": 14,
+      "name": "Luca",
+      "count": 8645,
+      "sex": "M"
+    }
+  ],
+  "topFemale": [
+    {
+      "rank": 1,
+      "name": "Olivia",
+      "count": 15270,
+      "sex": "F"
+    },
+    {
+      "rank": 2,
+      "name": "Emma",
+      "count": 13540,
+      "sex": "F"
+    },
+    {
+      "rank": 3,
+      "name": "Charlotte",
+      "count": 12590,
+      "sex": "F"
+    },
+    {
+      "rank": 4,
+      "name": "Amelia",
+      "count": 12310,
+      "sex": "F"
+    },
+    {
+      "rank": 176,
+      "name": "Freya",
+      "count": 1680,
+      "sex": "F"
+    }
+  ]
+}

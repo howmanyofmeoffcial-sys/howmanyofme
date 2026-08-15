@@ -1,0 +1,305 @@
+{
+  "sourceYear": "2010/2020",
+  "records": [
+    {
+      "name": "Smith",
+      "rank": 1,
+      "count": 2442977,
+      "prop100k": 828.19
+    },
+    {
+      "name": "Johnson",
+      "rank": 2,
+      "count": 1932812,
+      "prop100k": 655.24
+    },
+    {
+      "name": "Williams",
+      "rank": 3,
+      "count": 1625252,
+      "prop100k": 550.97
+    },
+    {
+      "name": "Brown",
+      "rank": 4,
+      "count": 1437026,
+      "prop100k": 487.16
+    },
+    {
+      "name": "Jones",
+      "rank": 5,
+      "count": 1425470,
+      "prop100k": 483.24
+    },
+    {
+      "name": "Garcia",
+      "rank": 6,
+      "count": 1166120,
+      "prop100k": 395.32
+    },
+    {
+      "name": "Miller",
+      "rank": 7,
+      "count": 1161437,
+      "prop100k": 393.74
+    },
+    {
+      "name": "Davis",
+      "rank": 8,
+      "count": 1116357,
+      "prop100k": 378.45
+    },
+    {
+      "name": "Rodriguez",
+      "rank": 9,
+      "count": 1094924,
+      "prop100k": 371.19
+    },
+    {
+      "name": "Martinez",
+      "rank": 10,
+      "count": 1060159,
+      "prop100k": 359.41
+    },
+    {
+      "name": "Hernandez",
+      "rank": 11,
+      "count": 1043281,
+      "prop100k": 353.68
+    },
+    {
+      "name": "Lopez",
+      "rank": 12,
+      "count": 874523,
+      "prop100k": 296.47
+    },
+    {
+      "name": "Gonzalez",
+      "rank": 13,
+      "count": 841025,
+      "prop100k": 285.11
+    },
+    {
+      "name": "Wilson",
+      "rank": 14,
+      "count": 801882,
+      "prop100k": 271.84
+    },
+    {
+      "name": "Anderson",
+      "rank": 15,
+      "count": 784404,
+      "prop100k": 265.92
+    },
+    {
+      "name": "Thomas",
+      "rank": 16,
+      "count": 756142,
+      "prop100k": 256.34
+    },
+    {
+      "name": "Taylor",
+      "rank": 17,
+      "count": 751209,
+      "prop100k": 254.66
+    },
+    {
+      "name": "Moore",
+      "rank": 18,
+      "count": 724374,
+      "prop100k": 245.57
+    },
+    {
+      "name": "Jackson",
+      "rank": 19,
+      "count": 708099,
+      "prop100k": 240.05
+    },
+    {
+      "name": "Martin",
+      "rank": 20,
+      "count": 702625,
+      "prop100k": 238.19
+    },
+    {
+      "name": "Lee",
+      "rank": 21,
+      "count": 693023,
+      "prop100k": 234.94
+    },
+    {
+      "name": "Perez",
+      "rank": 22,
+      "count": 681645,
+      "prop100k": 231.08
+    },
+    {
+      "name": "Thompson",
+      "rank": 23,
+      "count": 664644,
+      "prop100k": 225.32
+    },
+    {
+      "name": "White",
+      "rank": 24,
+      "count": 660491,
+      "prop100k": 223.91
+    },
+    {
+      "name": "Harris",
+      "rank": 25,
+      "count": 624252,
+      "prop100k": 211.63
+    },
+    {
+      "name": "Sanchez",
+      "rank": 26,
+      "count": 612752,
+      "prop100k": 207.73
+    },
+    {
+      "name": "Clark",
+      "rank": 27,
+      "count": 562679,
+      "prop100k": 190.75
+    },
+    {
+      "name": "Ramirez",
+      "rank": 28,
+      "count": 557423,
+      "prop100k": 188.97
+    },
+    {
+      "name": "Lewis",
+      "rank": 29,
+      "count": 531781,
+      "prop100k": 180.28
+    },
+    {
+      "name": "Robinson",
+      "rank": 30,
+      "count": 529821,
+      "prop100k": 179.61
+    },
+    {
+      "name": "Walker",
+      "rank": 31,
+      "count": 523129,
+      "prop100k": 177.34
+    },
+    {
+      "name": "Young",
+      "rank": 32,
+      "count": 484447,
+      "prop100k": 164.23
+    },
+    {
+      "name": "Allen",
+      "rank": 33,
+      "count": 482607,
+      "prop100k": 163.61
+    },
+    {
+      "name": "King",
+      "rank": 34,
+      "count": 465422,
+      "prop100k": 157.78
+    },
+    {
+      "name": "Wright",
+      "rank": 35,
+      "count": 458980,
+      "prop100k": 155.6
+    },
+    {
+      "name": "Scott",
+      "rank": 36,
+      "count": 439530,
+      "prop100k": 149
+    },
+    {
+      "name": "Torres",
+      "rank": 37,
+      "count": 437813,
+      "prop100k": 148.42
+    },
+    {
+      "name": "Nguyen",
+      "rank": 38,
+      "count": 437645,
+      "prop100k": 148.36
+    },
+    {
+      "name": "Hill",
+      "rank": 39,
+      "count": 434427,
+      "prop100k": 147.27
+    },
+    {
+      "name": "Flores",
+      "rank": 40,
+      "count": 433969,
+      "prop100k": 147.12
+    },
+    {
+      "name": "Green",
+      "rank": 41,
+      "count": 430182,
+      "prop100k": 145.83
+    },
+    {
+      "name": "Adams",
+      "rank": 42,
+      "count": 427865,
+      "prop100k": 145.05
+    },
+    {
+      "name": "Nelson",
+      "rank": 43,
+      "count": 424958,
+      "prop100k": 144.06
+    },
+    {
+      "name": "Baker",
+      "rank": 44,
+      "count": 419586,
+      "prop100k": 142.24
+    },
+    {
+      "name": "Hall",
+      "rank": 45,
+      "count": 417387,
+      "prop100k": 141.49
+    },
+    {
+      "name": "Rivera",
+      "rank": 46,
+      "count": 391114,
+      "prop100k": 132.59
+    },
+    {
+      "name": "Campbell",
+      "rank": 47,
+      "count": 386157,
+      "prop100k": 130.91
+    },
+    {
+      "name": "Mitchell",
+      "rank": 48,
+      "count": 384486,
+      "prop100k": 130.34
+    },
+    {
+      "name": "Carter",
+      "rank": 49,
+      "count": 376966,
+      "prop100k": 127.79
+    },
+    {
+      "name": "Roberts",
+      "rank": 50,
+      "count": 376774,
+      "prop100k": 127.73
+    }
+  ]
+}
