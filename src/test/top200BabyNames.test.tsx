@@ -4,7 +4,7 @@ import { render, screen, fireEvent } from "@testing-library/react";
 import { Top200BabyNamesSection } from "../islands/tools/Top200BabyNamesSection";
 import ssa2025Raw from "../data/raw/ssa/ssa_2025.json";
 
-describe("Phase: Baby Names Page Top 200 Boys & Girls Directory", () => {
+describe("Phase: Baby Names Page Top 200 Boys & Girls Redesign", () => {
   it("verifies full 200 boys and 200 girls dataset integrity without missing ranks", () => {
     const boys = (ssa2025Raw as any).topMale;
     const girls = (ssa2025Raw as any).topFemale;
@@ -22,38 +22,42 @@ describe("Phase: Baby Names Page Top 200 Boys & Girls Directory", () => {
     }
   });
 
-  it("renders the 2025 heading and Top 10 preview cards", () => {
+  it("renders two clearly separate sections for Top 200 Boys and Top 200 Girls", () => {
     render(<Top200BabyNamesSection />);
-    expect(screen.getByText(/popular baby names in 2025/i)).toBeDefined();
-    expect(screen.getByText(/top 10 baby boy names preview/i)).toBeDefined();
+    expect(screen.getByRole("heading", { level: 2, name: /top 200 boy names in 2025/i })).toBeDefined();
+    expect(screen.getByRole("heading", { level: 2, name: /top 200 girl names in 2025/i })).toBeDefined();
 
-    // Check top boys anchors
-    expect(screen.getAllByText("Liam").length).toBeGreaterThan(0);
-    expect(screen.getAllByText("Noah").length).toBeGreaterThan(0);
+    // Check anchor links
+    const boyAnchor = screen.getByRole("link", { name: /top 200 boy names/i });
+    const girlAnchor = screen.getByRole("link", { name: /top 200 girl names/i });
+    expect(boyAnchor.getAttribute("href")).toBe("#popular-boy-names");
+    expect(girlAnchor.getAttribute("href")).toBe("#popular-girl-names");
   });
 
-  it("allows switching to Top 200 Girls tab and renders Olivia at rank #1", () => {
+  it("renders Top 10 previews for both Boys and Girls simultaneously", () => {
     render(<Top200BabyNamesSection />);
-    const girlsTab = screen.getByRole("tab", { name: /top 200 girls/i });
-    fireEvent.click(girlsTab);
+    expect(screen.getByText(/top 10 boy names summary/i)).toBeDefined();
+    expect(screen.getByText(/top 10 girl names summary/i)).toBeDefined();
 
-    expect(screen.getByText(/top 10 baby girl names preview/i)).toBeDefined();
+    // Check top boys & girls anchors
+    expect(screen.getAllByText("Liam").length).toBeGreaterThan(0);
+    expect(screen.getAllByText("Noah").length).toBeGreaterThan(0);
     expect(screen.getAllByText("Olivia").length).toBeGreaterThan(0);
     expect(screen.getAllByText("Charlotte").length).toBeGreaterThan(0);
   });
 
-  it("filters names inside the table via search input", () => {
+  it("filters names inside the boy ranking table via search input", () => {
     render(<Top200BabyNamesSection />);
-    const searchInput = screen.getByPlaceholderText(/filter boy names in this ranking/i);
-    fireEvent.change(searchInput, { target: { value: "Theodore" } });
+    const searchBoyInput = screen.getByPlaceholderText(/search boy names in the 2025 ranking/i);
+    fireEvent.change(searchBoyInput, { target: { value: "Theodore" } });
 
     expect(screen.getAllByText("Theodore").length).toBeGreaterThan(0);
   });
 
   it("filters rank cutoffs when Top 50 or Top 100 buttons are clicked", () => {
     render(<Top200BabyNamesSection />);
-    const top50Btn = screen.getByRole("button", { name: /top 50/i });
-    fireEvent.click(top50Btn);
-    expect(top50Btn.className).toContain("bg-primary");
+    const top50Btns = screen.getAllByRole("button", { name: /top 50/i });
+    fireEvent.click(top50Btns[0]);
+    expect(top50Btns[0].className).toContain("bg-primary");
   });
 });

@@ -22,12 +22,12 @@ const TOP_BOYS_BENCHMARK = [
   { rank: 3, name: "Oliver", count: 14750, sex: "M" },
   { rank: 4, name: "Theodore", count: 14210, sex: "M" },
   { rank: 5, name: "Henry", count: 13850, sex: "M" },
-  { rank: 6, name: "Lucas", count: 13420, sex: "M" },
-  { rank: 7, name: "Benjamin", count: 13100, sex: "M" },
-  { rank: 8, name: "William", count: 12850, sex: "M" },
-  { rank: 9, name: "James", count: 12600, sex: "M" },
-  { rank: 10, name: "Mateo", count: 12350, sex: "M" },
-  { rank: 11, name: "Elijah", count: 12100, sex: "M" },
+  { rank: 6, name: "James", count: 13420, sex: "M" },
+  { rank: 7, name: "Elijah", count: 13100, sex: "M" },
+  { rank: 8, name: "Mateo", count: 12850, sex: "M" },
+  { rank: 9, name: "William", count: 12600, sex: "M" },
+  { rank: 10, name: "Lucas", count: 12350, sex: "M" },
+  { rank: 11, name: "Benjamin", count: 12100, sex: "M" },
   { rank: 12, name: "Ezra", count: 11800, sex: "M" },
   { rank: 13, name: "Sebastian", count: 11500, sex: "M" },
   { rank: 14, name: "Luca", count: 8645, sex: "M" },
@@ -58,28 +58,28 @@ const TOP_GIRLS_BENCHMARK = [
   { rank: 6, name: "Mia", count: 10950, sex: "F" },
   { rank: 7, name: "Isabella", count: 10600, sex: "F" },
   { rank: 8, name: "Evelyn", count: 10250, sex: "F" },
-  { rank: 9, name: "Harper", count: 9850, sex: "F" },
-  { rank: 10, name: "Luna", count: 9500, sex: "F" },
-  { rank: 11, name: "Camila", count: 9150, sex: "F" },
-  { rank: 12, name: "Gianna", count: 8800, sex: "F" },
-  { rank: 13, name: "Elizabeth", count: 8450, sex: "F" },
-  { rank: 14, name: "Eleanor", count: 8100, sex: "F" },
-  { rank: 15, name: "Ella", count: 7850, sex: "F" },
-  { rank: 16, name: "Violet", count: 7600, sex: "F" },
-  { rank: 17, name: "Hazel", count: 7350, sex: "F" },
-  { rank: 18, name: "Aurora", count: 7100, sex: "F" },
-  { rank: 19, name: "Avery", count: 6850, sex: "F" },
-  { rank: 20, name: "Scarlett", count: 6600, sex: "F" },
-  { rank: 21, name: "Mila", count: 6400, sex: "F" },
-  { rank: 22, name: "Nora", count: 6200, sex: "F" },
-  { rank: 23, name: "Aria", count: 6000, sex: "F" },
-  { rank: 24, name: "Chloe", count: 5850, sex: "F" },
-  { rank: 25, name: "Penelope", count: 5700, sex: "F" },
-  { rank: 26, name: "Layla", count: 5550, sex: "F" },
-  { rank: 27, name: "Riley", count: 5400, sex: "F" },
-  { rank: 28, name: "Zoey", count: 5250, sex: "F" },
-  { rank: 29, name: "Isla", count: 5100, sex: "F" },
-  { rank: 30, name: "Nova", count: 4950, sex: "F" },
+  { rank: 9, name: "Sofia", count: 9850, sex: "F" },
+  { rank: 10, name: "Eliana", count: 9500, sex: "F" },
+  { rank: 11, name: "Harper", count: 9150, sex: "F" },
+  { rank: 12, name: "Luna", count: 8800, sex: "F" },
+  { rank: 13, name: "Camila", count: 8450, sex: "F" },
+  { rank: 14, name: "Gianna", count: 8100, sex: "F" },
+  { rank: 15, name: "Elizabeth", count: 7850, sex: "F" },
+  { rank: 16, name: "Eleanor", count: 7600, sex: "F" },
+  { rank: 17, name: "Ella", count: 7350, sex: "F" },
+  { rank: 18, name: "Violet", count: 7100, sex: "F" },
+  { rank: 19, name: "Hazel", count: 6850, sex: "F" },
+  { rank: 20, name: "Aurora", count: 6600, sex: "F" },
+  { rank: 21, name: "Avery", count: 6400, sex: "F" },
+  { rank: 22, name: "Scarlett", count: 6200, sex: "F" },
+  { rank: 23, name: "Mila", count: 6000, sex: "F" },
+  { rank: 24, name: "Nora", count: 5850, sex: "F" },
+  { rank: 25, name: "Aria", count: 5700, sex: "F" },
+  { rank: 26, name: "Chloe", count: 5550, sex: "F" },
+  { rank: 27, name: "Penelope", count: 5400, sex: "F" },
+  { rank: 28, name: "Layla", count: 5250, sex: "F" },
+  { rank: 29, name: "Riley", count: 5100, sex: "F" },
+  { rank: 30, name: "Zoey", count: 4950, sex: "F" },
 ];
 
 // Load raw SSA names to populate ranks 31 to 200
@@ -162,6 +162,11 @@ if (maleRanks.get("Noah") !== 2) throw new Error("Validation failed: Noah must b
 if (maleRanks.get("Oliver") !== 3) throw new Error("Validation failed: Oliver must be rank 3 male");
 if (maleRanks.get("Theodore") !== 4) throw new Error("Validation failed: Theodore must be rank 4 male");
 if (maleRanks.get("Henry") !== 5) throw new Error("Validation failed: Henry must be rank 5 male");
+if (maleRanks.get("James") !== 6) throw new Error("Validation failed: James must be rank 6 male");
+if (maleRanks.get("Elijah") !== 7) throw new Error("Validation failed: Elijah must be rank 7 male");
+if (maleRanks.get("Mateo") !== 8) throw new Error("Validation failed: Mateo must be rank 8 male");
+if (maleRanks.get("William") !== 9) throw new Error("Validation failed: William must be rank 9 male");
+if (maleRanks.get("Lucas") !== 10) throw new Error("Validation failed: Lucas must be rank 10 male");
 if (maleRanks.get("Luca") !== 14) throw new Error("Validation failed: Luca must be rank 14 male");
 
 if (femaleRanks.get("Olivia") !== 1) throw new Error("Validation failed: Olivia must be rank 1 female");
@@ -169,6 +174,11 @@ if (femaleRanks.get("Charlotte") !== 2) throw new Error("Validation failed: Char
 if (femaleRanks.get("Emma") !== 3) throw new Error("Validation failed: Emma must be rank 3 female");
 if (femaleRanks.get("Amelia") !== 4) throw new Error("Validation failed: Amelia must be rank 4 female");
 if (femaleRanks.get("Sophia") !== 5) throw new Error("Validation failed: Sophia must be rank 5 female");
+if (femaleRanks.get("Mia") !== 6) throw new Error("Validation failed: Mia must be rank 6 female");
+if (femaleRanks.get("Isabella") !== 7) throw new Error("Validation failed: Isabella must be rank 7 female");
+if (femaleRanks.get("Evelyn") !== 8) throw new Error("Validation failed: Evelyn must be rank 8 female");
+if (femaleRanks.get("Sofia") !== 9) throw new Error("Validation failed: Sofia must be rank 9 female");
+if (femaleRanks.get("Eliana") !== 10) throw new Error("Validation failed: Eliana must be rank 10 female");
 if (femaleRanks.get("Freya") !== 176) throw new Error("Validation failed: Freya must be rank 176 female");
 
 // Check ranks 1 to 200 are sequential and complete

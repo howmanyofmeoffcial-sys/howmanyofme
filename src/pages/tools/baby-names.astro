@@ -30,8 +30,8 @@ import {
 } from 'lucide-react';
 
 const year = DATA_FRESHNESS.latestAvailableBirthYear;
-const title = `Baby Names: Popular Boy & Girl Names in ${year} | HowManyOfMe`;
-const description = `Explore official ${year} Top 200 baby boy and girl names from the Social Security Administration, browse alphabetically A–Z, and check 140+ years of popularity trends.`;
+const title = "Baby Names: Popular Boy & Girl Names | HowManyOfMe";
+const description = `Explore official ${year} Top 200 baby boy and girl names from the Social Security Administration (released May 2026), browse alphabetically A–Z, and check 140+ years of popularity trends.`;
 const canonical = "https://howmanyofme.co/tools/baby-names";
 
 const faqs = [
@@ -61,7 +61,7 @@ const faqs = [
   },
   {
     q: "How often is the baby-name data updated?",
-    a: "The Social Security Administration releases national baby-name data annually. Our system updates automatically as new official releases become available.",
+    a: "The Social Security Administration releases national baby-name data annually (the 2025 cohort was released in May 2026). Our system updates automatically as new official releases become available.",
   },
   {
     q: "Where does the ranking come from?",
@@ -145,42 +145,34 @@ const jsonLd = [
         Baby Names
       </h1>
       <p class="text-base md:text-lg text-muted-foreground mt-3 leading-relaxed">
-        Choosing a baby name starts with discovery. Explore the official {year} Top 200 baby boy and girl rankings below, search thousands of recorded names from official U.S. Social Security archives, and browse alphabetically from A to Z.
+        Choosing a baby name starts with discovery. Search thousands of recorded names from official U.S. Social Security archives, browse alphabetically from A to Z, and explore the complete official {year} Top 200 Boy Names and Top 200 Girl Names below.
       </p>
     </header>
 
-    <!-- 1. Top 200 Popular Baby Names Section (Official 2025 SSA Release) -->
+    <!-- 1. Interactive A–Z Directory & Search Browser -->
+    <section class="my-8 space-y-4">
+      <BabyNamesBrowser client:load />
+    </section>
+
+    <!-- 2. Top 200 Popular Baby Names Section (Separate Boys & Girls Ranks with Anchor Nav) -->
     <Top200BabyNamesSection client:load />
 
-    <!-- 2. AEO Direct Answer Block -->
+    <!-- 3. AEO Direct Answer Block -->
     <section class="my-10 rounded-2xl border-l-4 border-primary bg-primary/5 p-6 shadow-xs">
       <h2 class="text-xs font-bold uppercase tracking-wider text-primary mb-1">
         What Are the Most Popular Baby Names in {year}?
       </h2>
       <p class="text-sm md:text-base text-foreground leading-relaxed">
-        <strong>Liam</strong> ranked #1 among boys with 20,818 registered births, and <strong>Olivia</strong> ranked #1 among girls with 13,544 registered births in the official {year} Social Security Administration baby-name data.
+        <strong>Liam</strong> ranked #1 among boys with 20,818 registered births, and <strong>Olivia</strong> ranked #1 among girls with 13,544 registered births in the official {year} Social Security Administration baby-name data (released May 2026).
       </p>
     </section>
 
     <AdSlot />
 
-    <!-- 3. Interactive A–Z Directory & Search Browser -->
-    <section class="my-12 space-y-4">
-      <div class="border-b border-border/60 pb-3">
-        <h2 class="font-display text-2xl md:text-3xl font-bold text-foreground">
-          Search &amp; Browse All Baby Names A–Z
-        </h2>
-        <p class="text-sm text-muted-foreground mt-1">
-          Explore thousands of historical and contemporary names alphabetically or by starting letter.
-        </p>
-      </div>
-      <BabyNamesBrowser client:load />
-    </section>
-
-    <!-- 4. How to Narrow Down Baby Names (5 Practical Steps) -->
+    <!-- 4. How Baby Name Rankings Work (5 Practical Steps) -->
     <section class="my-12 space-y-6">
       <h2 class="font-display text-2xl md:text-3xl font-bold text-foreground">
-        How to Narrow Down Your Baby Name Shortlist
+        How Baby Name Rankings Work
       </h2>
       <p class="text-sm md:text-base text-muted-foreground leading-relaxed">
         With thousands of possibilities, finding the perfect name is easiest when approached in clear stages:
@@ -229,10 +221,10 @@ const jsonLd = [
       </div>
     </section>
 
-    <!-- 5. Baby Names vs Living Population (Demographic Distinction) -->
+    <!-- 5. What Does a Ranking Mean? (Demographic Distinction) -->
     <section class="my-12 space-y-4">
       <h2 class="font-display text-2xl md:text-3xl font-bold text-foreground">
-        Baby Name Popularity vs. Total Living Population
+        What Does a Ranking Mean? (Baby Names vs. Living Population)
       </h2>
       <div class="p-6 rounded-2xl border border-border/80 bg-secondary/30 space-y-3 text-sm text-muted-foreground leading-relaxed">
         <p>
@@ -246,7 +238,63 @@ const jsonLd = [
       </div>
     </section>
 
-    <!-- 6. Demographic Tools Ecosystem Grid -->
+    <!-- 6. Federal Data Snapshot & Sources -->
+    <section class="my-12 rounded-2xl border border-primary/20 bg-primary/5 p-6 shadow-xs space-y-4">
+      <div class="flex items-center justify-between border-b border-primary/15 pb-3">
+        <div class="flex items-center gap-2">
+          <Database class="h-4 w-4 text-primary" />
+          <h3 class="font-display text-lg font-bold text-foreground">Baby Name Data Snapshot</h3>
+        </div>
+        <span class="text-xs text-muted-foreground">Release Vintage: May 2026</span>
+      </div>
+
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs">
+        <div class="p-3 rounded-xl bg-card border border-border">
+          <span class="text-muted-foreground block">Birth Year</span>
+          <span class="font-bold text-foreground text-sm">{year}</span>
+        </div>
+        <div class="p-3 rounded-xl bg-card border border-border">
+          <span class="text-muted-foreground block">Primary Source</span>
+          <span class="font-bold text-foreground text-sm">Social Security Administration</span>
+        </div>
+        <div class="p-3 rounded-xl bg-card border border-border">
+          <span class="text-muted-foreground block">Geographic Scope</span>
+          <span class="font-bold text-foreground text-sm">United States</span>
+        </div>
+        <div class="p-3 rounded-xl bg-card border border-border">
+          <span class="text-muted-foreground block">Measured Metric</span>
+          <span class="font-bold text-foreground text-sm">Recorded Births</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- 7. Frequently Asked Questions -->
+    <section class="my-12 space-y-6">
+      <div class="border-b border-border/60 pb-3">
+        <h2 class="font-display text-2xl md:text-3xl font-bold text-foreground">
+          Frequently Asked Questions About Baby Names
+        </h2>
+        <p class="text-sm text-muted-foreground mt-1">
+          Common questions regarding annual popularity rankings and demographic name data.
+        </p>
+      </div>
+
+      <div class="space-y-4">
+        {faqs.map((faq, idx) => (
+          <div class="p-5 rounded-2xl border border-border bg-card shadow-xs space-y-2">
+            <h3 class="font-display text-base font-bold text-foreground flex items-center gap-2">
+              <HelpCircle class="h-4 w-4 text-primary shrink-0" />
+              <span>{faq.q}</span>
+            </h3>
+            <p class="text-sm text-muted-foreground leading-relaxed pl-6">
+              {faq.a}
+            </p>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <!-- 8. Demographic Tools Ecosystem Grid -->
     <section class="my-12 space-y-6">
       <div class="flex items-center justify-between">
         <h2 class="font-display text-2xl md:text-3xl font-bold text-foreground">
@@ -296,62 +344,6 @@ const jsonLd = [
             Compare 140-year multi-decade popularity curves across up to 4 names simultaneously.
           </p>
         </a>
-      </div>
-    </section>
-
-    <!-- 7. Federal Data Snapshot -->
-    <section class="my-12 rounded-2xl border border-primary/20 bg-primary/5 p-6 shadow-xs space-y-4">
-      <div class="flex items-center justify-between border-b border-primary/15 pb-3">
-        <div class="flex items-center gap-2">
-          <Database class="h-4 w-4 text-primary" />
-          <h3 class="font-display text-lg font-bold text-foreground">Baby Name Data Snapshot</h3>
-        </div>
-        <span class="text-xs text-muted-foreground">Latest Available Year: {year}</span>
-      </div>
-
-      <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs">
-        <div class="p-3 rounded-xl bg-card border border-border">
-          <span class="text-muted-foreground block">Data Year</span>
-          <span class="font-bold text-foreground text-sm">{year}</span>
-        </div>
-        <div class="p-3 rounded-xl bg-card border border-border">
-          <span class="text-muted-foreground block">Primary Source</span>
-          <span class="font-bold text-foreground text-sm">Social Security Administration</span>
-        </div>
-        <div class="p-3 rounded-xl bg-card border border-border">
-          <span class="text-muted-foreground block">Geographic Scope</span>
-          <span class="font-bold text-foreground text-sm">United States</span>
-        </div>
-        <div class="p-3 rounded-xl bg-card border border-border">
-          <span class="text-muted-foreground block">Measured Metric</span>
-          <span class="font-bold text-foreground text-sm">Birth-Name Registrations</span>
-        </div>
-      </div>
-    </section>
-
-    <!-- 8. Frequently Asked Questions -->
-    <section class="my-12 space-y-6">
-      <div class="border-b border-border/60 pb-3">
-        <h2 class="font-display text-2xl md:text-3xl font-bold text-foreground">
-          Frequently Asked Questions About Baby Names
-        </h2>
-        <p class="text-sm text-muted-foreground mt-1">
-          Common questions regarding annual popularity rankings and demographic name data.
-        </p>
-      </div>
-
-      <div class="space-y-4">
-        {faqs.map((faq, idx) => (
-          <div class="p-5 rounded-2xl border border-border bg-card shadow-xs space-y-2">
-            <h3 class="font-display text-base font-bold text-foreground flex items-center gap-2">
-              <HelpCircle class="h-4 w-4 text-primary shrink-0" />
-              <span>{faq.q}</span>
-            </h3>
-            <p class="text-sm text-muted-foreground leading-relaxed pl-6">
-              {faq.a}
-            </p>
-          </div>
-        ))}
       </div>
     </section>
 
