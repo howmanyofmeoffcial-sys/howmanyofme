@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { getNameData, formatNumber } from "../../data/nameData";
 import { getSurname } from "../../lib/surnames/data";
-import { Search, Sparkles, BookOpen, Globe2, BarChart3, TrendingUp, ArrowRight, ShieldCheck, HelpCircle } from "lucide-react";
+import { Search, Sparkles, BookOpen, Globe2, BarChart3, TrendingUp, ArrowRight, HelpCircle } from "lucide-react";
 import { trackEvent } from "../../lib/analytics/events";
 
 type NameType = "first" | "surname";

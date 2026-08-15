@@ -30,7 +30,7 @@ if (!data) {
   return Astro.redirect('/404');
 }
 
-const popularFullNames = getRelatedFullNames('', data.name, 8);
+const popularFullNames = getRelatedFullNames('', data.name, 40);
 const relatedSurnames = getRelatedSurnames(data.name, 6);
 const title = `How Many People Have the Last Name ${data.name}? Rank, Origin & Statistics`;
 const description = `There are approximately ${formatNumber(data.count)} people with the last name ${data.name} in the U.S. (rank #${formatNumber(data.rank)}). Explore official Decennial Census counts and common full name pairings.`;

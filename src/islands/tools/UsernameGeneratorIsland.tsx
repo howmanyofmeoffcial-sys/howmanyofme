@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Sparkles, Copy, Check, RotateCcw, FileText, Instagram, Gamepad2, Video, Hash, ShieldAlert } from "lucide-react";
+import { Sparkles, Copy, Check, RotateCcw, FileText, ShieldAlert } from "lucide-react";
 import { trackEvent } from "../../lib/analytics/events";
 
 type Platform = "general" | "instagram" | "tiktok" | "gaming";

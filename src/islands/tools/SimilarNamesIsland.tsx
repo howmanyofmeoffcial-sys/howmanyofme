@@ -1,7 +1,7 @@
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect } from "react";
 import canonicalNamesList from "../../data/generated/canonical-names.json";
 import { formatNumber, getNameData } from "../../data/nameData";
-import { Search, Sparkles, Filter, ArrowRight, BookOpen, BarChart3, Globe2, CheckCircle2, RotateCcw } from "lucide-react";
+import { Search, Sparkles, ArrowRight } from "lucide-react";
 import { trackEvent } from "../../lib/analytics/events";
 
 interface NameItem {

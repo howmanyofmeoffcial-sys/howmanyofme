@@ -103,18 +103,49 @@ const jsonLd = [
       <h2 class="font-display text-2xl font-bold mb-4 text-foreground">Closest Matching Names</h2>
       <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
         {similarData.combined.map((name) => (
-          <a
-            href={getNameUrl(name)}
-            class="p-4 rounded-xl border border-border bg-card hover:border-primary/40 hover:shadow-md transition text-center group"
-          >
-            <div class="font-semibold text-foreground group-hover:text-primary transition-colors mb-1">
-              {name}
+          <div class="p-4 rounded-xl border border-border bg-card hover:border-primary/40 hover:shadow-md transition text-center flex flex-col justify-between gap-2">
+            <div>
+              <a href={getNameUrl(name)} class="block font-bold text-foreground hover:text-primary transition-colors text-base mb-1">
+                {name}
+              </a>
+              <span class="text-xs text-muted-foreground block">
+                Soundalike &amp; structure match
+              </span>
             </div>
-            <div class="text-xs text-muted-foreground">
-              Explore {name} stats →
+            <div class="pt-2 border-t border-border/50 flex flex-col gap-1 text-[11px]">
+              <a href={getNameUrl(name)} class="font-semibold text-primary hover:underline">
+                View {name} Stats &rarr;
+              </a>
+              <a href={getSimilarNamesUrl(name)} class="text-muted-foreground hover:text-foreground">
+                Similar to {name} &rarr;
+              </a>
             </div>
-          </a>
+          </div>
         ))}
+      </div>
+    </section>
+
+    <!-- Connected Research Tools -->
+    <section class="my-10 p-6 rounded-2xl border border-border bg-secondary/30">
+      <h2 class="font-display text-xl font-bold mb-3 text-foreground">
+        More Research for {data.name}
+      </h2>
+      <p class="text-xs md:text-sm text-muted-foreground mb-4">
+        Explore detailed demographic, linguistic, and historical dimensions for {data.name}:
+      </p>
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+        <a href={`/name/${encodeURIComponent(data.name)}`} class="p-3.5 rounded-xl border border-border bg-card hover:border-primary/40 transition">
+          <div class="font-bold text-foreground text-sm">Full Living Population Report</div>
+          <div class="text-xs text-muted-foreground mt-0.5">Actuarial living counts &amp; state map &rarr;</div>
+        </a>
+        <a href="/tools/popularity-checker" class="p-3.5 rounded-xl border border-border bg-card hover:border-primary/40 transition">
+          <div class="font-bold text-foreground text-sm">Popularity &amp; Rarity Checker</div>
+          <div class="text-xs text-muted-foreground mt-0.5">National rank &amp; 1-in-X frequency ratio &rarr;</div>
+        </a>
+        <a href="/tools/trend-visualizer" class="p-3.5 rounded-xl border border-border bg-card hover:border-primary/40 transition">
+          <div class="font-bold text-foreground text-sm">Historical Trend Visualizer</div>
+          <div class="text-xs text-muted-foreground mt-0.5">140-year multi-decade time series &rarr;</div>
+        </a>
       </div>
     </section>
 

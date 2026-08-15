@@ -44,8 +44,20 @@ export function getIndexableFullNames(): FullNameEntity[] {
  * Returns meaningful related full-name combinations (same first name or same surname).
  */
 export function getRelatedFullNames(firstName: string, lastName: string, limit = 8): FullNameEntity[] {
-  const normFirst = firstName.toLowerCase();
-  const normLast = lastName.toLowerCase();
+  const normFirst = firstName.toLowerCase().trim();
+  const normLast = lastName.toLowerCase().trim();
+
+  if (normFirst && !normLast) {
+    return ALL_FULL_NAMES.filter(
+      (f) => f.firstName.toLowerCase() === normFirst
+    ).slice(0, limit);
+  }
+
+  if (normLast && !normFirst) {
+    return ALL_FULL_NAMES.filter(
+      (f) => f.lastName.toLowerCase() === normLast
+    ).slice(0, limit);
+  }
 
   const sameFirst = ALL_FULL_NAMES.filter(
     (f) => f.firstName.toLowerCase() === normFirst && f.lastName.toLowerCase() !== normLast
@@ -57,3 +69,4 @@ export function getRelatedFullNames(firstName: string, lastName: string, limit =
 
   return [...sameFirst, ...sameLast].slice(0, limit);
 }
+

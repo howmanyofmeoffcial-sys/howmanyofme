@@ -7,6 +7,7 @@ import AdSlot from '../../components/AdSlot.astro';
 import ToolCTA from '../../components/ToolCTA.astro';
 import RelatedPosts from '../../components/RelatedPosts.astro';
 import NameComparisonIsland from '../../islands/tools/NameComparisonIsland';
+import { getAllComparisonPairs } from '../../lib/comparisons/data';
 import manifest from '../../data/metadata/manifest.json';
 import {
   Sparkles,
@@ -22,6 +23,8 @@ import {
   ArrowRightLeft,
   BookOpen,
 } from 'lucide-react';
+
+const comparisonPairs = getAllComparisonPairs();
 
 const title = "Compare Two Names: Popularity, Rarity & Historical Trends";
 const description = "Compare two names side by side to see which is more common, how their popularity has changed over time, and which name is rarer in available U.S. demographic data.";
@@ -322,7 +325,40 @@ const jsonLd = [
       </div>
     </section>
 
-    <!-- 8. Demographic Tools Ecosystem -->
+    <!-- 8. Featured Head-to-Head Name Comparisons -->
+    <section class="my-12 space-y-6">
+      <div class="flex items-center justify-between">
+        <div>
+          <h2 class="font-display text-2xl md:text-3xl font-bold text-foreground">
+            Featured Side-by-Side Name Comparisons
+          </h2>
+          <p class="text-xs md:text-sm text-muted-foreground mt-1">
+            Explore comprehensive statistical breakdowns for popular baby name matchups and historical classics:
+          </p>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
+        {comparisonPairs.map((pair) => (
+          <a
+            href={`/name-comparison/${pair.slug}`}
+            class="p-4 rounded-xl border border-border bg-card hover:border-primary/40 hover:shadow-md transition text-center group"
+          >
+            <span class="text-[10px] font-bold uppercase tracking-wider text-primary block mb-1">
+              {pair.category}
+            </span>
+            <div class="font-bold text-foreground group-hover:text-primary transition-colors text-sm">
+              {pair.nameA} <span class="text-muted-foreground font-normal">vs</span> {pair.nameB}
+            </div>
+            <span class="text-[11px] text-muted-foreground mt-1 block">
+              Compare Stats &rarr;
+            </span>
+          </a>
+        ))}
+      </div>
+    </section>
+
+    <!-- 9. Demographic Tools Ecosystem -->
     <section class="my-12 space-y-6">
       <div class="flex items-center justify-between">
         <h2 class="font-display text-2xl md:text-3xl font-bold text-foreground">

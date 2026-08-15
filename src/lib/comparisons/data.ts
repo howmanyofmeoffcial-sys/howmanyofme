@@ -55,3 +55,12 @@ export function getComparisonDetails(slug: string): ComparisonDetails | null {
 
   return { pair, profileA, profileB };
 }
+
+export function getComparisonsForName(name: string): NameComparisonPair[] {
+  const clean = name.toLowerCase().trim();
+  return COMPARISON_PAIRS.filter(
+    (p) => p.nameA.toLowerCase() === clean || p.nameB.toLowerCase() === clean
+  );
+}
+
+
