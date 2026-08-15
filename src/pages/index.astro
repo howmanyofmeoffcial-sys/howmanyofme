@@ -5,6 +5,7 @@ import NameSearchHero from '../islands/NameSearchHero';
 import SiteFooter from '../components/SiteFooter.astro';
 import AdSlot from '../components/AdSlot.astro';
 import { getPopularNames, formatNumber, ALPHABET } from '../data/nameData';
+import { PopularBabyNamesSection } from '../islands/homepage/PopularBabyNamesSection';
 import { getAllSurnames } from '../lib/surnames/data';
 import { getSurnameUrl } from '../lib/surnames/url';
 import manifest from '../data/metadata/manifest.json';
@@ -145,39 +146,8 @@ const canonical = 'https://howmanyofme.co';
       </div>
     </section>
 
-    <!-- Section 2: Popular First Names -->
-    <section class="space-y-6">
-      <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4 border-b border-border/60 pb-4">
-        <div>
-          <h2 class="font-display text-2xl md:text-3xl font-bold text-foreground">
-            Popular First Names in the U.S.
-          </h2>
-          <p class="text-sm text-muted-foreground mt-1">
-            Top names derived from official Social Security historical cohorts and living estimates
-          </p>
-        </div>
-        <a href="/names/a" class="text-sm font-semibold text-primary hover:underline inline-flex items-center gap-1 shrink-0">
-          Browse A–Z directory →
-        </a>
-      </div>
-
-      <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3">
-        {popularNames.map((n) => (
-          <a
-            href={`/name/${n.name}`}
-            class="p-4 rounded-xl border border-border bg-card hover:border-primary/50 hover:shadow-md transition-all group block"
-          >
-            <div class="flex items-center justify-between mb-1.5">
-              <span class="font-bold text-foreground group-hover:text-primary transition-colors">{n.name}</span>
-              <span class="text-[10px] font-semibold uppercase px-1.5 py-0.5 rounded bg-secondary text-muted-foreground">
-                {n.gender}
-              </span>
-            </div>
-            <div class="text-xs text-muted-foreground">~{formatNumber(n.count)} living</div>
-          </a>
-        ))}
-      </div>
-    </section>
+    <!-- Section 2: Popular Baby Names in 2025 (Official SSA Data) -->
+    <PopularBabyNamesSection client:load />
 
     <AdSlot />
 
