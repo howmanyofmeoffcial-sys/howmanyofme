@@ -7,9 +7,19 @@ import AdSlot from '../../components/AdSlot.astro';
 import ToolCTA from '../../components/ToolCTA.astro';
 import RelatedPosts from '../../components/RelatedPosts.astro';
 import { getIndexableNames, getName, type NameRecord } from '../../lib/names';
-import { getSimilarNames } from '../../lib/names/getSimilarNames';
+import { getSimilarNames, countSyllables } from '../../lib/names/getSimilarNames';
+import { evaluateSimilarNamesIndexability } from '../../lib/seo/indexability';
 import { getNameUrl, getSimilarNamesUrl } from '../../lib/seo/canonicalUrl';
 import { formatNumber } from '../../data/nameData';
+import {
+  Volume2,
+  Sparkles,
+  BookOpen,
+  BarChart3,
+  Search,
+  ArrowRight,
+  ExternalLink,
+} from 'lucide-react';
 
 export async function getStaticPaths() {
   const allNames = getIndexableNames();
@@ -32,96 +42,195 @@ if (!data) {
   return Astro.redirect('/404');
 }
 
-const similarData = getSimilarNames(data.name, 12);
-const title = `Names Similar to ${data.name} — Soundalikes & Alternatives`;
-const description = `Find names similar to ${data.name} by sound, length, starting letter, and origin. Compare popularity and bearer statistics.`;
+const indexability = evaluateSimilarNamesIndexability(data);
+
+if (indexability.status === 'EXCLUDE') {
+  return Astro.redirect('/404');
+}
+
+const estimatedLiving = data.actuarial?.estimatedLiving || Math.round(data.count * 0.65);
+const similarData = getSimilarNames(data, 12);
+
+const title = `Names Similar to ${data.name}: ${similarData.combined.length} Alternative First Names`;
+const description = `Find first names similar to ${data.name} based on phonetic soundalikes, shared cultural origins, character lengths, and U.S. popularity rankings.`;
 const canonical = `https://howmanyofme.co${getSimilarNamesUrl(data.name)}`;
 
 const jsonLd = [
   {
-    "@context": "https://schema.org",
-    "@type": "WebPage",
+    '@context': 'https://schema.org',
+    '@type': 'WebPage',
     name: title,
     description,
     url: canonical,
   },
   {
-    "@context": "https://schema.org",
-    "@type": "ItemList",
+    '@context': 'https://schema.org',
+    '@type': 'ItemList',
     name: `Names Similar to ${data.name}`,
-    itemListElement: similarData.combined.map((name, i) => ({
-      "@type": "ListItem",
+    numberOfItems: similarData.combined.length,
+    itemListElement: similarData.combined.map((m, i) => ({
+      '@type': 'ListItem',
       position: i + 1,
-      name,
-      url: `https://howmanyofme.co${getNameUrl(name)}`,
+      name: m.name,
+      url: `https://howmanyofme.co${getNameUrl(m.name)}`,
     })),
   },
 ];
+
+const topAlternatives = similarData.combined.slice(0, 4).map((m) => m.name).join(', ');
 ---
 
-<BaseLayout title={title} description={description} canonical={canonical} jsonLd={jsonLd}>
+<BaseLayout
+  title={title}
+  description={description}
+  canonical={canonical}
+  noindex={indexability.status !== 'INDEX'}
+  jsonLd={jsonLd}
+>
   <SiteHeader client:idle />
 
   <main class="container py-12 max-w-4xl">
     <Breadcrumbs
       className="mb-6"
       items={[
-        { label: "Home", href: "/" },
-        { label: "Similar Names", href: "/similar-names" },
+        { label: 'Home', href: '/' },
+        { label: 'Similar Names', href: '/similar-names' },
         { label: `Similar to ${data.name}` },
       ]}
     />
 
     <div class="mb-8">
+      <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary/10 text-primary font-semibold uppercase tracking-wider text-[11px] mb-3">
+        <Sparkles class="h-3.5 w-3.5" /> Alternative Name Recommendations
+      </span>
       <h1 class="font-display text-4xl md:text-5xl font-bold mb-3 text-foreground">
         Names Similar to {data.name}
       </h1>
       <p class="text-lg text-muted-foreground leading-relaxed">
-        Looking for alternatives to <strong class="text-foreground">{data.name}</strong>? Explore first names that share similar sounds, syllable counts, starting letters, or linguistic origins.
+        Looking for names with a similar sound, rhythm, or cultural background to <strong class="text-foreground">{data.name}</strong>? Explore data-backed alternatives ranked by phonetic cadence, spelling edit distance, and demographic popularity.
       </p>
     </div>
 
     <!-- Target Name Card -->
-    <div class="p-6 rounded-2xl border border-primary/20 bg-primary/5 mb-10 flex flex-wrap items-center justify-between gap-4">
-      <div>
-        <div class="text-xs uppercase font-bold tracking-wider text-primary mb-1">Target Name</div>
-        <div class="text-2xl font-bold text-foreground">{data.name}</div>
-        <div class="text-sm text-muted-foreground">~{formatNumber(data.count)} living bearers (rank #{formatNumber(data.rank)})</div>
+    <div class="p-6 rounded-2xl border border-primary/20 bg-primary/5 mb-8 flex flex-wrap items-center justify-between gap-4">
+      <div class="space-y-1">
+        <div class="text-xs uppercase font-bold tracking-wider text-primary">Target Reference Name</div>
+        <div class="text-3xl font-bold text-foreground">{data.name}</div>
+        <div class="text-sm text-muted-foreground">
+          ~{formatNumber(estimatedLiving)} estimated living bearers · National Rank #{formatNumber(data.rank)}
+        </div>
+        {data.origin && (
+          <div class="text-xs text-muted-foreground">
+            Origin: <span class="font-medium text-foreground">{data.origin}</span>
+            {data.meaning && <span> · Meaning: <span class="italic text-foreground">"{data.meaning}"</span></span>}
+          </div>
+        )}
       </div>
       <a
         href={getNameUrl(data.name)}
-        class="px-5 py-2.5 rounded-xl bg-primary text-primary-foreground font-semibold text-sm hover:bg-primary/90 transition shadow-sm"
+        class="px-5 py-2.5 rounded-xl bg-primary text-primary-foreground font-semibold text-sm hover:bg-primary/90 transition shadow-sm inline-flex items-center gap-1.5"
       >
-        View Full {data.name} Report →
+        Full {data.name} Report <ArrowRight class="h-4 w-4" />
       </a>
+    </div>
+
+    <!-- Quick Answer / Summary Box -->
+    <div class="p-6 rounded-2xl border border-border bg-card shadow-xs mb-10 space-y-2">
+      <h2 class="text-xs font-bold uppercase tracking-wider text-primary">
+        Quick Summary: Closest Matches for {data.name}
+      </h2>
+      <p class="text-sm md:text-base text-foreground leading-relaxed">
+        The closest alternatives to <strong>{data.name}</strong> include <strong>{topAlternatives}</strong>. These suggestions share {similarData.topSignals.length > 0 ? similarData.topSignals.slice(0, 3).join(', ').toLowerCase() : 'phonetic rhythm, syllable cadence, and historical popularity tiers'}.
+      </p>
     </div>
 
     <AdSlot />
 
-    <!-- Similar Names Grid -->
+    <!-- Leading Similar Names Grid -->
     <section class="my-10">
-      <h2 class="font-display text-2xl font-bold mb-4 text-foreground">Closest Matching Names</h2>
-      <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
-        {similarData.combined.map((name) => (
-          <div class="p-4 rounded-xl border border-border bg-card hover:border-primary/40 hover:shadow-md transition text-center flex flex-col justify-between gap-2">
+      <div class="flex items-center justify-between mb-4">
+        <h2 class="font-display text-2xl font-bold text-foreground">
+          Closest Matching Names
+        </h2>
+        <span class="text-xs font-medium text-muted-foreground">
+          {similarData.combined.length} matches analyzed
+        </span>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+        {similarData.combined.map((match) => (
+          <div class="p-4 rounded-xl border border-border bg-card hover:border-primary/40 hover:shadow-md transition flex flex-col justify-between gap-3">
             <div>
-              <a href={getNameUrl(name)} class="block font-bold text-foreground hover:text-primary transition-colors text-base mb-1">
-                {name}
-              </a>
-              <span class="text-xs text-muted-foreground block">
-                Soundalike &amp; structure match
-              </span>
+              <div class="flex items-center justify-between mb-1">
+                <a href={getNameUrl(match.name)} class="font-bold text-foreground hover:text-primary transition-colors text-lg">
+                  {match.name}
+                </a>
+                <span class="text-[10px] uppercase font-bold px-2 py-0.5 rounded bg-primary/10 text-primary">
+                  {match.score}% Match
+                </span>
+              </div>
+              <div class="text-xs text-muted-foreground mb-2">
+                ~{formatNumber(match.estimatedLiving)} living bearers · Rank #{match.rank}
+              </div>
+
+              <!-- Specific data-backed matching reasons -->
+              <div class="flex flex-wrap gap-1 mt-2">
+                {match.signals.slice(0, 2).map((sig) => (
+                  <span class="text-[10px] px-2 py-0.5 rounded-md bg-secondary text-secondary-foreground border border-border/50">
+                    {sig}
+                  </span>
+                ))}
+              </div>
             </div>
-            <div class="pt-2 border-t border-border/50 flex flex-col gap-1 text-[11px]">
-              <a href={getNameUrl(name)} class="font-semibold text-primary hover:underline">
-                View {name} Stats &rarr;
+
+            <div class="pt-3 border-t border-border/50 flex items-center justify-between text-xs">
+              <a href={getNameUrl(match.name)} class="font-semibold text-primary hover:underline inline-flex items-center gap-1">
+                View {match.name} <ExternalLink class="h-3 w-3" />
               </a>
-              <a href={getSimilarNamesUrl(name)} class="text-muted-foreground hover:text-foreground">
-                Similar to {name} &rarr;
+              <a href={getSimilarNamesUrl(match.name)} class="text-muted-foreground hover:text-foreground">
+                Similar to {match.name} &rarr;
               </a>
             </div>
           </div>
         ))}
+      </div>
+    </section>
+
+    <!-- Similarity Dimensions Breakdown -->
+    <section class="my-12 space-y-4">
+      <h2 class="font-display text-2xl font-bold text-foreground">
+        Why These Names Are Similar to {data.name}
+      </h2>
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        <div class="p-5 rounded-xl border border-border bg-secondary/20 space-y-2">
+          <div class="flex items-center gap-2 font-bold text-foreground text-sm">
+            <Volume2 class="h-4 w-4 text-primary" />
+            <span>Phonetic &amp; Sound</span>
+          </div>
+          <p class="text-xs text-muted-foreground leading-relaxed">
+            Names matching the {countSyllables(data.name)}-syllable cadence, starting sound, or small edit-distance variations of {data.name}.
+          </p>
+        </div>
+
+        <div class="p-5 rounded-xl border border-border bg-secondary/20 space-y-2">
+          <div class="flex items-center gap-2 font-bold text-foreground text-sm">
+            <BookOpen class="h-4 w-4 text-primary" />
+            <span>Linguistic Heritage</span>
+          </div>
+          <p class="text-xs text-muted-foreground leading-relaxed">
+            Names sharing {data.origin || 'traditional'} cultural roots, etymological origins, or classic historical usage.
+          </p>
+        </div>
+
+        <div class="p-5 rounded-xl border border-border bg-secondary/20 space-y-2">
+          <div class="flex items-center gap-2 font-bold text-foreground text-sm">
+            <BarChart3 class="h-4 w-4 text-primary" />
+            <span>Popularity &amp; Scale</span>
+          </div>
+          <p class="text-xs text-muted-foreground leading-relaxed">
+            Alternatives within a comparable U.S. popularity tier to #{formatNumber(data.rank)}, offering similar mainstream or distinctive appeal.
+          </p>
+        </div>
       </div>
     </section>
 

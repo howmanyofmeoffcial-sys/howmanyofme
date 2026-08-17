@@ -68,9 +68,9 @@ export function getNameLinkGraph(record: NameRecord): NameLinkGraph {
 
   // Similar names
   const sim = getSimilarNames(record.name, 10);
-  const similarNames = sim.combined.map((name) => ({
-    name,
-    url: getNameUrl(name),
+  const similarNames = sim.combined.map((m) => ({
+    name: m.name,
+    url: getNameUrl(m.name),
   }));
 
   // Related names by origin

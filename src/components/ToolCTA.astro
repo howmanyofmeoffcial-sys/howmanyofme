@@ -24,7 +24,7 @@ const {
     </div>
     <form
       action="/name/James"
-      onsubmit="event.preventDefault(); const val = this.elements.name.value.trim() || 'James'; if (window.dataLayer) { window.dataLayer.push({ event: 'name_search_submitted', search_mode: 'first_name', source_page_type: 'tool_cta' }); } window.location.href = '/name/' + encodeURIComponent(val);"
+      onsubmit="event.preventDefault(); const raw = this.elements.name.value.trim() || 'James'; const val = raw.charAt(0).toUpperCase() + raw.slice(1).toLowerCase(); if (window.dataLayer) { window.dataLayer.push({ event: 'name_search_submitted', search_mode: 'first_name', source_page_type: 'tool_cta' }); } window.location.href = '/name/' + encodeURIComponent(val);"
       class="flex gap-2"
     >
       <div class="relative flex-1">
@@ -59,7 +59,7 @@ const {
 
       <form
         action="/name/James"
-        onsubmit="event.preventDefault(); const val = this.elements.name.value.trim() || 'James'; if (window.dataLayer) { window.dataLayer.push({ event: 'name_search_submitted', search_mode: 'first_name', source_page_type: 'tool_cta' }); } window.location.href = '/name/' + encodeURIComponent(val);"
+        onsubmit="event.preventDefault(); const raw = this.elements.name.value.trim() || 'James'; const val = raw.charAt(0).toUpperCase() + raw.slice(1).toLowerCase(); if (window.dataLayer) { window.dataLayer.push({ event: 'name_search_submitted', search_mode: 'first_name', source_page_type: 'tool_cta' }); } window.location.href = '/name/' + encodeURIComponent(val);"
         class="relative max-w-lg mx-auto"
       >
         <div class="relative flex items-center">

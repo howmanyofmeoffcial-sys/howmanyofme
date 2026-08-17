@@ -246,7 +246,7 @@ export default function UniqueNameIsland() {
                       {name}
                     </h3>
                     <p className="text-xs text-muted-foreground mt-0.5">
-                      ~{formatNumber(data.count)} estimated living bearers
+                      ~{formatNumber((data as any).actuarial?.estimatedLiving || Math.round(data.count * 0.65))} estimated living bearers
                     </p>
                   </div>
 

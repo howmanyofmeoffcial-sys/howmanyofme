@@ -8,14 +8,27 @@ import ToolCTA from '../../components/ToolCTA.astro';
 import BookmarkShareButtons from '../../islands/BookmarkShareButtons';
 import NameHistoryChart from '../../islands/NameHistoryChart';
 import { getIndexableNames, getName, type NameRecord } from '../../lib/names';
-import { buildNameEntityProfile } from '../../lib/names/entityProfile';
+import { buildNamePageViewModel } from '../../lib/names/insights';
 import { getNameLinkGraph } from '../../lib/names/linking';
 import { getRelatedFullNames } from '../../lib/fullNames/data';
 import { getComparisonsForName } from '../../lib/comparisons/data';
 import { getNameAbsoluteUrl, getSimilarNamesUrl } from '../../lib/seo/canonicalUrl';
+import { evaluateNameIndexability } from '../../lib/seo/indexability';
 import { formatNumber } from '../../data/nameData';
-import { buildSimilarFaqs } from '../../lib/dynamicContent';
+import { buildNameSeoMetadata } from '../../lib/seo/performanceData.ts';
 import manifest from '../../data/metadata/manifest.json';
+import {
+  Sparkles,
+  TrendingUp,
+  MapPin,
+  Users,
+  Calendar,
+  Award,
+  BookOpen,
+  Info,
+  ArrowRight,
+  ExternalLink,
+} from 'lucide-react';
 
 export async function getStaticPaths() {
   const allNames = getIndexableNames();
@@ -39,24 +52,20 @@ if (!data) {
   return Astro.redirect('/404');
 }
 
-const profile = buildNameEntityProfile(data);
+const indexability = evaluateNameIndexability(data);
+if (indexability.status === 'EXCLUDE') {
+  return Astro.redirect('/404');
+}
+
+const vm = buildNamePageViewModel(data);
+const seoMeta = buildNameSeoMetadata(data, vm.livingEstimate, vm.rank);
 const linkGraph = getNameLinkGraph(data);
-const popularFullNames = getRelatedFullNames(profile.name, '', 20);
-const nameComparisons = getComparisonsForName(profile.name);
+const popularFullNames = getRelatedFullNames(vm.name, '', 16);
+const nameComparisons = getComparisonsForName(vm.name);
 
-const faqs = buildSimilarFaqs({
-  name: profile.name,
-  origin: profile.origin,
-  meaning: profile.meaning,
-  rank: profile.rank,
-  count: profile.stats.estimatedLivingPeople,
-  similarSample: linkGraph.similarNames.slice(0, 5).map((s) => s.name),
-  formatNumber,
-});
-
-const title = `How Many People Are Named ${profile.name}? Popularity, Statistics & History`;
-const description = `There are ~${formatNumber(profile.stats.estimatedLivingPeople)} living people named ${profile.name} in the U.S. (rank #${formatNumber(profile.rank)}). Explore official SSA historical births, 2020 Census data, and decade trends.`;
-const canonical = getNameAbsoluteUrl(profile.name);
+const title = seoMeta.title;
+const description = seoMeta.description;
+const canonical = getNameAbsoluteUrl(vm.name);
 
 const jsonLd = [
   {
@@ -67,14 +76,14 @@ const jsonLd = [
     url: canonical,
     about: {
       '@type': 'Thing',
-      name: profile.name,
-      description: `Official demographic statistics, national rank #${formatNumber(profile.rank)}, and historical frequency for the first name ${profile.name}.`,
+      name: vm.name,
+      description: `Official demographic statistics, national rank #${formatNumber(vm.rank)}, and historical frequency for the first name ${vm.name}.`,
     },
   },
   {
     '@context': 'https://schema.org',
     '@type': 'FAQPage',
-    mainEntity: faqs.map((f) => ({
+    mainEntity: vm.faqs.map((f) => ({
       '@type': 'Question',
       name: f.q,
       acceptedAnswer: { '@type': 'Answer', text: f.a },
@@ -82,25 +91,27 @@ const jsonLd = [
   },
 ];
 
-const firstLetter = profile.name.charAt(0).toUpperCase();
+const firstLetter = vm.name.charAt(0).toUpperCase();
 const decades = Object.entries(data.decade_popularity || {});
+const historyPoints = data.ssa?.history || [];
 ---
 
 <BaseLayout
   title={title}
   description={description}
   canonical={canonical}
+  noindex={indexability.status !== 'INDEX'}
   jsonLd={jsonLd}
 >
   <SiteHeader client:idle />
 
-  <main class="container py-10 md:py-12">
+  <main class="container py-10 md:py-12 max-w-5xl">
     <Breadcrumbs
       className="mb-6"
       items={[
         { label: "Home", href: "/" },
         { label: `Names: ${firstLetter}`, href: linkGraph.letterHub.url },
-        { label: profile.name },
+        { label: vm.name },
       ]}
     />
 
@@ -108,13 +119,13 @@ const decades = Object.entries(data.decade_popularity || {});
     <div class="flex flex-wrap items-start justify-between gap-4 mb-8">
       <div>
         <h1 class="font-display text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-3 text-foreground tracking-tight">
-          How Many People Are Named {profile.name}?
+          {seoMeta.h1}
         </h1>
         <p class="text-lg md:text-xl text-muted-foreground">
-          Official U.S. Social Security &amp; Census demographic profile for <strong class="text-foreground">{profile.name}</strong>
+          {seoMeta.subhead}
         </p>
       </div>
-      <BookmarkShareButtons client:idle name={profile.name} />
+      <BookmarkShareButtons client:idle name={vm.name} />
     </div>
 
     <!-- 1. Answer-First Quick Answer Card (Featured Snippet / AEO Target) -->
@@ -129,161 +140,221 @@ const decades = Object.entries(data.decade_popularity || {});
       </div>
 
       <p class="text-lg md:text-xl font-medium leading-relaxed text-foreground mb-6">
-        {profile.insights.quickAnswer}
+        {vm.quickAnswer}
       </p>
+
+      <!-- Structured Demographic Summary Table for AEO / Snippets -->
+      <div class="overflow-x-auto my-6 border border-border/80 rounded-xl bg-card/60 p-4">
+        <table class="w-full text-left text-sm border-collapse">
+          <thead>
+            <tr class="border-b border-border text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+              <th class="py-2 pr-4">Demographic Metric</th>
+              <th class="py-2 px-4">Calculated Value</th>
+              <th class="py-2 pl-4">Source & Methodology</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-border/50 text-foreground">
+            <tr>
+              <td class="py-2.5 pr-4 font-medium">Estimated Living U.S. Bearers</td>
+              <td class="py-2.5 px-4 font-bold text-primary">~{formatNumber(vm.livingEstimate)}</td>
+              <td class="py-2.5 pl-4 text-xs text-muted-foreground">CDC Actuarial Life Table Model</td>
+            </tr>
+            <tr>
+              <td class="py-2.5 pr-4 font-medium">All-Time SSA Births (1880–{manifest.sources.ssa.latestAvailableYear})</td>
+              <td class="py-2.5 px-4 font-bold">{formatNumber(vm.historicalBirths)}</td>
+              <td class="py-2.5 pl-4 text-xs text-muted-foreground">Social Security Administration</td>
+            </tr>
+            <tr>
+              <td class="py-2.5 pr-4 font-medium">National Popularity Standing</td>
+              <td class="py-2.5 px-4 font-bold">#{formatNumber(vm.rank)}</td>
+              <td class="py-2.5 pl-4 text-xs text-muted-foreground">U.S. First-Name Historical Index</td>
+            </tr>
+            <tr>
+              <td class="py-2.5 pr-4 font-medium">Peak Registration Year</td>
+              <td class="py-2.5 px-4 font-bold">{vm.peakYear} ({formatNumber(vm.peakBirths)} births)</td>
+              <td class="py-2.5 pl-4 text-xs text-muted-foreground">SSA Historical Records</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
 
       <!-- Key metric pills -->
       <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-4 border-t border-border">
         <div class="p-3.5 rounded-xl bg-card border border-border">
           <div class="text-xs text-muted-foreground mb-1">Estimated Living (U.S.)</div>
-          <div class="text-xl font-bold text-foreground">~{formatNumber(profile.stats.estimatedLivingPeople)}</div>
+          <div class="text-xl font-bold text-foreground">~{formatNumber(vm.livingEstimate)}</div>
         </div>
         <div class="p-3.5 rounded-xl bg-card border border-border">
           <div class="text-xs text-muted-foreground mb-1">Historical Births (SSA)</div>
-          <div class="text-xl font-bold text-foreground">{formatNumber(profile.stats.totalHistoricalBirths)}</div>
+          <div class="text-xl font-bold text-foreground">{formatNumber(vm.historicalBirths)}</div>
         </div>
         <div class="p-3.5 rounded-xl bg-card border border-border">
           <div class="text-xs text-muted-foreground mb-1">All-Time Rank</div>
-          <div class="text-xl font-bold text-foreground">#{formatNumber(profile.rank)}</div>
+          <div class="text-xl font-bold text-foreground">#{formatNumber(vm.rank)}</div>
         </div>
         <div class="p-3.5 rounded-xl bg-card border border-border">
           <div class="text-xs text-muted-foreground mb-1">Historical Peak</div>
-          <div class="text-xl font-bold text-foreground">{profile.stats.peakYear}</div>
+          <div class="text-xl font-bold text-foreground">{vm.peakYear}</div>
         </div>
       </div>
     </section>
 
-    <!-- 2. Key Statistics Grid -->
+    <!-- 2. Target-Specific Key Insights (Structured Bullet Points) -->
+    <section class="mb-12 p-6 rounded-2xl border border-border bg-card shadow-xs">
+      <div class="flex items-center gap-2 mb-4">
+        <Sparkles class="h-4 w-4 text-primary" />
+        <h2 class="font-display text-xl font-bold text-foreground">
+          Key Insights for {vm.name}
+        </h2>
+      </div>
+      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+        {vm.keyInsights.map((insight) => (
+          <div class="p-4 rounded-xl bg-secondary/30 border border-border/70">
+            <div class="text-xs font-semibold text-muted-foreground mb-1">{insight.label}</div>
+            <div class="text-lg font-bold text-foreground mb-0.5">{insight.value}</div>
+            {insight.detail && <div class="text-xs text-muted-foreground">{insight.detail}</div>}
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <!-- 3. Key Demographic Statistics Grid -->
     <section class="mb-12">
       <h2 class="font-display text-2xl font-bold mb-4 text-foreground">
-        Key Demographic Statistics for {profile.name}
+        Key Demographic Statistics for {vm.name}
       </h2>
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
         <div class="p-5 rounded-xl border border-border bg-card">
           <div class="text-xs font-semibold text-primary uppercase tracking-wider mb-1">Living Population Model</div>
-          <div class="text-2xl font-bold text-foreground mb-1">~{formatNumber(profile.stats.estimatedLivingPeople)}</div>
+          <div class="text-2xl font-bold text-foreground mb-1">~{formatNumber(vm.livingEstimate)}</div>
           <p class="text-xs text-muted-foreground">Estimated living U.S. population based on actuarial cohort survival rates.</p>
         </div>
 
         <div class="p-5 rounded-xl border border-border bg-card">
           <div class="text-xs font-semibold text-primary uppercase tracking-wider mb-1">Total Recorded Births</div>
-          <div class="text-2xl font-bold text-foreground mb-1">{formatNumber(profile.stats.totalHistoricalBirths)}</div>
+          <div class="text-2xl font-bold text-foreground mb-1">{formatNumber(vm.historicalBirths)}</div>
           <p class="text-xs text-muted-foreground">U.S. Social Security card registrations recorded from 1880 through 2024.</p>
         </div>
 
         <div class="p-5 rounded-xl border border-border bg-card">
           <div class="text-xs font-semibold text-primary uppercase tracking-wider mb-1">2020 Decennial Census</div>
           <div class="text-2xl font-bold text-foreground mb-1">
-            {profile.stats.censusCount ? formatNumber(profile.stats.censusCount) : "Unlisted (<100)"}
+            {vm.censusCount ? formatNumber(vm.censusCount) : "Unlisted (<100)"}
           </div>
           <p class="text-xs text-muted-foreground">Official count in 2020 U.S. Census first-name frequency returns.</p>
         </div>
 
         <div class="p-5 rounded-xl border border-border bg-card">
           <div class="text-xs font-semibold text-primary uppercase tracking-wider mb-1">Estimated Average Age</div>
-          <div class="text-2xl font-bold text-foreground mb-1">{profile.stats.estimatedAverageAge} Years</div>
+          <div class="text-2xl font-bold text-foreground mb-1">{vm.estimatedAverageAge} Years</div>
           <p class="text-xs text-muted-foreground">Weighted average age calculated from surviving historical birth cohorts.</p>
         </div>
 
         <div class="p-5 rounded-xl border border-border bg-card">
           <div class="text-xs font-semibold text-primary uppercase tracking-wider mb-1">Peak Historical Year</div>
-          <div class="text-2xl font-bold text-foreground mb-1">{profile.stats.peakYear}</div>
-          <p class="text-xs text-muted-foreground">Highest annual total: {formatNumber(profile.stats.peakBirths)} registrations in {profile.stats.peakYear}.</p>
+          <div class="text-2xl font-bold text-foreground mb-1">{vm.peakYear}</div>
+          <p class="text-xs text-muted-foreground">Highest annual total: {formatNumber(vm.peakBirths)} registrations in {vm.peakYear}.</p>
         </div>
 
         <div class="p-5 rounded-xl border border-border bg-card">
           <div class="text-xs font-semibold text-primary uppercase tracking-wider mb-1">Recent 10-Year Trend</div>
           <div class="text-2xl font-bold text-foreground mb-1 capitalize">
-            {profile.stats.recentTrendDirection} ({profile.stats.recentTrendPct >= 0 ? `+${profile.stats.recentTrendPct}%` : `${profile.stats.recentTrendPct}%`})
+            {vm.recentTrendDirection} ({vm.recentTrendPct >= 0 ? `+${vm.recentTrendPct}%` : `${vm.recentTrendPct}%`})
           </div>
           <p class="text-xs text-muted-foreground">Registration change over the recent 2015–2024 window.</p>
         </div>
       </div>
     </section>
 
-    <!-- 3. Annual Popularity History & Interactive Island -->
+    <!-- 4. Annual Popularity History & Interactive Chart -->
     <section class="mb-12">
       <h2 class="font-display text-2xl font-bold mb-2 text-foreground">
         Historical Popularity &amp; Annual Trends
       </h2>
       <p class="text-sm text-muted-foreground mb-6">
-        {profile.insights.peakInsight} {profile.insights.recentTrendInsight}
+        {vm.trendSummary}
       </p>
 
-      {profile.availability.hasHistory && (
+      {vm.hasHistory && (
         <div class="mb-6">
           <NameHistoryChart
             client:visible
-            name={profile.name}
-            history={profile.stats.history}
-            peakYear={profile.stats.peakYear}
-            peakBirths={profile.stats.peakBirths}
+            name={vm.name}
+            history={historyPoints}
+            peakYear={vm.peakYear}
+            peakBirths={vm.peakBirths}
           />
         </div>
       )}
 
       <!-- Accessible Semantic History Summary (Pure SSR / No-JS fallback) -->
-      <details class="p-4 rounded-xl border border-border bg-card/60 text-sm mb-6">
-        <summary class="font-semibold text-foreground cursor-pointer hover:text-primary transition">
-          📊 View Selected Historical Timeline Data Table (1880–2024)
-        </summary>
-        <div class="mt-4 overflow-x-auto">
-          <table class="w-full text-left text-xs border-collapse">
-            <thead>
-              <tr class="border-b border-border bg-secondary/50">
-                <th class="p-2 font-semibold">Year</th>
-                <th class="p-2 font-semibold">Total Births</th>
-                <th class="p-2 font-semibold">Male</th>
-                <th class="p-2 font-semibold">Female</th>
-              </tr>
-            </thead>
-            <tbody>
-              {profile.stats.history.slice(-15).map((pt) => (
-                <tr class="border-b border-border/50 hover:bg-secondary/30">
-                  <td class="p-2 font-medium">{pt.year}</td>
-                  <td class="p-2">{formatNumber(pt.births)}</td>
-                  <td class="p-2 text-blue-600 dark:text-blue-400">{formatNumber(pt.male)}</td>
-                  <td class="p-2 text-pink-600 dark:text-pink-400">{formatNumber(pt.female)}</td>
+      {historyPoints.length > 0 && (
+        <details class="p-4 rounded-xl border border-border bg-card/60 text-sm mb-6">
+          <summary class="font-semibold text-foreground cursor-pointer hover:text-primary transition">
+            📊 View Selected Historical Timeline Data Table (1880–2024)
+          </summary>
+          <div class="mt-4 overflow-x-auto">
+            <table class="w-full text-left text-xs border-collapse">
+              <thead>
+                <tr class="border-b border-border bg-secondary/50">
+                  <th class="p-2 font-semibold">Year</th>
+                  <th class="p-2 font-semibold">Total Births</th>
+                  <th class="p-2 font-semibold">Male</th>
+                  <th class="p-2 font-semibold">Female</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
-          <p class="text-xs text-muted-foreground mt-2">Showing 15 most recent milestone years. Source: SSA 1880–2024.</p>
-        </div>
-      </details>
+              </thead>
+              <tbody>
+                {historyPoints.slice(-15).map((pt) => (
+                  <tr class="border-b border-border/50 hover:bg-secondary/30">
+                    <td class="p-2 font-medium">{pt.year}</td>
+                    <td class="p-2">{formatNumber(pt.births)}</td>
+                    <td class="p-2 text-blue-600 dark:text-blue-400">{formatNumber(pt.male)}</td>
+                    <td class="p-2 text-pink-600 dark:text-pink-400">{formatNumber(pt.female)}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+            <p class="text-xs text-muted-foreground mt-2">Showing 15 most recent milestone years. Source: SSA 1880–2024.</p>
+          </div>
+        </details>
+      )}
 
       <!-- Decade Popularity Index Grid -->
-      <h3 class="font-display text-lg font-bold mb-3 text-foreground">Relative Popularity by Decade</h3>
-      <div class="grid grid-cols-3 sm:grid-cols-5 md:grid-cols-9 gap-2.5">
-        {decades.map(([decade, score]) => (
-          <div class="text-center p-3 rounded-lg bg-secondary/70 border border-border/60">
-            <div class="text-xs text-muted-foreground mb-1 font-medium">{decade}</div>
-            <div class="h-2 rounded-full bg-border overflow-hidden">
-              <div class="h-full rounded-full bg-primary" style={{ width: `${score}%` }} />
-            </div>
-            <div class="text-xs font-bold mt-1.5 text-foreground">{score}/100</div>
+      {decades.length > 0 && (
+        <div>
+          <h3 class="font-display text-lg font-bold mb-3 text-foreground">Relative Popularity by Decade</h3>
+          <div class="grid grid-cols-3 sm:grid-cols-5 md:grid-cols-9 gap-2.5">
+            {decades.map(([decade, score]) => (
+              <div class="text-center p-3 rounded-lg bg-secondary/70 border border-border/60">
+                <div class="text-xs text-muted-foreground mb-1 font-medium">{decade}</div>
+                <div class="h-2 rounded-full bg-border overflow-hidden">
+                  <div class="h-full rounded-full bg-primary" style={{ width: `${score}%` }} />
+                </div>
+                <div class="text-xs font-bold mt-1.5 text-foreground">{score}/100</div>
+              </div>
+            ))}
           </div>
-        ))}
-      </div>
+        </div>
+      )}
     </section>
 
-    <!-- 4. Sex Distribution Breakdown -->
+    <!-- 5. Sex & Gender Distribution Breakdown -->
     <section class="mb-12 p-6 rounded-2xl border border-border bg-card">
       <h2 class="font-display text-2xl font-bold mb-2 text-foreground">
         Sex &amp; Gender Distribution in Historical Records
       </h2>
       <p class="text-sm text-muted-foreground mb-6">
-        {profile.insights.sexInsight}
+        {vm.genderSummary}
       </p>
 
       <div class="space-y-4 max-w-xl">
         <div class="flex justify-between text-sm font-semibold">
-          <span class="text-blue-600 dark:text-blue-400">Male: {profile.stats.maleShare}% (~{formatNumber(data.ssa?.maleBirths || 0)} births)</span>
-          <span class="text-pink-600 dark:text-pink-400">Female: {profile.stats.femaleShare}% (~{formatNumber(data.ssa?.femaleBirths || 0)} births)</span>
+          <span class="text-blue-600 dark:text-blue-400">Male: {vm.maleShare}% (~{formatNumber(data.ssa?.maleBirths || 0)} births)</span>
+          <span class="text-pink-600 dark:text-pink-400">Female: {vm.femaleShare}% (~{formatNumber(data.ssa?.femaleBirths || 0)} births)</span>
         </div>
         <div class="h-4 rounded-full bg-secondary overflow-hidden flex">
-          <div class="bg-blue-500 h-full transition-all" style={{ width: `${profile.stats.maleShare}%` }} />
-          <div class="bg-pink-500 h-full transition-all" style={{ width: `${profile.stats.femaleShare}%` }} />
+          <div class="bg-blue-500 h-full transition-all" style={{ width: `${vm.maleShare}%` }} />
+          <div class="bg-pink-500 h-full transition-all" style={{ width: `${vm.femaleShare}%` }} />
         </div>
         <p class="text-xs text-muted-foreground">
           Distribution calculated from cumulative U.S. Social Security application records (1880–2024).
@@ -291,34 +362,58 @@ const decades = Object.entries(data.decade_popularity || {});
       </div>
     </section>
 
-    <!-- 5. Census 2020 Snapshot Section -->
+    <!-- 6. Origin & Meaning Section -->
+    <section class="mb-12 p-6 rounded-2xl border border-border bg-card">
+      <div class="flex items-center gap-2 mb-3">
+        <BookOpen class="h-5 w-5 text-primary" />
+        <h2 class="font-display text-2xl font-bold text-foreground">
+          Origin &amp; Meaning of the Name {vm.name}
+        </h2>
+      </div>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div class="p-4 rounded-xl bg-secondary/30 border border-border/70">
+          <div class="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-1">Cultural / Linguistic Origin</div>
+          <div class="text-lg font-bold text-foreground">{vm.origin}</div>
+          <p class="text-xs text-muted-foreground mt-1">Linguistic root and etymological background.</p>
+        </div>
+        <div class="p-4 rounded-xl bg-secondary/30 border border-border/70">
+          <div class="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-1">Traditional Meaning</div>
+          <div class="text-lg font-bold text-foreground">"{vm.meaning}"</div>
+          <p class="text-xs text-muted-foreground mt-1">Historical interpretation recorded in onomastic sources.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 7. Census 2020 Snapshot Section -->
     <section class="mb-12 p-6 rounded-2xl border border-border bg-card">
       <div class="flex items-center gap-2 mb-2">
         <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-semibold bg-secondary text-foreground">
           🏛️ Official Census
         </span>
         <h2 class="font-display text-2xl font-bold text-foreground">
-          {profile.name} in the 2020 Decennial Census
+          {vm.name} in the 2020 Decennial Census
         </h2>
       </div>
-      <p class="text-sm text-muted-foreground mb-6">
-        {profile.insights.censusInsight}
-      </p>
 
-      {profile.availability.hasCensus ? (
-        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-          <div class="p-4 rounded-xl bg-secondary/50 border border-border/80">
-            <div class="text-xs text-muted-foreground mb-1">Census 2020 Count</div>
-            <div class="text-xl font-bold text-foreground">{formatNumber(profile.stats.censusCount!)} Bearers</div>
-          </div>
-          <div class="p-4 rounded-xl bg-secondary/50 border border-border/80">
-            <div class="text-xs text-muted-foreground mb-1">Census 2020 Rank</div>
-            <div class="text-xl font-bold text-foreground">#{formatNumber(profile.stats.censusRank!)}</div>
-          </div>
-          <div class="p-4 rounded-xl bg-secondary/50 border border-border/80">
-            <div class="text-xs text-muted-foreground mb-1">Census Sex Breakdown</div>
-            <div class="text-sm font-semibold text-foreground">
-              {data.census2020?.pctMale ?? 0}% M · {data.census2020?.pctFemale ?? 0}% F
+      {vm.hasCensus ? (
+        <div class="space-y-4">
+          <p class="text-sm text-muted-foreground">
+            In the 2020 Decennial U.S. Census first-name tabulations, <strong>{vm.name}</strong> appeared {formatNumber(vm.censusCount!)} times, ranking #{formatNumber(vm.censusRank!)} among all first names recorded in 2020 returns.
+          </p>
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <div class="p-4 rounded-xl bg-secondary/50 border border-border/80">
+              <div class="text-xs text-muted-foreground mb-1">Census 2020 Count</div>
+              <div class="text-xl font-bold text-foreground">{formatNumber(vm.censusCount!)} Bearers</div>
+            </div>
+            <div class="p-4 rounded-xl bg-secondary/50 border border-border/80">
+              <div class="text-xs text-muted-foreground mb-1">Census 2020 Rank</div>
+              <div class="text-xl font-bold text-foreground">#{formatNumber(vm.censusRank!)}</div>
+            </div>
+            <div class="p-4 rounded-xl bg-secondary/50 border border-border/80">
+              <div class="text-xs text-muted-foreground mb-1">Census Sex Breakdown</div>
+              <div class="text-sm font-semibold text-foreground">
+                {data.census2020?.pctMale ?? 0}% M · {data.census2020?.pctFemale ?? 0}% F
+              </div>
             </div>
           </div>
         </div>
@@ -329,14 +424,14 @@ const decades = Object.entries(data.decade_popularity || {});
       )}
     </section>
 
-    <!-- 6. Geographic State Distribution -->
-    {profile.availability.hasStateDistribution && (
+    <!-- 8. Geographic State Distribution -->
+    {vm.hasStateDistribution && (
       <section class="mb-12">
         <h2 class="font-display text-2xl font-bold mb-2 text-foreground">
-          Where Is the Name {profile.name} Most Common?
+          Where Is the Name {vm.name} Most Common?
         </h2>
         <p class="text-sm text-muted-foreground mb-4">
-          {profile.insights.geographicInsight} Estimated state-level distribution of living bearers:
+          {vm.geographicSummary} Estimated state-level distribution of living bearers:
         </p>
 
         <div class="overflow-x-auto rounded-xl border border-border bg-card">
@@ -349,7 +444,7 @@ const decades = Object.entries(data.decade_popularity || {});
               </tr>
             </thead>
             <tbody>
-              {profile.stats.stateDistribution.map((st) => (
+              {vm.stateDistribution.map((st) => (
                 <tr class="border-b border-border/50 hover:bg-secondary/30">
                   <td class="p-3 font-medium text-foreground">{st.state} ({st.code})</td>
                   <td class="p-3">~{formatNumber(st.estimatedBearers)}</td>
@@ -366,47 +461,38 @@ const decades = Object.entries(data.decade_popularity || {});
       <AdSlot />
     </div>
 
-    <!-- 7. Actuarial Living Estimate & Survival Model -->
+    <!-- 9. Actuarial Living Estimate & Survival Model -->
     <section class="mb-12 p-6 rounded-2xl border border-border bg-card">
       <h2 class="font-display text-2xl font-bold mb-3 text-foreground">
         Actuarial Living Population &amp; Average Age Model
       </h2>
       <p class="text-sm leading-relaxed text-muted-foreground mb-4">
-        {profile.insights.livingEstimateInsight}
+        Based on cohort survival models applied to 1880–2024 SSA birth registrations, an estimated <strong>{formatNumber(vm.livingEstimate)}</strong> people named {vm.name} are living today in the U.S., with an estimated average age of <strong>{vm.estimatedAverageAge} years</strong>.
       </p>
       <div class="p-4 rounded-xl bg-secondary/40 border border-border/60 text-xs text-muted-foreground space-y-2">
         <p>
           <strong>Methodology Note:</strong> Lifetime birth registrations do not equal the current living population. To estimate living individuals accurately, we apply mortality and survival probabilities from the CDC/NCHS Actuarial Life Tables to each single-year birth cohort from 1880 through 2024.
         </p>
         <p>
-          Estimated Average Age for {profile.name}: <strong class="text-foreground">{profile.stats.estimatedAverageAge} years</strong>.
+          Estimated Average Age for {vm.name}: <strong class="text-foreground">{vm.estimatedAverageAge} years</strong>.
         </p>
       </div>
     </section>
 
-    <!-- 8. Comparative Context -->
-    <section class="mb-12 p-6 rounded-2xl border border-border bg-card">
-      <h2 class="font-display text-2xl font-bold mb-2 text-foreground">
-        Comparative Popularity Context
-      </h2>
-      <p class="text-sm leading-relaxed text-muted-foreground">
-        {profile.insights.comparativeInsight}
-      </p>
-    </section>
-
-    <!-- 9. Transparent Methodology & Data Provenance Block -->
+    <!-- 10. Transparent Methodology & Data Provenance Block -->
     <section class="mb-12 p-6 md:p-8 rounded-2xl border border-border bg-secondary/30">
       <h2 class="font-display text-2xl font-bold mb-4 text-foreground">
         Data Sources, Provenance &amp; Methodology
       </h2>
       <div class="space-y-4 text-sm text-muted-foreground leading-relaxed">
         <p>
-          HowManyOfMe.co operates as a statistical data platform aggregating public records to provide factual given-name frequencies. Our calculations distinguish between observed historical registrations, decennial census enumerations, and derived demographic models:
+          HowManyOfMe.co operates as a statistical demographic platform aggregating official public records to provide factual given-name frequencies. Our calculations distinguish between observed historical registrations, decennial census enumerations, and derived actuarial models:
         </p>
         <ul class="list-disc list-inside space-y-2 text-xs md:text-sm">
-          {profile.insights.methodologyNotes.map((note) => (
-            <li>{note}</li>
-          ))}
+          <li><strong>U.S. Social Security Administration (SSA) Baby Names Dataset (1880–2024):</strong> All historical births with Social Security card applications (minimum 5 occurrences per year/sex).</li>
+          <li><strong>U.S. Census Bureau 2020 Decennial Census:</strong> First-name frequency tabulations covering distinct names occurring 100+ times in 2020 census returns.</li>
+          <li><strong>Actuarial Living Estimates:</strong> Calculated by multiplying birth cohorts from 1880 to 2024 by CDC/NCHS life table survival probabilities to estimate current living population rather than lifetime cumulative births.</li>
+          <li><strong>State Distributions:</strong> Demographic frequency allocation proportional to state census population weights.</li>
         </ul>
 
         <div class="pt-4 border-t border-border flex flex-wrap gap-4 text-xs text-muted-foreground">
@@ -417,14 +503,14 @@ const decades = Object.entries(data.decade_popularity || {});
       </div>
     </section>
 
-    <!-- 10. Related Names by Origin -->
+    <!-- 11. Related Names by Origin -->
     {linkGraph.relatedByOrigin.length > 0 && (
       <section class="mb-12 p-6 rounded-xl border border-border bg-card">
         <h2 class="font-display text-xl font-bold mb-2 text-foreground">
-          Names with Similar Origin ({profile.origin})
+          Names with Similar Origin ({vm.origin})
         </h2>
         <p class="text-xs text-muted-foreground mb-4">
-          Discover other historical names sharing {profile.origin} linguistic roots:
+          Discover other historical names sharing {vm.origin} linguistic roots:
         </p>
         <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-2.5">
           {linkGraph.relatedByOrigin.map((rel) => (
@@ -440,7 +526,7 @@ const decades = Object.entries(data.decade_popularity || {});
       </section>
     )}
 
-    <!-- 11. Similar Sounding Names -->
+    <!-- 12. Similar Sounding Names -->
     {linkGraph.similarNames.length > 0 && (
       <section class="mb-12 p-6 rounded-xl border border-border bg-card">
         <div class="flex items-center justify-between gap-4 mb-3">
@@ -448,7 +534,7 @@ const decades = Object.entries(data.decade_popularity || {});
             Similar Sounding &amp; Variant Names
           </h2>
           <a
-            href={getSimilarNamesUrl(profile.name)}
+            href={getSimilarNamesUrl(vm.name)}
             class="text-xs font-semibold text-primary hover:underline"
           >
             Explore all variants &rarr;
@@ -461,19 +547,19 @@ const decades = Object.entries(data.decade_popularity || {});
               class="p-3 rounded-lg border border-border bg-secondary/40 hover:bg-primary/10 hover:border-primary/30 transition text-center group"
             >
               <div class="font-semibold text-foreground group-hover:text-primary transition">{sim.name}</div>
-              <div class="text-xs text-muted-foreground">Rank #{sim.rank}</div>
+              <div class="text-xs text-muted-foreground">View profile &rarr;</div>
             </a>
           ))}
         </div>
       </section>
     )}
 
-    <!-- 12. Head-to-Head Name Comparisons -->
+    <!-- 13. Head-to-Head Name Comparisons -->
     {nameComparisons.length > 0 && (
       <section class="mb-12 p-6 rounded-xl border border-border bg-card">
         <div class="flex items-center justify-between gap-4 mb-3">
           <h2 class="font-display text-xl font-bold text-foreground">
-            Head-to-Head Comparisons for {profile.name}
+            Head-to-Head Comparisons for {vm.name}
           </h2>
           <a
             href="/tools/name-comparison"
@@ -499,11 +585,11 @@ const decades = Object.entries(data.decade_popularity || {});
       </section>
     )}
 
-    <!-- 13. Popular Full-Name Combinations -->
+    <!-- 14. Popular Full-Name Combinations -->
     {popularFullNames.length > 0 && (
       <section class="mb-12 p-6 rounded-xl border border-border bg-card">
         <h2 class="font-display text-xl font-bold mb-2 text-foreground">
-          Popular Full-Name Combinations for {profile.name}
+          Popular Full-Name Combinations for {vm.name}
         </h2>
         <p class="text-xs text-muted-foreground mb-4">
           Estimated frequency of common first-name + surname combinations:
@@ -522,13 +608,13 @@ const decades = Object.entries(data.decade_popularity || {});
       </section>
     )}
 
-    <!-- 13. Frequently Asked Questions -->
+    <!-- 15. Frequently Asked Questions -->
     <section class="mb-12">
       <h2 class="font-display text-2xl font-bold mb-6 text-foreground">
-        Frequently Asked Questions About {profile.name}
+        Frequently Asked Questions About {vm.name}
       </h2>
       <div class="space-y-4">
-        {faqs.map((faq) => (
+        {vm.faqs.map((faq) => (
           <div class="p-5 rounded-xl border border-border bg-card">
             <h3 class="font-semibold text-foreground text-base mb-2">{faq.q}</h3>
             <p class="text-sm text-muted-foreground leading-relaxed">{faq.a}</p>

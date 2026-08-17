@@ -108,7 +108,7 @@ export function buildSimilarFaqs(ctx: IntroCtx): DynamicFaq[] {
     },
     {
       q: `How many people are named ${name}?`,
-      a: `Roughly ${formatNumber(count)} people are estimated to share the name ${name} worldwide, based on our combined US SSA, census, and international name datasets.`,
+      a: `Roughly ${formatNumber(count)} living people are estimated to share the first name ${name} in the United States, based on official Social Security Administration birth cohorts and CDC actuarial survival curves.`,
     },
     {
       q: `Is ${name} a rare name?`,

@@ -1,7 +1,7 @@
-import namesIndex from "./generated/names-index.json";
-import canonicalNamesList from "./generated/canonical-names.json";
-import { normalizeName } from "../lib/names/normalizeName";
-import { validateName } from "../lib/names/validateName";
+import namesIndex from "./generated/names-index.json" with { type: "json" };
+import canonicalNamesList from "./generated/canonical-names.json" with { type: "json" };
+import { normalizeName } from "../lib/names/normalizeName.ts";
+import { validateName } from "../lib/names/validateName.ts";
 
 export interface NameRecordData {
   name: string;

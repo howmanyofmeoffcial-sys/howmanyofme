@@ -11,3 +11,4 @@ export * from "./linking";
 export * from "./statistics";
 export * from "./entityProfile";
 export * from "../estimation";
+export * from "../seo/indexability";

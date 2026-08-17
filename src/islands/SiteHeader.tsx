@@ -1,5 +1,6 @@
 import { Search, Menu, X } from "lucide-react";
 import { useState } from "react";
+import { normalizeName } from "../lib/names/normalizeName";
 
 export default function SiteHeader() {
   const [query, setQuery] = useState("");
@@ -8,7 +9,10 @@ export default function SiteHeader() {
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
     if (query.trim()) {
-      window.location.href = `/name/${encodeURIComponent(query.trim())}`;
+      const norm = normalizeName(query.trim());
+      if (norm.slug) {
+        window.location.href = `/name/${encodeURIComponent(norm.slug)}`;
+      }
       setQuery("");
       setMobileMenuOpen(false);
     }

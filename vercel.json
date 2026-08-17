@@ -31,6 +31,18 @@
     { "source": "/disclaimer.html", "destination": "/disclaimer", "permanent": true },
     { "source": "/blog.html",    "destination": "/blog",      "permanent": true },
     { "source": "/tools.html",   "destination": "/tools",     "permanent": true },
+    { "source": "/methodology.html", "destination": "/methodology", "permanent": true },
+    { "source": "/data.html",    "destination": "/data",      "permanent": true },
+    { "source": "/last-names.html", "destination": "/last-names", "permanent": true },
+    { "source": "/similar-names.html", "destination": "/similar-names", "permanent": true },
+    { "source": "/name-comparison.html", "destination": "/tools/name-comparison", "permanent": true },
+
+    { "source": "/tools/:path+.html", "destination": "/tools/:path+", "permanent": true },
+    { "source": "/blog/:path+.html", "destination": "/blog/:path+", "permanent": true },
+    { "source": "/name/:path+.html", "destination": "/name/:path+", "permanent": true },
+    { "source": "/similar-names/:path+.html", "destination": "/similar-names/:path+", "permanent": true },
+    { "source": "/people/:path+.html", "destination": "/people/:path+", "permanent": true },
+    { "source": "/last-name/:path+.html", "destination": "/last-name/:path+", "permanent": true },
 
     {
       "source": "/blog/how-many-people-have-my-name-questions",

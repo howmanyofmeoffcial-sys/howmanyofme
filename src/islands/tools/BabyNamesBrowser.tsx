@@ -1,5 +1,6 @@
 import React, { useState, useMemo } from "react";
 import { getNamesForLetter, getNameData, formatNumber, ALPHABET } from "../../data/nameData";
+import { getNameUrl } from "../../lib/seo/canonicalUrl";
 import { Search, ChevronRight } from "lucide-react";
 import { trackEvent } from "../../lib/analytics/events";
 
@@ -192,7 +193,7 @@ export default function BabyNamesBrowser() {
                 return (
                   <a
                     key={name}
-                    href={`/name/${name.toLowerCase()}`}
+                    href={getNameUrl(name)}
                     className="p-4 rounded-2xl border border-border bg-card hover:border-primary/40 hover:shadow-md transition-all group flex flex-col justify-between space-y-2.5"
                   >
                     <div className="flex items-start justify-between gap-2">

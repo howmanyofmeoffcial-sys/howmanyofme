@@ -3,7 +3,7 @@
  * Single source of truth for generating internal canonical URLs across the application.
  */
 
-import { normalizeName } from "../names/normalizeName";
+import { normalizeName } from "../names/normalizeName.ts";
 
 const SITE_URL = "https://howmanyofme.co";
 

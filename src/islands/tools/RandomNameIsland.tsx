@@ -70,7 +70,7 @@ export default function RandomNameIsland() {
           count: data.count,
           origin: data.origin,
           meaning: data.meaning,
-          url: `/name/${randFirst.toLowerCase()}`,
+          url: `/name/${encodeURIComponent(randFirst)}`,
         });
       } else if (fmt === "last") {
         const randSur = allSurnames[Math.floor(Math.random() * allSurnames.length)];
@@ -83,7 +83,7 @@ export default function RandomNameIsland() {
           lastName: randSur.name,
           type: "last",
           count: randSur.count,
-          url: `/surname/${randSur.slug.toLowerCase()}`,
+          url: `/last-name/${encodeURIComponent(randSur.slug)}`,
         });
       } else {
         // Full name
@@ -104,7 +104,7 @@ export default function RandomNameIsland() {
           lastName: randSur.name,
           type: "full",
           gender: firstData.gender,
-          url: `/full-name/${randFirst.toLowerCase()}-${randSur.slug.toLowerCase()}`,
+          url: `/people/${randFirst.toLowerCase()}-${randSur.slug.toLowerCase()}`,
         });
       }
     }

@@ -1,5 +1,6 @@
-import canonicalNamesList from "../../data/generated/canonical-names.json";
-import { type NameRecord } from "./getName";
+import canonicalNamesList from "../../data/generated/canonical-names.json" with { type: "json" };
+import { type NameRecord } from "./getName.ts";
+import { evaluateNameIndexability } from "../seo/indexability.ts";
 
 const ALL_RECORDS = canonicalNamesList as unknown as NameRecord[];
 
@@ -11,10 +12,10 @@ export function getAllNames(): NameRecord[] {
 }
 
 /**
- * Retrieves all indexable names passing data quality filters.
+ * Retrieves all indexable names passing centralized SEO indexability evaluation.
  */
 export function getIndexableNames(): NameRecord[] {
-  return ALL_RECORDS.filter((n) => n.count > 0 && n.rank > 0 && Boolean(n.origin));
+  return ALL_RECORDS.filter((n) => evaluateNameIndexability(n).status === "INDEX");
 }
 
 /**

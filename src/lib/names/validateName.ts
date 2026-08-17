@@ -1,4 +1,4 @@
-import { normalizeName } from "./normalizeName";
+import { normalizeName } from "./normalizeName.ts";
 
 export interface ValidationResult {
   isValid: boolean;

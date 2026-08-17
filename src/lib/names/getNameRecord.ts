@@ -1,7 +1,7 @@
-import namesIndex from "../../data/generated/names-index.json";
-import { normalizeName } from "./normalizeName";
-import { validateName } from "./validateName";
-import type { NameRecord } from "./getName";
+import namesIndex from "../../data/generated/names-index.json" with { type: "json" };
+import { normalizeName } from "./normalizeName.ts";
+import { validateName } from "./validateName.ts";
+import type { NameRecord } from "./getName.ts";
 
 const INDEX_MAP = namesIndex as unknown as Record<string, NameRecord>;
 
